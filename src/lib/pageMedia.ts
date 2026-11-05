@@ -34,6 +34,16 @@ export const EVENT_PHOTO_TAGS: Record<string, string[]> = {
   "bar-mitzvah-photography": ["party", "event"],
   "indian-wedding-photography": ["indian", "wedding"],
   "pakistani-wedding-photography": ["wedding"],
+  "muslim-wedding-photography": ["wedding"],
+  "jewish-wedding-photography": ["wedding"],
+  "same-sex-wedding-photography": ["wedding", "engagement"],
+  "chinese-wedding-photography": ["wedding"],
+  "african-wedding-photography": ["wedding"],
+  "elopement-photography": ["wedding", "engagement"],
+  "bridal-shower-photography": ["party", "event"],
+  "rehearsal-dinner-photography": ["event", "wedding"],
+  "prom-photography": ["party", "event"],
+  "retirement-party-photography": ["party", "corporate"],
   "quinceanera-photography": ["party", "event"],
   "sweet-16-photography": ["party"],
   "birthday-party-photography": ["party"],
@@ -62,4 +72,4 @@ export const SERVICE_VIDEO_TAGS: Record<string, Tag[]> = {
 export const TOUR_STATES = ["VA", "MD", "DC", "NY", "NJ"];
 
 /** Event types to feature on wedding vs. event pages. */
-export const WEDDING_EVENTS = ["indian-wedding-photography", "pakistani-wedding-photography", "engagement-party-photography", "religious-ceremony-photography"];
+export const WEDDING_EVENTS = ["indian-wedding-photography", "pakistani-wedding-photography", "muslim-wedding-photography", "jewish-wedding-photography", "same-sex-wedding-photography", "chinese-wedding-photography", "african-wedding-photography", "elopement-photography", "engagement-party-photography", "bridal-shower-photography", "rehearsal-dinner-photography", "religious-ceremony-photography"];

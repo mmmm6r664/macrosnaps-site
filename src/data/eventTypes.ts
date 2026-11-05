@@ -105,17 +105,17 @@ export const EVENT_TYPES: EventType[] = [
     related: ["pakistani-wedding-photography", "engagement-party-photography", "festival-community-event-photography"],
   },
 
-  // ---------------------------------------------------------------- Pakistani & Muslim Weddings
+  // ---------------------------------------------------------------- Pakistani Weddings
   {
     slug: "pakistani-wedding-photography",
-    name: "Pakistani & Muslim Weddings",
+    name: "Pakistani Weddings",
     pro: "Pakistani Wedding Photographer",
-    h1: "Pakistani & Muslim Wedding Photography & Videography",
-    title: "Pakistani & Muslim Wedding Photographer | MacroSnaps",
+    h1: "Pakistani Wedding Photography & Videography",
+    title: "Pakistani Wedding Photographer & Videographer | MacroSnaps",
     description:
-      "Pakistani and Muslim wedding photography and video for the dholki, mehndi, nikah, baraat, rukhsati and valima. Open hourly rates, our own US crews.",
+      "Pakistani wedding photography and video for the dholki, mehndi, nikah, baraat, rukhsati and valima. Open hourly rates, our own US crews.",
     intro: [
-      "A Pakistani or Muslim wedding often unfolds over several events: dholki evenings with family songs, a colorful mehndi, the nikah, the baraat with the rukhsati at its close, and the valima hosted by the groom's family. MacroSnaps photographers and videographers can cover each of these, and we plan the coverage around how your family celebrates, whether events are held together or separately, at home, in a masjid or in a banquet hall.",
+      "A Pakistani wedding often unfolds over several events: dholki evenings with family songs, a colorful mehndi, the nikah, the baraat with the rukhsati at its close, and the valima hosted by the groom's family. MacroSnaps photographers and videographers can cover each of these, and we plan the coverage around how your family celebrates, whether events are held together or separately, at home, in a masjid or in a banquet hall.",
       "We are respectful of religious and family preferences. If your nikah takes place in a masjid, we follow its guidelines on where we can stand. If your family prefers gender-segregated seating or would like women-only areas photographed in a particular way, tell us in advance and we will plan accordingly. Moments like the signing of the nikah nama, the first look in the mirror and the rukhsati are covered calmly and without interrupting.",
       "Our prices are listed openly and are the same for every family, with no quotes to negotiate: photography is $250 for the first hour and $100 for each additional hour, and videography is $300 for the first hour and $200 for each additional hour. Each event has a two-hour minimum, and you can book and pay online. MacroSnaps is part of MacroHype LLC, working with clients since 2011, and is insured through State Farm.",
     ],
@@ -145,7 +145,7 @@ export const EVENT_TYPES: EventType[] = [
     ],
     videoTags: ["wedding"],
     imageSet: "wedding",
-    related: ["indian-wedding-photography", "engagement-party-photography", "festival-community-event-photography"],
+    related: ["muslim-wedding-photography", "indian-wedding-photography", "engagement-party-photography"],
   },
 
   // ---------------------------------------------------------------- Quinceañeras
