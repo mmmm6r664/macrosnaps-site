@@ -10,16 +10,16 @@ export default function TeamQuote({ region, title = "The people behind the camer
   const members = region ? TEAM.filter((m) => m.regions.includes(region)) : TEAM;
   if (!members.length) return null;
   return (
-    <section className="bg-black px-4 py-16 md:px-6" data-reveal>
+    <section className="bg-white px-4 py-16 md:px-6" data-reveal>
       {!region && (
         <div className="mx-auto mb-10 max-w-3xl text-center">
-          <p className="eyebrow !text-gold">Meet our regional leads</p>
-          <h2 className="mt-3 font-serif text-3xl text-white md:text-4xl">{title}</h2>
+          <p className="eyebrow">Meet our regional leads</p>
+          <h2 className="mt-3 font-serif text-3xl md:text-4xl">{title}</h2>
         </div>
       )}
       <div className={`mx-auto grid max-w-7xl gap-6 ${members.length > 1 ? "lg:grid-cols-2" : "max-w-5xl"}`}>
         {members.map((m) => (
-          <figure key={m.name} className="overflow-hidden rounded-lg border border-gold/30 shadow-2xl">
+          <figure key={m.name} className="overflow-hidden rounded-lg border border-gold/40 shadow-lg">
             <Image src={m.image} alt={`${m.name}, ${m.role} at MacroSnaps: "${m.quote}"`} width={1600} height={900} sizes="(max-width: 1024px) 100vw, 50vw" className="h-auto w-full" />
           </figure>
         ))}
