@@ -128,7 +128,6 @@ export default function Header() {
               ),
             )}
           </nav>
-          <p className="font-serif text-xs italic font-semibold tracking-wide">{SITE.shortTagline}</p>
         </div>
 
         {/* Mobile */}
