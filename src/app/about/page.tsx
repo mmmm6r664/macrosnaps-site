@@ -5,7 +5,7 @@ import { IMG } from "@/lib/images";
 import { ClientLogos, CtaBand, TrustBar } from "@/components/blocks";
 import { SITE } from "@/lib/site";
 
-export const metadata: Metadata = { title: "About MacroSnaps", description: "MacroSnaps is a global photography and videography company and part of MacroHype LLC, serving conferences, corporate events and weddings with more than 13 years of experience.", alternates: { canonical: "/about" } };
+export const metadata: Metadata = { title: "About MacroSnaps", description: "MacroSnaps is a global photography and videography company and part of MacroHype LLC, with more than 13 years of experience and our own crews across the US.", alternates: { canonical: "/about" } };
 
 export default function About() {
   return (

@@ -10,7 +10,7 @@ import { IconCheck } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Corporate & Conference Photography and Videography",
-  description: "One photography & videography partner for every conference, company event and office across the US, Ontario & Quebec. Multi-day crews, live streaming and published hourly rates.",
+  description: "One photo and video partner for conferences, company events and every office across the US, Ontario & Quebec. Multi-day crews, live streaming, published rates.",
   alternates: { canonical: "/corporate" },
 };
 

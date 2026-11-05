@@ -17,7 +17,8 @@ import { ScrollReveal } from "@/components/Motion";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
-  title: { default: "MacroSnaps | Global Event, Conference & Wedding Photography & Videography", template: "%s | MacroSnaps" },
+  title: { default: "MacroSnaps | Event, Conference & Wedding Photo & Video", template: "%s | MacroSnaps" },
+  alternates: { canonical: "/" },
   description: SITE.description,
   openGraph: { siteName: "MacroSnaps", type: "website", images: ["https://static.wixstatic.com/media/1f3625_d2741b395b5d446da5d8ca57e5f286b2~mv2.jpg/v1/fit/w_1200,h_630,q_85/hero.jpg"] },
   twitter: { card: "summary_large_image", site: "@macrosnaps" },

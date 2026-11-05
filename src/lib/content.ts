@@ -99,7 +99,7 @@ export function cityContent(t: LocalTarget, c: City): CityContent {
 
   const subtitle = pick(
     [
-      `${name} for conferences, corporate events and weddings across ${c.name} and the surrounding area, with transparent prices you can book and pay for online.`,
+      `${name} for weddings, engagements, celebrations, conferences and corporate events across ${c.name} and the surrounding area, with published prices you can book and pay for online.`,
       `MacroSnaps' own ${plural(pro).toLowerCase()} cover ${c.name}: insured, 5-star rated, retouched images delivered fast.`,
       `Professional ${name.toLowerCase()} in ${c.name}, ${c.stateName}. One company, our own crews, upfront prices.`,
     ],
@@ -131,8 +131,8 @@ export function cityContent(t: LocalTarget, c: City): CityContent {
       `Your wedding day in ${c.name} only happens once. Our ${plural(pro).toLowerCase()} plan around your timeline, light and locations so you can simply enjoy it.`,
     ],
     general: [
-      `Looking for a professional ${pro.toLowerCase()} in ${c.name}? MacroSnaps covers conferences, corporate events, private events and weddings across ${c.stateName}, with our own photographers and videographers rather than freelancers from a marketplace.`,
-      `MacroSnaps is a global photography and videography company, and our crews work in ${c.name} for conferences, corporate events, celebrations and weddings.`,
+      `Looking for a professional ${pro.toLowerCase()} in ${c.name}? MacroSnaps covers weddings, engagements, family portraits, birthdays and celebrations, conferences and corporate events across ${c.stateName}, with our own photographers and videographers rather than freelancers from a marketplace.`,
+      `MacroSnaps is a global photography and videography company, and our crews work in ${c.name} for weddings and engagements, family and maternity sessions, parties and celebrations, and conferences and corporate events.`,
       `From corporate conferences to weddings, MacroSnaps provides ${name.toLowerCase()} in ${c.name}, ${c.stateName}, with packages you can book and pay for online in minutes.`,
     ],
   }[topic];
@@ -207,6 +207,7 @@ export function cityContent(t: LocalTarget, c: City): CityContent {
         ? `MacroSnaps ${name.toLowerCase()} packages in ${c.name} start at $${priceFrom} for 2 hours of coverage, and every package price is listed on this page. The first-hour price includes travel, so ${c.name} costs the same as any other city we serve. Multi-day and multi-camera corporate events are quoted separately.`
         : `Contact us with your date and requirements and we will send a quote for ${c.name}.`,
     },
+    { q: "How are your prices so affordable?", a: "We are affordable, but not cheap. We don't believe hiring a professional photographer or videographer should break the bank, and your wedding day certainly shouldn't cost you $10,000 to $20,000 just for photography. We keep prices down by how we work: our crews cover several events a day, so we run at high volume instead of charging one client for an entire day; our post-production team includes dedicated editors, some based overseas, who retouch and edit efficiently; and we share people, equipment and systems with our parent company, MacroHype. The result is professional cameras and lighting, experienced photographers and videographers, and careful, professional editing at a price that is published on our website and the same for every client." },
     {
       q: `Do you have ${plural(pro).toLowerCase()} in ${c.name}?`,
       a: `Yes. MacroSnaps has its own photographers and videographers working across ${c.stateName}, and we assign a crew for ${c.name} as soon as you book. You deal with one company from booking to delivery.`,
@@ -302,6 +303,6 @@ function topicDesc(topic: Topic, t: LocalTarget) {
     corporate: "corporate events, launches and galas",
     event: "galas, parties and celebrations",
     wedding: "ceremonies, receptions and elopements",
-    general: targetKind(t) === "video" ? "conferences, corporate events and weddings" : "conferences, corporate events and weddings",
+    general: "weddings, engagements, events and conferences",
   }[topic];
 }

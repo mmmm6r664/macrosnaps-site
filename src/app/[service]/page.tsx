@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   const { service } = await params;
   if (service in HUBS) {
     const h = HUBS[service as keyof typeof HUBS];
-    const t = `${h.pro}s Near You | ${h.name} Across the US, Ontario & Quebec`;
+    const t = `${h.pro}s Near You | US, Ontario & Quebec`;
     return { title: { absolute: `${t} | MacroSnaps` }, description: `Find a MacroSnaps ${h.pro.toLowerCase()} in your state, province or city. Our own crews cover conferences, corporate events and weddings across 1,690+ cities.`, alternates: { canonical: `/${service}` } };
   }
   const ev = EVENT_TYPES.find((e) => e.slug === service);

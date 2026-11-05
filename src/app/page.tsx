@@ -15,6 +15,7 @@ import { TrustBar, SectionTitle, Faqs, ClientLogos, Gallery, HowItWorks } from "
 import ContactForm from "@/components/ContactForm";
 
 const HOME_FAQS = [
+  { q: "How are your prices so affordable?", a: "We are affordable, but not cheap. We don't believe hiring a professional photographer or videographer should break the bank, and your wedding day certainly shouldn't cost you $10,000 to $20,000 just for photography. We keep prices down by how we work: our crews cover several events a day, so we run at high volume instead of charging one client for an entire day; our post-production team includes dedicated editors, some based overseas, who retouch and edit efficiently; and we share people, equipment and systems with our parent company, MacroHype. The result is professional cameras and lighting, experienced photographers and videographers, and careful, professional editing at a price that is published on our website and the same for every client." },
   { q: "Do you serve my area?", a: "Yes. MacroSnaps works worldwide, with our own photographers and videographers covering conferences, corporate events and weddings anywhere in the United States and Canada, from New York and Washington DC to Los Angeles, Chicago, Dallas, Miami, Toronto and beyond. Tell us your city and date when you book, and we'll confirm your crew." },
   { q: "Is your company insured and registered?", a: "We are fully insured through State Farm for $1 million (each occurrence) and $2 million (general aggregate). If your venue needs a copy of our insurance, email info@macrosnaps.com and we will be happy to oblige. We are a fully registered business and serve clients at venues across North America." },
   { q: "Do you have a studio?", a: "Yes, we have a studio in New York City (115 W 45th Street Suite 606, Times Square) and an office in Washington, DC (1300 I St NW). Our photographers and videographers also travel to clients anywhere we serve." },
@@ -28,9 +29,12 @@ const HOME_FAQS = [
 ];
 
 const PILLARS = [
-  { slug: "conference-photography", title: "Conferences", text: "Keynotes, panels, expos and networking — photo, video and live streaming for multi-day programs." },
-  { slug: "corporate-event-photography", title: "Corporate Events", text: "Launches, galas, award nights, holiday parties and offsites for companies in every city they operate." },
-  { slug: "wedding-photography", title: "Weddings", text: "Ceremonies, receptions, courthouse weddings and elopements, photographed and filmed with care." },
+  { slug: "conference-photography", title: "Conferences", text: "Keynotes, panels, expos and networking — photo, video and live streaming for multi-day programs.", tags: ["conference"] },
+  { slug: "corporate-event-photography", title: "Corporate Events", text: "Launches, galas, award nights, holiday parties and offsites in every city your company works in.", tags: ["corporate", "gala"] },
+  { slug: "wedding-photography", title: "Weddings", text: "Ceremonies, receptions, courthouse weddings, elopements and multi-day cultural weddings.", tags: ["wedding"] },
+  { slug: "engagement-photography", title: "Engagements", text: "Proposals and engagement sessions at the landmarks and parks you love.", tags: ["engagement"] },
+  { slug: "events", title: "Celebrations", text: "Bar & Bat Mitzvahs, Sweet 16s, quinceañeras, birthdays, anniversaries and gender reveals.", tags: ["party", "event"] },
+  { slug: "family-photography", title: "Family & Maternity", text: "Family portraits, maternity and newborn sessions, graduations and milestones.", tags: ["family", "maternity"] },
 ];
 
 export default function Home() {
@@ -45,7 +49,7 @@ export default function Home() {
   ];
   const about = pick.use(IMG.about);
   const banner = pick.one(byTags("conference").slice(8), IMG.conference);
-  const pillarImg = [pick.one(IMG.conference.slice(1)), pick.one(IMG.conference.slice(7)), pick.one(IMG.wedding)];
+  const pillarImg = PILLARS.map((p) => pick.one(byTags(...p.tags).slice(1), byTags(...p.tags)));
   const gallery = pick.many(16, IMG.portfolio, IMG.wedding, IMG.conference, IMG.event);
   const recentEvents = EVENTS.filter((e) => e.image).slice(0, 8);
   return (
@@ -72,8 +76,8 @@ export default function Home() {
 
       {/* Pillars */}
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-6" data-reveal>
-        <SectionTitle eyebrow="What we do" title="Photography & videography for the moments that matter" intro="One company with our own crews across all 50 states, Washington, DC, Ontario and Quebec — published prices and online booking." />
-        <div className="grid gap-6 md:grid-cols-3">
+        <SectionTitle eyebrow="What we do" title="Photography & videography for every occasion" intro="One company with our own crews across all 50 states, Washington, DC, Ontario and Quebec — published prices and online booking." />
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {PILLARS.map((p, i) => (
             <Link key={p.slug} href={`/${p.slug}`} className="group relative block aspect-[4/5] overflow-hidden bg-black text-white hover-zoom">
               <Image src={pillarImg[i]} alt={p.title} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover opacity-75 transition duration-500 group-hover:scale-105 group-hover:opacity-60" />

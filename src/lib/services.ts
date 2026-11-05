@@ -101,6 +101,10 @@ const CORPORATE_NOTE =
 
 const GENERAL_FAQS: Faq[] = [
   {
+    q: "How are your prices so affordable?",
+    a: "We are affordable, but not cheap. We don't believe hiring a professional photographer or videographer should break the bank, and your wedding day certainly shouldn't cost you $10,000 to $20,000 just for photography. We keep prices down by how we work: our crews cover several events a day, so we run at high volume instead of charging one client for an entire day; our post-production team includes dedicated editors, some based overseas, who retouch and edit efficiently; and we share people, equipment and systems with our parent company, MacroHype. The result is professional cameras and lighting, experienced photographers and videographers, and careful, professional editing at a price that is published on our website and the same for every client.",
+  },
+  {
     q: "Are the pictures edited?",
     a: "Yes. We color grade and retouch all the pictures delivered to our clients. Additional editing requests (for example slimming or skin-tone changes) are available at an extra charge, and re-edits of any photo you are not happy with are free.",
   },
@@ -128,7 +132,7 @@ export const SERVICES: Service[] = [
     pro: "Conference Photographer",
     title: "Conference Photographer | Corporate Conference Photography Worldwide",
     description:
-      "Professional conference photography for keynotes, panels, breakouts, expos and networking. MacroSnaps crews cover conferences across the US, Ontario and Quebec. From $350.",
+      "Conference photography for keynotes, panels, breakouts, expos and networking. Our own crews across the US, Ontario & Quebec. From $350, book online.",
     intro: [
       "Capturing the essence of a conference requires a unique set of skills and equipment, and we are committed to providing top-quality photography services for your event.",
       "From the opening keynote to the closing reception, MacroSnaps photographers document speakers, panels, breakout sessions, sponsors, exhibitors and the conversations that happen between sessions, giving your marketing, PR and sponsorship teams images they can publish the same week.",
@@ -172,7 +176,7 @@ export const SERVICES: Service[] = [
     pro: "Corporate Event Photographer",
     title: "Corporate Event Photographer | Company Events, Galas & Trade Shows",
     description:
-      "Corporate event photography for company parties, product launches, galas, award nights, trade shows and team offsites. Our own crews across the US, Ontario & Quebec. From $350.",
+      "Corporate event photography for launches, galas, award nights, holiday parties and offsites. Our own crews across the US, Ontario & Quebec. From $350.",
     intro: [
       "Your company events are some of your best marketing material. MacroSnaps photographs product launches, holiday parties, client appreciation nights, galas, award ceremonies, trade show booths and team offsites, and delivers polished images your brand, HR and sales teams can use for months.",
       "Our photographers dress for the room, work discreetly around executives and guests, and capture both the moments your leadership wants on record and the candid energy that shows what your company is really like.",
@@ -212,7 +216,7 @@ export const SERVICES: Service[] = [
     pro: "Trade Show Photographer",
     title: "Trade Show & Expo Photographer | Booth & Exhibitor Photography",
     description:
-      "Trade show and expo photography: booth photos, product demos, crowds, exhibitor and sponsor coverage at convention centers across the US, Ontario and Quebec. From $350.",
+      "Trade show and expo photography: booth photos, product demos, crowds and sponsor coverage at convention centers across the US, Ontario & Quebec. From $350.",
     intro: [
       "A trade show booth costs a lot to design and staff, and good photographs are how you prove its value to leadership and reuse it in marketing. MacroSnaps photographs booths before the doors open, product demos, visitor traffic, meetings and team photos at convention centers across North America.",
       "For show organizers, we cover the full expo floor, sponsor activations, ribbon cuttings and stage programming, so every exhibitor and sponsor gets the proof of exposure they paid for.",
@@ -243,7 +247,7 @@ export const SERVICES: Service[] = [
     pro: "Conference Videographer",
     title: "Conference Videographer | Keynote Recording & Recap Videos",
     description:
-      "Conference videography: keynote and panel recordings, multi-camera coverage, professional audio and edited highlight recap videos. Nationwide crews. From $500.",
+      "Conference videography: keynote and panel recordings, multi-camera coverage, clean audio and edited highlight recap videos. Our own crews. From $500.",
     intro: [
       "From keynote speeches to panel discussions, we'll capture every important moment. We pride ourselves on delivering excellent customer service and a high-quality final product.",
       "MacroSnaps films conferences, keynotes, panels and corporate events with multi-camera coverage and professional audio, then edits highlight videos your team can use to sell next year's tickets, thank sponsors and publish sessions online.",
@@ -277,7 +281,7 @@ export const SERVICES: Service[] = [
     pro: "Corporate Videographer",
     title: "Corporate Videographer | Company Event, Brand & Testimonial Videos",
     description:
-      "Corporate videography for company events, brand stories, executive interviews, client testimonials and training videos. MacroSnaps crews across the US, Ontario & Quebec.",
+      "Corporate videography for company events, brand stories, executive interviews, testimonials and training videos. Our own crews across the US, Ontario & Quebec.",
     intro: [
       "Video is now the most-used format in B2B marketing, recruiting and internal communication. MacroSnaps films corporate events, executive interviews, customer testimonials, brand and culture videos and training content, with the same crew quality in every city where you operate.",
       "As part of MacroHype LLC, a digital media and marketing company working with businesses since 2011, our team plans, shoots and edits corporate video with your audience and channels in mind.",
@@ -366,7 +370,7 @@ export const SERVICES: Service[] = [
     pro: "Wedding Photographer",
     title: "Affordable Wedding Photographers | MacroSnaps Captures Perfect Moments",
     description:
-      "Affordable wedding photographers for ceremonies, receptions, elopements and courthouse weddings across the US, Ontario & Quebec. Packages from $350. Book online.",
+      "Affordable wedding photographers for ceremonies, receptions, elopements and courthouse weddings across the US, Ontario & Quebec. From $350, book online.",
     intro: [
       "Wedding; the special day to celebrate two souls building a sweet bond of forever and vowing to be beside each other for eternity as they both whisper “I Do” in the midst of a teary-eyed crowd. Every emotion, every expression of happiness and excitement that fills the air at that second is a moment we treasure and pledge to capture.",
       "As a couple's big day approaches, they want to ensure that every aspect of their wedding is captured perfectly, including the photography. That's where MacroSnaps comes in. Our wedding photography services offer a comprehensive solution to capturing beautiful, timeless memories of your special day.",
@@ -391,7 +395,7 @@ export const SERVICES: Service[] = [
     pro: "Wedding Videographer",
     title: "Wedding Videographer | Cinematic Wedding Films",
     description:
-      "Wedding videography: cinematic HD highlight films of your ceremony and reception, with music of your choice. MacroSnaps videographers across the US, Ontario & Quebec.",
+      "Wedding videography: cinematic highlight films of your ceremony and reception with music of your choice. Our own videographers in the US, Ontario & Quebec.",
     intro: [
       "Our videographers capture your remarkable stories in breathtaking cinematic HD videos.",
       "From vows and speeches to the first dance, MacroSnaps wedding videographers film the day as it unfolds and edit a highlight film set to the music you choose, with raw footage available on request.",

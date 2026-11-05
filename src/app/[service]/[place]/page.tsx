@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCity, getRegion, getRegionByCode, cityLabel, prerenderCities, regions, City, Region } from "@/lib/geo";
-import { LOCAL_SLUGS, SERVICES } from "@/lib/services";
+import { LOCAL_SLUGS, SERVICES, getService } from "@/lib/services";
 import { cityContent, regionContent, resolveTarget, hubServices, imagesFor, targetName, targetPro, targetSlug, LocalTarget } from "@/lib/content";
 import { PageHero, TrustBar, SectionTitle, Pricing, Faqs, ClientLogos, Gallery, Breadcrumbs, CtaBand, HowItWorks } from "@/components/blocks";
 import JsonLd from "@/components/JsonLd";
@@ -114,12 +114,25 @@ function CityPage({ t, city }: { t: LocalTarget; city: City }) {
       <section className="bg-marble px-4 py-16 md:px-6">
         <div className="mx-auto max-w-7xl">
           <SectionTitle eyebrow="Pricing" title={c.pricingTitle} intro={c.pricingIntro} />
-          {services.filter((s) => s.packages.length).slice(0, 2).map((s) => (
-            <div key={s.slug} className="mb-12 last:mb-0">
-              {services.length > 1 && <h3 className="mb-5 font-serif text-2xl"><Link href={`/${s.slug}/${city.slug}`} className="hover:text-gold-dark">{s.name} in {city.name}</Link></h3>}
-              <Pricing packages={s.packages.slice(0, services.length > 1 ? 3 : 6)} serviceSlug={s.slug} citySlug={city.slug} note={s.pricingNote} />
-            </div>
-          ))}
+          {t.kind === "hub" ? (
+            <>
+              <Pricing packages={(t.hub.kind === "video" ? getService("event-videography") : getService("event-photography"))!.packages} serviceSlug={t.hub.kind === "video" ? "event-videography" : "event-photography"} citySlug={city.slug} />
+              <h3 className="mb-6 mt-14 text-center font-serif text-2xl">The same published rate for every {t.hub.kind === "video" ? "videography" : "photography"} service in {city.name}</h3>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {SERVICES.filter((x) => x.kind === t.hub.kind && x.packages.some((p) => p.hours)).map((x) => (
+                  <Link key={x.slug} href={x.local ? `/${x.slug}/${city.slug}` : `/${x.slug}`} className="group flex items-center justify-between border border-black/10 bg-white px-4 py-3 transition hover:border-gold-dark hover:shadow-md">
+                    <span>{x.name}</span><span className="text-gold-dark transition group-hover:translate-x-1">→</span>
+                  </Link>
+                ))}
+              </div>
+            </>
+          ) : (
+            services.filter((s) => s.packages.length).map((s) => (
+              <div key={s.slug}>
+                <Pricing packages={s.packages} serviceSlug={s.slug} citySlug={city.slug} note={s.pricingNote} />
+              </div>
+            ))
+          )}
         </div>
       </section>
 

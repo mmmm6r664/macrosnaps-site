@@ -7,6 +7,7 @@ export const metadata: Metadata = { title: "FAQ: Booking, Pricing, Insurance & D
 export default function FaqPage() {
   const seen = new Set<string>();
   const groups = [
+    { title: "Pricing, booking & insurance", slugs: ["event-photography"] },
     { title: "Conferences & corporate events", slugs: ["conference-photography", "conference-videography", "corporate-event-photography"] },
     { title: "Weddings", slugs: ["wedding-photography", "wedding-videography"] },
   ].map((g) => ({ title: g.title, faqs: g.slugs.flatMap((s) => SERVICES.find((x) => x.slug === s)?.faqs ?? []).filter((f) => (seen.has(f.q) ? false : (seen.add(f.q), true))) }));

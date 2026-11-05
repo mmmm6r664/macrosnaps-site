@@ -34,7 +34,7 @@ export default function Footer() {
           <FooterCol title="Videography" items={[...NAV_VIDEO.map(([s, l]) => [`/${s}`, l]), ["/photo-booth", "Photo Booth"]]} />
           <FooterCol title="Popular Cities" items={TOP.map(([s, l]) => [`/photographers/${s}`, `${l} Photographers`])} />
           <div>
-            <h3 className="mb-4 font-serif text-lg text-gold">Contact</h3>
+            <h2 className="mb-4 font-serif text-lg text-gold">Contact</h2>
             <p><a href={SITE.phoneHref} className="hover:text-gold">{SITE.phone}</a></p>
             <p><a href={`mailto:${SITE.email}`} className="hover:text-gold">{SITE.email}</a></p>
             {SITE.offices.map((o) => (
@@ -57,7 +57,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 border-t border-white/10 pt-8">
-          <h3 className="mb-3 font-serif text-lg text-gold">Photographers & Videographers by State and Province</h3>
+          <h2 className="mb-3 font-serif text-lg text-gold">Photographers & Videographers by State and Province</h2>
           <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
             {[...usRegions, ...caRegions].map((r) => (
               <Link key={r.slug} href={`/photographers/${r.slug}`} className="hover:text-gold">{r.name}</Link>
@@ -88,7 +88,7 @@ export default function Footer() {
 function FooterCol({ title, items }: { title: string; items: string[][] }) {
   return (
     <div>
-      <h3 className="mb-4 font-serif text-lg text-gold">{title}</h3>
+      <h2 className="mb-4 font-serif text-lg text-gold">{title}</h2>
       <ul className="space-y-1.5 text-sm">
         {items.map(([href, label]) => <li key={href}><Link href={href} className="hover:text-gold">{label}</Link></li>)}
       </ul>

@@ -4,7 +4,7 @@ import { usRegions, caRegions, citiesIn } from "@/lib/geo";
 import { SectionTitle } from "@/components/blocks";
 
 export const metadata: Metadata = {
-  title: "Locations: Photographers & Videographers in Every State and Province",
+  title: "Locations: Photographers in Every State, Ontario & Quebec",
   description: "MacroSnaps covers all 50 US states, Washington DC and Canada. Find conference, event and wedding photographers and videographers in 1,690+ cities.",
   alternates: { canonical: "/locations" },
 };
