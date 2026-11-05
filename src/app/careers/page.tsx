@@ -38,7 +38,7 @@ export default function Careers() {
       <section className="mx-auto max-w-3xl px-4 py-16" data-reveal>
         <SectionTitle eyebrow="Requirements" title="Who we're looking for" />
         <ul className="space-y-3 text-[17px]">
-          {["At least 4 years of professional photography or videography experience", "The latest professional camera body and lenses", "Professional lighting suited to events", "A portfolio that shows your event, wedding or corporate work", "Reliable, punctual and comfortable working with clients and guests"].map((r) => <li key={r} className="flex gap-3"><IconCheck className="mt-1 h-5 w-5 shrink-0 text-gold-dark" />{r}</li>)}
+          {["At least 4 years of professional photography or videography experience", "The latest professional camera body and lenses", "A portfolio that shows your event, wedding or corporate work", "Reliable, punctual and comfortable working with clients and guests"].map((r) => <li key={r} className="flex gap-3"><IconCheck className="mt-1 h-5 w-5 shrink-0 text-gold-dark" />{r}</li>)}
         </ul>
       </section>
       <section id="apply" className="bg-marble px-4 py-16 md:px-6">
