@@ -73,12 +73,14 @@ export default function Footer() {
 
         <div className="mt-8 flex flex-col items-center justify-between gap-3 text-xs md:flex-row">
           <p>© {new Date().getFullYear()} MacroSnaps. Website by <a href={SITE.parentUrl} className="underline">{SITE.parent}</a>.</p>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             <Link href="/faq" className="hover:text-gold">FAQ</Link>
             <Link href="/investors" className="hover:text-gold">Investor Relations</Link>
             <Link href="/locations" className="hover:text-gold">All Locations</Link>
             <Link href="/terms" className="hover:text-gold">Booking Terms</Link>
             <Link href="/privacy" className="hover:text-gold">Privacy</Link>
+            <Link href="/privacy#cookies" className="hover:text-gold">Cookies</Link>
+            <Link href="/legal" className="hover:text-gold">Legal</Link>
           </div>
         </div>
       </div>
