@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Stats from "@/components/Stats";
-import TeamQuote from "@/components/TeamQuote";
 import { IMG } from "@/lib/images";
 import { ClientLogos, CtaBand, TrustBar } from "@/components/blocks";
 import { SITE } from "@/lib/site";
@@ -27,7 +26,6 @@ export default function About() {
       </section>
       <TrustBar />
       <Stats />
-      <TeamQuote />
       <ClientLogos />
       <CtaBand title="Let us help create long lasting memories" />
     </>
