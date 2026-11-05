@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { cities, cityLabel, regions } from "@/lib/geo";
+import { safeQuery } from "@/lib/safeInput";
 
 const norm = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const INDEX = [
@@ -10,7 +11,9 @@ const INDEX = [
 export const revalidate = 86400;
 
 export async function GET(req: Request) {
-  const q = norm(new URL(req.url).searchParams.get("q") ?? "").trim().replace(/,/g, " ").replace(/\s+/g, " ");
+  const safe = safeQuery(new URL(req.url).searchParams.get("q"));
+  if (safe === null) return NextResponse.json([]);
+  const q = norm(safe).trim().replace(/,/g, " ").replace(/\s+/g, " ");
   if (q.length < 2) return NextResponse.json([]);
   const words = q.split(" ");
   const hits = INDEX.filter((e) => words.every((w) => e.key.includes(w)))

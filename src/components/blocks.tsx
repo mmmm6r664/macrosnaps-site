@@ -39,7 +39,7 @@ export function SectionTitle({ eyebrow, title, intro, center = true }: { eyebrow
 }
 
 export function TrustBar() {
-  const items = ["1,000+ corporate events · 5,000+ weddings & private events", "5-star rated on Google, Thumbtack, WeddingWire & The Knot", "Insured by State Farm: $1M / $2M", "Published prices, book & pay online"];
+  const items = ["6,000+ events", "Rated 5 stars", "Insured by State Farm: $1M / $2M", "Published prices, book & pay online"];
   return (
     <div className="border-y border-black/5 bg-marble">
       <ul className="mx-auto grid max-w-7xl gap-3 px-4 py-5 text-sm text-ink sm:grid-cols-2 lg:grid-cols-4">

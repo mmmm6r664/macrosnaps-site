@@ -1,4 +1,5 @@
 "use client";
+import { cleanTyped, MAX_QUERY } from "@/lib/safeInput";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -61,7 +62,9 @@ export default function AskBox({ variant = "light", title = "Tell us what you ne
         <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-gold-dark" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
         <input
           value={q}
-          onChange={(e) => setQ(e.target.value)}
+          onChange={(e) => setQ(cleanTyped(e.target.value))}
+          maxLength={MAX_QUERY}
+          spellCheck={false}
           onFocus={() => (focused.current = true)}
           placeholder={ph}
           aria-label="Describe the photography or videography you need"

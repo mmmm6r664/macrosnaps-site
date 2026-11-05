@@ -1,4 +1,5 @@
 "use client";
+import { cleanTyped, MAX_QUERY } from "@/lib/safeInput";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -29,7 +30,9 @@ export default function CitySearch({ dark = true, placeholder = "Find your city 
     <div className="relative">
       <input
         value={q}
-        onChange={(e) => setQ(e.target.value)}
+        onChange={(e) => setQ(cleanTyped(e.target.value))}
+          maxLength={MAX_QUERY}
+          spellCheck={false}
         onKeyDown={(e) => {
           if (e.key === "ArrowDown") { e.preventDefault(); setActive((a) => Math.min(a + 1, hits.length - 1)); }
           if (e.key === "ArrowUp") { e.preventDefault(); setActive((a) => Math.max(a - 1, 0)); }
