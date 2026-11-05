@@ -1,57 +1,28 @@
 import Image from "next/image";
 
-export const TEAM = {
-  juan: {
-    name: "Juan",
-    role: "Head Photographer · DC Metro Region",
-    quote: "We aim to make all your events special.",
-    photo: "/team/juan.png",
-    alt: "Juan, Head Photographer for the DC Metro region at MacroSnaps",
-    regions: ["DC", "MD", "VA"],
-  },
-  dusan: {
-    name: "Dusan",
-    role: "Head Videographer · New York Metro Region",
-    quote: "At MacroSnaps, we take your story seriously — every frame, every cut.",
-    photo: "/team/dusan.png",
-    alt: "Dusan, Head Videographer for the New York Metro region at MacroSnaps",
-    regions: ["NY", "NJ", "CT"],
-  },
-};
-type Member = (typeof TEAM)[keyof typeof TEAM];
+export const TEAM = [
+  { name: "Juan", role: "Head Photographer, DC Metro Region", quote: "We aim to make all your events special.", image: "/team/juan-quote.jpg", regions: ["DC", "MD", "VA"] },
+  { name: "Dusan", role: "Head Videographer, New York Metro Region", quote: "At MacroSnaps, we take your story seriously.", image: "/team/dusan-quote.jpg", regions: ["NY", "NJ", "CT"] },
+];
 
-function Card({ m, large }: { m: Member; large?: boolean }) {
-  return (
-    <figure className={`flex flex-col items-center gap-8 ${large ? "md:flex-row" : ""}`}>
-      <div className={`relative shrink-0 overflow-hidden rounded-t-full border-4 border-gold shadow-xl ${large ? "h-72 w-56 md:h-96 md:w-72" : "h-72 w-56"}`}>
-        <Image src={m.photo} alt={m.alt} fill sizes="288px" className="object-cover object-top" />
-      </div>
-      <div className={`text-center ${large ? "md:text-left" : ""}`}>
-        <svg viewBox="0 0 48 36" className={`mx-auto h-8 w-10 text-gold ${large ? "md:mx-0" : ""}`} fill="currentColor" aria-hidden><path d="M0 36V22C0 9 7 1 19 0l2 5C14 7 11 12 11 18h8v18H0zm27 0V22C27 9 34 1 46 0l2 5c-7 2-10 7-10 13h8v18H27z" /></svg>
-        <blockquote className={`mt-3 font-script leading-tight text-ink ${large ? "text-4xl md:text-5xl" : "text-3xl md:text-4xl"}`}>{m.quote}</blockquote>
-        <figcaption className="mt-5">
-          <span className="block font-serif text-2xl">{m.name}</span>
-          <span className="text-sm uppercase tracking-[.2em] text-gold-dark">{m.role}</span>
-        </figcaption>
-      </div>
-    </figure>
-  );
-}
-
-/** Team quotes. Pass a state/province code to show the local lead only (nothing if none). */
-export default function TeamQuote({ region }: { region?: string }) {
-  const members = region ? Object.values(TEAM).filter((m) => m.regions.includes(region)) : Object.values(TEAM);
+/** Team quote images. With `region`, shows only that region's lead (nothing if none). */
+export default function TeamQuote({ region, title = "The people behind the camera" }: { region?: string; title?: string }) {
+  const members = region ? TEAM.filter((m) => m.regions.includes(region)) : TEAM;
   if (!members.length) return null;
   return (
-    <section className="marble px-4 py-16 md:px-6" data-reveal>
+    <section className="bg-black px-4 py-16 md:px-6" data-reveal>
       {!region && (
-        <div className="mx-auto mb-12 max-w-3xl text-center">
-          <p className="eyebrow">Meet the team</p>
-          <h2 className="mt-3 font-serif text-3xl md:text-4xl">The people behind the camera</h2>
+        <div className="mx-auto mb-10 max-w-3xl text-center">
+          <p className="eyebrow !text-gold">Meet our regional leads</p>
+          <h2 className="mt-3 font-serif text-3xl text-white md:text-4xl">{title}</h2>
         </div>
       )}
-      <div className={`mx-auto grid max-w-6xl gap-16 ${members.length > 1 ? "md:grid-cols-2" : "max-w-5xl"}`}>
-        {members.map((m) => <Card key={m.name} m={m} large={members.length === 1} />)}
+      <div className={`mx-auto grid max-w-7xl gap-6 ${members.length > 1 ? "lg:grid-cols-2" : "max-w-5xl"}`}>
+        {members.map((m) => (
+          <figure key={m.name} className="overflow-hidden rounded-lg border border-gold/30 shadow-2xl">
+            <Image src={m.image} alt={`${m.name}, ${m.role} at MacroSnaps: "${m.quote}"`} width={1600} height={900} sizes="(max-width: 1024px) 100vw, 50vw" className="h-auto w-full" />
+          </figure>
+        ))}
       </div>
     </section>
   );

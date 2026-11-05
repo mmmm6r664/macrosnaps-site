@@ -5,7 +5,6 @@ import { HeroSlideshow } from "@/components/Motion";
 import AskBox from "@/components/AskBox";
 import WhyUs from "@/components/WhyUs";
 import Stats from "@/components/Stats";
-import TeamQuote from "@/components/TeamQuote";
 import VideoGrid from "@/components/VideoGrid";
 import { VIDEOS } from "@/data/videos";
 import { EVENT_TYPES } from "@/data/eventTypes";
@@ -126,8 +125,6 @@ export default function Home() {
           <Link href="/book" className="mt-8 self-start font-sans text-3xl tracking-wide text-ink hover:text-gold-dark">BOOK A SESSION</Link>
         </div>
       </section>
-
-      <TeamQuote />
 
       <WhyUs where="Every event" />
 
