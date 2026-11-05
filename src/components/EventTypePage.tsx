@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { EVENT_TYPES, type EventType } from "@/data/eventTypes";
 import { RATES, hourPrice } from "@/lib/services";
-import { byTags, photoPicker } from "@/lib/images";
+import { byTags, photoPicker, bannerSafe } from "@/lib/images";
 import { videosFor, type Tag } from "@/data/videos";
 import { EVENT_PHOTO_TAGS } from "@/lib/pageMedia";
 import { topCities, cityLabel } from "@/lib/geo";
@@ -14,7 +14,7 @@ import { serviceSchema } from "@/lib/schema";
 export default function EventTypePage({ e }: { e: EventType }) {
   const pick = photoPicker();
   const own = byTags(...(EVENT_PHOTO_TAGS[e.slug] ?? ["event"]));
-  const hero = own.length ? pick.one(own) : undefined;
+  const hero = bannerSafe(own).length ? pick.one(bannerSafe(own)) : undefined;
   const gallery = pick.many(8, own);
   const videos = videosFor(e.videoTags as Tag[], 3, e.slug.length);
   const related = e.related.map((r) => EVENT_TYPES.find((x) => x.slug === r)).filter(Boolean) as EventType[];

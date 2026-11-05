@@ -13,7 +13,7 @@ import ExploreLinks from "@/components/ExploreLinks";
 import { videosFor } from "@/data/videos";
 import { SERVICE_VIDEO_TAGS, TOUR_STATES } from "@/lib/pageMedia";
 import { serviceSchema } from "@/lib/schema";
-import { photoPicker, rotate } from "@/lib/images";
+import { photoPicker, rotate, bannerSafe } from "@/lib/images";
 import { SITE } from "@/lib/site";
 import { IconCheck } from "@/components/Icons";
 
@@ -73,7 +73,7 @@ function CityPage({ t, city }: { t: LocalTarget; city: City }) {
   const services = hubServices(t);
   const pick = photoPicker();
   const pool = rotate(imagesFor(t), city.id);
-  const heroImg = pick.one(pool);
+  const heroImg = bannerSafe(pool).length ? pick.one(bannerSafe(pool)) : undefined;
   const images = pick.many(12, pool);
   const url = `/${slug}/${city.slug}`;
   const primary = services[0];
@@ -231,7 +231,7 @@ function RegionPage({ t, region }: { t: LocalTarget; region: Region }) {
   const services = hubServices(t);
   const pick = photoPicker();
   const pool = rotate(imagesFor(t), region.slug.length * 7 + region.name.charCodeAt(0));
-  const heroImg = pick.one(pool);
+  const heroImg = bannerSafe(pool).length ? pick.one(bannerSafe(pool)) : undefined;
   const images = pick.many(8, pool);
   const url = `/${slug}/${region.slug}`;
   const primary = services[0];

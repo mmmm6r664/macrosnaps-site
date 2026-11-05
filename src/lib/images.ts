@@ -3,7 +3,7 @@
 import catalog from "@/data/photos.json";
 import illustrations from "@/data/illustrations.json";
 
-export type Photo = { src: string; tags: string[]; alt: string };
+export type Photo = { src: string; tags: string[]; alt: string; orient?: string; banner?: boolean };
 const PHOTOS = catalog as Photo[];
 const ILLUS = illustrations as Photo[];
 const ALT = new Map<string, string>([...PHOTOS, ...ILLUS].map((p) => [p.src, p.alt]));
@@ -18,13 +18,17 @@ export const byTags = (...tags: string[]) => {
 /** Illustrative (non-portfolio) images for subjects we have no own photos of — never used in "Our Work" galleries. */
 export const illustrationsFor = (...tags: string[]) => ILLUS.filter((p) => p.tags.some((t) => tags.includes(t))).map((p) => p.src);
 export const altFor = (src: string) => ALT.get(src);
+const BANNER = new Set(PHOTOS.filter((p) => p.banner).map((p) => p.src));
+/** Photos that still read well in wide crops (heroes, banners): wide-safe first, others never in wide slots. */
+export const bannerSafe = (list: string[]) => list.filter((s) => BANNER.has(s) || s.includes("ytimg.com"));
+export const isBannerSafe = (src?: string) => !!src && (BANNER.has(src) || src.includes("ytimg.com"));
 
 const W = "https://static.wixstatic.com/media/";
 
 export const IMG = {
   hero: `${W}1f3625_d2741b395b5d446da5d8ca57e5f286b2~mv2.jpg`,
   about: `${W}1f3625_79013331208a4ec8826fcde024545575~mv2.jpg`,
-  conferenceHero: `${W}b8cb3c_af143925a50c4d24a9cdd29895d94165~mv2.jpg`,
+  conferenceHero: `${W}b8cb3c_af143925a50c4d24a9cdd29895d94165~mv2.jpg`, // audience in a darkened auditorium (wide-safe)
   conference: byTags("conference"),
   corporate: byTags("corporate", "gala"),
   conferenceVideo: byTags("conference"),
@@ -72,7 +76,7 @@ export const serviceTags = (slug: string) => SERVICE_TAGS[slug] ?? ["conference"
 /** Own photos for a service page. */
 export const photosForService = (slug: string) => byTags(...serviceTags(slug));
 /** Hero image for a service: own photo first, an illustration if we have none. */
-export const heroForService = (slug: string) => photosForService(slug)[0] ?? illustrationsFor(...serviceTags(slug))[0] ?? IMG.conferenceHero;
+export const heroForService = (slug: string) => bannerSafe(photosForService(slug))[0] ?? illustrationsFor(...serviceTags(slug))[0];
 
 /** Hands out photos for one page so the same photo never appears twice on that page. */
 export function photoPicker() {

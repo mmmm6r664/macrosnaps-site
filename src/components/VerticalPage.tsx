@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Vertical } from "@/data/verticals";
 import { VERTICALS } from "@/data/verticals";
 import { getService, RATES } from "@/lib/services";
-import { byTags, photoPicker } from "@/lib/images";
+import { byTags, photoPicker, bannerSafe } from "@/lib/images";
 import { videosFor } from "@/data/videos";
 import { VERTICAL_MEDIA } from "@/lib/pageMedia";
 import { PageHero, TrustBar, SectionTitle, Faqs, Gallery, Breadcrumbs, CtaBand, HowItWorks } from "./blocks";
@@ -19,7 +19,7 @@ export default function VerticalPage({ v }: { v: Vertical }) {
   const media = VERTICAL_MEDIA[v.slug] ?? { photos: [], videos: [] };
   const pick = photoPicker();
   const own = media.photos.length ? byTags(...media.photos) : [];
-  const hero = own.length ? pick.one(own) : undefined;
+  const hero = bannerSafe(own).length ? pick.one(bannerSafe(own)) : undefined;
   const gallery = pick.many(8, own);
   const videos = media.videos.length ? videosFor(media.videos, 3) : [];
   const services = v.services.map((s) => getService(s)).filter(Boolean);

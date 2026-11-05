@@ -14,7 +14,7 @@ import { SERVICE_VIDEO_TAGS, TOUR_STATES } from "@/lib/pageMedia";
 import { EVENT_TYPES } from "@/data/eventTypes";
 import JsonLd from "@/components/JsonLd";
 import { serviceSchema } from "@/lib/schema";
-import { IMG, byTags } from "@/lib/images";
+import { IMG, byTags, bannerSafe } from "@/lib/images";
 import { IconCheck } from "@/components/Icons";
 
 export const dynamicParams = false;
@@ -76,10 +76,10 @@ function LocationDirectory({ slug, pro }: { slug: string; pro: string }) {
 const FILM_HERO = ["commercial-videography", "music-videography", "food-photography", "photo-booth", "engagement-videography"];
 const heroOf = (s: Service): string | undefined => {
   if (s.slug === "conference-photography") return IMG.conferenceHero;
-  if (s.slug === "live-stream" || s.slug === "video-editing") return byTags("conference")[8] ?? IMG.conferenceHero;
+  if (s.slug === "live-stream" || s.slug === "video-editing") return bannerSafe(byTags("conference"))[1] ?? IMG.conferenceHero;
   const film = videosFor(SERVICE_VIDEO_TAGS[s.slug] ?? [], 1)[0];
   if (film && (FILM_HERO.includes(s.slug) || !s.images.length)) return `https://i.ytimg.com/vi/${film.id}/hqdefault.jpg`;
-  return s.images[0];
+  return bannerSafe(s.images)[0] ?? (film ? `https://i.ytimg.com/vi/${film.id}/hqdefault.jpg` : undefined);
 };
 
 function ServicePage({ s }: { s: Service }) {

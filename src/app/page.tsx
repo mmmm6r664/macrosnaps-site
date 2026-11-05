@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { IMG, photoPicker, byTags } from "@/lib/images";
+import { IMG, photoPicker, byTags, bannerSafe } from "@/lib/images";
 import { HeroSlideshow } from "@/components/Motion";
 import AskBox from "@/components/AskBox";
 import WhyUs from "@/components/WhyUs";
@@ -55,12 +55,12 @@ export default function Home() {
   const heroSlides = [
     { src: hero, alt: "Wedding couple photographed by MacroSnaps", pos: "center 22%" },
     { src: pick.use(IMG.conferenceHero), alt: "Conference audience photographed by MacroSnaps" },
-    { src: pick.one(byTags("indian")), alt: "Indian wedding couple photographed by MacroSnaps" },
-    { src: pick.one(IMG.conference.slice(2)), alt: "Panel discussion at a conference photographed by MacroSnaps" },
-    { src: pick.one(byTags("courthouse")), alt: "Couple at the US Capitol photographed by MacroSnaps" },
+    { src: pick.one(bannerSafe(byTags("indian"))), alt: "Indian wedding couple photographed by MacroSnaps" },
+    { src: pick.one(bannerSafe(byTags("conference")).slice(1)), alt: "Panel discussion at a conference photographed by MacroSnaps" },
+    { src: pick.one(bannerSafe(byTags("courthouse"))), alt: "Couple at the US Capitol photographed by MacroSnaps" },
   ];
   const about = pick.use(IMG.about);
-  const banner = pick.one(byTags("conference").slice(8), IMG.conference);
+  const banner = pick.one(bannerSafe(byTags("conference")).slice(3));
   const pillarImg = PILLARS.map((p) => (p.film ? `https://i.ytimg.com/vi/${p.film}/hqdefault.jpg` : pick.one(byTags(...(p.tags ?? [])).slice(1), byTags(...(p.tags ?? [])))));
   const gallery = pick.many(16, IMG.portfolio, IMG.wedding, IMG.conference, IMG.event);
   const recentEvents = EVENTS.filter((e) => e.image).slice(0, 8);
