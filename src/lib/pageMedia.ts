@@ -53,7 +53,7 @@ export const SERVICE_VIDEO_TAGS: Record<string, Tag[]> = {
   "corporate-event-photography": ["corporate", "conference"], "corporate-videography": ["corporate", "conference"],
   "trade-show-photography": ["tradeshow"], "event-photography": ["party", "event"], "event-videography": ["party", "event"],
   "wedding-photography": ["wedding"], "wedding-videography": ["wedding"], "engagement-photography": ["wedding"], "engagement-videography": ["wedding"],
-  "commercial-photography": ["commercial"], "commercial-videography": ["commercial"], "food-photography": ["restaurant"],
+  "commercial-photography": ["restaurant", "commercial"], "commercial-videography": ["restaurant", "commercial"], "food-photography": ["restaurant"],
   "photo-booth": ["party"], "video-editing": ["conference", "wedding"], "graduation-photography": ["party"],
   photographers: ["conference", "wedding", "party"], videographers: ["conference", "wedding", "commercial"],
 };

@@ -71,7 +71,8 @@ export const VIDEOS: Video[] = [
 ];
 
 export const videosFor = (tags: Tag[], n = 6, seed = 0) => {
-  const list = VIDEOS.filter((v) => v.tags.some((t) => tags.includes(t)));
+  const list: Video[] = [];
+  for (const t of tags) for (const v of VIDEOS) if (v.tags.includes(t) && !list.includes(v)) list.push(v);
   const k = list.length ? seed % list.length : 0;
   return [...list.slice(k), ...list.slice(0, k)].slice(0, n);
 };

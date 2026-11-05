@@ -9,7 +9,12 @@ const ILLUS = illustrations as Photo[];
 const ALT = new Map<string, string>([...PHOTOS, ...ILLUS].map((p) => [p.src, p.alt]));
 
 /** Own photos having any of the tags, in catalog order. */
-export const byTags = (...tags: string[]) => PHOTOS.filter((p) => p.tags.some((t) => tags.includes(t))).map((p) => p.src);
+export const byTags = (...tags: string[]) => {
+  // Priority order: every photo with the first tag, then the second tag, …
+  const out: string[] = [];
+  for (const t of tags) for (const p of PHOTOS) if (p.tags.includes(t) && !out.includes(p.src)) out.push(p.src);
+  return out;
+};
 /** Illustrative (non-portfolio) images for subjects we have no own photos of — never used in "Our Work" galleries. */
 export const illustrationsFor = (...tags: string[]) => ILLUS.filter((p) => p.tags.some((t) => tags.includes(t))).map((p) => p.src);
 export const altFor = (src: string) => ALT.get(src);
@@ -39,8 +44,8 @@ const SERVICE_TAGS: Record<string, string[]> = {
   "trade-show-photography": ["tradeshow", "conference"],
   "conference-videography": ["conference"],
   "corporate-videography": ["corporate", "conference"],
-  "event-photography": ["event", "party", "gala"],
-  "event-videography": ["event", "party", "gala"],
+  "event-photography": ["party", "gala", "event"],
+  "event-videography": ["party", "gala", "event"],
   "wedding-photography": ["wedding"],
   "wedding-videography": ["wedding"],
   "engagement-photography": ["engagement"],
