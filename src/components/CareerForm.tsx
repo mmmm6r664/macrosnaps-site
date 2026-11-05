@@ -95,7 +95,7 @@ export default function CareerForm() {
       <div>
         <button disabled={state === "sending"} className="btn-gold w-full sm:w-auto">{state === "sending" ? "Sending…" : "Submit application"}</button>
         {state === "error" && <p className="mt-3 text-sm text-red-700">{error}</p>}
-        <p className="mt-3 text-xs text-muted">Requirements: at least 1 year of professional experience and a primary camera body released in 2015 or later, valued at $1,000 or more.</p>
+        <p className="mt-3 text-xs text-muted">Please only apply if you are a professional photographer or videographer.</p>
       </div>
     </form>
   );
