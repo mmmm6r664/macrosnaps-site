@@ -28,7 +28,7 @@ export const EXPERIENCE = [
 
 export const RADIUS = ["Up to 10 miles", "Up to 25 miles", "Up to 50 miles", "Up to 100 miles", "100+ miles / willing to travel"];
 export const ROLES = ["Photographer", "Videographer", "Both photo & video"];
-export const SHOOT_TYPES = ["Conferences & corporate events", "Weddings", "Engagements & couples", "Parties & private events", "Cultural & religious ceremonies", "Headshots & portraits", "Family, maternity & newborn", "Real estate", "Product & food", "Commercial / brand video", "Live streaming", "Drone (FAA Part 107)"];
+export const SHOOT_TYPES = ["Conferences & corporate events", "Weddings", "Same-sex weddings", "Engagements & couples", "Boudoir", "Parties & private events", "Cultural & religious ceremonies", "Headshots & portraits", "Family, maternity & newborn", "Real estate", "Product & food", "Commercial / brand video", "Live streaming", "Drone (FAA Part 107)"];
 
 export const NOT_ELIGIBLE =
   "Thank you for your interest in MacroSnaps. At this time we can only accept applications from photographers and videographers with at least 1 year of professional experience and a primary camera body released in 2015 or later, valued at $1,000 or more. You're welcome to apply again once you meet these requirements.";
