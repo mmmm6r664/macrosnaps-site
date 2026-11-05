@@ -118,7 +118,7 @@ const GENERAL_FAQS: Faq[] = [
   },
   {
     q: "What is your refund and rescheduling policy?",
-    a: "Bookings are non-refundable because we reserve your slot and turn away other bookings for that time. Bookings can be rescheduled at no charge because of extreme weather or a serious emergency (proof required).",
+    a: "All bookings are non-refundable, because each booking secures the date and our team's commitment. If MacroSnaps can't perform the service because of unforeseen circumstances such as illness or equipment failure, you receive a full refund. Cancellations by the client aren't eligible for a refund or rescheduling. See our Terms and Conditions.",
   },
 ];
 

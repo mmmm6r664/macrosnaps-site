@@ -25,7 +25,7 @@ export async function POST(req: Request) {
       ["Name", s(b.name)], ["Email", email], ["Phone", s(b.phone, 40)], ["City", s(b.city)], ["Work radius", s(b.radius)], ["Role", s(b.role)],
       ["Experience", EXPERIENCE.find((x) => x.id === s(b.experience))?.label], ["Work status", s(b.status, 80)], ["Working hours", s(b.hours, 80)], ["Portfolio", s(b.portfolio, 300)], ["Shoot types", shoots],
       ["Primary camera", cam ? `${cam.brand} ${cam.model} (${cam.year})` : `Other: ${s(b.otherModel, 120)} (${s(b.otherYear)}, ${s(b.otherValue)})`],
-      ["Secondary cameras", s(b.secondary, 2000)], ["Lens kit", s(b.lenses, 3000)], ["Lighting kit", s(b.lighting, 3000)], ["Notes", s(b.notes, 2000)],
+      ["Secondary cameras", s(b.secondary, 2000)], ["Lens kit", s(b.lenses, 3000)], ["Lighting kit", s(b.lighting, 3000)], ["Notes", s(b.notes, 2000)], ["Disability self-ID (voluntary, not used for decisions)", s(b.disability, 80) || "Not answered"],
     ]),
   });
   if (!r.ok) return NextResponse.json({ error: "We couldn't submit your application right now — please email info@macrosnaps.com" }, { status: 502 });

@@ -19,7 +19,7 @@ export default function Legal() {
 
       <h2 className="mt-8 font-serif text-2xl">Policies</h2>
       <ul className="list-disc pl-6">
-        <li><Link href="/terms">Booking Terms</Link> — pricing, payment, refunds, rescheduling and delivery.</li>
+        <li><Link href="/terms">Terms and Conditions</Link>: ownership and usage, model release, refunds, file storage and the rest of the agreement every client signs when booking.</li>
         <li><Link href="/privacy">Privacy Policy</Link> — what information we collect and how we use it.</li>
         <li><Link href="/privacy#cookies">Cookie Policy</Link> — essential and optional cookies, and how to change your choice.</li>
       </ul>

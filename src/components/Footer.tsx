@@ -69,9 +69,8 @@ export default function Footer() {
           {REVIEW_BADGES.map((b) => (
             <Image key={b.logo} src={b.logo} alt={b.name} width={130} height={56} className="h-12 w-auto" />
           ))}
-          <a href={SITE.reviews.sulekha} target="_blank" rel="noopener" aria-label="MacroSnaps on Sulekha: 5-star rating" className="flex h-12 flex-col items-center justify-center rounded bg-white px-4 leading-none transition hover:opacity-90">
-            <span className="font-sans text-xl font-bold tracking-tight text-[#e4322b]">sulekha</span>
-            <span className="mt-1 text-[11px] tracking-[.2em] text-[#f5a623]" aria-hidden>★★★★★</span>
+          <a href={SITE.reviews.sulekha} target="_blank" rel="noopener" aria-label="MacroSnaps on Sulekha: rated 5 stars" className="flex h-12 items-center rounded bg-white px-3 transition hover:opacity-90">
+            <Image src="/badges/sulekha.png" alt="Sulekha" width={756} height={204} className="h-8 w-auto" />
           </a>
         </div>
 
@@ -82,7 +81,7 @@ export default function Footer() {
             <Link href="/careers" className="hover:text-gold">Careers</Link>
             <Link href="/investors" className="hover:text-gold">Investor Relations</Link>
             <Link href="/locations" className="hover:text-gold">All Locations</Link>
-            <Link href="/terms" className="hover:text-gold">Booking Terms</Link>
+            <Link href="/terms" className="hover:text-gold">Terms &amp; Conditions</Link>
             <Link href="/privacy" className="hover:text-gold">Privacy</Link>
             <Link href="/privacy#cookies" className="hover:text-gold">Cookies</Link>
             <Link href="/legal" className="hover:text-gold">Legal</Link>

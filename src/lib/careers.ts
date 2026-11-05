@@ -37,7 +37,11 @@ export const DISQUALIFIERS = [
   { id: "under18", label: "I am under 18 years old" },
   { id: "noWorkPermit", label: "I am not authorized to work in the US (or in Canada, if applying there)" },
   { id: "noLicense", label: "I don't have a valid driver's license or government-issued ID" },
+  { id: "criminal", label: "I have a criminal conviction" },
 ];
+
+/** Voluntary disability self-identification. Optional, never used to decide eligibility. */
+export const DISABILITY = ["Yes, I have a disability (or previously had one)", "No, I don't have a disability", "I prefer not to answer"];
 
 export const NOT_ELIGIBLE =
   "Thank you for your interest in MacroSnaps. Based on your answers, you don't meet our current requirements, so we can't accept your application at this time. You're welcome to apply again once you meet them.";

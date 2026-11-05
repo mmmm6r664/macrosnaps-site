@@ -5,6 +5,7 @@ import { quoteHourly, type Kind, type SessionInput, type Line } from "@/lib/pric
 import { getCity, cityLabel } from "@/lib/geo";
 import { SITE } from "@/lib/site";
 import { sendMail, table, TEAM_INBOX } from "@/lib/mail";
+import { TERMS_VERSION } from "@/lib/terms";
 
 const s = (v: unknown, max = 300) => String(v ?? "").trim().slice(0, max);
 const isDate = (d: string) => /^\d{4}-\d{2}-\d{2}$/.test(d) && new Date(`${d}T23:59:59`) >= new Date();
@@ -33,7 +34,10 @@ export async function POST(req: Request) {
   const required = { name: s(b.name), email, phone: s(b.phone, 40), location: s(b.location), address: s(b.address, 400) };
   if (Object.values(required).some((v) => !v) || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
     return NextResponse.json({ error: "Please complete all required fields" }, { status: 400 });
-  if (b.agree !== true) return NextResponse.json({ error: "Please accept the booking terms" }, { status: 400 });
+  const signature = s(b.signature, 100);
+  if (b.agree !== true || signature.length < 3) return NextResponse.json({ error: "Please read and sign the Terms and Conditions" }, { status: 400 });
+  const signedAt = new Date().toISOString();
+  const signerIp = (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim().slice(0, 45);
 
   const addCompanion = hourly && b.addCompanion === true;
   const lines: Line[] = hourly
@@ -56,6 +60,10 @@ export async function POST(req: Request) {
     customer_phone: required.phone,
     company: s(b.company, 120),
     notes: s(b.notes, 480),
+    terms_signed_by: signature,
+    terms_version: TERMS_VERSION,
+    terms_signed_at: signedAt,
+    terms_signer_ip: signerIp,
   };
 
   if (!stripe) {

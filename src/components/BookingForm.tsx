@@ -1,6 +1,9 @@
 "use client";
-import { useMemo, useState } from "react";
+import TermsList from "@/components/TermsList";
+import { TERMS_VERSION } from "@/lib/terms";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { createPortal } from "react-dom";
 import { RATES, quoteHourly, billedHours as billed, durationHours, type Kind } from "@/lib/pricing";
 
 type Pkg = { id: string; name: string; price: number; priceNote?: string; features: string[]; hours?: number };
@@ -30,6 +33,10 @@ export default function BookingForm({ services, cities, initial }: { services: S
   const defaultHours = initialPkg?.hours ?? rates.minHours;
   const [sessions, setSessions] = useState<Session[]>([{ key: 1, date: "", start: "", end: "", venue: "", extraCrew: 0 }]);
   const [state, setState] = useState<"idle" | "sending" | "requested" | "error">("idle");
+  const [signOpen, setSignOpen] = useState(false);
+  const [signature, setSignature] = useState("");
+  const [accepted, setAccepted] = useState(false);
+  const pending = useRef<Record<string, FormDataEntryValue> | null>(null);
   const [error, setError] = useState("");
   const today = useMemo(() => new Date(Date.now() + 86400000).toISOString().slice(0, 10), []);
 
@@ -68,17 +75,26 @@ export default function BookingForm({ services, cities, initial }: { services: S
       return [...list, { key: Date.now(), date: nextDate, start: last.start, end: last.end, venue: last.venue, extraCrew: last.extraCrew }];
     });
 
-  async function submit(e: React.FormEvent<HTMLFormElement>) {
+  // Step 1: the form is valid, so open the Terms and Conditions popup for signature.
+  function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    pending.current = Object.fromEntries(new FormData(e.currentTarget).entries());
+    setError("");
+    setSignOpen(true);
+  }
+
+  // Step 2: signed, so create the checkout.
+  async function signAndPay() {
+    const f = pending.current ?? {};
+    setSignOpen(false);
     setState("sending");
     setError("");
-    const f = Object.fromEntries(new FormData(e.currentTarget).entries());
     const citySlug = cities.find((c) => c.label.toLowerCase() === location.trim().toLowerCase())?.slug ?? "";
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...f, service: service.slug, package: pkg.id, location, citySlug, agree: f.agree === "on", sessions: sessions.map(({ date, start, end, venue, extraCrew }) => ({ date, start, end, venue, extraCrew })), addCompanion: hourly && addCompanion }),
+        body: JSON.stringify({ ...f, service: service.slug, package: pkg.id, location, citySlug, agree: true, signature: signature.trim(), termsVersion: TERMS_VERSION, sessions: sessions.map(({ date, start, end, venue, extraCrew }) => ({ date, start, end, venue, extraCrew })), addCompanion: hourly && addCompanion }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Something went wrong");
@@ -242,15 +258,37 @@ export default function BookingForm({ services, cities, initial }: { services: S
             <span className="text-sm uppercase tracking-widest">Total</span>
             <span className="font-serif text-4xl">${total.toLocaleString()}</span>
           </div>
-          <label className="mt-5 flex gap-2 text-xs leading-relaxed text-muted">
-            <input type="checkbox" name="agree" required className="mt-0.5" />
-            <span>I agree to the <Link href="/terms" className="underline" target="_blank">booking terms</Link>. Bookings are non-refundable; free rescheduling for extreme weather or emergencies.</span>
-          </label>
-          <button disabled={state === "sending"} className="btn-gold mt-5 w-full">{state === "sending" ? "Redirecting…" : "Continue to secure payment"}</button>
+          <p className="mt-5 text-xs leading-relaxed text-muted">Next, you&apos;ll review and sign our <Link href="/terms" className="underline" target="_blank">Terms and Conditions</Link>. All bookings are non-refundable.</p>
+          <button disabled={state === "sending"} className="btn-gold mt-5 w-full">{state === "sending" ? "Redirecting…" : "Review terms & continue to payment"}</button>
           {state === "error" && <p className="mt-3 text-sm text-red-700">{error}</p>}
           <p className="mt-4 text-center text-xs text-muted">Secure card payment by Stripe. Planning something larger? <Link href="/corporate" className="underline">Talk to our team</Link>.</p>
         </div>
       </aside>
+
+      {signOpen && createPortal(
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.72)" }} role="dialog" aria-modal="true" aria-labelledby="terms-title" onKeyDown={(e) => e.key === "Escape" && setSignOpen(false)}>
+          <div className="flex max-h-[90vh] w-full max-w-2xl flex-col bg-white shadow-2xl">
+            <div className="border-b border-black/10 px-6 py-4">
+              <h2 id="terms-title" className="font-serif text-2xl">Terms and Conditions</h2>
+              <p className="text-xs text-muted">Please read and sign to confirm your booking.</p>
+            </div>
+            <div className="flex-1 overflow-y-auto px-6 py-5"><TermsList compact /></div>
+            <div className="border-t border-black/10 bg-[#faf8f3] px-6 py-5">
+              <label className="flex gap-2 text-sm">
+                <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} className="mt-1 h-4 w-4 accent-[#a8963b]" />
+                <span>I have read and agree to the MacroSnaps Terms and Conditions.</span>
+              </label>
+              <label className="mt-4 block text-xs font-semibold uppercase tracking-[.15em] text-muted" htmlFor="signature">Type your full name to sign *</label>
+              <input id="signature" value={signature} onChange={(e) => setSignature(e.target.value.slice(0, 100))} autoComplete="name" className="mt-1.5 w-full border border-black/15 bg-white px-3 py-3 font-script text-2xl outline-none focus:border-gold-dark" placeholder="Your full name" />
+              <p className="mt-1 text-xs text-muted">Signed electronically on {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}.</p>
+              <div className="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <button type="button" onClick={() => setSignOpen(false)} className="btn-dark">Cancel</button>
+                <button type="button" disabled={!accepted || signature.trim().length < 3} onClick={signAndPay} className="btn-gold disabled:cursor-not-allowed disabled:opacity-50">Sign & continue to payment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      , document.body)}
     </form>
   );
 }

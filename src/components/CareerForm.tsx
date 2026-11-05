@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { BRANDS, CAMERAS, EXPERIENCE, RADIUS, ROLES, WORK_STATUS, AVAILABILITY, SHOOT_TYPES, DISQUALIFIERS, NOT_ELIGIBLE, checkEligibility } from "@/lib/careers";
+import { BRANDS, CAMERAS, EXPERIENCE, RADIUS, ROLES, WORK_STATUS, AVAILABILITY, SHOOT_TYPES, DISQUALIFIERS, DISABILITY, NOT_ELIGIBLE, checkEligibility } from "@/lib/careers";
 
 export default function CareerForm() {
   const [camera, setCamera] = useState("");
@@ -101,6 +101,18 @@ export default function CareerForm() {
           {DISQUALIFIERS.map((d) => (
             <label key={d.id} className="flex cursor-pointer items-center gap-3 border border-black/10 bg-white px-4 py-3 hover:border-gold-dark has-[:checked]:border-gold-dark has-[:checked]:bg-gold/10">
               <input type="checkbox" name="flags" value={d.id} className="h-4 w-4 accent-[#a8963b]" />{d.label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend className="mb-1 font-serif text-2xl">Voluntary self-identification of disability</legend>
+        <p className="mb-4 text-sm text-muted">This question is optional. MacroSnaps is an equal opportunity company: your answer is kept confidential, is never used to decide your application, and you won&apos;t be discriminated against for answering or for declining to answer. If you need an accommodation to apply or to work with us, let us know.</p>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {DISABILITY.map((d) => (
+            <label key={d} className="flex cursor-pointer items-center gap-3 border border-black/10 bg-white px-4 py-3 text-sm hover:border-gold-dark has-[:checked]:border-gold-dark has-[:checked]:bg-gold/10">
+              <input type="radio" name="disability" value={d} className="h-4 w-4 accent-[#a8963b]" />{d}
             </label>
           ))}
         </div>
