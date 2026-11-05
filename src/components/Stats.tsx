@@ -5,7 +5,7 @@ export const STATS = [
   { value: 1000, suffix: "+", label: "Corporate events & conferences" },
   { value: 5000, suffix: "+", label: "Weddings & private events" },
   { value: 13, suffix: "+", label: "Years of experience" },
-  { value: 50, suffix: "", label: "States, plus DC, Ontario & Quebec" },
+  { value: 50, suffix: "", label: "States Served" },
 ];
 
 function Counter({ to, suffix }: { to: number; suffix: string }) {
