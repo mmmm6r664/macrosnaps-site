@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { IMG } from "@/lib/images";
+import { IMG, photoPicker } from "@/lib/images";
 import { EVENTS } from "@/lib/clients";
 import { SERVICES } from "@/lib/services";
 import { PageHero, TrustBar, SectionTitle, ClientLogos, Faqs, CtaBand } from "@/components/blocks";
@@ -32,6 +32,9 @@ const FAQS = [
 
 export default function Corporate() {
   const corporate = SERVICES.filter((s) => s.group === "corporate");
+  const pick = photoPicker();
+  pick.use(IMG.conferenceHero);
+  const cardImg = corporate.map((s) => pick.one(s.images, IMG.conference, IMG.event));
   return (
     <>
       <PageHero image={IMG.conferenceHero} eyebrow="For conference organizers & corporate teams" title="Corporate Photography & Videography" subtitle="One partner for every conference, company event and office — photo, video and live streaming by MacroSnaps' own crews across the US and Canada.">
@@ -51,9 +54,9 @@ export default function Corporate() {
         <div className="mx-auto max-w-7xl">
           <SectionTitle eyebrow="Services" title="Corporate services" />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {corporate.map((s) => (
+            {corporate.map((s, i) => (
               <Link key={s.slug} href={`/${s.slug}`} className="group bg-white">
-                <div className="relative aspect-[4/3] overflow-hidden"><Image src={s.images[0]} alt={s.name} fill sizes="25vw" className="object-cover transition group-hover:scale-105" /></div>
+                <div className="relative aspect-[4/3] overflow-hidden"><Image src={cardImg[i]} alt={s.name} fill sizes="25vw" className="object-cover transition group-hover:scale-105" /></div>
                 <div className="p-5"><h3 className="font-serif text-lg">{s.name}</h3><p className="mt-1 text-sm text-muted">{s.coverage.slice(0, 3).join(" · ")}</p></div>
               </Link>
             ))}

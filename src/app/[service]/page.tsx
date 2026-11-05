@@ -61,13 +61,15 @@ function LocationDirectory({ slug, pro }: { slug: string; pro: string }) {
   );
 }
 
+const heroOf = (s: Service) => (s.slug === "conference-photography" ? IMG.conferenceHero : s.images[0]);
+
 function ServicePage({ s }: { s: Service }) {
   const corporate = s.group === "corporate";
   const bookable = s.packages.some((p) => !p.quoteOnly);
   return (
     <>
       <JsonLd data={serviceSchema({ name: s.name, serviceType: s.name, description: s.description, url: `/${s.slug}`, prices: s.packages.filter((p) => !p.quoteOnly).map((p) => p.price) })} />
-      <PageHero image={s.slug === "conference-photography" ? IMG.conferenceHero : s.images[0]} eyebrow="MacroSnaps" title={s.name} subtitle={s.description}>
+      <PageHero image={heroOf(s)} eyebrow="MacroSnaps" title={s.name} subtitle={s.description}>
         {bookable ? <Link href={`/book?service=${s.slug}`} className="btn-gold">Book Now</Link> : <Link href={`/contact?subject=${encodeURIComponent(s.name)}`} className="btn-gold">Get a Quote</Link>}
         {corporate && <Link href="/corporate#quote" className="btn-outline">Corporate Quote</Link>}
       </PageHero>
@@ -101,7 +103,7 @@ function ServicePage({ s }: { s: Service }) {
       <section className="bg-black px-4 py-16 md:px-6">
         <div className="mx-auto max-w-7xl">
           <h2 className="mb-10 text-center font-serif text-3xl text-white">Our Work</h2>
-          <Gallery images={s.images.slice(0, 16)} alt={s.name} />
+          <Gallery images={s.images.filter((x) => x !== heroOf(s)).slice(0, 16)} alt={s.name} />
         </div>
       </section>
 

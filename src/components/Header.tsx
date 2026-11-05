@@ -3,28 +3,53 @@ import Image from "next/image";
 import { SITE } from "@/lib/site";
 import { NAV_PHOTO, NAV_SERVICES, NAV_VIDEO } from "@/lib/nav";
 import { IconChevron, IconMail, IconPhone } from "./Icons";
+import CitySearch from "./CitySearch";
 
-type Item = { label: string; href?: string; children?: readonly (readonly [string, string])[]; extra?: { href: string; label: string }[] };
+type Item = { label: string; href?: string; children?: readonly (readonly [string, string])[]; extra?: { href: string; label: string }[]; mega?: boolean };
+
+const US_TOP = [
+  ["new-york-city-ny", "New York City"], ["washington-dc", "Washington, DC"], ["los-angeles-ca", "Los Angeles"], ["chicago-il", "Chicago"],
+  ["san-francisco-ca", "San Francisco"], ["boston-ma", "Boston"], ["miami-fl", "Miami"], ["atlanta-ga", "Atlanta"],
+  ["dallas-tx", "Dallas"], ["houston-tx", "Houston"], ["las-vegas-nv", "Las Vegas"], ["philadelphia-pa", "Philadelphia"],
+  ["seattle-wa", "Seattle"], ["san-diego-ca", "San Diego"], ["orlando-fl", "Orlando"], ["denver-co", "Denver"],
+];
+const CA_TOP = [["toronto-on", "Toronto"], ["montreal-qc", "Montréal"], ["vancouver-bc", "Vancouver"], ["calgary-ab", "Calgary"], ["ottawa-on", "Ottawa"], ["edmonton-ab", "Edmonton"]];
+
+function LocationsPanel() {
+  return (
+    <div className="grid w-[760px] grid-cols-[1.1fr_1fr_.8fr] gap-8 p-7 font-sans">
+      <div>
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[.2em] text-gold">Find your city</p>
+        <CitySearch />
+        <p className="mt-3 text-xs text-white/60">1,800+ cities across all 50 states, DC and Canada.</p>
+        <div className="mt-6 space-y-2 text-sm">
+          <Link href="/locations#united-states" className="block hover:text-gold">All US states →</Link>
+          <Link href="/locations#canada" className="block hover:text-gold">All Canadian provinces →</Link>
+          <Link href="/locations" className="block hover:text-gold">Browse every location →</Link>
+        </div>
+      </div>
+      <div>
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[.2em] text-gold">Popular US cities</p>
+        <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-sm">
+          {US_TOP.map(([s, l]) => <li key={s}><Link href={`/photographers/${s}`} className="hover:text-gold">{l}</Link></li>)}
+        </ul>
+      </div>
+      <div>
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[.2em] text-gold">Canada</p>
+        <ul className="space-y-1.5 text-sm">
+          {CA_TOP.map(([s, l]) => <li key={s}><Link href={`/photographers/${s}`} className="hover:text-gold">{l}</Link></li>)}
+        </ul>
+      </div>
+    </div>
+  );
+}
 
 const NAV: Item[] = [
   { label: "Home", href: "/" },
   { label: "Photography", children: NAV_PHOTO },
   { label: "Videography", children: NAV_VIDEO },
   { label: "Services", children: NAV_SERVICES },
-  {
-    label: "Locations",
-    href: "/locations",
-    extra: [
-      { href: "/locations#united-states", label: "United States" },
-      { href: "/locations#canada", label: "Canada" },
-      { href: "/photographers/new-york-city-ny", label: "New York City" },
-      { href: "/photographers/washington-dc", label: "Washington, DC" },
-      { href: "/photographers/los-angeles-ca", label: "Los Angeles" },
-      { href: "/photographers/chicago-il", label: "Chicago" },
-      { href: "/photographers/san-francisco-ca", label: "San Francisco" },
-      { href: "/photographers/toronto-on", label: "Toronto" },
-    ],
-  },
+  { label: "Locations", href: "/locations", mega: true },
   { label: "Portfolio", href: "/portfolio" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
@@ -50,7 +75,14 @@ export default function Header() {
           </div>
           <nav aria-label="Main" className="flex items-center gap-1 font-nav text-[15px]">
             {NAV.map((item) =>
-              item.children || item.extra ? (
+              item.mega ? (
+                <div key={item.label} className="group relative">
+                  <Link href={item.href!} className="flex items-center gap-1 px-3 py-1 text-gold hover:bg-gold hover:text-black">{item.label}<IconChevron className="h-3 w-3" /></Link>
+                  <div className="invisible absolute right-0 top-full z-50 border-t-2 border-gold bg-black/95 text-white opacity-0 shadow-xl transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                    <LocationsPanel />
+                  </div>
+                </div>
+              ) : item.children || item.extra ? (
                 <div key={item.label} className="group relative">
                   {item.href ? (
                     <Link href={item.href} className="flex items-center gap-1 px-3 py-1 text-gold hover:bg-gold hover:text-black">{item.label}<IconChevron className="h-3 w-3" /></Link>
@@ -84,7 +116,18 @@ export default function Header() {
             <div className="fixed inset-x-0 top-[80px] bottom-0 overflow-y-auto bg-black px-4 pb-10">
               <Link href="/book" className="btn-gold my-4 w-full">Book Now</Link>
               {NAV.map((item) =>
-                item.children || item.extra ? (
+                item.mega ? (
+                  <details key={item.label} className="border-b border-white/10">
+                    <summary className="flex items-center justify-between py-3 font-nav text-lg text-gold">{item.label}<IconChevron className="h-4 w-4" /></summary>
+                    <div className="space-y-3 pb-4">
+                      <CitySearch />
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-2 pl-1 text-sm">
+                        {[...US_TOP.slice(0, 8), ...CA_TOP.slice(0, 2)].map(([s, l]) => <Link key={s} href={`/photographers/${s}`}>{l}</Link>)}
+                      </div>
+                      <Link href="/locations" className="block pl-1 text-sm text-gold">All states & provinces →</Link>
+                    </div>
+                  </details>
+                ) : item.children || item.extra ? (
                   <details key={item.label} className="border-b border-white/10">
                     <summary className="flex items-center justify-between py-3 font-nav text-lg text-gold">{item.label}<IconChevron className="h-4 w-4" /></summary>
                     <div className="pb-3">

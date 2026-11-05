@@ -8,6 +8,7 @@ import { PageHero, TrustBar, SectionTitle, Pricing, Faqs, ClientLogos, Gallery, 
 import JsonLd from "@/components/JsonLd";
 import ContactForm from "@/components/ContactForm";
 import { serviceSchema } from "@/lib/schema";
+import { photoPicker, rotate } from "@/lib/images";
 import { SITE } from "@/lib/site";
 import { IconCheck } from "@/components/Icons";
 
@@ -65,7 +66,10 @@ function CityPage({ t, city }: { t: LocalTarget; city: City }) {
   const slug = targetSlug(t);
   const region = getRegionByCode(city.state)!;
   const services = hubServices(t);
-  const images = imagesFor(t);
+  const pick = photoPicker();
+  const pool = rotate(imagesFor(t), city.id);
+  const heroImg = pick.one(pool);
+  const images = pick.many(12, pool);
   const url = `/${slug}/${city.slug}`;
   const primary = services[0];
   const bookHref = `/book?service=${primary?.slug ?? ""}&city=${city.slug}`;
@@ -77,7 +81,7 @@ function CityPage({ t, city }: { t: LocalTarget; city: City }) {
   return (
     <>
       <JsonLd data={serviceSchema({ name: c.h1, serviceType: targetName(t), description: c.metaDescription, url, area: { type: "City", name: cityLabel(city), containedIn: city.stateName }, prices: services.flatMap((s) => s.packages.map((p) => p.price)) })} />
-      <PageHero image={images[city.id % Math.min(images.length, 6)] ?? images[0]} eyebrow={`${city.stateName} · ${targetName(t)}`} title={c.h1} subtitle={c.subtitle}>
+      <PageHero image={heroImg} eyebrow={`${city.stateName} · ${targetName(t)}`} title={c.h1} subtitle={c.subtitle}>
         <Link href={bookHref} className="btn-gold">Book Now{c.priceFrom ? ` — from $${c.priceFrom}` : ""}</Link>
         <a href="#quote" className="btn-outline">Get a Corporate Quote</a>
       </PageHero>
@@ -188,7 +192,10 @@ function RegionPage({ t, region }: { t: LocalTarget; region: Region }) {
   const c = regionContent(t, region);
   const slug = targetSlug(t);
   const services = hubServices(t);
-  const images = imagesFor(t);
+  const pick = photoPicker();
+  const pool = rotate(imagesFor(t), region.slug.length * 7 + region.name.charCodeAt(0));
+  const heroImg = pick.one(pool);
+  const images = pick.many(8, pool);
   const url = `/${slug}/${region.slug}`;
   const primary = services[0];
   const otherHere = LOCAL_SLUGS.filter((s) => s !== slug).map((s) => resolveTarget(s)!);
@@ -196,7 +203,7 @@ function RegionPage({ t, region }: { t: LocalTarget; region: Region }) {
   return (
     <>
       <JsonLd data={serviceSchema({ name: c.h1, serviceType: targetName(t), description: c.metaDescription, url, area: { type: "State", name: region.name }, prices: services.flatMap((s) => s.packages.map((p) => p.price)) })} />
-      <PageHero image={images[1] ?? images[0]} eyebrow={region.country === "canada" ? "Canada" : "United States"} title={c.h1} subtitle={c.intro[0]}>
+      <PageHero image={heroImg} eyebrow={region.country === "canada" ? "Canada" : "United States"} title={c.h1} subtitle={c.intro[0]}>
         <Link href={`/book?service=${primary?.slug ?? ""}`} className="btn-gold">Book Now{c.priceFrom ? ` — from $${c.priceFrom}` : ""}</Link>
         <a href="#cities" className="btn-outline">Find your city</a>
       </PageHero>

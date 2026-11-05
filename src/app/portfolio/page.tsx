@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { IMG } from "@/lib/images";
+import { IMG, photoPicker } from "@/lib/images";
 import { EVENTS } from "@/lib/clients";
 import { SERVICES } from "@/lib/services";
 import { ClientLogos, CtaBand, Gallery, SectionTitle } from "@/components/blocks";
@@ -8,13 +8,15 @@ import { ClientLogos, CtaBand, Gallery, SectionTitle } from "@/components/blocks
 export const metadata: Metadata = { title: "Portfolio: Conference, Event & Wedding Photography", description: "Portfolio of MacroSnaps photography and videography: conferences, corporate events, weddings, engagements and portraits.", alternates: { canonical: "/portfolio" } };
 
 export default function Portfolio() {
-  const sets = [
+  const pick = photoPicker();
+  const raw = [
     { title: "Conferences & Corporate", images: [...new Set([...IMG.conference, ...(SERVICES.find((s) => s.slug === "conference-photography")?.images ?? [])])] },
     { title: "Weddings & Engagements", images: [...new Set([...IMG.wedding, ...IMG.engagement])] },
     { title: "Events & Celebrations", images: SERVICES.find((s) => s.slug === "event-photography")?.images ?? IMG.event },
     { title: "Portraits & Family", images: [...new Set([...IMG.personal, ...(SERVICES.find((s) => s.slug === "newborn-photography")?.images ?? [])])] },
     { title: "Commercial & Product", images: SERVICES.find((s) => s.slug === "product-photography")?.images ?? IMG.commercial },
   ];
+  const sets = raw.map((r) => ({ title: r.title, images: pick.many(16, r.images) }));
   return (
     <>
       <section className="bg-black px-4 py-16 text-center text-white">
@@ -24,7 +26,7 @@ export default function Portfolio() {
       {sets.map((s) => (
         <section key={s.title} className="mx-auto max-w-7xl px-4 py-12 md:px-6">
           <h2 className="mb-6 font-serif text-3xl">{s.title}</h2>
-          <Gallery images={s.images.slice(0, 16)} alt={s.title} />
+          <Gallery images={s.images} alt={s.title} />
         </section>
       ))}
       <section id="events" className="bg-marble px-4 py-16 md:px-6">

@@ -23,8 +23,7 @@ const wedding = ids("b8cb3c", [
 const portfolio = ids("1f3625", [
   "d2741b395b5d446da5d8ca57e5f286b2", "60dffbb38cbb4504b56957bf494a1fe6", "9bee7d64ee72451aae75c89f5f076926",
   "3c0101d69c7c4665b8c972572c411094", "86e3b417178c42e5bd0985affc27b819", "b7934fbbd1bd4f6e838a117847f6c74d",
-  "973a086295154bf5b59bddb71bce14c6", "9e25ecebcaff425787244fe817b50433", "79013331208a4ec8826fcde024545575",
-  "c647d5dd7f7b41cb8bb5df3fd4d2993a", "29e9427188304526a3c462332ef9ddc9", "793e7bdd083548108682e39e6c2baabc",
+  "973a086295154bf5b59bddb71bce14c6", "9e25ecebcaff425787244fe817b50433", "79013331208a4ec8826fcde024545575", "29e9427188304526a3c462332ef9ddc9",
 ]);
 
 const event = ids("1f3625", ["b0cb8415b81041bd95ddfaa98de0c3c7", "356d4c3ccbd7465082888135322ec671", "9e25ecebcaff425787244fe817b50433", "973a086295154bf5b59bddb71bce14c6"])
@@ -34,10 +33,10 @@ const event = ids("1f3625", ["b0cb8415b81041bd95ddfaa98de0c3c7", "356d4c3ccbd746
 const personal = ids("1f3625", [
   "356d4c3ccbd7465082888135322ec671", "ea9a4b1ef48f477b906372313e7f89a4", "689b9ae37c8846dd871cc52c4bb8a400",
   "f6ce273979f84ca2930b9e0c2f784c99", "79013331208a4ec8826fcde024545575", "9bee7d64ee72451aae75c89f5f076926",
-  "8ab854da9b4843ca9b7502fe69f4e064", "9bd522d565ae46a78b23d80a037595f2",
+  "8ab854da9b4843ca9b7502fe69f4e064",
 ]);
 
-const engagement = ids("1f3625", ["9bee7d64ee72451aae75c89f5f076926", "79013331208a4ec8826fcde024545575", "c647d5dd7f7b41cb8bb5df3fd4d2993a", "86e3b417178c42e5bd0985affc27b819", "b7934fbbd1bd4f6e838a117847f6c74d"]);
+const engagement = ids("1f3625", ["9bee7d64ee72451aae75c89f5f076926", "79013331208a4ec8826fcde024545575", "86e3b417178c42e5bd0985affc27b819", "b7934fbbd1bd4f6e838a117847f6c74d"]);
 
 export const IMG = {
   hero: `${W}1f3625_d2741b395b5d446da5d8ca57e5f286b2~mv2.jpg`,
@@ -55,8 +54,39 @@ export const IMG = {
   realEstate: [`${W}1f3625_50bff426d6f74b5887fb0effb9321fe6~mv2.jpg`, ...portfolio.slice(0, 4)],
 };
 
+// Same photo uploaded twice on Wix under different ids (found by comparing image fingerprints).
+const DUPLICATES = new Set([
+  "1f3625_c647d5dd7f7b41cb8bb5df3fd4d2993a", "1f3625_793e7bdd083548108682e39e6c2baabc", "1f3625_9bd522d565ae46a78b23d80a037595f2",
+]);
+/** Only MacroSnaps' own work: no Unsplash stock (nsplsh_), no Wix video-template thumbnails (d0220c_), no duplicates. */
+export const isOwnPhoto = (u: string) => !/\/media\/(nsplsh_|d0220c_|11062b_)/.test(u) && ![...DUPLICATES].some((d) => u.includes(d));
+
 const X = extracted as Record<string, string[]>;
 /** Photos for a service: that page's own photos from macrosnaps.com first, then a curated fallback set. */
-export const imagesForService = (slug: string, fallback: string[]) => [...new Set([...(X[slug] ?? []), ...fallback])];
+export const imagesForService = (slug: string, fallback: string[]) => [...new Set([...(X[slug] ?? []), ...fallback])].filter(isOwnPhoto);
 
 export const heroFor = (images: string[]) => images[0] ?? IMG.hero;
+
+/** Hands out photos for one page so the same photo never appears twice on that page. */
+export function photoPicker() {
+  const used = new Set<string>();
+  const take = (src: string) => (used.add(src), src);
+  return {
+    use: (src: string) => take(src),
+    one: (...lists: string[][]) => {
+      for (const l of lists) for (const s of l) if (!used.has(s)) return take(s);
+      return lists.flat()[0] ?? IMG.hero;
+    },
+    many: (n: number, ...lists: string[][]) => {
+      const out: string[] = [];
+      for (const s of lists.flat()) {
+        if (out.length >= n) break;
+        if (!used.has(s)) out.push(take(s));
+      }
+      return out;
+    },
+  };
+}
+
+/** Rotate a list by a seed so different pages lead with different photos. */
+export const rotate = <T,>(list: T[], seed: number) => (list.length ? [...list.slice(seed % list.length), ...list.slice(0, seed % list.length)] : list);

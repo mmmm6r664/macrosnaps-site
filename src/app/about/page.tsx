@@ -17,7 +17,7 @@ export default function About() {
           <div className="prose-ms mt-6 text-[17px]">
             <p>MacroSnaps is a premium global photography and videography company covering conferences, corporate events and weddings, with our own photographers and videographers across the United States and Canada.</p>
             <p>MacroSnaps is part of <a href={SITE.parentUrl}>MacroHype LLC</a>, a digital media and marketing company based out of New York City and Washington DC. We have been doing commercial and product photography, real estate photography and commercial videography for our clients since 2011, and in January 2020 we established MacroSnaps as a separate company focused on events, weddings and life&apos;s important moments.</p>
-            <p>Today we are official media partner to conferences such as CDAO, the AI in Finance Summit and the FIX Americas Trading Conference, and we photograph and film events for organizations including IEEE, IBM, PwC, Deloitte and the Department of Justice.</p>
+            <p>Today we are official media partner to conferences such as CDAO, the AI in Finance Summit and the FIX Americas Trading Conference, and we photograph and film events for organizations including IEEE, PwC, Deloitte, Steelcase and the Department of Justice.</p>
             <p>We are fully insured through State Farm, we list every price on our website, and we are rated 5 stars on Google, Thumbtack, WeddingWire and The Knot.</p>
           </div>
           <Link href="/book" className="btn-dark mt-6 self-start">Book a Session</Link>

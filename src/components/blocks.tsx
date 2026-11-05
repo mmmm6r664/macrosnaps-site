@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ALL_CLIENTS as CLIENTS } from "@/lib/clients";
 import { SITE } from "@/lib/site";
-import type { Package } from "@/lib/services";
+import { RATES, hourPrice, type Package } from "@/lib/services";
 import JsonLd from "./JsonLd";
 import { breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { IconCheck, IconChevron } from "./Icons";
@@ -48,6 +48,7 @@ export function Pricing({ packages, serviceSlug, citySlug, note }: { packages: P
   if (!packages.length) return null;
   return (
     <div>
+      {rateLine(packages) && <p className="mb-8 text-center text-sm font-semibold uppercase tracking-[.15em] text-gold-dark">{rateLine(packages)}</p>}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {packages.map((p) => (
           <div key={p.id} className="flex flex-col border border-black/10 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
@@ -68,6 +69,14 @@ export function Pricing({ packages, serviceSlug, citySlug, note }: { packages: P
       {note && <p className="mt-6 text-center text-sm text-muted">{note}</p>}
     </div>
   );
+}
+
+function rateLine(packages: Package[]) {
+  const two = packages.find((p) => p.hours === 2);
+  if (!two) return null;
+  const kind = two.price === hourPrice("photo", 2) ? "photo" : two.price === hourPrice("video", 2) ? "video" : null;
+  if (!kind) return null;
+  return `Minimum ${RATES.minHours} hours · $${RATES[kind].first} first hour + $${RATES[kind].extra} each additional hour`;
 }
 
 export function Faqs({ faqs, withSchema = true }: { faqs: { q: string; a: string }[]; withSchema?: boolean }) {
@@ -92,7 +101,7 @@ export function ClientLogos({ title = "We Have Worked With" }: { title?: string 
   const row = [...logos, ...logos];
   return (
     <section className="overflow-hidden bg-white py-14">
-      <SectionTitle eyebrow="Trusted by conference organizers & brands" title={title} />
+      <SectionTitle eyebrow="Conferences & events we have covered" title={title} />
       <div className="relative">
         <div className="marquee items-center gap-12">
           {row.map((c, i) => (
@@ -107,9 +116,12 @@ export function ClientLogos({ title = "We Have Worked With" }: { title?: string 
 export function Gallery({ images, alt }: { images: string[]; alt: string }) {
   if (!images.length) return null;
   return (
-    <div className="columns-2 gap-3 md:columns-3 lg:columns-4 [&>*]:mb-3">
+    <div className="columns-2 gap-3 md:columns-3 lg:columns-4">
       {images.map((src, i) => (
-        <Image key={src} src={src} alt={`${alt} ${i + 1}`} width={600} height={600} sizes="(max-width: 768px) 50vw, 25vw" className="w-full break-inside-avoid object-cover" />
+        // block wrapper so a photo is never split across two columns
+        <div key={src} className="mb-3 break-inside-avoid">
+          <Image src={src} alt={`${alt} ${i + 1}`} width={600} height={600} sizes="(max-width: 768px) 50vw, 25vw" className="block h-auto w-full" />
+        </div>
       ))}
     </div>
   );

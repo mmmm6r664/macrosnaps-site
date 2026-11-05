@@ -32,11 +32,14 @@ import coverage from "@/data/coverage.json";
 export type CoveredEvent = { name: string; where: string; year: string; image: string; url: string; status: "covered" | "partner" };
 export const EVENTS = (coverage.events as CoveredEvent[]).sort((a, b) => (b.year || "0").localeCompare(a.year || "0"));
 
-/** Every client logo: MacroSnaps conference clients + MacroHype clients, de-duplicated by name. */
+/** Logo wall: MacroSnaps conference & event clients. */
 export const ALL_CLIENTS = (() => {
   const seen = new Set<string>();
   const out: { name: string; logo: string }[] = [];
-  for (const c of [...CLIENTS, ...(coverage.clients as { name: string; logo: string }[])]) {
+  // Only event / conference clients — MacroHype's marketing clients are deliberately excluded.
+  const EVENT_CLIENTS = new Set(["CDAO", "DevGlobal", "National Technology Security Coalition (NTSC)"]);
+  const extra = (coverage.clients as { name: string; logo: string }[]).filter((c) => EVENT_CLIENTS.has(c.name));
+  for (const c of [...CLIENTS, ...extra]) {
     const k = c.name.toLowerCase().replace(/[^a-z0-9]/g, "");
     if (seen.has(k)) continue;
     seen.add(k);

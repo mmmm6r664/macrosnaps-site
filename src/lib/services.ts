@@ -45,11 +45,16 @@ const PHOTO_FEATURES = (h: number) => [
   "Turnaround time: 1 week",
 ];
 
-const photoPackages = (prices: number[], prefix = "photo"): Package[] =>
-  prices.map((price, i) => ({ id: `${prefix}-${i + 2}h`, name: `${i + 2} Hour Photography`, hours: i + 2, price, features: PHOTO_FEATURES(i + 2) }));
+const HOURS = [2, 3, 4, 5, 6, 7];
+const photoPackages = (_legacy?: number[], prefix = "photo"): Package[] =>
+  HOURS.map((h) => ({ id: `${prefix}-${h}h`, name: `${h} Hour Photography`, hours: h, price: hourPrice("photo", h), features: PHOTO_FEATURES(h) }));
+
+/** Rate card — minimum booking 2 hours. */
+export const RATES = { photo: { first: 250, extra: 100 }, video: { first: 300, extra: 200 }, minHours: 2 };
+export const hourPrice = (kind: "photo" | "video", h: number) => RATES[kind].first + RATES[kind].extra * (h - 1);
 
 const VIDEO_TABLE: [number, number, string, number, string][] = [
-  // hours, price, clip length, re-edits, turnaround — from macrosnaps.com event videography pricing
+  // hours, (old price, unused), clip length, re-edits, turnaround
   [2, 450, "3 - 5 mins", 1, "2 to 4 weeks"],
   [3, 650, "3 - 5 mins", 1, "2 to 4 weeks"],
   [4, 850, "3 - 5 mins", 1, "2 to 4 weeks"],
@@ -59,8 +64,8 @@ const VIDEO_TABLE: [number, number, string, number, string][] = [
 ];
 const SECOND_SHOOTER: Record<number, number> = { 2: 400, 3: 600, 4: 800, 5: 1000, 6: 1200, 7: 1400 };
 
-const videoPackages = (prefix = "video", prices?: number[]): Package[] =>
-  VIDEO_TABLE.map(([h, base, len, re, tat], i) => ({ price: prices?.[i] ?? base,
+const videoPackages = (prefix = "video", _legacy?: number[]): Package[] =>
+  VIDEO_TABLE.map(([h, , len, re, tat]) => ({ price: hourPrice("video", h),
     id: `${prefix}-${h}h`,
     name: `${h} Hour Videography`,
     hours: h,
@@ -84,12 +89,7 @@ const EVENT_VIDEO = videoPackages();
 const simple = (prefix: string, rows: [string, number, string[]][]): Package[] =>
   rows.map(([name, price, features], i) => ({ id: `${prefix}-${i + 1}`, name, price, features }));
 
-const SESSION_PHOTO = (prefix: string) =>
-  simple(prefix, [
-    ["1 Hour Session", 200, ["1 photographer", "1 hour session", "Retouched, high-resolution photos", "Online gallery"]],
-    ["2 Hour Session", 300, ["1 photographer", "2 hour session", "Retouched, high-resolution photos", "Online gallery"]],
-    ["3 Hour Session", 400, ["1 photographer", "3 hour session", "Retouched, high-resolution photos", "Online gallery"]],
-  ]);
+const SESSION_PHOTO = (prefix: string) => photoPackages(undefined, prefix);
 const PORTRAITS = (prefix: string) =>
   simple(prefix, [
     ["10 Portraits", 150, ["10 retouched portraits", "30 minute session"]],
@@ -111,7 +111,7 @@ const GENERAL_FAQS: Faq[] = [
   },
   {
     q: "Why is the first hour priced differently from additional hours?",
-    a: "We leave a gap between shoots so our crew always arrives on time, and the time and cost of travelling to your venue is built into the first hour. That is why package prices are the same wherever you book.",
+    a: "We leave a gap between shoots so our crew always arrives on time, and the time and cost of travelling to your venue is built into the first hour. Photography is $250 for the first hour and $100 for each additional hour; videography is $300 for the first hour and $200 for each additional hour. The minimum booking is 2 hours, and prices are the same wherever you book.",
   },
   {
     q: "What is your refund and rescheduling policy?",
@@ -764,11 +764,7 @@ const PRICES: Record<string, Package[]> = {
   ]),
   "maternity-photography": PORTRAITS("maternity"),
   "graduation-photography": PORTRAITS("graduation"),
-  "family-photography": simple("family", [
-    ["30 Minute Session", 200, ["30 minute family session", "Retouched, high-resolution photos", "Online gallery"]],
-    ["2 Hour Session", 300, ["2 hour family session", "Retouched, high-resolution photos", "Online gallery"]],
-    ["3 Hour Session", 400, ["3 hour family session", "Retouched, high-resolution photos", "Online gallery"]],
-  ]),
+  "family-photography": photoPackages(undefined, "family"),
   "dating-photography": simple("dating", [
     ["15 Minute Studio Session", 100, ["5 retouched portraits", "In studio"]],
     ["1 Hour Session", 200, ["Outdoor portraits", "1 hour session"]],
