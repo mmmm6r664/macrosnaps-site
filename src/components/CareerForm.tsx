@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { BRANDS, CAMERAS, EXPERIENCE, RADIUS, ROLES, SHOOT_TYPES, NOT_ELIGIBLE, checkEligibility } from "@/lib/careers";
+import { BRANDS, CAMERAS, EXPERIENCE, RADIUS, ROLES, WORK_STATUS, AVAILABILITY, SHOOT_TYPES, NOT_ELIGIBLE, checkEligibility } from "@/lib/careers";
 
 export default function CareerForm() {
   const [camera, setCamera] = useState("");
@@ -52,7 +52,9 @@ export default function CareerForm() {
         <div><label className={label} htmlFor="radius">Work radius *</label><select id="radius" name="radius" required defaultValue="" className={field}><option value="" disabled>Select how far you&apos;ll travel</option>{RADIUS.map((r) => <option key={r}>{r}</option>)}</select></div>
         <div><label className={label} htmlFor="role">I am a *</label><select id="role" name="role" required defaultValue="" className={field}><option value="" disabled>Select</option>{ROLES.map((r) => <option key={r}>{r}</option>)}</select></div>
         <div><label className={label} htmlFor="experience">Professional experience *</label><select id="experience" name="experience" required defaultValue="" className={field}><option value="" disabled>Select years of experience</option>{EXPERIENCE.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}</select></div>
-        <div><label className={label} htmlFor="portfolio">Portfolio / website / Instagram *</label><input id="portfolio" name="portfolio" required className={field} placeholder="https://" /></div>
+        <div><label className={label} htmlFor="status">Are you a full-time, part-time or hobbyist photographer? *</label><select id="status" name="status" required defaultValue="" className={field}><option value="" disabled>Select</option>{WORK_STATUS.map((r) => <option key={r}>{r}</option>)}</select></div>
+        <div><label className={label} htmlFor="hours">Your working hours *</label><select id="hours" name="hours" required defaultValue="" className={field}><option value="" disabled>When are you available to shoot?</option>{AVAILABILITY.map((r) => <option key={r}>{r}</option>)}</select></div>
+        <div className="sm:col-span-2"><label className={label} htmlFor="portfolio">Portfolio / website / Instagram *</label><input id="portfolio" name="portfolio" required className={field} placeholder="https://" /></div>
       </fieldset>
 
       <fieldset>

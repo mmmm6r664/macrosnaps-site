@@ -26,6 +26,8 @@ export const EXPERIENCE = [
   { id: "10+", label: "10+ years", ok: true },
 ];
 
+export const WORK_STATUS = ["Full-time photographer / videographer", "Part-time photographer / videographer", "Hobbyist"];
+export const AVAILABILITY = ["Weekdays (daytime)", "Weekday evenings", "Weekends only", "Weekdays & weekends", "Fully flexible: any day, any time"];
 export const RADIUS = ["Up to 10 miles", "Up to 25 miles", "Up to 50 miles", "Up to 100 miles", "100+ miles / willing to travel"];
 export const ROLES = ["Photographer", "Videographer", "Both photo & video"];
 export const SHOOT_TYPES = ["Conferences & corporate events", "Weddings", "Same-sex weddings", "Engagements & couples", "Boudoir", "Parties & private events", "Cultural & religious ceremonies", "Headshots & portraits", "Family, maternity & newborn", "Real estate", "Product & food", "Commercial / brand video", "Live streaming", "Drone (FAA Part 107)"];
