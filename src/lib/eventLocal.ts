@@ -147,7 +147,8 @@ export function eventCityContent(e: EventType, c: City) {
       1,
     );
   }
-  if (L.blurb) cityPara += " " + L.blurb;
+  // The city blurb is business-focused, so only corporate-style events use it.
+  if (L.blurb && group === "corporate") cityPara += " " + L.blurb;
   intro.push(cityPara);
 
   intro.push(e.intro[1]);
