@@ -68,6 +68,7 @@ body {
 
 .marquee { display: flex; width: max-content; animation: marquee 60s linear infinite; }
 .marquee:hover { animation-play-state: paused; }
+.marquee.slow { animation-duration: 90s; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .marquee { animation: none; } html { scroll-behavior: auto; } }
 

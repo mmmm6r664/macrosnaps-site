@@ -28,13 +28,24 @@ const HOME_FAQS = [
   { q: "Can you live stream our event or wedding?", a: "Yes. We live stream conferences, town halls and weddings with multiple cameras and clean audio, and send you a link to share with remote guests." },
 ];
 
-const PILLARS = [
-  { slug: "conference-photography", title: "Conferences", text: "Keynotes, panels, expos and networking — photo, video and live streaming for multi-day programs.", tags: ["conference"] },
-  { slug: "corporate-event-photography", title: "Corporate Events", text: "Launches, galas, award nights, holiday parties and offsites in every city your company works in.", tags: ["corporate", "gala"] },
-  { slug: "wedding-photography", title: "Weddings", text: "Ceremonies, receptions, courthouse weddings, elopements and multi-day cultural weddings.", tags: ["wedding"] },
-  { slug: "engagement-photography", title: "Engagements", text: "Proposals and engagement sessions at the landmarks and parks you love.", tags: ["engagement"] },
-  { slug: "events", title: "Celebrations", text: "Bar & Bat Mitzvahs, Sweet 16s, quinceañeras, birthdays, anniversaries and gender reveals.", tags: ["party", "event"] },
-  { slug: "family-photography", title: "Family & Maternity", text: "Family portraits, maternity and newborn sessions, graduations and milestones.", tags: ["family", "maternity"] },
+const PILLARS: { slug: string; title: string; text: string; tags?: string[]; film?: string }[] = [
+  { slug: "conference-photography", title: "Conferences", text: "Keynotes, panels, expos and networking for multi-day programs.", tags: ["conference"] },
+  { slug: "wedding-photography", title: "Weddings", text: "Ceremonies, receptions, courthouse weddings and elopements.", tags: ["wedding"] },
+  { slug: "corporate-event-photography", title: "Corporate Events", text: "Launches, galas, award nights, holiday parties and offsites.", tags: ["corporate", "gala"] },
+  { slug: "engagement-photography", title: "Engagements", text: "Proposals and engagement sessions at places you love.", tags: ["engagement"] },
+  { slug: "indian-wedding-photography", title: "Indian Weddings", text: "Haldi, mehndi, sangeet, baraat, pheras and reception.", tags: ["indian"] },
+  { slug: "trade-show-photography", title: "Trade Shows", text: "Booths, product demos, crowds and sponsor coverage.", tags: ["tradeshow"] },
+  { slug: "events", title: "Celebrations", text: "Bar & Bat Mitzvahs, Sweet 16s, quinceañeras and birthdays.", tags: ["party"] },
+  { slug: "gala-fundraiser-photography", title: "Galas & Fundraisers", text: "Red carpets, speeches, auctions and honorees.", tags: ["gala"] },
+  { slug: "family-photography", title: "Family Portraits", text: "Outdoor and at-home family sessions.", tags: ["family"] },
+  { slug: "maternity-photography", title: "Maternity", text: "Maternity portraits for moms-to-be and families.", tags: ["maternity"] },
+  { slug: "newborn-photography", title: "Newborn", text: "Newborn portraits in the first weeks, studio or at home.", tags: ["newborn"] },
+  { slug: "graduation-photography", title: "Graduation", text: "Cap & gown portraits, ceremonies and parties.", tags: ["graduation"] },
+  { slug: "real-estate-photography", title: "Real Estate & 3D Tours", text: "Listing photos, video and Matterport tours.", tags: ["realestate"] },
+  { slug: "commercial-videography", title: "Ads & Commercials", text: "Restaurant, brand and product videos for Google, Facebook & TV.", film: "sEPh6gEZVYM" },
+  { slug: "live-stream", title: "Live Streaming", text: "Multi-camera streams of keynotes and ceremonies.", tags: ["conference"] },
+  { slug: "photo-booth", title: "Photo Booth", text: "Booth, backdrop and attendant for your event.", tags: ["photobooth"] },
+  { slug: "photo-retouching", title: "Retouching", text: "Portrait, product and commercial retouching.", tags: ["retouching"] },
 ];
 
 export default function Home() {
@@ -49,7 +60,7 @@ export default function Home() {
   ];
   const about = pick.use(IMG.about);
   const banner = pick.one(byTags("conference").slice(8), IMG.conference);
-  const pillarImg = PILLARS.map((p) => pick.one(byTags(...p.tags).slice(1), byTags(...p.tags)));
+  const pillarImg = PILLARS.map((p) => (p.film ? `https://i.ytimg.com/vi/${p.film}/hqdefault.jpg` : pick.one(byTags(...(p.tags ?? [])).slice(1), byTags(...(p.tags ?? [])))));
   const gallery = pick.many(16, IMG.portfolio, IMG.wedding, IMG.conference, IMG.event);
   const recentEvents = EVENTS.filter((e) => e.image).slice(0, 8);
   return (
@@ -75,20 +86,26 @@ export default function Home() {
       <TrustBar />
 
       {/* Pillars */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6" data-reveal>
-        <SectionTitle eyebrow="What we do" title="Photography & videography for every occasion" intro="One company with our own crews across all 50 states, Washington, DC, Ontario and Quebec — published prices and online booking." />
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {PILLARS.map((p, i) => (
-            <Link key={p.slug} href={`/${p.slug}`} className="group relative block aspect-[4/5] overflow-hidden bg-black text-white hover-zoom">
-              <Image src={pillarImg[i]} alt={p.title} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover opacity-75 transition duration-500 group-hover:scale-105 group-hover:opacity-60" />
-              <div className="absolute inset-x-0 bottom-0 p-7">
-                <h2 className="font-script text-4xl">{p.title}</h2>
-                <p className="mt-2 text-sm text-white/90">{p.text}</p>
-                <span className="mt-4 inline-block border-b border-gold pb-1 text-xs uppercase tracking-[.2em] text-gold">Explore</span>
+      <section className="py-16">
+        <div className="mx-auto max-w-7xl px-4 md:px-6" data-reveal>
+          <SectionTitle eyebrow="What we do" title="Photography & videography for every occasion" intro="One company with our own crews across all 50 states, Washington, DC, Ontario and Quebec — published prices and online booking." />
+        </div>
+      <div className="relative overflow-hidden pb-4">
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent" />
+        <div className="marquee slow gap-5 px-5">
+          {[...PILLARS, ...PILLARS].map((p, i) => (
+            <Link key={i} href={`/${p.slug}`} aria-hidden={i >= PILLARS.length} tabIndex={i >= PILLARS.length ? -1 : undefined} className="group relative block aspect-[4/5] w-72 shrink-0 overflow-hidden bg-black text-white md:w-80 hover-zoom">
+              <Image src={pillarImg[i % PILLARS.length]} alt={i < PILLARS.length ? `${p.title} photographed by MacroSnaps` : ""} fill sizes="320px" className="object-cover opacity-75 transition duration-500 group-hover:opacity-60" />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                <h3 className="font-script text-3xl">{p.title}</h3>
+                <p className="mt-1 text-sm text-white/90">{p.text}</p>
+                <span className="mt-3 inline-block border-b border-gold pb-1 text-xs uppercase tracking-[.2em] text-gold">Explore</span>
               </div>
             </Link>
           ))}
         </div>
+      </div>
       </section>
 
       {/* About — image left, marble right, as on macrosnaps.com */}
