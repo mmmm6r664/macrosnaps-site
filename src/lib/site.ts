@@ -14,7 +14,6 @@ export const SITE = {
   offices: [
     { name: "New York City (Times Square)", street: "115 W 45th Street Suite 606", city: "New York", region: "NY", zip: "10036", country: "US" },
     { name: "Washington DC", street: "1300 I St NW", city: "Washington", region: "DC", zip: "20005", country: "US" },
-    { name: "Alexandria, Virginia", street: "4900 Leesburg Pike Suite 414", city: "Alexandria", region: "VA", zip: "22302", country: "US" },
   ],
   insurance:
     "Fully insured through State Farm: $1 million each occurrence and $2 million general aggregate. Certificates of insurance for venues are available on request.",

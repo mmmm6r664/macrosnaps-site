@@ -56,9 +56,9 @@ function sizePhrase(c: City) {
 function studioLine(c: City): string | undefined {
   const { nyc, dc } = c.studioMiles;
   if (c.slug === "new-york-city-ny" || c.slug === "manhattan-ny") return "Our New York City studio is in Times Square at 115 W 45th Street, so our team is local.";
-  if (c.slug === "washington-dc") return "We have offices in downtown Washington, DC and in Alexandria, Virginia, so our team is local.";
+  if (c.slug === "washington-dc") return "Our Washington, DC office is downtown at 1300 I St NW, so our team is local.";
   if (nyc <= 60) return `${c.name} is about ${nyc} miles from our Times Square studio in New York City.`;
-  if (dc <= 60) return `${c.name} is about ${dc} miles from our Washington, DC office and Alexandria, Virginia studio.`;
+  if (dc <= 60) return `${c.name} is about ${dc} miles from our Washington, DC office.`;
   return undefined;
 }
 

@@ -31,6 +31,4 @@ export const NAV_SERVICES = [
   ["video-editing", "Video Editing"],
   ["photo-retouching", "Photo Retouching"],
   ["virtualtours", "3D Virtual Tours"],
-  ["photography-services", "Photography Services"],
-  ["videography-services", "Videography Services"],
 ] as const;

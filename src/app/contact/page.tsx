@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
 import { SITE } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Contact Us", description: "Contact MacroSnaps: call 877-622-4973 or email info@macrosnaps.com. Studios in New York City and Alexandria, VA; office in Washington, DC.", alternates: { canonical: "/contact" } };
+export const metadata: Metadata = { title: "Contact Us", description: "Contact MacroSnaps: call 877-622-4973 or email info@macrosnaps.com. Studio in New York City and office in Washington, DC.", alternates: { canonical: "/contact" } };
 
 export default async function Contact({ searchParams }: { searchParams: Promise<{ subject?: string }> }) {
   const { subject } = await searchParams;

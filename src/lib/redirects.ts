@@ -19,6 +19,8 @@ export const redirects: R[] = [
   r("/passaic-new-jersey-photography", "/photographers/passaic-nj"),
   r("/paterson-new-jersey-photography", "/photographers/paterson-nj"),
   r("/book-online", "/book"),
+  r("/photography-services", "/photographers"),
+  r("/videography-services", "/videographers"),
   r("/book-now", "/book"),
   r("/videography", "/videographers"),
   r("/shop", "/book"),

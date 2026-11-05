@@ -44,10 +44,13 @@ function LocationsPanel() {
   );
 }
 
+const ALL_PHOTO = { href: "/photographers", label: "All Photography Services" };
+const ALL_VIDEO = { href: "/videographers", label: "All Videography Services" };
+
 const NAV: Item[] = [
   { label: "Home", href: "/" },
-  { label: "Photography", children: NAV_PHOTO },
-  { label: "Videography", children: NAV_VIDEO },
+  { label: "Photography", children: NAV_PHOTO, extra: [ALL_PHOTO] },
+  { label: "Videography", children: NAV_VIDEO, extra: [ALL_VIDEO] },
   { label: "Services", children: NAV_SERVICES },
   { label: "Locations", href: "/locations", mega: true },
   { label: "Portfolio", href: "/portfolio" },
