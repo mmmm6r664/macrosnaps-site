@@ -6,22 +6,30 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prebuild": "node scripts/merge-local.mjs",
+    "predev": "node scripts/merge-local.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/eb-garamond": "^5.2.5",
+    "@fontsource-variable/raleway": "^5.2.5",
+    "@fontsource/courgette": "^5.2.5",
+    "@fontsource/dancing-script": "^5.2.5",
+    "next": "15.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "next": "15.5.4"
+    "resend": "^4.1.2",
+    "stripe": "^17.7.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

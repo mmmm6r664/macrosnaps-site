@@ -1,0 +1,45 @@
+gilbert-az|Gilbert, AZ
+norfolk-va|Norfolk, VA
+louisville-ky|Louisville, KY
+reno-nv|Reno, NV
+winston-salem-nc|Winston-Salem, NC
+glendale-az|Glendale, AZ
+hialeah-fl|Hialeah, FL
+garland-tx|Garland, TX
+scottsdale-az|Scottsdale, AZ
+irving-tx|Irving, TX
+chesapeake-va|Chesapeake, VA
+north-las-vegas-nv|North Las Vegas, NV
+fremont-ca|Fremont, CA
+baton-rouge-la|Baton Rouge, LA
+lexington-ky|Lexington, KY
+paradise-nv|Paradise, NV
+richmond-va|Richmond, VA
+san-bernardino-ca|San Bernardino, CA
+spokane-wa|Spokane, WA
+birmingham-al|Birmingham, AL
+modesto-ca|Modesto, CA
+des-moines-ia|Des Moines, IA
+rochester-ny|Rochester, NY
+tacoma-wa|Tacoma, WA
+arlington-va|Arlington, VA
+fontana-ca|Fontana, CA
+oxnard-ca|Oxnard, CA
+moreno-valley-ca|Moreno Valley, CA
+fayetteville-nc|Fayetteville, NC
+huntington-beach-ca|Huntington Beach, CA
+toronto-on|Toronto, ON
+montreal-qc|Montréal, QC
+calgary-ab|Calgary, AB
+ottawa-on|Ottawa, ON
+edmonton-ab|Edmonton, AB
+mississauga-on|Mississauga, ON
+north-york-on|North York, ON
+winnipeg-mb|Winnipeg, MB
+vancouver-bc|Vancouver, BC
+scarborough-on|Scarborough, ON
+quebec-qc|Québec, QC
+hamilton-on|Hamilton, ON
+brampton-on|Brampton, ON
+surrey-bc|Surrey, BC
+laval-qc|Laval, QC

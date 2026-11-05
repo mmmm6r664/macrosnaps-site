@@ -1,0 +1,1413 @@
+{
+  "raleigh-nc": {
+    "conferenceVenues": [
+      "Raleigh Convention Center",
+      "Raleigh Marriott City Center",
+      "Sheraton Raleigh Hotel",
+      "The Umstead Hotel and Spa (Cary)"
+    ],
+    "eventVenues": [
+      "North Carolina Museum of Art",
+      "Merrimon-Wynne House",
+      "Martin Marietta Center for the Performing Arts",
+      "JC Raulston Arboretum"
+    ],
+    "photoSpots": [
+      "Dorothea Dix Park",
+      "North Carolina State Capitol",
+      "Pullen Park",
+      "Historic Oakwood",
+      "NC State Belltower"
+    ],
+    "neighborhoods": [
+      "Downtown Raleigh",
+      "Glenwood South",
+      "Five Points",
+      "North Hills",
+      "Historic Oakwood",
+      "Warehouse District"
+    ],
+    "airport": "Raleigh-Durham International Airport (RDU)",
+    "blurb": "Raleigh anchors the Research Triangle, so its event calendar leans on tech, life sciences, state government and university conferences, alongside a busy wedding market spread between downtown venues and countryside estates. Spring and fall bring mild weather and blooming or turning trees, while humid summer afternoons often call for early or golden-hour outdoor sessions."
+  },
+  "omaha-ne": {
+    "conferenceVenues": [
+      "CHI Health Center Omaha",
+      "Hilton Omaha",
+      "Omaha Marriott Downtown at the Capitol District",
+      "Embassy Suites by Hilton Omaha La Vista Hotel & Conference Center"
+    ],
+    "eventVenues": [
+      "The Durham Museum",
+      "Joslyn Art Museum",
+      "Lauritzen Gardens",
+      "Holland Performing Arts Center",
+      "Omaha's Henry Doorly Zoo and Aquarium"
+    ],
+    "photoSpots": [
+      "The Old Market",
+      "Bob Kerrey Pedestrian Bridge",
+      "Gene Leahy Mall at The RiverFront",
+      "Heartland of America Park",
+      "Memorial Park"
+    ],
+    "neighborhoods": [
+      "Old Market",
+      "Blackstone District",
+      "Dundee",
+      "Benson",
+      "Aksarben Village",
+      "North Downtown (NoDo)"
+    ],
+    "airport": "Eppley Airfield (OMA)",
+    "blurb": "Omaha draws insurance, finance, rail and agribusiness meetings, and it hosts the annual Berkshire Hathaway shareholders meeting and the NCAA Men's College World Series. Winters are cold and snowy, so many weddings and outdoor shoots cluster between May and October, with indoor museum and ballroom venues carrying the off-season."
+  },
+  "miami-fl": {
+    "conferenceVenues": [
+      "Miami Beach Convention Center",
+      "JW Marriott Marquis Miami",
+      "InterContinental Miami",
+      "Hyatt Regency Miami and James L. Knight Center",
+      "Fontainebleau Miami Beach"
+    ],
+    "eventVenues": [
+      "Vizcaya Museum and Gardens",
+      "The Biltmore Hotel (Coral Gables)",
+      "Pérez Art Museum Miami",
+      "Deering Estate",
+      "Adrienne Arsht Center for the Performing Arts"
+    ],
+    "photoSpots": [
+      "South Pointe Park",
+      "Wynwood Walls",
+      "Ocean Drive Art Deco District",
+      "Bayfront Park",
+      "Venetian Pool (Coral Gables)"
+    ],
+    "neighborhoods": [
+      "Brickell",
+      "Wynwood",
+      "Coconut Grove",
+      "Little Havana",
+      "Miami Design District",
+      "Coral Gables"
+    ],
+    "airport": "Miami International Airport (MIA)",
+    "blurb": "Miami's calendar is shaped by international business, finance, art and hospitality, with Art Basel Miami Beach each December and a steady run of Latin American corporate meetings and destination weddings. The dry season from roughly November to April is peak time for events; summer brings heat, humidity, daily storms and hurricane-season planning."
+  },
+  "oakland-ca": {
+    "conferenceVenues": [
+      "Oakland Marriott City Center",
+      "Oakland Scottish Rite Center",
+      "Waterfront Hotel (Jack London Square)",
+      "Oakland Museum of California"
+    ],
+    "eventVenues": [
+      "Oakland Museum of California",
+      "Dunsmuir Hellman Historic Estate",
+      "Chapel of the Chimes",
+      "Paramount Theatre",
+      "Fox Theater Oakland"
+    ],
+    "photoSpots": [
+      "Lake Merritt",
+      "Morcom Rose Garden",
+      "Jack London Square",
+      "Redwood Regional Park",
+      "Joaquin Miller Park"
+    ],
+    "neighborhoods": [
+      "Rockridge",
+      "Temescal",
+      "Uptown",
+      "Jack London District",
+      "Piedmont Avenue",
+      "Montclair"
+    ],
+    "airport": "Oakland San Francisco Bay Airport (OAK)",
+    "blurb": "Oakland's events mix tech and nonprofit gatherings, arts and music happenings, and weddings that take advantage of historic theaters, gardens and the hills above the city. The climate is mild year-round with drier, sunnier days than San Francisco, though morning fog and a rainy season from about November to March are worth building into shoot plans."
+  },
+  "minneapolis-mn": {
+    "conferenceVenues": [
+      "Minneapolis Convention Center",
+      "Hilton Minneapolis",
+      "Hyatt Regency Minneapolis",
+      "Minneapolis Marriott City Center"
+    ],
+    "eventVenues": [
+      "Minneapolis Institute of Art",
+      "Walker Art Center",
+      "Mill City Museum",
+      "The Machine Shop",
+      "Aria"
+    ],
+    "photoSpots": [
+      "Stone Arch Bridge",
+      "Minnehaha Falls",
+      "Lake Harriet",
+      "Minneapolis Sculpture Garden",
+      "Loring Park"
+    ],
+    "neighborhoods": [
+      "North Loop",
+      "Northeast",
+      "Uptown",
+      "Linden Hills",
+      "Downtown East",
+      "Loring Park"
+    ],
+    "airport": "Minneapolis-Saint Paul International Airport (MSP)",
+    "blurb": "Minneapolis is home to major retail, healthcare, medical device and financial companies, which keeps its convention center and downtown hotels busy with corporate meetings and trade events. Summers are short and lush with the city's lakes and riverfront at their best, while long, cold winters push most events indoors to converted warehouses, museums and ballrooms."
+  },
+  "tulsa-ok": {
+    "conferenceVenues": [
+      "Arvest Convention Center",
+      "Hyatt Regency Tulsa Downtown",
+      "Hard Rock Hotel & Casino Tulsa",
+      "The Mayo Hotel"
+    ],
+    "eventVenues": [
+      "Philbrook Museum of Art",
+      "The Mayo Hotel",
+      "Cain's Ballroom",
+      "Tulsa Performing Arts Center",
+      "Tulsa Garden Center at Woodward Park"
+    ],
+    "photoSpots": [
+      "Gathering Place",
+      "Woodward Park",
+      "Philbrook Museum gardens",
+      "Guthrie Green",
+      "Center of the Universe"
+    ],
+    "neighborhoods": [
+      "Brady Arts District",
+      "Blue Dome District",
+      "Cherry Street",
+      "Brookside",
+      "Pearl District",
+      "Maple Ridge"
+    ],
+    "airport": "Tulsa International Airport (TUL)",
+    "blurb": "Tulsa's meetings market grew out of the energy and aerospace industries, and the city now pairs those with arts events, music venues and weddings in its Art Deco downtown. Spring and fall offer the most comfortable outdoor conditions, while summers are hot and spring storms can force quick changes to outdoor plans."
+  },
+  "wichita-ks": {
+    "conferenceVenues": [
+      "Century II Performing Arts & Convention Center",
+      "Hyatt Regency Wichita",
+      "Drury Plaza Hotel Broadview",
+      "Wichita Marriott"
+    ],
+    "eventVenues": [
+      "Botanica Wichita",
+      "Wichita Art Museum",
+      "Exploration Place",
+      "Mark Arts",
+      "INTRUST Bank Arena"
+    ],
+    "photoSpots": [
+      "Keeper of the Plains",
+      "Old Town Wichita",
+      "Arkansas River paths",
+      "Botanica Wichita gardens",
+      "Sedgwick County Park"
+    ],
+    "neighborhoods": [
+      "Old Town",
+      "Delano",
+      "College Hill",
+      "Riverside",
+      "Douglas Design District",
+      "East Wichita"
+    ],
+    "airport": "Wichita Dwight D. Eisenhower National Airport (ICT)",
+    "blurb": "Known as the Air Capital of the World, Wichita hosts many aviation and manufacturing meetings, plus regional association events and a steady local wedding scene. Outdoor work is most comfortable in spring and fall; summers are hot and windy, and spring brings severe-weather risk."
+  },
+  "new-orleans-la": {
+    "conferenceVenues": [
+      "Ernest N. Morial Convention Center",
+      "Hyatt Regency New Orleans",
+      "New Orleans Marriott",
+      "Hilton New Orleans Riverside",
+      "Sheraton New Orleans Hotel"
+    ],
+    "eventVenues": [
+      "The National WWII Museum",
+      "Mardi Gras World",
+      "New Orleans Museum of Art",
+      "Ogden Museum of Southern Art",
+      "Audubon Tea Room"
+    ],
+    "photoSpots": [
+      "Jackson Square",
+      "City Park and the Besthoff Sculpture Garden",
+      "Garden District streets",
+      "Frenchmen Street",
+      "Crescent Park"
+    ],
+    "neighborhoods": [
+      "French Quarter",
+      "Garden District",
+      "Faubourg Marigny",
+      "Bywater",
+      "Warehouse District",
+      "Uptown"
+    ],
+    "airport": "Louis Armstrong New Orleans International Airport (MSY)",
+    "blurb": "New Orleans is a major convention city and hosts large festivals such as Mardi Gras, Jazz Fest and Essence Festival, plus destination weddings with second-line parades through historic streets. The most comfortable season runs from late fall through spring; summers are hot and humid with frequent afternoon storms, and hurricane season runs June through November."
+  },
+  "arlington-tx": {
+    "conferenceVenues": [
+      "Loews Arlington Hotel and Convention Center",
+      "Live! by Loews - Arlington, TX",
+      "Sheraton Arlington Hotel",
+      "AT&T Stadium",
+      "Globe Life Field"
+    ],
+    "eventVenues": [
+      "AT&T Stadium",
+      "Globe Life Field",
+      "Texas Live!",
+      "Levitt Pavilion Arlington",
+      "Arlington Museum of Art"
+    ],
+    "photoSpots": [
+      "River Legacy Park",
+      "Downtown Arlington and Levitt Pavilion",
+      "University of Texas at Arlington campus",
+      "Richard Greene Linear Park",
+      "Arlington Entertainment District"
+    ],
+    "neighborhoods": [
+      "Entertainment District",
+      "Downtown Arlington",
+      "North Arlington",
+      "Viridian",
+      "South Arlington"
+    ],
+    "airport": "Dallas Fort Worth International Airport (DFW)",
+    "blurb": "Arlington sits between Dallas and Fort Worth and is best known for its entertainment district, home to AT&T Stadium, Globe Life Field and Six Flags Over Texas, which draws major sporting events, concerts and corporate hospitality. Spring and fall are the sweet spots for outdoor sessions, since North Texas summers regularly run past 100°F."
+  },
+  "cleveland-oh": {
+    "conferenceVenues": [
+      "Huntington Convention Center of Cleveland",
+      "Hilton Cleveland Downtown",
+      "Cleveland Marriott Downtown at Key Tower",
+      "Renaissance Cleveland Hotel"
+    ],
+    "eventVenues": [
+      "Cleveland Museum of Art",
+      "Rock & Roll Hall of Fame",
+      "Cleveland Botanical Garden",
+      "Greater Cleveland Aquarium",
+      "Tudor Arms Hotel"
+    ],
+    "photoSpots": [
+      "Edgewater Park",
+      "Wade Lagoon",
+      "Cleveland Cultural Gardens",
+      "Lake View Cemetery",
+      "The Arcade Cleveland"
+    ],
+    "neighborhoods": [
+      "Ohio City",
+      "Tremont",
+      "University Circle",
+      "Gordon Square",
+      "The Flats",
+      "Little Italy"
+    ],
+    "airport": "Cleveland Hopkins International Airport (CLE)",
+    "blurb": "Cleveland's event scene is tied to healthcare, manufacturing and higher education, with the Cleveland Clinic and University Circle institutions generating a steady stream of medical and academic meetings. Lake Erie brings pleasant summers and colorful falls but snowy, gray winters, so indoor museum and historic hotel venues are popular from November to March."
+  },
+  "bakersfield-ca": {
+    "conferenceVenues": [
+      "Dignity Health Theater and Convention Center",
+      "Bakersfield Marriott at the Convention Center",
+      "DoubleTree by Hilton Bakersfield",
+      "Kern County Fairgrounds"
+    ],
+    "eventVenues": [
+      "Kern County Museum",
+      "The Padre Hotel",
+      "Fox Theater Bakersfield",
+      "Buck Owens' Crystal Palace",
+      "Bakersfield Museum of Art"
+    ],
+    "photoSpots": [
+      "The Park at River Walk",
+      "Hart Memorial Park",
+      "Kern River Parkway",
+      "Panorama Vista Preserve",
+      "Bakersfield Sign on Sillect Avenue"
+    ],
+    "neighborhoods": [
+      "Downtown Bakersfield",
+      "Westchester",
+      "Seven Oaks",
+      "Rosedale",
+      "Oleander-Sunset",
+      "Northwest Bakersfield"
+    ],
+    "airport": "Meadows Field Airport (BFL)",
+    "blurb": "Bakersfield's economy runs on agriculture and energy, and the city is known for the country-music Bakersfield Sound, which shows up in venues like Buck Owens' Crystal Palace. Summers are very hot and dry, so outdoor shoots work best in spring and fall or near sunrise and sunset, and winter can bring tule fog."
+  },
+  "honolulu-hi": {
+    "conferenceVenues": [
+      "Hawai'i Convention Center",
+      "Hilton Hawaiian Village Waikiki Beach Resort",
+      "Sheraton Waikiki Beach Resort",
+      "Hyatt Regency Waikiki Beach Resort and Spa"
+    ],
+    "eventVenues": [
+      "The Royal Hawaiian, a Luxury Collection Resort",
+      "Moana Surfrider, A Westin Resort & Spa",
+      "Honolulu Museum of Art",
+      "Bishop Museum",
+      "Halekulani"
+    ],
+    "photoSpots": [
+      "Diamond Head",
+      "Kapi'olani Park",
+      "Magic Island at Ala Moana Beach Park",
+      "Waikiki Beach",
+      "Iolani Palace grounds"
+    ],
+    "neighborhoods": [
+      "Waikiki",
+      "Kaka'ako",
+      "Chinatown",
+      "Kaimuki",
+      "Manoa",
+      "Kahala"
+    ],
+    "airport": "Daniel K. Inouye International Airport (HNL)",
+    "blurb": "Honolulu draws Pacific Rim business meetings, military and government events, incentive trips and a large share of destination weddings. The weather is warm year-round, with trade winds and passing showers, and winter months bring bigger surf on the north and west shores while sunset timing makes beachfront shoots popular any season."
+  },
+  "tampa-fl": {
+    "conferenceVenues": [
+      "Tampa Convention Center",
+      "JW Marriott Tampa Water Street",
+      "Tampa Marriott Water Street",
+      "Grand Hyatt Tampa Bay",
+      "Hilton Tampa Downtown"
+    ],
+    "eventVenues": [
+      "Henry B. Plant Museum",
+      "Tampa Bay History Center",
+      "The Florida Aquarium",
+      "Armature Works",
+      "Tampa Museum of Art"
+    ],
+    "photoSpots": [
+      "Tampa Riverwalk",
+      "Bayshore Boulevard",
+      "Curtis Hixon Waterfront Park",
+      "University of Tampa minarets",
+      "Ybor City Historic District"
+    ],
+    "neighborhoods": [
+      "Ybor City",
+      "Hyde Park",
+      "Water Street",
+      "Channel District",
+      "Seminole Heights",
+      "Davis Islands"
+    ],
+    "airport": "Tampa International Airport (TPA)",
+    "blurb": "Tampa hosts healthcare, defense, finance and sports-related events, along with large Gasparilla celebrations each winter and a busy year-round wedding market. Winter and spring are the most comfortable months for outdoor sessions; summers bring heat, humidity and near-daily afternoon thunderstorms during hurricane season."
+  },
+  "aurora-co": {
+    "conferenceVenues": [
+      "Gaylord Rockies Resort & Convention Center",
+      "Hyatt Regency Aurora-Denver Conference Center",
+      "Aurora Municipal Center"
+    ],
+    "eventVenues": [
+      "Stanley Marketplace",
+      "Aurora Fox Arts Center",
+      "Gaylord Rockies Resort & Convention Center",
+      "Murphy Creek Golf Course"
+    ],
+    "photoSpots": [
+      "Cherry Creek State Park",
+      "Aurora Reservoir",
+      "Plains Conservation Center",
+      "Aurora Sports Park"
+    ],
+    "neighborhoods": [
+      "Southlands",
+      "Saddle Rock",
+      "Fitzsimons",
+      "Original Aurora",
+      "Murphy Creek",
+      "Tallyn's Reach"
+    ],
+    "airport": "Denver International Airport (DEN)",
+    "blurb": "Aurora sits next to Denver International Airport and is home to the Anschutz Medical Campus and several military installations, making it a regular host for medical, aerospace and large association conventions. The high-plains climate brings plenty of sun and dramatic mountain views on clear days, with summer afternoon storms and occasional heavy spring snow to plan around."
+  },
+  "anaheim-ca": {
+    "conferenceVenues": [
+      "Anaheim Convention Center",
+      "Hilton Anaheim",
+      "Anaheim Marriott",
+      "Disneyland Hotel",
+      "Hyatt Regency Orange County (Garden Grove)"
+    ],
+    "eventVenues": [
+      "Disney's Grand Californian Hotel & Spa",
+      "Honda Center",
+      "The Grove of Anaheim",
+      "Muzeo Museum and Cultural Center",
+      "Anaheim Packing District"
+    ],
+    "photoSpots": [
+      "Center Street Promenade",
+      "Oak Canyon Nature Center",
+      "Yorba Regional Park",
+      "Pearson Park",
+      "Anaheim Packing House"
+    ],
+    "neighborhoods": [
+      "Anaheim Resort District",
+      "Downtown Anaheim",
+      "Anaheim Hills",
+      "Platinum Triangle",
+      "Colony Historic District"
+    ],
+    "airport": "John Wayne Airport (SNA)",
+    "blurb": "Anaheim's convention center is the largest on the West Coast, and the surrounding resort district keeps it busy with trade shows such as the NAMM Show and Natural Products Expo West. Southern California's mild, dry weather allows outdoor shoots most of the year, with the coolest, greenest conditions in winter and spring."
+  },
+  "santa-ana-ca": {
+    "conferenceVenues": [
+      "Avenue of the Arts Costa Mesa (South Coast Metro)",
+      "Hilton Orange County/Costa Mesa",
+      "OC Fair & Event Center (Costa Mesa)",
+      "Anaheim Convention Center (nearby)"
+    ],
+    "eventVenues": [
+      "Bowers Museum",
+      "Old Orange County Courthouse",
+      "Discovery Cube Orange County",
+      "Grand Central Art Center"
+    ],
+    "photoSpots": [
+      "Old Orange County Courthouse",
+      "Downtown Santa Ana's Fourth Street",
+      "Santiago Park",
+      "French Park Historic District",
+      "Centennial Regional Park"
+    ],
+    "neighborhoods": [
+      "Downtown Santa Ana",
+      "French Park",
+      "Floral Park",
+      "Artists Village",
+      "Willard",
+      "South Coast Metro"
+    ],
+    "airport": "John Wayne Airport (SNA)",
+    "blurb": "As Orange County's seat, Santa Ana hosts government, legal and cultural events, and its museums and historic downtown are popular for galas and weddings with a strong Latino cultural influence. The mild coastal-inland climate makes outdoor shoots possible most of the year, with summer heat and late-spring marine-layer mornings to plan around."
+  },
+  "corpus-christi-tx": {
+    "conferenceVenues": [
+      "American Bank Center",
+      "Omni Corpus Christi Hotel",
+      "Texas A&M University-Corpus Christi"
+    ],
+    "eventVenues": [
+      "Art Museum of South Texas",
+      "USS Lexington Museum",
+      "Texas State Aquarium",
+      "Heritage Park"
+    ],
+    "photoSpots": [
+      "Corpus Christi Bayfront and Seawall",
+      "Selena Memorial (Mirador de la Flor)",
+      "Cole Park",
+      "Padre Island National Seashore",
+      "Harbor Bridge views from North Beach"
+    ],
+    "neighborhoods": [
+      "Downtown",
+      "North Beach",
+      "Padre Island",
+      "Ocean Drive",
+      "Southside",
+      "Flour Bluff"
+    ],
+    "airport": "Corpus Christi International Airport (CRP)",
+    "blurb": "Corpus Christi's events are tied to its port, energy and petrochemical industries, naval presence and Gulf Coast tourism, and beach and bayfront weddings are common. Winters are mild and good for outdoor shoots, while summers are hot and humid with steady coastal winds and a June-to-November hurricane season."
+  },
+  "riverside-ca": {
+    "conferenceVenues": [
+      "Riverside Convention Center",
+      "The Mission Inn Hotel & Spa",
+      "Marriott Riverside at the Convention Center",
+      "University of California, Riverside"
+    ],
+    "eventVenues": [
+      "The Mission Inn Hotel & Spa",
+      "Fox Performing Arts Center",
+      "Riverside Municipal Auditorium",
+      "UCR Botanic Gardens",
+      "The Cheech Marin Center for Chicano Art & Culture"
+    ],
+    "photoSpots": [
+      "Mount Rubidoux",
+      "California Citrus State Historic Park",
+      "Fairmount Park",
+      "Mission Inn and Downtown Main Street Mall",
+      "UC Riverside Bell Tower"
+    ],
+    "neighborhoods": [
+      "Downtown Riverside",
+      "Wood Streets",
+      "Canyon Crest",
+      "Mission Grove",
+      "Arlington Heights",
+      "La Sierra"
+    ],
+    "airport": "Ontario International Airport (ONT)",
+    "blurb": "Riverside's event scene centers on its historic downtown, where the Mission Inn hosts weddings and its Festival of Lights draws crowds each holiday season, while the university and county government bring steady meetings. Inland Empire summers are hot and dry, so spring, fall and winter offer the best outdoor light and comfort."
+  },
+  "st-louis-mo": {
+    "conferenceVenues": [
+      "America's Center Convention Complex",
+      "Hyatt Regency St. Louis at The Arch",
+      "St. Louis Union Station Hotel",
+      "Marriott St. Louis Grand",
+      "Chase Park Plaza Royal Sonesta"
+    ],
+    "eventVenues": [
+      "Missouri Botanical Garden",
+      "Saint Louis Art Museum",
+      "St. Louis Union Station Grand Hall",
+      "The Jewel Box",
+      "Chase Park Plaza Royal Sonesta"
+    ],
+    "photoSpots": [
+      "Gateway Arch National Park",
+      "Forest Park and the World's Fair Pavilion",
+      "Tower Grove Park",
+      "Lafayette Square",
+      "Laclede's Landing"
+    ],
+    "neighborhoods": [
+      "Central West End",
+      "Soulard",
+      "The Hill",
+      "Lafayette Square",
+      "Delmar Loop",
+      "Benton Park"
+    ],
+    "airport": "St. Louis Lambert International Airport (STL)",
+    "blurb": "St. Louis hosts healthcare, bioscience, agriculture-tech and financial-services meetings, along with large faith-based and sports events, and its historic buildings and gardens are favorite wedding backdrops. Spring and fall are the best seasons for outdoor work; summers are hot and humid and winters can be cold and gray."
+  },
+  "lexington-fayette-ky": {
+    "conferenceVenues": [
+      "Central Bank Center",
+      "Hyatt Regency Lexington",
+      "Hilton Lexington Downtown",
+      "Griffin Gate Marriott Golf Resort & Spa",
+      "Kentucky Horse Park"
+    ],
+    "eventVenues": [
+      "Keeneland",
+      "Ashland, The Henry Clay Estate",
+      "21c Museum Hotel Lexington",
+      "Kentucky Horse Park",
+      "The Arboretum, State Botanical Garden of Kentucky"
+    ],
+    "photoSpots": [
+      "Keeneland grounds",
+      "Thoroughbred Park",
+      "Old Frankfort Pike horse farms",
+      "Jacobson Park",
+      "Triangle Park"
+    ],
+    "neighborhoods": [
+      "Downtown",
+      "Chevy Chase",
+      "Distillery District",
+      "Ashland Park",
+      "Hamburg",
+      "Southland"
+    ],
+    "airport": "Blue Grass Airport (LEX)",
+    "blurb": "Lexington's events revolve around the thoroughbred industry, bourbon tourism and the University of Kentucky, with Keeneland's April and October race meets drawing major corporate hospitality. Horse farms with stone fences and rolling pastures are common wedding and portrait settings, at their greenest in spring and most colorful in October."
+  },
+  "stockton-ca": {
+    "conferenceVenues": [
+      "Stockton Arena",
+      "University Plaza Waterfront Hotel",
+      "Hilton Stockton",
+      "University of the Pacific"
+    ],
+    "eventVenues": [
+      "The Haggin Museum",
+      "Bob Hope Theatre",
+      "Morris Chapel at University of the Pacific",
+      "Weber Point Events Center"
+    ],
+    "photoSpots": [
+      "Victory Park",
+      "University of the Pacific campus",
+      "Downtown Stockton waterfront",
+      "Oak Grove Regional Park",
+      "Weber Point"
+    ],
+    "neighborhoods": [
+      "Miracle Mile",
+      "Brookside",
+      "Lincoln Village",
+      "Spanos Park",
+      "Downtown Stockton",
+      "Weston Ranch"
+    ],
+    "airport": "Stockton Metropolitan Airport (SCK)",
+    "blurb": "Stockton sits on the San Joaquin Delta and draws agriculture, logistics and education events, with nearby Lodi wineries adding to the region's wedding options. Summers are hot and dry with cooling Delta breezes in the evening, and winter can bring Central Valley tule fog."
+  },
+  "pittsburgh-pa": {
+    "conferenceVenues": [
+      "David L. Lawrence Convention Center",
+      "Omni William Penn Hotel",
+      "Wyndham Grand Pittsburgh Downtown",
+      "The Westin Pittsburgh",
+      "Fairmont Pittsburgh"
+    ],
+    "eventVenues": [
+      "Phipps Conservatory and Botanical Gardens",
+      "Carnegie Museum of Art and Natural History",
+      "Senator John Heinz History Center",
+      "The Pennsylvanian",
+      "The Frick Pittsburgh"
+    ],
+    "photoSpots": [
+      "Point State Park",
+      "Grandview Avenue on Mount Washington",
+      "Schenley Park",
+      "Cathedral of Learning",
+      "Duquesne Incline"
+    ],
+    "neighborhoods": [
+      "Lawrenceville",
+      "Shadyside",
+      "Strip District",
+      "Squirrel Hill",
+      "South Side",
+      "North Shore"
+    ],
+    "airport": "Pittsburgh International Airport (PIT)",
+    "blurb": "Pittsburgh's event calendar draws on healthcare, robotics, AI and higher education, with Carnegie Mellon, Pitt and UPMC fueling a steady stream of conferences. The city's rivers, bridges and hills give it varied backdrops; fall foliage is a highlight, while winters are cold and often overcast."
+  },
+  "anchorage-ak": {
+    "conferenceVenues": [
+      "Dena'ina Civic and Convention Center",
+      "William A. Egan Civic and Convention Center",
+      "Hotel Captain Cook",
+      "Hilton Anchorage",
+      "Sheraton Anchorage Hotel"
+    ],
+    "eventVenues": [
+      "Anchorage Museum",
+      "Alaska Native Heritage Center",
+      "Hotel Captain Cook",
+      "Alyeska Resort (Girdwood)"
+    ],
+    "photoSpots": [
+      "Tony Knowles Coastal Trail",
+      "Earthquake Park",
+      "Kincaid Park",
+      "Flattop Mountain",
+      "Point Woronzof"
+    ],
+    "neighborhoods": [
+      "Downtown",
+      "Midtown",
+      "South Addition",
+      "Spenard",
+      "Eagle River",
+      "Girdwood"
+    ],
+    "airport": "Ted Stevens Anchorage International Airport (ANC)",
+    "blurb": "Anchorage hosts oil and gas, aviation, military and Alaska Native organization meetings, and summer destination weddings with mountain and inlet views. Long summer daylight gives photographers extended golden hours, while winter days are short and cold, so outdoor shoot windows shift dramatically by season."
+  },
+  "cincinnati-oh": {
+    "conferenceVenues": [
+      "Duke Energy Convention Center",
+      "Hyatt Regency Cincinnati",
+      "Hilton Cincinnati Netherland Plaza",
+      "Cincinnati Marriott at RiverCenter (Covington, KY)"
+    ],
+    "eventVenues": [
+      "Cincinnati Art Museum",
+      "Union Terminal (Cincinnati Museum Center)",
+      "Krohn Conservatory",
+      "Cincinnati Music Hall",
+      "American Sign Museum"
+    ],
+    "photoSpots": [
+      "Eden Park",
+      "Smale Riverfront Park",
+      "John A. Roebling Suspension Bridge",
+      "Washington Park",
+      "Ault Park"
+    ],
+    "neighborhoods": [
+      "Over-the-Rhine",
+      "Mount Adams",
+      "Hyde Park",
+      "Northside",
+      "Clifton",
+      "The Banks"
+    ],
+    "airport": "Cincinnati/Northern Kentucky International Airport (CVG)",
+    "blurb": "Cincinnati is headquarters to Procter & Gamble, Kroger and other major firms, so consumer-goods, retail and financial meetings fill its convention center and downtown hotels. Historic architecture in Over-the-Rhine and along the Ohio River makes for strong backdrops, with spring and fall the most comfortable outdoor seasons."
+  },
+  "ironville-ky": {
+    "conferenceVenues": [
+      "Delta Hotels by Marriott Ashland Downtown",
+      "Paramount Arts Center (Ashland)",
+      "Mountain Health Arena (Huntington, WV)"
+    ],
+    "eventVenues": [
+      "Paramount Arts Center",
+      "Highlands Museum & Discovery Center",
+      "Huntington Museum of Art (Huntington, WV)"
+    ],
+    "photoSpots": [
+      "Central Park (Ashland)",
+      "Downtown Ashland's Winchester Avenue",
+      "Greenbo Lake State Resort Park",
+      "Ritter Park (Huntington, WV)"
+    ],
+    "neighborhoods": [
+      "Ashland",
+      "Westwood",
+      "Russell",
+      "Flatwoods",
+      "Catlettsburg"
+    ],
+    "airport": "Huntington Tri-State Airport (HTS)",
+    "blurb": "Ironville is a Boyd County community on the edge of Ashland, so most events here draw on the Ashland and Huntington, WV, tri-state area, from healthcare and industrial meetings to weddings in historic downtown venues. The Ohio River valley has four distinct seasons, with spring blooms and fall foliage in the surrounding hills offering the best outdoor conditions."
+  },
+  "meads-ky": {
+    "conferenceVenues": [
+      "Delta Hotels by Marriott Ashland Downtown",
+      "Paramount Arts Center (Ashland)",
+      "Mountain Health Arena (Huntington, WV)"
+    ],
+    "eventVenues": [
+      "Paramount Arts Center",
+      "Highlands Museum & Discovery Center",
+      "Huntington Museum of Art (Huntington, WV)"
+    ],
+    "photoSpots": [
+      "Central Park (Ashland)",
+      "Downtown Ashland's Winchester Avenue",
+      "Greenbo Lake State Resort Park",
+      "Ritter Park (Huntington, WV)"
+    ],
+    "neighborhoods": [
+      "Ashland",
+      "Cannonsburg",
+      "Summit",
+      "Catlettsburg",
+      "Westwood"
+    ],
+    "airport": "Huntington Tri-State Airport (HTS)",
+    "blurb": "Meads is a small Boyd County community just outside Ashland, and local events typically use venues in Ashland and across the river in the Huntington, WV, area. Spring and fall are the most reliable seasons for outdoor sessions in the wooded hills of northeastern Kentucky, with humid summers and occasional winter snow."
+  },
+  "henderson-nv": {
+    "conferenceVenues": [
+      "Henderson Convention Center",
+      "Green Valley Ranch Resort Spa and Casino",
+      "M Resort Spa Casino",
+      "The Westin Lake Las Vegas Resort & Spa",
+      "Hilton Lake Las Vegas Resort & Spa"
+    ],
+    "eventVenues": [
+      "Green Valley Ranch Resort Spa and Casino",
+      "The Westin Lake Las Vegas Resort & Spa",
+      "Reflection Bay Golf Club",
+      "Vegas Valley Winery"
+    ],
+    "photoSpots": [
+      "Lake Las Vegas",
+      "Clark County Wetlands Park",
+      "Ethel M Chocolates Botanical Cactus Garden",
+      "Henderson Bird Viewing Preserve",
+      "River Mountains Loop Trail"
+    ],
+    "neighborhoods": [
+      "Green Valley",
+      "Anthem",
+      "Lake Las Vegas",
+      "Inspirada",
+      "Water Street District",
+      "Seven Hills"
+    ],
+    "airport": "Harry Reid International Airport (LAS)",
+    "blurb": "Henderson offers a quieter, resort-style alternative to the Las Vegas Strip, with lakeside and casino resorts hosting corporate retreats, incentive groups and weddings. Desert conditions mean very hot summers, so outdoor shoots are best planned for fall through spring or at sunrise and sunset."
+  },
+  "greensboro-nc": {
+    "conferenceVenues": [
+      "Greensboro Coliseum Complex",
+      "Joseph S. Koury Convention Center",
+      "Grandover Resort & Spa",
+      "Greensboro Marriott Downtown",
+      "Proximity Hotel"
+    ],
+    "eventVenues": [
+      "Proximity Hotel",
+      "Greensboro Science Center",
+      "Weatherspoon Art Museum",
+      "Blandwood Museum",
+      "Steven Tanger Center for the Performing Arts"
+    ],
+    "photoSpots": [
+      "Greensboro Arboretum",
+      "Bog Garden at Benjamin Park",
+      "Gateway Gardens",
+      "LeBauer Park",
+      "Guilford Courthouse National Military Park"
+    ],
+    "neighborhoods": [
+      "Downtown Greensboro",
+      "Fisher Park",
+      "Irving Park",
+      "Lindley Park",
+      "College Hill",
+      "Sunset Hills"
+    ],
+    "airport": "Piedmont Triad International Airport (GSO)",
+    "blurb": "Greensboro's history in textiles and its role in the 1960 sit-in movement shape its cultural events, while its coliseum complex and several universities draw tournaments, trade shows and academic meetings. Spring and fall are prime seasons for outdoor work, with mild winters and warm, humid summers."
+  },
+  "saint-paul-mn": {
+    "conferenceVenues": [
+      "Saint Paul RiverCentre",
+      "InterContinental Saint Paul Riverfront",
+      "The Saint Paul Hotel",
+      "Union Depot"
+    ],
+    "eventVenues": [
+      "Landmark Center",
+      "Union Depot",
+      "Science Museum of Minnesota",
+      "James J. Hill House",
+      "Marjorie McNeely Conservatory at Como Park"
+    ],
+    "photoSpots": [
+      "Summit Avenue",
+      "Cathedral of Saint Paul",
+      "Rice Park",
+      "Harriet Island Regional Park",
+      "Minnesota State Capitol"
+    ],
+    "neighborhoods": [
+      "Lowertown",
+      "Cathedral Hill",
+      "Highland Park",
+      "Macalester-Groveland",
+      "West Seventh",
+      "Summit Hill"
+    ],
+    "airport": "Minneapolis-Saint Paul International Airport (MSP)",
+    "blurb": "As Minnesota's capital, Saint Paul hosts government, association and healthcare meetings, along with the Saint Paul Winter Carnival and the nearby Minnesota State Fair. Victorian homes, river bluffs and historic downtown buildings make strong backdrops, with summer and fall best for outdoor sessions and indoor venues favored through the cold winter."
+  },
+  "plano-tx": {
+    "conferenceVenues": [
+      "Plano Event Center",
+      "Renaissance Dallas at Plano Legacy West Hotel",
+      "Dallas/Plano Marriott at Legacy Town Center",
+      "Hilton Dallas/Plano Granite Park"
+    ],
+    "eventVenues": [
+      "Southfork Ranch (Parker)",
+      "Heritage Farmstead Museum",
+      "Legacy Hall",
+      "Plano Event Center"
+    ],
+    "photoSpots": [
+      "Arbor Hills Nature Preserve",
+      "Historic Downtown Plano",
+      "Legacy West",
+      "Oak Point Park and Nature Preserve",
+      "Haggard Park"
+    ],
+    "neighborhoods": [
+      "Legacy West",
+      "Downtown Plano",
+      "Willow Bend",
+      "Granite Park",
+      "West Plano",
+      "East Plano"
+    ],
+    "airport": "Dallas Fort Worth International Airport (DFW)",
+    "blurb": "Plano is home to the corporate headquarters of companies such as Toyota North America and JCPenney, which keeps its Legacy business district busy with corporate meetings and product events. North Texas weather favors spring and fall for outdoor shoots, as summers are very hot and spring brings storm risk."
+  },
+  "newark-nj": {
+    "conferenceVenues": [
+      "Prudential Center",
+      "New Jersey Performing Arts Center (NJPAC)",
+      "Hilton Newark Penn Station",
+      "Robert Treat Hotel",
+      "Newark Liberty International Airport Marriott"
+    ],
+    "eventVenues": [
+      "Newark Museum of Art",
+      "New Jersey Performing Arts Center (NJPAC)",
+      "Cathedral Basilica of the Sacred Heart",
+      "Prudential Center"
+    ],
+    "photoSpots": [
+      "Branch Brook Park",
+      "Military Park",
+      "Cathedral Basilica of the Sacred Heart",
+      "Riverfront Park",
+      "Washington Park"
+    ],
+    "neighborhoods": [
+      "Ironbound",
+      "Downtown Newark",
+      "Forest Hill",
+      "University Heights",
+      "North Ward",
+      "Lincoln Park"
+    ],
+    "airport": "Newark Liberty International Airport (EWR)",
+    "blurb": "Newark combines insurance, logistics, higher education and arts institutions, so its venues host corporate meetings, university events and performances within easy reach of Manhattan. Branch Brook Park's cherry blossoms make April a standout month for outdoor portraits, while summers are hot and winters cold."
+  },
+  "toledo-oh": {
+    "conferenceVenues": [
+      "Glass City Center",
+      "Renaissance Toledo Downtown Hotel",
+      "Stranahan Theater"
+    ],
+    "eventVenues": [
+      "Toledo Museum of Art and Glass Pavilion",
+      "Toledo Botanical Garden",
+      "Toledo Zoo",
+      "Stranahan Theater"
+    ],
+    "photoSpots": [
+      "Glass City Metropark",
+      "Wildwood Preserve Metropark",
+      "Old West End",
+      "Promenade Park",
+      "Toledo Botanical Garden"
+    ],
+    "neighborhoods": [
+      "Downtown Toledo",
+      "Old West End",
+      "Warehouse District",
+      "Ottawa Hills",
+      "Point Place",
+      "Sylvania"
+    ],
+    "airport": "Detroit Metropolitan Wayne County Airport (DTW)",
+    "blurb": "Toledo is known as the Glass City for its glassmaking heritage, and its convention center, art museum and riverfront host manufacturing, automotive and regional association events. Summer and early fall are best for outdoor shoots along the Maumee River, while winters are cold with lake-effect clouds."
+  },
+  "lincoln-ne": {
+    "conferenceVenues": [
+      "Pinnacle Bank Arena",
+      "Embassy Suites by Hilton Lincoln",
+      "Lancaster Event Center",
+      "Nebraska Innovation Campus Conference Center"
+    ],
+    "eventVenues": [
+      "Lied Center for Performing Arts",
+      "Sheldon Museum of Art",
+      "Lincoln Children's Zoo",
+      "Nebraska State Capitol"
+    ],
+    "photoSpots": [
+      "Nebraska State Capitol",
+      "Sunken Gardens",
+      "Haymarket District",
+      "Pioneers Park Nature Center",
+      "Holmes Lake"
+    ],
+    "neighborhoods": [
+      "Haymarket",
+      "Downtown Lincoln",
+      "Near South",
+      "College View",
+      "Country Club",
+      "Telegraph District"
+    ],
+    "airport": "Lincoln Airport (LNK)",
+    "blurb": "Lincoln's event calendar is driven by state government, the University of Nebraska and Husker football weekends, which fill hotels each fall. Spring and fall bring the most comfortable outdoor weather, while summers are hot and winters cold and windy."
+  },
+  "orlando-fl": {
+    "conferenceVenues": [
+      "Orange County Convention Center",
+      "Hyatt Regency Orlando",
+      "Rosen Shingle Creek",
+      "Orlando World Center Marriott",
+      "Gaylord Palms Resort & Convention Center (Kissimmee)"
+    ],
+    "eventVenues": [
+      "Harry P. Leu Gardens",
+      "Cypress Grove Estate House",
+      "Dr. Phillips Center for the Performing Arts",
+      "Orlando Museum of Art",
+      "Albin Polasek Museum & Sculpture Gardens (Winter Park)"
+    ],
+    "photoSpots": [
+      "Lake Eola Park",
+      "Park Avenue in Winter Park",
+      "Kraft Azalea Garden",
+      "Mead Botanical Garden",
+      "Harry P. Leu Gardens"
+    ],
+    "neighborhoods": [
+      "Thornton Park",
+      "College Park",
+      "Baldwin Park",
+      "Mills 50",
+      "Winter Park",
+      "Lake Nona"
+    ],
+    "airport": "Orlando International Airport (MCO)",
+    "blurb": "Orlando is one of the country's busiest convention destinations, with the Orange County Convention Center and theme-park resorts hosting trade shows, incentive trips and destination weddings year-round. Winter and spring are the most comfortable months for outdoor sessions; summers bring heat, humidity and near-daily afternoon thunderstorms."
+  },
+  "chula-vista-ca": {
+    "conferenceVenues": [
+      "Gaylord Pacific Resort & Convention Center",
+      "San Diego Convention Center (nearby)"
+    ],
+    "eventVenues": [
+      "Gaylord Pacific Resort & Convention Center",
+      "The Living Coast Discovery Center",
+      "Hotel del Coronado (nearby Coronado)"
+    ],
+    "photoSpots": [
+      "Chula Vista Bayfront Park",
+      "Third Avenue Village",
+      "Otay Valley Regional Park",
+      "Rohr Park",
+      "Sweetwater Marsh National Wildlife Refuge"
+    ],
+    "neighborhoods": [
+      "Eastlake",
+      "Otay Ranch",
+      "Third Avenue Village",
+      "Rancho del Rey",
+      "Bonita",
+      "Chula Vista Bayfront"
+    ],
+    "airport": "San Diego International Airport (SAN)",
+    "blurb": "Chula Vista's bayfront became a major meetings destination with the 2025 opening of the Gaylord Pacific Resort & Convention Center, adding large-scale conference space to the South Bay. The coastal climate is mild year-round, with late-spring marine layer mornings and dependably clear fall days for outdoor work."
+  },
+  "jersey-city-nj": {
+    "conferenceVenues": [
+      "Hyatt Regency Jersey City on the Hudson",
+      "The Westin Jersey City Newport",
+      "Liberty Science Center"
+    ],
+    "eventVenues": [
+      "Liberty House Restaurant",
+      "Liberty Science Center",
+      "Hyatt Regency Jersey City on the Hudson",
+      "Canopy by Hilton Jersey City Arts District"
+    ],
+    "photoSpots": [
+      "Liberty State Park",
+      "Exchange Place waterfront",
+      "Hamilton Park",
+      "Van Vorst Park",
+      "Paulus Hook"
+    ],
+    "neighborhoods": [
+      "Downtown / Paulus Hook",
+      "Journal Square",
+      "The Heights",
+      "Newport",
+      "Bergen-Lafayette",
+      "Hamilton Park"
+    ],
+    "airport": "Newark Liberty International Airport (EWR)",
+    "blurb": "Jersey City's waterfront financial district hosts banking, insurance and tech meetings with the Manhattan skyline as a backdrop, and Liberty State Park is a favorite for wedding portraits facing the Statue of Liberty. Spring and fall offer the best outdoor light and comfort, with hot summers and cold, windy waterfront winters."
+  },
+  "chandler-az": {
+    "conferenceVenues": [
+      "Sheraton Grand at Wild Horse Pass",
+      "Hilton Phoenix Chandler",
+      "Chandler Center for the Arts",
+      "Phoenix Convention Center (nearby)"
+    ],
+    "eventVenues": [
+      "Chandler Center for the Arts",
+      "Sheraton Grand at Wild Horse Pass",
+      "Ocotillo Golf Club",
+      "Wild Horse Pass Golf Club"
+    ],
+    "photoSpots": [
+      "Historic Downtown Chandler and Dr. A.J. Chandler Park",
+      "Tumbleweed Park",
+      "Veterans Oasis Park",
+      "Desert Breeze Park"
+    ],
+    "neighborhoods": [
+      "Downtown Chandler",
+      "Ocotillo",
+      "Fulton Ranch",
+      "Price Corridor",
+      "West Chandler",
+      "Sun Lakes"
+    ],
+    "airport": "Phoenix Sky Harbor International Airport (PHX)",
+    "blurb": "Chandler is a semiconductor and tech hub in the Phoenix area, with Intel's large campus and the Price Corridor generating corporate meetings and product events. Outdoor shoots are best from October through April, since summer temperatures regularly top 105°F and the monsoon season adds dust storms and lightning."
+  },
+  "fort-wayne-in": {
+    "conferenceVenues": [
+      "Grand Wayne Convention Center",
+      "Hilton Fort Wayne at the Grand Wayne Convention Center",
+      "Allen County War Memorial Coliseum",
+      "The Bradley"
+    ],
+    "eventVenues": [
+      "Foellinger-Freimann Botanical Conservatory",
+      "Embassy Theatre",
+      "Fort Wayne Museum of Art",
+      "Parkview Field"
+    ],
+    "photoSpots": [
+      "Promenade Park",
+      "Lakeside Park and Rose Garden",
+      "Headwaters Park",
+      "Foster Park",
+      "The Landing"
+    ],
+    "neighborhoods": [
+      "Downtown Fort Wayne",
+      "West Central",
+      "The Landing",
+      "Wells Street Corridor",
+      "'07 District",
+      "Aboite"
+    ],
+    "airport": "Fort Wayne International Airport (FWA)",
+    "blurb": "Fort Wayne's economy rests on manufacturing, healthcare, insurance and defense, and its revitalized riverfront downtown draws regional conferences, festivals and weddings. Summers are warm and green with the Lakeside rose garden in bloom from June, while winters are cold and snowy."
+  },
+  "buffalo-ny": {
+    "conferenceVenues": [
+      "Buffalo Niagara Convention Center",
+      "Hyatt Regency Buffalo Hotel and Conference Center",
+      "Embassy Suites by Hilton Buffalo",
+      "KeyBank Center"
+    ],
+    "eventVenues": [
+      "Buffalo AKG Art Museum",
+      "The Buffalo History Museum",
+      "Frank Lloyd Wright's Martin House",
+      "Buffalo and Erie County Botanical Gardens",
+      "Shea's Performing Arts Center"
+    ],
+    "photoSpots": [
+      "Delaware Park and Hoyt Lake",
+      "Canalside",
+      "Erie Basin Marina",
+      "Buffalo City Hall",
+      "Forest Lawn Cemetery"
+    ],
+    "neighborhoods": [
+      "Elmwood Village",
+      "Allentown",
+      "Hertel Avenue",
+      "North Buffalo",
+      "Larkinville",
+      "Downtown Buffalo"
+    ],
+    "airport": "Buffalo Niagara International Airport (BUF)",
+    "blurb": "Buffalo's architectural legacy, from Frank Lloyd Wright houses to Olmsted parks, shapes its event scene alongside healthcare, education and advanced manufacturing meetings. Summers along the waterfront are pleasant and popular for weddings, while lake-effect snow makes indoor venues the norm in winter."
+  },
+  "durham-nc": {
+    "conferenceVenues": [
+      "Durham Convention Center",
+      "Washington Duke Inn & Golf Club",
+      "JB Duke Hotel",
+      "The Durham Hotel"
+    ],
+    "eventVenues": [
+      "Sarah P. Duke Gardens",
+      "The Rickhouse",
+      "Durham Performing Arts Center (DPAC)",
+      "Duke Chapel",
+      "Washington Duke Inn & Golf Club"
+    ],
+    "photoSpots": [
+      "Sarah P. Duke Gardens",
+      "American Tobacco Campus",
+      "Duke Chapel",
+      "Durham Central Park",
+      "Eno River State Park"
+    ],
+    "neighborhoods": [
+      "Downtown Durham",
+      "Brightleaf District",
+      "Ninth Street",
+      "Trinity Park",
+      "Old West Durham",
+      "Southpoint"
+    ],
+    "airport": "Raleigh-Durham International Airport (RDU)",
+    "blurb": "Durham's events draw on Duke University, Duke Health and nearby Research Triangle Park, with converted tobacco warehouses now serving as venues for conferences, galas and weddings. Spring blooms at Duke Gardens and mild fall weather are peak times for outdoor sessions, while summers are hot and humid."
+  },
+  "st-petersburg-fl": {
+    "conferenceVenues": [
+      "The Vinoy Resort & Golf Club, Autograph Collection",
+      "Hilton St. Petersburg Bayfront",
+      "St. Pete Coliseum",
+      "Tampa Convention Center (nearby)"
+    ],
+    "eventVenues": [
+      "The Dalí Museum",
+      "Museum of Fine Arts, St. Petersburg",
+      "Sunken Gardens",
+      "James Museum of Western & Wildlife Art",
+      "The Vinoy Resort & Golf Club"
+    ],
+    "photoSpots": [
+      "St. Pete Pier",
+      "Vinoy Park",
+      "Straub Park",
+      "Fort De Soto Park",
+      "Central Avenue murals"
+    ],
+    "neighborhoods": [
+      "Downtown St. Petersburg",
+      "Old Northeast",
+      "Kenwood",
+      "Grand Central District",
+      "Edge District",
+      "Warehouse Arts District"
+    ],
+    "airport": "Tampa International Airport (TPA)",
+    "blurb": "St. Petersburg pairs a museum-rich downtown waterfront with Gulf beaches, making it a draw for association meetings, arts events and destination weddings. Winter and spring offer comfortable, drier weather and clear sunsets, while summer brings heat, afternoon storms and hurricane-season planning."
+  },
+  "irvine-ca": {
+    "conferenceVenues": [
+      "Irvine Marriott",
+      "Hotel Irvine",
+      "Beckman Center of the National Academies of Sciences & Engineering",
+      "Bren Events Center (UC Irvine)"
+    ],
+    "eventVenues": [
+      "Strawberry Farms Golf Club",
+      "Irvine Barclay Theatre",
+      "Orange County Great Park",
+      "Hotel Irvine"
+    ],
+    "photoSpots": [
+      "Bommer Canyon",
+      "William R. Mason Regional Park",
+      "San Joaquin Wildlife Sanctuary",
+      "Quail Hill Trailhead",
+      "Orange County Great Park"
+    ],
+    "neighborhoods": [
+      "Woodbridge",
+      "Turtle Rock",
+      "Irvine Spectrum",
+      "Northwood",
+      "University Park",
+      "Quail Hill"
+    ],
+    "airport": "John Wayne Airport (SNA)",
+    "blurb": "Irvine is a master-planned business hub with tech, biotech, automotive and gaming companies, plus UC Irvine, so corporate meetings and offsites make up much of its event calendar. Mild Southern California weather allows outdoor shoots nearly year-round, with spring green hills and clear fall days the best windows."
+  },
+  "laredo-tx": {
+    "conferenceVenues": [
+      "La Posada Hotel",
+      "Embassy Suites by Hilton Laredo",
+      "Sames Auto Arena",
+      "Laredo Center for the Arts"
+    ],
+    "eventVenues": [
+      "La Posada Hotel",
+      "Laredo Center for the Arts",
+      "Republic of the Rio Grande Museum",
+      "Sames Auto Arena"
+    ],
+    "photoSpots": [
+      "San Agustín Plaza and Cathedral",
+      "Lake Casa Blanca International State Park",
+      "Texas A&M International University campus",
+      "Historic Downtown Laredo"
+    ],
+    "neighborhoods": [
+      "Downtown / San Agustín",
+      "El Azteca",
+      "Del Mar",
+      "North Laredo"
+    ],
+    "airport": "Laredo International Airport (LRD)",
+    "blurb": "Laredo is one of the busiest land ports on the U.S.-Mexico border, so trade, logistics and customs-related meetings anchor its business events, and the George Washington's Birthday Celebration is a signature winter tradition. Summers are very hot, so outdoor sessions are best from late fall through early spring."
+  },
+  "lubbock-tx": {
+    "conferenceVenues": [
+      "Lubbock Memorial Civic Center",
+      "Overton Hotel & Conference Center",
+      "McKenzie-Merket Alumni Center",
+      "United Supermarkets Arena"
+    ],
+    "eventVenues": [
+      "Buddy Holly Hall of Performing Arts and Sciences",
+      "National Ranching Heritage Center",
+      "Llano Estacado Winery",
+      "Cactus Theater",
+      "Museum of Texas Tech University"
+    ],
+    "photoSpots": [
+      "Texas Tech University campus",
+      "Lubbock Lake Landmark",
+      "Mackenzie Park",
+      "Buddy and Maria Elena Holly Plaza",
+      "American Windpower Center"
+    ],
+    "neighborhoods": [
+      "Depot District",
+      "Tech Terrace",
+      "Overton",
+      "Downtown Lubbock",
+      "Ransom Canyon"
+    ],
+    "airport": "Lubbock Preston Smith International Airport (LBB)",
+    "blurb": "Lubbock's event scene is driven by Texas Tech University, agriculture, cotton and the growing High Plains wine industry, with the Depot District offering music and nightlife venues. Wide skies make for long sunsets, but spring winds and dust and hot summer afternoons favor early-morning or evening outdoor sessions."
+  },
+  "madison-wi": {
+    "conferenceVenues": [
+      "Monona Terrace Community and Convention Center",
+      "Alliant Energy Center",
+      "The Madison Concourse Hotel",
+      "Hilton Madison Monona Terrace",
+      "Fluno Center (UW-Madison)"
+    ],
+    "eventVenues": [
+      "Olbrich Botanical Gardens",
+      "Overture Center for the Arts",
+      "Memorial Union Terrace",
+      "Chazen Museum of Art"
+    ],
+    "photoSpots": [
+      "Wisconsin State Capitol",
+      "Picnic Point",
+      "UW-Madison Arboretum",
+      "Olbrich Botanical Gardens",
+      "Monona Terrace rooftop"
+    ],
+    "neighborhoods": [
+      "Capitol Square",
+      "Willy Street / Marquette",
+      "Atwood",
+      "Monroe Street",
+      "Vilas",
+      "Tenney-Lapham"
+    ],
+    "airport": "Dane County Regional Airport (MSN)",
+    "blurb": "As Wisconsin's capital and home of the University of Wisconsin-Madison, the city hosts government, academic, healthcare-tech and association events, with Epic Systems in nearby Verona adding a major corporate presence. The isthmus between two lakes is at its best in summer and early fall, while winters are long and cold."
+  }
+}

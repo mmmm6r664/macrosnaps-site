@@ -1,36 +1,13 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MacroSnaps website
 
-## Getting Started
+Next.js 15 site for MacroSnaps: global photography & videography for conferences, corporate events and weddings.
 
-First, run the development server:
+- 30 service pages with real MacroSnaps pricing (`src/lib/services.ts`).
+- Local SEO pages: 10 services × (64 states/provinces + 1,826 cities), e.g. `/conference-photography/san-francisco-ca`. ~19,000 URLs; 3,230 pre-rendered, the rest render on first visit and are cached.
+- Researched local venues/photo spots for the 132 largest cities (`src/data/local/`).
+- Online booking + Stripe Checkout (`/book`), contact & corporate-quote forms via Resend.
+- Schema.org, per-service sitemaps, robots.txt, 301s from old Wix URLs (`src/lib/redirects.ts`).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Edit: prices/copy `src/lib/services.ts` · business info `src/lib/site.ts` · city copy `src/lib/content.ts` · photos `src/lib/images.ts`.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Run: `cp .env.example .env.local`, fill keys, `npm install && npm run dev`. Deploy on Vercel with the same env vars.

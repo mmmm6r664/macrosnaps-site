@@ -1,0 +1,362 @@
+{
+  "new-york-city-ny": {
+    "conferenceVenues": ["Jacob K. Javits Convention Center", "New York Hilton Midtown", "New York Marriott Marquis", "Sheraton New York Times Square Hotel"],
+    "eventVenues": ["The Plaza Hotel", "American Museum of Natural History", "Cipriani 42nd Street", "The Metropolitan Museum of Art", "Brooklyn Botanic Garden"],
+    "photoSpots": ["Bethesda Terrace in Central Park", "Brooklyn Bridge", "DUMBO waterfront", "The High Line", "Top of the Rock at Rockefeller Center"],
+    "neighborhoods": ["Midtown Manhattan", "SoHo", "Williamsburg", "Upper West Side", "Long Island City", "Financial District"],
+    "airport": "John F. Kennedy International Airport (JFK)",
+    "blurb": "New York's calendar is driven by finance, media, fashion and tech, with major trade shows at the Javits Center and a steady run of galas, product launches and hotel-ballroom weddings across all five boroughs. Spring and fall bring the best outdoor light and the busiest booking season, while permits and crowd timing matter for shoots at landmark parks and bridges."
+  },
+  "los-angeles-ca": {
+    "conferenceVenues": ["Los Angeles Convention Center", "JW Marriott Los Angeles L.A. LIVE", "The Westin Bonaventure Hotel & Suites", "The Beverly Hilton", "Pasadena Convention Center"],
+    "eventVenues": ["The Getty Center", "Los Angeles County Museum of Art (LACMA)", "Millennium Biltmore Hotel", "Vibiana", "The Ebell of Los Angeles"],
+    "photoSpots": ["Griffith Observatory and Griffith Park", "Venice Canals", "Walt Disney Concert Hall", "Echo Park Lake", "Santa Monica Pier"],
+    "neighborhoods": ["Downtown LA", "Hollywood", "Silver Lake", "Venice", "Arts District", "West Hollywood"],
+    "airport": "Los Angeles International Airport (LAX)",
+    "blurb": "Entertainment, media and design shape LA's event scene, from studio premieres and award-season parties to trade shows at the convention center downtown. The dry, mild climate allows outdoor shoots most of the year, though traffic between neighborhoods should be built into any multi-location timeline."
+  },
+  "chicago-il": {
+    "conferenceVenues": ["McCormick Place", "Hyatt Regency Chicago", "Hilton Chicago", "Sheraton Grand Chicago Riverwalk", "Navy Pier"],
+    "eventVenues": ["The Field Museum", "Art Institute of Chicago", "Chicago Cultural Center", "Museum of Science and Industry", "The Drake Hotel"],
+    "photoSpots": ["Cloud Gate in Millennium Park", "Chicago Riverwalk", "Buckingham Fountain", "North Avenue Beach", "Lincoln Park"],
+    "neighborhoods": ["The Loop", "River North", "West Loop", "Lincoln Park", "Wicker Park", "Gold Coast"],
+    "airport": "O'Hare International Airport (ORD)",
+    "blurb": "Chicago hosts some of the country's largest trade shows at McCormick Place, alongside a busy corporate, healthcare and food-industry meeting market downtown. Summer and early fall are peak season for lakefront and rooftop events, while winter work moves indoors to museums and historic hotel ballrooms."
+  },
+  "brooklyn-ny": {
+    "conferenceVenues": ["New York Marriott at the Brooklyn Bridge", "Brooklyn Expo Center", "Duggal Greenhouse at the Brooklyn Navy Yard", "Industry City"],
+    "eventVenues": ["Brooklyn Botanic Garden", "Brooklyn Museum", "Weylin", "Liberty Warehouse", "Prospect Park Boathouse"],
+    "photoSpots": ["Washington Street in DUMBO", "Brooklyn Bridge Park", "Brooklyn Heights Promenade", "Prospect Park", "Domino Park"],
+    "neighborhoods": ["Williamsburg", "DUMBO", "Park Slope", "Brooklyn Heights", "Bushwick", "Greenpoint"],
+    "airport": "John F. Kennedy International Airport (JFK)",
+    "blurb": "Brooklyn's event scene leans toward converted industrial spaces, waterfront venues and creative-industry gatherings, with brand activations and design events alongside a large wedding market. Late spring and fall are the most popular windows for waterfront portraits with the Manhattan skyline behind them."
+  },
+  "houston-tx": {
+    "conferenceVenues": ["George R. Brown Convention Center", "NRG Center", "Hilton Americas-Houston", "Marriott Marquis Houston", "Hyatt Regency Houston"],
+    "eventVenues": ["Museum of Fine Arts, Houston", "Houston Museum of Natural Science", "The Houstonian Hotel, Club & Spa", "The Astorian", "Bayou Bend Collection and Gardens"],
+    "photoSpots": ["Hermann Park and its Japanese Garden", "Buffalo Bayou Park", "Discovery Green", "Rice University campus", "Market Square Park"],
+    "neighborhoods": ["Montrose", "The Heights", "Midtown", "River Oaks", "Museum District", "EaDo"],
+    "airport": "George Bush Intercontinental Airport (IAH)",
+    "blurb": "Energy, healthcare and aerospace drive Houston's conference market, including the large Offshore Technology Conference each spring at NRG Park. Summers are hot and humid with an active hurricane season, so outdoor sessions are best planned for October through April or early in the morning."
+  },
+  "queens-ny": {
+    "conferenceVenues": ["TWA Hotel at JFK", "Terrace on the Park", "Sheraton LaGuardia East Hotel", "Citi Field"],
+    "eventVenues": ["Terrace on the Park", "Queens Botanical Garden", "Queens Museum", "Museum of the Moving Image", "TWA Hotel"],
+    "photoSpots": ["Unisphere in Flushing Meadows Corona Park", "Gantry Plaza State Park", "Socrates Sculpture Park", "Astoria Park", "Rockaway Beach"],
+    "neighborhoods": ["Astoria", "Long Island City", "Flushing", "Forest Hills", "Jackson Heights", "Sunnyside"],
+    "airport": "LaGuardia Airport (LGA)",
+    "blurb": "Queens is home to both of New York City's major airports, which makes it a practical base for airport-hotel meetings, and its diverse communities support a large banquet-hall and multicultural wedding scene. Gantry Plaza and Hunters Point offer skyline views across the East River, best at sunset."
+  },
+  "philadelphia-pa": {
+    "conferenceVenues": ["Pennsylvania Convention Center", "Philadelphia Marriott Downtown", "Loews Philadelphia Hotel", "Sheraton Philadelphia Downtown"],
+    "eventVenues": ["Philadelphia Museum of Art", "The Barnes Foundation", "The Franklin Institute", "Penn Museum", "Cescaphe Ballroom"],
+    "photoSpots": ["Rittenhouse Square", "Boathouse Row", "Elfreth's Alley", "Philadelphia Museum of Art steps", "Shofuso Japanese House and Garden"],
+    "neighborhoods": ["Rittenhouse Square", "Old City", "Fishtown", "Society Hill", "Northern Liberties", "Manayunk"],
+    "airport": "Philadelphia International Airport (PHL)",
+    "blurb": "Philadelphia's meetings market is anchored by healthcare, pharmaceuticals and universities, with conventions centered on the Pennsylvania Convention Center downtown. Colonial-era streets and Fairmount Park give event and wedding photographers historic backdrops within a short drive, and spring and fall are the most comfortable seasons outdoors."
+  },
+  "phoenix-az": {
+    "conferenceVenues": ["Phoenix Convention Center", "Arizona Biltmore", "JW Marriott Phoenix Desert Ridge Resort & Spa", "Sheraton Phoenix Downtown", "Hyatt Regency Phoenix"],
+    "eventVenues": ["Desert Botanical Garden", "Heard Museum", "Wrigley Mansion", "Phoenix Art Museum", "Arizona Biltmore"],
+    "photoSpots": ["Hole-in-the-Rock at Papago Park", "Camelback Mountain", "South Mountain Park", "Roosevelt Row murals", "Desert Botanical Garden trails"],
+    "neighborhoods": ["Downtown Phoenix", "Arcadia", "Roosevelt Row", "Biltmore Area", "Ahwatukee", "Scottsdale"],
+    "airport": "Phoenix Sky Harbor International Airport (PHX)",
+    "blurb": "Phoenix's resort properties make it a common destination for incentive trips and corporate retreats, with conference and wedding season concentrated from October through April. Summer temperatures regularly top 100°F, so outdoor shoots in those months are usually scheduled around sunrise or golden hour."
+  },
+  "manhattan-ny": {
+    "conferenceVenues": ["Jacob K. Javits Convention Center", "New York Marriott Marquis", "New York Hilton Midtown", "Lotte New York Palace"],
+    "eventVenues": ["The Rainbow Room", "Gotham Hall", "The Pierre", "The Morgan Library & Museum", "Tribeca Rooftop"],
+    "photoSpots": ["Bow Bridge in Central Park", "Washington Square Park", "The High Line", "Grand Central Terminal", "Little Island"],
+    "neighborhoods": ["Upper East Side", "Chelsea", "Greenwich Village", "Tribeca", "Harlem", "Lower East Side"],
+    "airport": "LaGuardia Airport (LGA)",
+    "blurb": "Manhattan concentrates the city's corporate headquarters, media companies and luxury hotels, so it sees a dense schedule of conferences, investor events, fashion-week shows and black-tie galas. Shooting outdoors means planning around crowds and permit rules, with early mornings in Central Park and the High Line being the quietest."
+  },
+  "san-antonio-tx": {
+    "conferenceVenues": ["Henry B. González Convention Center", "Grand Hyatt San Antonio River Walk", "JW Marriott San Antonio Hill Country Resort & Spa", "San Antonio Marriott Rivercenter", "Hyatt Regency San Antonio Riverwalk"],
+    "eventVenues": ["McNay Art Museum", "San Antonio Botanical Garden", "Witte Museum", "Hotel Emma", "The Argyle"],
+    "photoSpots": ["San Antonio River Walk", "The Alamo", "Mission San José", "Pearl District", "Japanese Tea Garden"],
+    "neighborhoods": ["Downtown", "King William Historic District", "Pearl", "Alamo Heights", "Southtown", "Stone Oak"],
+    "airport": "San Antonio International Airport (SAT)",
+    "blurb": "San Antonio draws association conventions and military and healthcare meetings to its River Walk hotels, and the city's Spanish missions and historic homes are popular for weddings. Fiesta in April fills the calendar, and long, hot summers make spring and late fall the preferred seasons for outdoor sessions."
+  },
+  "san-diego-ca": {
+    "conferenceVenues": ["San Diego Convention Center", "Manchester Grand Hyatt San Diego", "Hilton San Diego Bayfront", "Marriott Marquis San Diego Marina", "Hotel del Coronado"],
+    "eventVenues": ["The Prado at Balboa Park", "USS Midway Museum", "The US Grant", "Hotel del Coronado", "San Diego Natural History Museum"],
+    "photoSpots": ["Balboa Park", "La Jolla Cove", "Sunset Cliffs", "Torrey Pines State Natural Reserve", "Seaport Village"],
+    "neighborhoods": ["Gaslamp Quarter", "La Jolla", "Little Italy", "North Park", "Coronado", "Pacific Beach"],
+    "airport": "San Diego International Airport (SAN)",
+    "blurb": "San Diego hosts Comic-Con each July along with major biotech, defense and medical meetings at its bayfront convention center. The coastal climate is mild year-round, though marine layer clouds in May and June can flatten morning light near the beaches."
+  },
+  "the-bronx-ny": {
+    "conferenceVenues": ["Yankee Stadium", "Marina del Rey", "Bronx Zoo"],
+    "eventVenues": ["New York Botanical Garden", "Wave Hill", "Bartow-Pell Mansion Museum", "Bronx Zoo", "Marina del Rey"],
+    "photoSpots": ["New York Botanical Garden", "Wave Hill gardens overlooking the Hudson", "Pelham Bay Park and Orchard Beach", "City Island", "Van Cortlandt Park"],
+    "neighborhoods": ["Riverdale", "Mott Haven", "City Island", "Belmont (Arthur Avenue)", "Throggs Neck", "Fordham"],
+    "airport": "LaGuardia Airport (LGA)",
+    "blurb": "The Bronx's event scene centers on its large cultural institutions and waterfront banquet halls, with the botanical garden and Wave Hill both well established as wedding and gala sites. Spring bloom season and fall foliage are the strongest times for garden portraits."
+  },
+  "dallas-tx": {
+    "conferenceVenues": ["Kay Bailey Hutchison Convention Center Dallas", "Omni Dallas Hotel", "Hyatt Regency Dallas", "Hilton Anatole", "Irving Convention Center at Las Colinas"],
+    "eventVenues": ["Dallas Arboretum and Botanical Garden", "Dallas Museum of Art", "Perot Museum of Nature and Science", "The Adolphus", "Nasher Sculpture Center"],
+    "photoSpots": ["Klyde Warren Park", "Margaret Hunt Hill Bridge", "Deep Ellum murals", "White Rock Lake", "Dallas Arboretum"],
+    "neighborhoods": ["Uptown", "Deep Ellum", "Bishop Arts District", "Design District", "Highland Park", "Lower Greenville"],
+    "airport": "Dallas/Fort Worth International Airport (DFW)",
+    "blurb": "Dallas has a large corporate-headquarters base in finance, telecom and energy, which keeps its convention center and hotel ballrooms busy with meetings and award events. Spring is a popular season for weddings, while summer heat pushes most outdoor shoots to early morning or evening."
+  },
+  "san-jose-ca": {
+    "conferenceVenues": ["San Jose McEnery Convention Center", "Signia by Hilton San Jose", "Hilton San Jose", "San Jose Marriott", "Santa Clara Convention Center"],
+    "eventVenues": ["Hayes Mansion", "The Tech Interactive", "San Jose Museum of Art", "Montalvo Arts Center", "History Park San José"],
+    "photoSpots": ["San Jose Municipal Rose Garden", "Guadalupe River Park", "Japanese Friendship Garden at Kelley Park", "Alum Rock Park", "Santana Row"],
+    "neighborhoods": ["Downtown San Jose", "Willow Glen", "Japantown", "Rose Garden", "Almaden Valley", "West San Jose"],
+    "airport": "San José Mineta International Airport (SJC)",
+    "blurb": "As the largest city in Silicon Valley, San Jose sees a steady flow of tech conferences, developer events and product launches, plus corporate offsites in nearby Santa Clara. The dry, mild climate makes outdoor sessions practical most of the year, with the Municipal Rose Garden peaking from April through June."
+  },
+  "austin-tx": {
+    "conferenceVenues": ["JW Marriott Austin", "Hilton Austin", "Fairmont Austin", "Palmer Events Center", "AT&T Hotel and Conference Center"],
+    "eventVenues": ["Laguna Gloria", "Umlauf Sculpture Garden & Museum", "The Driskill", "Lady Bird Johnson Wildflower Center", "Mexic-Arte Museum"],
+    "photoSpots": ["Lady Bird Lake and the Ann and Roy Butler Hike-and-Bike Trail", "Mount Bonnell", "South Congress Avenue", "Zilker Metropolitan Park", "Texas State Capitol grounds"],
+    "neighborhoods": ["Downtown", "South Congress", "East Austin", "Rainey Street", "Hyde Park", "Zilker"],
+    "airport": "Austin-Bergstrom International Airport (AUS)",
+    "blurb": "Austin's event calendar is shaped by tech companies, the University of Texas and festivals such as SXSW in March and Austin City Limits in the fall. With the downtown convention center closed for a multi-year rebuild, more meetings are landing in large hotels and university venues, and spring wildflower season is a favorite for portraits before summer heat sets in."
+  },
+  "jacksonville-fl": {
+    "conferenceVenues": ["Prime Osborn III Convention Center", "Hyatt Regency Jacksonville Riverfront", "Omni Jacksonville Hotel", "Sawgrass Marriott Golf Resort & Spa", "The Ponte Vedra Inn & Club"],
+    "eventVenues": ["Cummer Museum of Art & Gardens", "Museum of Science & History (MOSH)", "Epping Forest Yacht & Country Club", "The Ponte Vedra Inn & Club", "Treaty Oak Park"],
+    "photoSpots": ["Treaty Oak Park", "Friendship Fountain on the Southbank Riverwalk", "Memorial Park in Riverside", "Jacksonville Beach Pier", "Kingsley Plantation"],
+    "neighborhoods": ["Riverside", "Avondale", "San Marco", "Springfield", "Jacksonville Beach", "Ponte Vedra Beach"],
+    "airport": "Jacksonville International Airport (JAX)",
+    "blurb": "Jacksonville's meetings market draws on logistics, finance, healthcare and a large military presence, while nearby Ponte Vedra Beach hosts golf-centered corporate events around THE PLAYERS Championship each March. Summers are hot and humid with afternoon storms, so spring and fall are the most dependable seasons for beach and riverfront shoots."
+  },
+  "san-francisco-ca": {
+    "conferenceVenues": ["Moscone Center", "San Francisco Marriott Marquis", "Hyatt Regency San Francisco", "Palace Hotel", "Fort Mason Center for Arts & Culture"],
+    "eventVenues": ["San Francisco City Hall", "Palace of Fine Arts", "Legion of Honor", "The Fairmont San Francisco", "Ferry Building"],
+    "photoSpots": ["Golden Gate Bridge from Crissy Field", "Baker Beach", "Painted Ladies at Alamo Square", "Lands End", "Twin Peaks"],
+    "neighborhoods": ["Mission District", "SoMa", "Nob Hill", "Pacific Heights", "Marina District", "North Beach"],
+    "airport": "San Francisco International Airport (SFO)",
+    "blurb": "San Francisco's conference calendar is dominated by tech and software events at Moscone Center, and City Hall is one of the most photographed civil-wedding locations in the country. Summer fog is common near the coast, so September and October often bring the clearest, warmest days for outdoor work."
+  },
+  "columbus-oh": {
+    "conferenceVenues": ["Greater Columbus Convention Center", "Hilton Columbus Downtown", "Hyatt Regency Columbus", "Renaissance Columbus Downtown Hotel", "Ohio Expo Center"],
+    "eventVenues": ["Franklin Park Conservatory and Botanical Gardens", "Columbus Museum of Art", "Ohio Statehouse", "COSI", "The Westin Great Southern Columbus"],
+    "photoSpots": ["Scioto Mile", "Schiller Park in German Village", "Topiary Park", "Short North Arts District arches", "Columbus Commons"],
+    "neighborhoods": ["Short North", "German Village", "Brewery District", "Italian Village", "Victorian Village", "Clintonville"],
+    "airport": "John Glenn Columbus International Airport (CMH)",
+    "blurb": "Columbus combines state government, Ohio State University and a growing insurance, retail and tech sector, which supports a steady flow of conventions and association meetings downtown. The Arnold Sports Festival fills the city each March, and fall foliage around German Village and the Scioto Mile is a popular backdrop."
+  },
+  "fort-worth-tx": {
+    "conferenceVenues": ["Fort Worth Convention Center", "Omni Fort Worth Hotel", "Hilton Fort Worth", "Worthington Renaissance Fort Worth Hotel", "Will Rogers Memorial Center"],
+    "eventVenues": ["Kimbell Art Museum", "Modern Art Museum of Fort Worth", "Fort Worth Botanic Garden", "Hotel Drover", "Dickies Arena"],
+    "photoSpots": ["Fort Worth Stockyards", "Sundance Square", "Fort Worth Water Gardens", "Japanese Garden at the Fort Worth Botanic Garden", "Trinity Park"],
+    "neighborhoods": ["Downtown / Sundance Square", "Stockyards", "Cultural District", "Near Southside", "West 7th", "Arlington Heights"],
+    "airport": "Dallas/Fort Worth International Airport (DFW)",
+    "blurb": "Fort Worth mixes Western heritage with a strong museum district, and the Fort Worth Stock Show & Rodeo each January and February is one of its biggest annual draws. Ranch-style and Stockyards weddings are common, and spring and fall avoid the worst of North Texas summer heat."
+  },
+  "indianapolis-in": {
+    "conferenceVenues": ["Indiana Convention Center", "JW Marriott Indianapolis", "Lucas Oil Stadium", "Hyatt Regency Indianapolis", "The Westin Indianapolis"],
+    "eventVenues": ["Newfields", "Indiana State Museum", "Eiteljorg Museum", "Crane Bay Event Center", "Indianapolis Motor Speedway"],
+    "photoSpots": ["Indianapolis Cultural Trail and Canal Walk", "Monument Circle", "White River State Park", "Holliday Park", "Massachusetts Avenue"],
+    "neighborhoods": ["Mass Ave", "Fountain Square", "Broad Ripple", "Irvington", "Lockerbie Square", "Carmel"],
+    "airport": "Indianapolis International Airport (IND)",
+    "blurb": "Indianapolis has a compact, walkable convention district connected to hotels by skywalks, and it hosts Gen Con each summer along with frequent amateur and pro sports events. May is dominated by the Indianapolis 500, while autumn is a good season for outdoor portraits along the canal and in the city's parks."
+  },
+  "charlotte-nc": {
+    "conferenceVenues": ["Charlotte Convention Center", "The Westin Charlotte", "Hilton Charlotte Uptown", "The Ballantyne, a Luxury Collection Hotel", "The Ritz-Carlton, Charlotte"],
+    "eventVenues": ["The Duke Mansion", "Mint Museum Uptown", "NASCAR Hall of Fame", "Daniel Stowe Botanical Garden", "The Ritz-Carlton, Charlotte"],
+    "photoSpots": ["Freedom Park", "Romare Bearden Park", "Little Sugar Creek Greenway", "NoDa murals", "Wing Haven Gardens"],
+    "neighborhoods": ["Uptown", "South End", "NoDa", "Plaza Midwood", "Dilworth", "Myers Park"],
+    "airport": "Charlotte Douglas International Airport (CLT)",
+    "blurb": "As a major banking center with a large hub airport, Charlotte sees a steady stream of financial-services meetings, corporate events and motorsports-related gatherings. Mild springs and autumns suit outdoor weddings, and the tree-lined streets of Myers Park and Dilworth are common portrait settings."
+  },
+  "washington-dc": {
+    "conferenceVenues": ["Walter E. Washington Convention Center", "Marriott Marquis Washington, DC", "Washington Hilton", "Omni Shoreham Hotel", "Gaylord National Resort & Convention Center"],
+    "eventVenues": ["National Building Museum", "Andrew W. Mellon Auditorium", "Decatur House", "The Mayflower Hotel", "Smithsonian National Museum of the American Indian"],
+    "photoSpots": ["Lincoln Memorial and Reflecting Pool", "Tidal Basin", "Georgetown Waterfront Park", "U.S. Capitol grounds", "Dumbarton Oaks Gardens"],
+    "neighborhoods": ["Georgetown", "Dupont Circle", "Capitol Hill", "Navy Yard", "Adams Morgan", "The Wharf"],
+    "airport": "Ronald Reagan Washington National Airport (DCA)",
+    "blurb": "Washington's event market is built around government, policy associations, nonprofits and embassies, so conferences, advocacy fly-ins and evening receptions run year-round. Cherry blossom season in late March and early April is the busiest time for portraits around the Tidal Basin, and permits are required for some shoots on the National Mall."
+  },
+  "seattle-wa": {
+    "conferenceVenues": ["Seattle Convention Center", "Hyatt Regency Seattle", "Sheraton Grand Seattle", "Bell Harbor International Conference Center", "Meydenbauer Center"],
+    "eventVenues": ["Chihuly Garden and Glass", "Museum of Pop Culture (MoPOP)", "Fairmont Olympic Hotel", "Sodo Park", "Seattle Art Museum"],
+    "photoSpots": ["Kerry Park", "Gas Works Park", "Pike Place Market", "Discovery Park", "Olympic Sculpture Park"],
+    "neighborhoods": ["Capitol Hill", "Ballard", "Fremont", "Queen Anne", "Pioneer Square", "South Lake Union"],
+    "airport": "Seattle-Tacoma International Airport (SEA)",
+    "blurb": "Seattle's conference scene is driven by cloud computing, software, aerospace and life sciences, with major events at the downtown convention center and corporate gatherings in Bellevue. Summers are dry and long-lit, while the rest of the year brings soft overcast light and frequent drizzle, so backup indoor locations are standard practice."
+  },
+  "denver-co": {
+    "conferenceVenues": ["Colorado Convention Center", "Hyatt Regency Denver at Colorado Convention Center", "Sheraton Denver Downtown Hotel", "Gaylord Rockies Resort & Convention Center", "The Brown Palace Hotel and Spa"],
+    "eventVenues": ["Denver Botanic Gardens", "Denver Art Museum", "Denver Museum of Nature & Science", "Denver Union Station", "History Colorado Center"],
+    "photoSpots": ["Red Rocks Park and Amphitheatre", "Larimer Square", "Washington Park", "City Park", "Confluence Park"],
+    "neighborhoods": ["LoDo", "RiNo", "Highlands", "Cherry Creek", "Capitol Hill", "Washington Park"],
+    "airport": "Denver International Airport (DEN)",
+    "blurb": "Denver's central location and large hub airport make it a frequent pick for national association meetings, while the nearby Rockies draw mountain weddings and corporate retreats. Weather changes quickly, with afternoon thunderstorms in summer and the chance of snow from October into spring, so flexible scheduling helps for outdoor shoots."
+  },
+  "el-paso-tx": {
+    "conferenceVenues": ["El Paso Convention Center", "Hotel Paso del Norte", "The Plaza Hotel Pioneer Park"],
+    "eventVenues": ["El Paso Museum of Art", "Plaza Theatre", "Hotel Paso del Norte", "Magoffin Home State Historic Site"],
+    "photoSpots": ["Scenic Drive overlook", "Franklin Mountains State Park", "San Jacinto Plaza", "Ysleta Mission on the Mission Trail", "UTEP campus"],
+    "neighborhoods": ["Downtown", "Kern Place", "Sunset Heights", "Upper Valley", "Westside", "Northeast El Paso"],
+    "airport": "El Paso International Airport (ELP)",
+    "blurb": "El Paso's event scene reflects its border location, Fort Bliss military community and close ties with Ciudad Juárez, with bilingual weddings and quinceañeras a large part of the market. The high-desert climate brings abundant sun, and the Franklin Mountains provide sunset and city-light backdrops for portraits."
+  },
+  "detroit-mi": {
+    "conferenceVenues": ["Huntington Place", "Detroit Marriott at the Renaissance Center", "The Westin Book Cadillac Detroit", "MotorCity Casino Hotel", "Suburban Collection Showplace"],
+    "eventVenues": ["Detroit Institute of Arts", "The Fillmore Detroit", "The Henry Ford", "Fisher Building", "Michigan Central"],
+    "photoSpots": ["Belle Isle Park", "Detroit Riverwalk", "Campus Martius Park", "Eastern Market", "Dequindre Cut"],
+    "neighborhoods": ["Corktown", "Midtown", "Downtown", "Eastern Market", "Indian Village", "West Village"],
+    "airport": "Detroit Metropolitan Wayne County Airport (DTW)",
+    "blurb": "The auto industry anchors Detroit's meetings and trade-show market, including the Detroit Auto Show at Huntington Place, and restored historic buildings downtown have become popular for galas and weddings. Summer and early fall are the prime outdoor seasons along the riverfront, while winters are cold and gray."
+  },
+  "boston-ma": {
+    "conferenceVenues": ["Boston Convention & Exhibition Center", "The Westin Boston Seaport District", "Sheraton Boston Hotel", "Omni Boston Hotel at the Seaport", "Seaport Hotel & World Trade Center"],
+    "eventVenues": ["Boston Public Library (McKim Building)", "Museum of Fine Arts, Boston", "Isabella Stewart Gardner Museum", "Fairmont Copley Plaza", "Boston Harbor Hotel"],
+    "photoSpots": ["Boston Public Garden", "Acorn Street on Beacon Hill", "Charles River Esplanade", "Boston Common", "Arnold Arboretum"],
+    "neighborhoods": ["Back Bay", "Beacon Hill", "North End", "Seaport District", "South End", "Cambridge"],
+    "airport": "Boston Logan International Airport (BOS)",
+    "blurb": "Boston's universities, hospitals and biotech firms generate a dense calendar of academic and medical conferences, concentrated in the Seaport. Fall foliage season is the most requested time for portraits, while winters bring snow and early sunsets that shorten outdoor windows."
+  },
+  "memphis-tn": {
+    "conferenceVenues": ["Renasant Convention Center", "The Peabody Memphis", "Sheraton Memphis Downtown Hotel", "The Guest House at Graceland"],
+    "eventVenues": ["Memphis Brooks Museum of Art", "Dixon Gallery and Gardens", "Memphis Botanic Garden", "Orpheum Theatre", "The Cadre Building"],
+    "photoSpots": ["Beale Street", "Big River Crossing", "Overton Park", "Tom Lee Park", "Shelby Farms Park"],
+    "neighborhoods": ["Downtown", "Midtown", "Cooper-Young", "Overton Square", "South Main Arts District", "Germantown"],
+    "airport": "Memphis International Airport (MEM)",
+    "blurb": "Memphis is a logistics and healthcare hub, home to FedEx's global headquarters and St. Jude Children's Research Hospital, which keeps corporate and medical meetings steady. Music history drives much of its tourism, including Memphis in May each spring, and summers are hot and humid enough that evening shoots are often preferred."
+  },
+  "portland-or": {
+    "conferenceVenues": ["Oregon Convention Center", "Hyatt Regency Portland at the Oregon Convention Center", "Hilton Portland Downtown", "Portland Marriott Downtown Waterfront"],
+    "eventVenues": ["Pittock Mansion", "Portland Art Museum", "Lan Su Chinese Garden", "Portland Japanese Garden", "Castaway Portland"],
+    "photoSpots": ["International Rose Test Garden", "Tom McCall Waterfront Park", "Mount Tabor Park", "Multnomah Falls", "Cathedral Park under the St. Johns Bridge"],
+    "neighborhoods": ["Pearl District", "Alberta Arts District", "Hawthorne", "Nob Hill", "Sellwood", "St. Johns"],
+    "airport": "Portland International Airport (PDX)",
+    "blurb": "Portland's event scene leans toward outdoor apparel, design and food-and-drink industries, with many couples and companies choosing nearby Willamette Valley wineries or the Columbia River Gorge. Dry, mild summers are peak season, while the rainy months from November through March bring soft light and lush green backdrops."
+  },
+  "oklahoma-city-ok": {
+    "conferenceVenues": ["Oklahoma City Convention Center", "Omni Oklahoma City Hotel", "Skirvin Hilton Oklahoma City", "OKC Fairgrounds"],
+    "eventVenues": ["Oklahoma City Museum of Art", "Myriad Botanical Gardens", "National Cowboy & Western Heritage Museum", "Skirvin Hilton Oklahoma City", "Oklahoma History Center"],
+    "photoSpots": ["Oklahoma City National Memorial", "Bricktown Canal", "Scissortail Park", "Myriad Botanical Gardens", "Plaza District murals"],
+    "neighborhoods": ["Bricktown", "Midtown", "Plaza District", "Paseo Arts District", "Automobile Alley", "Nichols Hills"],
+    "airport": "OKC Will Rogers International Airport (OKC)",
+    "blurb": "Energy, aviation and state government anchor Oklahoma City's meetings market, which has grown with the convention center and Omni hotel that opened beside Scissortail Park. Spring brings severe-weather season, so outdoor events from April through June benefit from a covered backup, while fall is typically the most settled time to shoot."
+  },
+  "las-vegas-nv": {
+    "conferenceVenues": ["Las Vegas Convention Center", "Venetian Expo", "Mandalay Bay Convention Center", "Caesars Forum", "MGM Grand Conference Center"],
+    "eventVenues": ["The Neon Museum", "The Smith Center for the Performing Arts", "The Mob Museum", "Springs Preserve", "Little White Wedding Chapel"],
+    "photoSpots": ["Welcome to Fabulous Las Vegas sign", "Red Rock Canyon National Conservation Area", "Valley of Fire State Park", "Fremont Street", "Las Vegas Strip at night"],
+    "neighborhoods": ["The Strip", "Downtown / Fremont East", "Las Vegas Arts District", "Summerlin", "Henderson", "Chinatown"],
+    "airport": "Harry Reid International Airport (LAS)",
+    "blurb": "Las Vegas is one of the busiest trade-show cities in North America, hosting CES each January along with a long list of industry expos across its resort convention spaces. It is also a major wedding destination, and the desert backdrops nearby are best shot from fall through spring, as summer afternoons are extremely hot."
+  },
+  "baltimore-md": {
+    "conferenceVenues": ["Baltimore Convention Center", "Hilton Baltimore Inner Harbor", "Hyatt Regency Baltimore Inner Harbor", "Baltimore Marriott Waterfront", "Renaissance Baltimore Harborplace Hotel"],
+    "eventVenues": ["American Visionary Art Museum", "Baltimore Museum of Art", "The Walters Art Museum", "George Peabody Library", "National Aquarium"],
+    "photoSpots": ["Inner Harbor promenade", "Fells Point", "Federal Hill Park", "Fort McHenry National Monument", "Mount Vernon Place"],
+    "neighborhoods": ["Fells Point", "Canton", "Federal Hill", "Mount Vernon", "Hampden", "Harbor East"],
+    "airport": "Baltimore/Washington International Thurgood Marshall Airport (BWI)",
+    "blurb": "Baltimore's meetings scene leans on medicine and research tied to Johns Hopkins and the University of Maryland, along with the city's port and logistics businesses. Waterfront neighborhoods with cobblestone streets and rowhouses offer historic backdrops, and spring and fall avoid the humid mid-Atlantic summer."
+  },
+  "milwaukee-wi": {
+    "conferenceVenues": ["Baird Center", "Hilton Milwaukee City Center", "The Pfister Hotel", "Hyatt Regency Milwaukee", "Potawatomi Casino Hotel"],
+    "eventVenues": ["Milwaukee Art Museum", "Harley-Davidson Museum", "Pabst Mansion", "The Grain Exchange", "Villa Terrace Decorative Arts Museum"],
+    "photoSpots": ["Milwaukee Art Museum lakefront", "Milwaukee RiverWalk", "Historic Third Ward", "Lake Park", "Bradford Beach"],
+    "neighborhoods": ["Historic Third Ward", "Bay View", "East Side", "Walker's Point", "Brady Street", "Wauwatosa"],
+    "airport": "Milwaukee Mitchell International Airport (MKE)",
+    "blurb": "Milwaukee's manufacturing and brewing heritage shows up in its event venues, many of them restored warehouses and Gilded Age buildings, and the expanded Baird Center has added convention capacity downtown. Summer is festival season along the Lake Michigan shoreline, including Summerfest, while winters are long and cold."
+  },
+  "albuquerque-nm": {
+    "conferenceVenues": ["Albuquerque Convention Center", "Hotel Albuquerque at Old Town", "Hyatt Regency Albuquerque", "Sandia Resort & Casino", "Hyatt Regency Tamaya Resort & Spa"],
+    "eventVenues": ["Los Poblanos Historic Inn & Organic Farm", "Hotel Andaluz", "Albuquerque BioPark Botanic Garden", "Indian Pueblo Cultural Center", "Albuquerque Museum"],
+    "photoSpots": ["Old Town Plaza", "Sandia Peak Tramway", "Petroglyph National Monument", "Rio Grande bosque trails", "Balloon Fiesta Park"],
+    "neighborhoods": ["Old Town", "Nob Hill", "Downtown", "North Valley", "Los Ranchos de Albuquerque", "Rio Rancho"],
+    "airport": "Albuquerque International Sunport (ABQ)",
+    "blurb": "Albuquerque's event market includes national-lab and aerospace meetings, Native American and Hispanic cultural celebrations, and the International Balloon Fiesta each October. The high-desert light is strong and clear, and the Sandia Mountains turn pink at sunset, making evening the favored time for outdoor portraits."
+  },
+  "tucson-az": {
+    "conferenceVenues": ["Tucson Convention Center", "JW Marriott Tucson Starr Pass Resort", "Loews Ventana Canyon Resort", "The Westin La Paloma Resort & Spa", "Hilton Tucson El Conquistador Golf & Tennis Resort"],
+    "eventVenues": ["Tucson Botanical Gardens", "Arizona-Sonora Desert Museum", "Hotel Congress", "Arizona Inn", "Tohono Chul"],
+    "photoSpots": ["Sabino Canyon", "Saguaro National Park", "Gates Pass", "Mission San Xavier del Bac", "Barrio Viejo"],
+    "neighborhoods": ["Downtown", "Fourth Avenue", "Barrio Viejo", "Sam Hughes", "Catalina Foothills", "Oro Valley"],
+    "airport": "Tucson International Airport (TUS)",
+    "blurb": "Tucson's event calendar features the University of Arizona, aerospace and optics companies, and the Tucson Gem and Mineral Show, which fills the city every January and February. Saguaro-filled desert and foothill resorts make it a popular wedding destination from October through April, with summer monsoon storms arriving in July and August."
+  },
+  "nashville-tn": {
+    "conferenceVenues": ["Music City Center", "Gaylord Opryland Resort & Convention Center", "Omni Nashville Hotel", "JW Marriott Nashville", "Renaissance Nashville Hotel"],
+    "eventVenues": ["Ryman Auditorium", "Country Music Hall of Fame and Museum", "Cheekwood Estate & Gardens", "The Hermitage Hotel", "Union Station Nashville Yards"],
+    "photoSpots": ["The Parthenon in Centennial Park", "John Seigenthaler Pedestrian Bridge", "Lower Broadway", "Radnor Lake State Park", "12 South murals"],
+    "neighborhoods": ["The Gulch", "12 South", "East Nashville", "Germantown", "Midtown", "Music Row"],
+    "airport": "Nashville International Airport (BNA)",
+    "blurb": "Nashville's music industry and large healthcare-management sector keep its convention center and hotels busy, and the city is one of the most popular destinations in the country for bachelorette parties and weddings. Spring and fall are peak seasons, with humid summers and occasional winter ice."
+  },
+  "fresno-ca": {
+    "conferenceVenues": ["Fresno Convention & Entertainment Center", "DoubleTree by Hilton Fresno Convention Center", "Fresno Fairgrounds"],
+    "eventVenues": ["Tower Theatre", "Forestiere Underground Gardens", "Kearney Mansion Museum", "Fresno Art Museum", "Fresno Chaffee Zoo"],
+    "photoSpots": ["Woodward Park and Shinzen Friendship Garden", "Fresno County Blossom Trail", "Kearney Park", "Tower District", "Old Town Clovis"],
+    "neighborhoods": ["Tower District", "Fig Garden", "Downtown Fresno", "Woodward Park", "Sunnyside", "Clovis"],
+    "airport": "Fresno Yosemite International Airport (FAT)",
+    "blurb": "Fresno sits at the center of the San Joaquin Valley's agriculture industry, which drives many of its trade meetings and expos, and it is a common gateway for Yosemite, Kings Canyon and Sequoia. The Blossom Trail peaks in late February and March, while summer heat pushes outdoor shoots to early morning or evening."
+  },
+  "sacramento-ca": {
+    "conferenceVenues": ["SAFE Credit Union Convention Center", "Sheraton Grand Sacramento Hotel", "Hyatt Regency Sacramento", "Kimpton Sawyer Hotel", "Cal Expo"],
+    "eventVenues": ["Crocker Art Museum", "California State Railroad Museum", "Vizcaya Sacramento", "The Citizen Hotel", "Sutter's Fort State Historic Park"],
+    "photoSpots": ["Tower Bridge", "Old Sacramento Waterfront", "California State Capitol Park", "McKinley Park Rose Garden", "American River Parkway"],
+    "neighborhoods": ["Midtown", "Downtown", "East Sacramento", "Land Park", "Old Sacramento", "R Street Corridor"],
+    "airport": "Sacramento International Airport (SMF)",
+    "blurb": "As California's capital, Sacramento hosts a steady schedule of government, policy and association meetings, and it promotes itself as a farm-to-fork dining city. Nearby Lodi, Amador County and the Sierra foothills draw winery weddings, and the long, dry summers are hot enough that golden hour is the preferred shooting window."
+  },
+  "kansas-city-mo": {
+    "conferenceVenues": ["Kansas City Convention Center", "Loews Kansas City Hotel", "Kansas City Marriott Downtown", "Sheraton Kansas City Hotel at Crown Center", "Overland Park Convention Center"],
+    "eventVenues": ["Nelson-Atkins Museum of Art", "Union Station Kansas City", "National WWI Museum and Memorial", "Kauffman Center for the Performing Arts", "The Grand Hall at Power & Light"],
+    "photoSpots": ["Country Club Plaza", "Loose Park Rose Garden", "Liberty Memorial overlook", "Crossroads Arts District", "River Market"],
+    "neighborhoods": ["Crossroads", "Westport", "Country Club Plaza", "River Market", "Brookside", "Power & Light District"],
+    "airport": "Kansas City International Airport (MCI)",
+    "blurb": "Kansas City's meetings market draws on agriculture, engineering, logistics and animal health, and its central location makes it a practical choice for national associations. The city's fountains and the Spanish-inspired Country Club Plaza are popular portrait settings, with spring and fall the most comfortable seasons."
+  },
+  "long-beach-ca": {
+    "conferenceVenues": ["Long Beach Convention & Entertainment Center", "Hyatt Regency Long Beach", "The Westin Long Beach", "Renaissance Long Beach Hotel", "The Queen Mary"],
+    "eventVenues": ["The Queen Mary", "Aquarium of the Pacific", "Rancho Los Alamitos", "Museum of Latin American Art", "Long Beach Museum of Art"],
+    "photoSpots": ["Shoreline Village", "Naples canals", "Bluff Park", "Rainbow Harbor", "El Dorado Nature Center"],
+    "neighborhoods": ["Downtown", "Belmont Shore", "Naples", "Bixby Knolls", "East Village Arts District", "Alamitos Beach"],
+    "airport": "Long Beach Airport (LGB)",
+    "blurb": "Long Beach combines a major port with a waterfront convention district, and it hosts the Grand Prix of Long Beach street race each April. Mild coastal weather allows year-round outdoor shoots, with harbor and canal settings that work well at sunset."
+  },
+  "mesa-az": {
+    "conferenceVenues": ["Mesa Convention Center", "Sheraton Mesa Hotel at Wrigleyville West", "Mesa Arts Center"],
+    "eventVenues": ["Mesa Arts Center", "Arizona Museum of Natural History", "Sloan Park", "i.d.e.a. Museum"],
+    "photoSpots": ["Usery Mountain Regional Park", "Lower Salt River", "Saguaro Lake", "Lost Dutchman State Park", "Downtown Mesa Main Street"],
+    "neighborhoods": ["Downtown Mesa", "Dobson Ranch", "Eastmark", "Red Mountain", "Las Sendas", "Gilbert"],
+    "airport": "Phoenix Sky Harbor International Airport (PHX)",
+    "blurb": "Mesa is the largest city in the Phoenix East Valley and hosts Chicago Cubs spring training at Sloan Park each February and March, which brings a wave of visitors and corporate hospitality events. The Superstition Mountains and Salt River are close by for desert portraits, best scheduled from October through April."
+  },
+  "staten-island-ny": {
+    "conferenceVenues": ["Hilton Garden Inn New York/Staten Island", "The Vanderbilt at South Beach", "Snug Harbor Cultural Center & Botanical Garden"],
+    "eventVenues": ["Snug Harbor Cultural Center & Botanical Garden", "Historic Richmond Town", "The Vanderbilt at South Beach", "Staten Island Museum"],
+    "photoSpots": ["New York Chinese Scholar's Garden at Snug Harbor", "St. George waterfront and Staten Island Ferry", "Conference House Park", "Fort Wadsworth", "Clove Lakes Park"],
+    "neighborhoods": ["St. George", "Tottenville", "Great Kills", "New Dorp", "Todt Hill", "Stapleton"],
+    "airport": "Newark Liberty International Airport (EWR)",
+    "blurb": "Staten Island's event market is largely local, built around catering halls, family celebrations and community events, with Snug Harbor's restored buildings and gardens as a frequent wedding choice. Its waterfront parks offer harbor and Verrazzano-Narrows Bridge views, and the free ferry makes Lower Manhattan an easy add-on location."
+  },
+  "atlanta-ga": {
+    "conferenceVenues": ["Georgia World Congress Center", "AmericasMart Atlanta", "Hyatt Regency Atlanta", "Atlanta Marriott Marquis", "Omni Atlanta Hotel at Centennial Park"],
+    "eventVenues": ["Atlanta Botanical Garden", "High Museum of Art", "Fox Theatre", "Swan House at the Atlanta History Center", "Georgia Aquarium"],
+    "photoSpots": ["Piedmont Park", "Atlanta BeltLine Eastside Trail", "Centennial Olympic Park", "Jackson Street Bridge", "Ponce City Market"],
+    "neighborhoods": ["Midtown", "Buckhead", "Inman Park", "Old Fourth Ward", "Virginia-Highland", "West Midtown"],
+    "airport": "Hartsfield-Jackson Atlanta International Airport (ATL)",
+    "blurb": "Atlanta's huge hub airport and large downtown convention campus make it a top destination for trade shows, and it is home to corporate headquarters in logistics, media and beverages as well as a busy film-production industry. Spring dogwood and azalea season and mild autumns are favored for outdoor sessions, while summers are hot and humid."
+  },
+  "colorado-springs-co": {
+    "conferenceVenues": ["The Broadmoor", "Cheyenne Mountain Resort", "The Antlers, a Wyndham Hotel", "Colorado Springs Marriott"],
+    "eventVenues": ["The Broadmoor", "Glen Eyrie Castle", "Colorado Springs Fine Arts Center at Colorado College", "The Pinery at the Hill", "U.S. Olympic & Paralympic Museum"],
+    "photoSpots": ["Garden of the Gods", "Pikes Peak", "North Cheyenne Cañon Park", "Manitou Springs", "Palmer Park"],
+    "neighborhoods": ["Downtown", "Old Colorado City", "Broadmoor", "Old North End", "Briargate", "Manitou Springs"],
+    "airport": "Colorado Springs Airport (COS)",
+    "blurb": "Colorado Springs has a strong military and defense presence along with the U.S. Olympic & Paralympic Training Center, which shapes many of its conferences and ceremonies. Red-rock and mountain backdrops make it a popular wedding destination, though afternoon summer storms and early-season snow call for flexible timing."
+  },
+  "virginia-beach-va": {
+    "conferenceVenues": ["Virginia Beach Convention Center", "Hilton Virginia Beach Oceanfront", "Sheraton Virginia Beach Oceanfront Hotel", "The Founders Inn and Spa"],
+    "eventVenues": ["The Cavalier Hotel", "Virginia Aquarium & Marine Science Center", "The Founders Inn and Spa", "Hilton Virginia Beach Oceanfront"],
+    "photoSpots": ["Virginia Beach Boardwalk and King Neptune statue", "First Landing State Park", "Sandbridge Beach", "Back Bay National Wildlife Refuge"],
+    "neighborhoods": ["Oceanfront", "ViBe Creative District", "Town Center", "Sandbridge", "Chesapeake Beach", "Great Neck"],
+    "airport": "Norfolk International Airport (ORF)",
+    "blurb": "Virginia Beach's event scene combines oceanfront tourism with a large military community tied to the Hampton Roads naval and joint bases, which supports reunions, ceremonies and defense-industry meetings. Beach weddings peak from late spring through early fall, and early mornings or evenings help avoid crowds and midday glare on the sand."
+  }
+}

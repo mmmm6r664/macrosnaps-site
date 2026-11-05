@@ -1,0 +1,45 @@
+new-york-city-ny|New York City, NY
+los-angeles-ca|Los Angeles, CA
+chicago-il|Chicago, IL
+brooklyn-ny|Brooklyn, NY
+houston-tx|Houston, TX
+queens-ny|Queens, NY
+philadelphia-pa|Philadelphia, PA
+phoenix-az|Phoenix, AZ
+manhattan-ny|Manhattan, NY
+san-antonio-tx|San Antonio, TX
+san-diego-ca|San Diego, CA
+the-bronx-ny|The Bronx, NY
+dallas-tx|Dallas, TX
+san-jose-ca|San Jose, CA
+austin-tx|Austin, TX
+jacksonville-fl|Jacksonville, FL
+san-francisco-ca|San Francisco, CA
+columbus-oh|Columbus, OH
+fort-worth-tx|Fort Worth, TX
+indianapolis-in|Indianapolis, IN
+charlotte-nc|Charlotte, NC
+washington-dc|Washington, DC, DC
+seattle-wa|Seattle, WA
+denver-co|Denver, CO
+el-paso-tx|El Paso, TX
+detroit-mi|Detroit, MI
+boston-ma|Boston, MA
+memphis-tn|Memphis, TN
+portland-or|Portland, OR
+oklahoma-city-ok|Oklahoma City, OK
+las-vegas-nv|Las Vegas, NV
+baltimore-md|Baltimore, MD
+milwaukee-wi|Milwaukee, WI
+albuquerque-nm|Albuquerque, NM
+tucson-az|Tucson, AZ
+nashville-tn|Nashville, TN
+fresno-ca|Fresno, CA
+sacramento-ca|Sacramento, CA
+kansas-city-mo|Kansas City, MO
+long-beach-ca|Long Beach, CA
+mesa-az|Mesa, AZ
+staten-island-ny|Staten Island, NY
+atlanta-ga|Atlanta, GA
+colorado-springs-co|Colorado Springs, CO
+virginia-beach-va|Virginia Beach, VA

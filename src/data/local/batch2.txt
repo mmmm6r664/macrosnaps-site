@@ -1,0 +1,45 @@
+raleigh-nc|Raleigh, NC
+omaha-ne|Omaha, NE
+miami-fl|Miami, FL
+oakland-ca|Oakland, CA
+minneapolis-mn|Minneapolis, MN
+tulsa-ok|Tulsa, OK
+wichita-ks|Wichita, KS
+new-orleans-la|New Orleans, LA
+arlington-tx|Arlington, TX
+cleveland-oh|Cleveland, OH
+bakersfield-ca|Bakersfield, CA
+honolulu-hi|Honolulu, HI
+tampa-fl|Tampa, FL
+aurora-co|Aurora, CO
+anaheim-ca|Anaheim, CA
+santa-ana-ca|Santa Ana, CA
+corpus-christi-tx|Corpus Christi, TX
+riverside-ca|Riverside, CA
+st-louis-mo|St. Louis, MO
+lexington-fayette-ky|Lexington-Fayette, KY
+stockton-ca|Stockton, CA
+pittsburgh-pa|Pittsburgh, PA
+anchorage-ak|Anchorage, AK
+cincinnati-oh|Cincinnati, OH
+ironville-ky|Ironville, KY
+meads-ky|Meads, KY
+henderson-nv|Henderson, NV
+greensboro-nc|Greensboro, NC
+saint-paul-mn|Saint Paul, MN
+plano-tx|Plano, TX
+newark-nj|Newark, NJ
+toledo-oh|Toledo, OH
+lincoln-ne|Lincoln, NE
+orlando-fl|Orlando, FL
+chula-vista-ca|Chula Vista, CA
+jersey-city-nj|Jersey City, NJ
+chandler-az|Chandler, AZ
+fort-wayne-in|Fort Wayne, IN
+buffalo-ny|Buffalo, NY
+durham-nc|Durham, NC
+st-petersburg-fl|St. Petersburg, FL
+irvine-ca|Irvine, CA
+laredo-tx|Laredo, TX
+lubbock-tx|Lubbock, TX
+madison-wi|Madison, WI

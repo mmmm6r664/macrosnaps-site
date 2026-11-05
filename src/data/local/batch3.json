@@ -1,0 +1,1392 @@
+{
+  "gilbert-az": {
+    "conferenceVenues": [
+      "Mesa Convention Center",
+      "Sheraton Grand at Wild Horse Pass",
+      "Phoenix Marriott Resort Tempe at The Buttes"
+    ],
+    "eventVenues": [
+      "Agritopia",
+      "Shenandoah Mill",
+      "Seville Golf & Country Club",
+      "Villa Siena"
+    ],
+    "photoSpots": [
+      "Riparian Preserve at Water Ranch",
+      "Gilbert Water Tower",
+      "Gilbert Regional Park",
+      "Freestone Park",
+      "Heritage District"
+    ],
+    "neighborhoods": [
+      "Heritage District",
+      "Agritopia",
+      "Val Vista Lakes",
+      "Power Ranch",
+      "Morrison Ranch",
+      "Seville"
+    ],
+    "airport": "Phoenix Sky Harbor International Airport (PHX)",
+    "blurb": "Gilbert's event calendar leans toward family celebrations, school and church functions, and farm-style weddings, with larger corporate meetings usually held in neighboring Mesa, Chandler or Tempe. Outdoor shoots work best from October through April, since summer afternoons regularly top 105°F."
+  },
+  "norfolk-va": {
+    "conferenceVenues": [
+      "Norfolk Waterside Marriott",
+      "Sheraton Norfolk Waterside Hotel",
+      "Hilton Norfolk The Main",
+      "Chartway Arena",
+      "Virginia Beach Convention Center"
+    ],
+    "eventVenues": [
+      "Chrysler Museum of Art",
+      "Nauticus and the Battleship Wisconsin",
+      "Norfolk Botanical Garden",
+      "Hermitage Museum & Gardens",
+      "MacArthur Memorial"
+    ],
+    "photoSpots": [
+      "Town Point Park",
+      "Norfolk Botanical Garden",
+      "The Hague in Ghent",
+      "Elizabeth River Trail",
+      "Ocean View Beach Park"
+    ],
+    "neighborhoods": [
+      "Downtown",
+      "Ghent",
+      "Freemason",
+      "Ocean View",
+      "Colonial Place",
+      "Larchmont"
+    ],
+    "airport": "Norfolk International Airport (ORF)",
+    "blurb": "Norfolk's events are shaped by Naval Station Norfolk, the port and the region's defense contractors, alongside Old Dominion University and festivals like Harborfest on the downtown waterfront. Summers are hot and humid and hurricane season runs June through November, so waterfront shoots benefit from a weather backup plan."
+  },
+  "louisville-ky": {
+    "conferenceVenues": [
+      "Kentucky International Convention Center",
+      "Omni Louisville Hotel",
+      "Galt House Hotel",
+      "Kentucky Exposition Center",
+      "Louisville Marriott Downtown"
+    ],
+    "eventVenues": [
+      "Speed Art Museum",
+      "The Brown Hotel",
+      "Frazier History Museum",
+      "Churchill Downs",
+      "Muhammad Ali Center",
+      "The Louisville Palace"
+    ],
+    "photoSpots": [
+      "Waterfront Park",
+      "Big Four Bridge",
+      "Cherokee Park",
+      "Old Louisville",
+      "Bernheim Arboretum and Research Forest (Clermont)"
+    ],
+    "neighborhoods": [
+      "NuLu",
+      "The Highlands",
+      "Old Louisville",
+      "Butchertown",
+      "Crescent Hill",
+      "St. Matthews"
+    ],
+    "airport": "Louisville Muhammad Ali International Airport (SDF)",
+    "blurb": "Louisville hosts a steady run of trade shows at the Kentucky Exposition Center plus healthcare, logistics and bourbon-industry events, and the Kentucky Derby on the first Saturday in May fills hotels and venues weeks in advance. Spring and fall are the most comfortable seasons for outdoor portraits; summers are humid."
+  },
+  "reno-nv": {
+    "conferenceVenues": [
+      "Reno-Sparks Convention Center",
+      "Grand Sierra Resort",
+      "Peppermill Reno",
+      "Atlantis Casino Resort Spa",
+      "Silver Legacy Resort Casino"
+    ],
+    "eventVenues": [
+      "Nevada Museum of Art",
+      "National Automobile Museum",
+      "Wilbur D. May Arboretum and Botanical Garden",
+      "Peppermill Reno"
+    ],
+    "photoSpots": [
+      "Truckee River Walk and Wingfield Park",
+      "Reno Arch",
+      "Rancho San Rafael Regional Park",
+      "Idlewild Park",
+      "Virginia Lake Park"
+    ],
+    "neighborhoods": [
+      "Midtown",
+      "Downtown",
+      "Old Southwest",
+      "South Meadows",
+      "Damonte Ranch",
+      "Sparks"
+    ],
+    "airport": "Reno-Tahoe International Airport (RNO)",
+    "blurb": "Reno combines casino-resort conventions with a growing tech and logistics economy, and its summer calendar includes Hot August Nights and the Great Reno Balloon Race in September. The high-desert climate brings dry, sunny days but cold, sometimes snowy winters, and Lake Tahoe is a common add-on location for couples."
+  },
+  "winston-salem-nc": {
+    "conferenceVenues": [
+      "Benton Convention Center",
+      "Graylyn Estate",
+      "Embassy Suites by Hilton Winston-Salem",
+      "The Kimpton Cardinal Hotel"
+    ],
+    "eventVenues": [
+      "Reynolda House Museum of American Art",
+      "Graylyn Estate",
+      "Old Salem Museums & Gardens",
+      "Milton Rhodes Center for the Arts"
+    ],
+    "photoSpots": [
+      "Old Salem",
+      "Reynolda Gardens",
+      "Tanglewood Park (Clemmons)",
+      "Bailey Park",
+      "Downtown Arts District on Trade Street"
+    ],
+    "neighborhoods": [
+      "Downtown Arts District",
+      "West End",
+      "Ardmore",
+      "Buena Vista",
+      "Old Salem",
+      "Clemmons"
+    ],
+    "airport": "Piedmont Triad International Airport (GSO)",
+    "blurb": "Winston-Salem's events draw on Wake Forest University, Atrium Health Wake Forest Baptist and the Innovation Quarter, along with arts programming such as the RiverRun International Film Festival. Its historic estates and gardens are popular for spring and fall weddings, when Piedmont weather is mild."
+  },
+  "glendale-az": {
+    "conferenceVenues": [
+      "Renaissance Phoenix Glendale Hotel & Spa",
+      "Glendale Civic Center",
+      "State Farm Stadium",
+      "Desert Diamond Arena"
+    ],
+    "eventVenues": [
+      "Glendale Civic Center",
+      "Sahuaro Ranch Park Historic Area",
+      "Glendale Women's Club",
+      "Camelback Ranch"
+    ],
+    "photoSpots": [
+      "Sahuaro Ranch Park",
+      "Thunderbird Conservation Park",
+      "Historic Downtown Glendale and Catlin Court",
+      "Westgate Entertainment District"
+    ],
+    "neighborhoods": [
+      "Historic Downtown Glendale",
+      "Catlin Court",
+      "Arrowhead Ranch",
+      "Westgate",
+      "Peoria"
+    ],
+    "airport": "Phoenix Sky Harbor International Airport (PHX)",
+    "blurb": "Glendale's Westgate area brings in major sporting events at State Farm Stadium, including NFL games and past Super Bowls, along with conferences at the adjoining Renaissance hotel and spring training at Camelback Ranch. The cooler months from October to April are the prime outdoor season, and Glendale Glitters lights up downtown each winter."
+  },
+  "hialeah-fl": {
+    "conferenceVenues": [
+      "Miami Airport Convention Center",
+      "Hilton Miami Airport Blue Lagoon",
+      "Trump National Doral Miami",
+      "Miami Beach Convention Center"
+    ],
+    "eventVenues": [
+      "Hialeah Park",
+      "Milander Center for Arts and Entertainment",
+      "Trump National Doral Miami",
+      "Vizcaya Museum and Gardens (Miami)"
+    ],
+    "photoSpots": [
+      "Hialeah Park and its flamingo flock",
+      "Amelia Earhart Park",
+      "Milander Park",
+      "Miami Lakes town center"
+    ],
+    "neighborhoods": [
+      "Hialeah Gardens",
+      "Miami Lakes",
+      "Miami Springs",
+      "Palm Springs North",
+      "Doral"
+    ],
+    "airport": "Miami International Airport (MIA)",
+    "blurb": "Hialeah is a predominantly Cuban-American city where quinceañeras, family milestones and church weddings make up much of the event calendar, with corporate meetings typically held near Miami International Airport and Doral. Expect heat, humidity and afternoon storms from June through October; winter and spring offer the most reliable outdoor light."
+  },
+  "garland-tx": {
+    "conferenceVenues": [
+      "Curtis Culwell Center",
+      "Granville Arts Center",
+      "Kay Bailey Hutchison Convention Center Dallas"
+    ],
+    "eventVenues": [
+      "The Atrium at Granville Arts Center",
+      "Plaza Theatre",
+      "Firewheel Golf Park"
+    ],
+    "photoSpots": [
+      "Lake Ray Hubbard",
+      "Downtown Garland square",
+      "Spring Creek Forest Preserve",
+      "Rowlett Creek Preserve",
+      "Firewheel Town Center"
+    ],
+    "neighborhoods": [
+      "Downtown Garland",
+      "Firewheel",
+      "Heritage Crossing",
+      "Rowlett",
+      "Richardson",
+      "Sachse"
+    ],
+    "airport": "Dallas/Fort Worth International Airport (DFW)",
+    "blurb": "Garland's events range from school and community gatherings at the Curtis Culwell Center to performances and receptions at the Granville Arts Center, with larger conventions heading to nearby Dallas. North Texas summers are very hot and spring brings severe-storm risk, so fall is the easiest season for outdoor sessions."
+  },
+  "scottsdale-az": {
+    "conferenceVenues": [
+      "Fairmont Scottsdale Princess",
+      "JW Marriott Scottsdale Camelback Inn Resort & Spa",
+      "The Westin Kierland Resort & Spa",
+      "Hyatt Regency Scottsdale Resort & Spa at Gainey Ranch",
+      "Scottsdale Resort at McCormick Ranch"
+    ],
+    "eventVenues": [
+      "Taliesin West",
+      "Scottsdale Museum of Contemporary Art",
+      "Four Seasons Resort Scottsdale at Troon North",
+      "The Phoenician",
+      "Fairmont Scottsdale Princess"
+    ],
+    "photoSpots": [
+      "Old Town Scottsdale",
+      "Soleri Bridge and Scottsdale Waterfront",
+      "Pinnacle Peak Park",
+      "McDowell Sonoran Preserve",
+      "Gateway Trailhead"
+    ],
+    "neighborhoods": [
+      "Old Town",
+      "McCormick Ranch",
+      "Gainey Ranch",
+      "Kierland",
+      "DC Ranch",
+      "Troon North"
+    ],
+    "airport": "Phoenix Sky Harbor International Airport (PHX)",
+    "blurb": "Scottsdale is a resort-based meetings destination for incentive trips and executive retreats, and its January–February calendar includes the Barrett-Jackson car auction and the WM Phoenix Open at TPC Scottsdale. Peak wedding and conference season runs October through April, with desert sunsets and saguaro backdrops a short drive from most resorts."
+  },
+  "irving-tx": {
+    "conferenceVenues": [
+      "Irving Convention Center at Las Colinas",
+      "The Westin Irving Convention Center at Las Colinas",
+      "Four Seasons Resort and Club Dallas at Las Colinas",
+      "Toyota Music Factory"
+    ],
+    "eventVenues": [
+      "Four Seasons Resort and Club Dallas at Las Colinas",
+      "Toyota Music Factory",
+      "Las Colinas Country Club",
+      "Irving Arts Center"
+    ],
+    "photoSpots": [
+      "Mustangs at Las Colinas in Williams Square",
+      "Mandalay Canal",
+      "Lake Carolyn",
+      "Campión Trail"
+    ],
+    "neighborhoods": [
+      "Las Colinas",
+      "Valley Ranch",
+      "Downtown Irving Heritage District",
+      "Coppell",
+      "Grand Prairie"
+    ],
+    "airport": "Dallas/Fort Worth International Airport (DFW)",
+    "blurb": "Irving's Las Colinas district is a corporate hub home to several Fortune 500 headquarters, and its convention center sits minutes from DFW Airport, which makes it a common choice for national sales meetings. Spring and fall are the best seasons for outdoor work; summer heat pushes most events indoors."
+  },
+  "chesapeake-va": {
+    "conferenceVenues": [
+      "Chesapeake Conference Center",
+      "Virginia Beach Convention Center",
+      "Norfolk Waterside Marriott"
+    ],
+    "eventVenues": [
+      "Chesapeake Arboretum",
+      "Chesapeake Conference Center",
+      "Chrysler Museum of Art (Norfolk)"
+    ],
+    "photoSpots": [
+      "Great Dismal Swamp National Wildlife Refuge",
+      "Dismal Swamp Canal Trail",
+      "Northwest River Park",
+      "Chesapeake City Park",
+      "Chesapeake Arboretum"
+    ],
+    "neighborhoods": [
+      "Great Bridge",
+      "Greenbrier",
+      "Western Branch",
+      "Deep Creek",
+      "Hickory",
+      "South Norfolk"
+    ],
+    "airport": "Norfolk International Airport (ORF)",
+    "blurb": "Chesapeake's events are a mix of military-family celebrations, community festivals and business meetings in the Greenbrier corridor, with Norfolk and Virginia Beach close by for larger conventions. Its wooded parks and waterways suit spring and fall portraits, while summers are humid and hurricane season runs June through November."
+  },
+  "north-las-vegas-nv": {
+    "conferenceVenues": [
+      "Las Vegas Convention Center",
+      "Aliante Casino + Hotel + Spa",
+      "Cannery Casino Hotel"
+    ],
+    "eventVenues": [
+      "Aliante Casino + Hotel + Spa",
+      "Craig Ranch Regional Park Amphitheater",
+      "The Neon Museum (Las Vegas)"
+    ],
+    "photoSpots": [
+      "Craig Ranch Regional Park",
+      "Aliante Nature Discovery Park",
+      "Tule Springs Fossil Beds National Monument",
+      "Floyd Lamb Park at Tule Springs"
+    ],
+    "neighborhoods": [
+      "Aliante",
+      "Craig Ranch",
+      "Centennial Hills",
+      "Downtown Las Vegas",
+      "Summerlin"
+    ],
+    "airport": "Harry Reid International Airport (LAS)",
+    "blurb": "North Las Vegas is a fast-growing suburb whose own events center on community celebrations, Nellis Air Force Base families and the Aliante area, while major conventions sit 20–30 minutes south on the Strip. Spring and fall bring the best shooting weather; summer highs routinely pass 105°F."
+  },
+  "fremont-ca": {
+    "conferenceVenues": [
+      "Fremont Marriott Silicon Valley",
+      "Santa Clara Convention Center",
+      "Hilton Newark/Fremont"
+    ],
+    "eventVenues": [
+      "Ardenwood Historic Farm",
+      "Palmdale Estates",
+      "Mission San Jose",
+      "Niles Essanay Silent Film Museum"
+    ],
+    "photoSpots": [
+      "Mission Peak Regional Preserve",
+      "Lake Elizabeth in Central Park",
+      "Coyote Hills Regional Park",
+      "Niles Canyon",
+      "Ardenwood Historic Farm"
+    ],
+    "neighborhoods": [
+      "Niles",
+      "Mission San Jose",
+      "Warm Springs",
+      "Irvington",
+      "Centerville",
+      "Ardenwood"
+    ],
+    "airport": "San José Mineta International Airport (SJC)",
+    "blurb": "Fremont sits at the East Bay edge of Silicon Valley, with Tesla's factory and many tech and manufacturing firms generating corporate events, and a large South Asian community that keeps multi-day weddings in steady demand. The mild climate allows year-round shoots, and Mission Peak's hills turn green after winter rains."
+  },
+  "baton-rouge-la": {
+    "conferenceVenues": [
+      "Raising Cane's River Center",
+      "L'Auberge Casino Hotel Baton Rouge",
+      "Renaissance Baton Rouge Hotel",
+      "Hilton Baton Rouge Capitol Center",
+      "Crowne Plaza Baton Rouge"
+    ],
+    "eventVenues": [
+      "Old Louisiana State Capitol",
+      "Old Governor's Mansion",
+      "LSU Rural Life Museum",
+      "Shaw Center for the Arts",
+      "Houmas House (Darrow)"
+    ],
+    "photoSpots": [
+      "Louisiana State Capitol and gardens",
+      "LSU campus and Memorial Tower",
+      "University Lakes",
+      "Mississippi River levee downtown",
+      "Spanish Town"
+    ],
+    "neighborhoods": [
+      "Mid City",
+      "Spanish Town",
+      "Garden District",
+      "Beauregard Town",
+      "Southdowns",
+      "Perkins Rowe area"
+    ],
+    "airport": "Baton Rouge Metropolitan Airport (BTR)",
+    "blurb": "As Louisiana's capital and home to LSU, Baton Rouge hosts legislative, petrochemical-industry and university events, and fall Saturdays revolve around Tiger Stadium. Live oaks and River Road plantation homes are popular wedding backdrops; plan around summer humidity and hurricane season."
+  },
+  "lexington-ky": {
+    "conferenceVenues": [
+      "Central Bank Center",
+      "Hyatt Regency Lexington",
+      "Lexington Griffin Gate Marriott Golf Resort & Spa",
+      "Hilton Lexington/Downtown"
+    ],
+    "eventVenues": [
+      "Keeneland",
+      "Kentucky Horse Park",
+      "Ashland, The Henry Clay Estate",
+      "21c Museum Hotel Lexington"
+    ],
+    "photoSpots": [
+      "Keeneland grounds",
+      "Horse farms along Old Frankfort Pike",
+      "Ashland, The Henry Clay Estate",
+      "Jacobson Park",
+      "Arboretum State Botanical Garden of Kentucky"
+    ],
+    "neighborhoods": [
+      "Downtown",
+      "Chevy Chase",
+      "Distillery District",
+      "Ashland Park",
+      "Hamburg",
+      "Southland"
+    ],
+    "airport": "Blue Grass Airport (LEX)",
+    "blurb": "Lexington's event scene is tied to the horse industry, bourbon tourism and the University of Kentucky, with Keeneland's April and October race meets setting the social calendar. Spring and fall bring green pastures and mild temperatures that suit horse-farm and estate weddings."
+  },
+  "paradise-nv": {
+    "conferenceVenues": [
+      "Las Vegas Convention Center",
+      "Mandalay Bay Convention Center",
+      "Caesars Forum",
+      "The Venetian Expo",
+      "MGM Grand Conference Center"
+    ],
+    "eventVenues": [
+      "Bellagio",
+      "Wynn Las Vegas",
+      "Caesars Palace",
+      "Mandalay Bay"
+    ],
+    "photoSpots": [
+      "Welcome to Fabulous Las Vegas sign",
+      "Fountains of Bellagio",
+      "LINQ Promenade and High Roller",
+      "Bellagio Conservatory & Botanical Gardens",
+      "Red Rock Canyon National Conservation Area"
+    ],
+    "neighborhoods": [
+      "The Strip",
+      "University District (UNLV)",
+      "Spring Valley",
+      "Enterprise",
+      "Henderson",
+      "Downtown Las Vegas"
+    ],
+    "airport": "Harry Reid International Airport (LAS)",
+    "blurb": "The unincorporated town of Paradise contains most of the Las Vegas Strip, so it hosts the bulk of the region's mega-conventions such as CES and dozens of other large trade shows, plus a constant stream of destination weddings. Strip casinos offer controlled indoor settings year-round, while outdoor desert sessions are best scheduled for cooler mornings or the fall-to-spring season."
+  },
+  "richmond-va": {
+    "conferenceVenues": [
+      "Greater Richmond Convention Center",
+      "Richmond Marriott Downtown",
+      "Omni Richmond Hotel",
+      "The Jefferson Hotel",
+      "Hilton Richmond Downtown"
+    ],
+    "eventVenues": [
+      "The Jefferson Hotel",
+      "Virginia Museum of Fine Arts",
+      "Lewis Ginter Botanical Garden",
+      "Maymont",
+      "Agecroft Hall & Gardens"
+    ],
+    "photoSpots": [
+      "Maymont",
+      "Belle Isle",
+      "Libby Hill Park",
+      "Monument Avenue",
+      "Canal Walk"
+    ],
+    "neighborhoods": [
+      "The Fan",
+      "Church Hill",
+      "Carytown",
+      "Scott's Addition",
+      "Shockoe Bottom",
+      "Museum District"
+    ],
+    "airport": "Richmond International Airport (RIC)",
+    "blurb": "Richmond's events come from state government, finance, healthcare and VCU, while its breweries, historic districts and riverfront draw a growing number of weddings. Spring and fall bring the best weather and foliage along the James River; summers are hot and humid."
+  },
+  "san-bernardino-ca": {
+    "conferenceVenues": [
+      "Ontario Convention Center",
+      "Riverside Convention Center",
+      "Hilton San Bernardino",
+      "Yaamava' Resort & Casino at San Manuel"
+    ],
+    "eventVenues": [
+      "California Theatre of the Performing Arts",
+      "Yaamava' Resort & Casino at San Manuel",
+      "Kimberly Crest House & Gardens (Redlands)",
+      "The Mission Inn Hotel & Spa (Riverside)"
+    ],
+    "photoSpots": [
+      "Seccombe Lake Park",
+      "Perris Hill Park",
+      "Rim of the World Scenic Byway",
+      "Lake Arrowhead"
+    ],
+    "neighborhoods": [
+      "Downtown San Bernardino",
+      "Hospitality Lane",
+      "Highland",
+      "Redlands",
+      "Loma Linda",
+      "Rialto"
+    ],
+    "airport": "Ontario International Airport (ONT)",
+    "blurb": "San Bernardino is a logistics and government center for the Inland Empire, and many of its corporate and celebration events cluster around Hospitality Lane and the casino resort in neighboring Highland. Summer valley heat is intense, but the San Bernardino Mountains are less than an hour away for cooler, forested backdrops."
+  },
+  "spokane-wa": {
+    "conferenceVenues": [
+      "Spokane Convention Center",
+      "The Historic Davenport Hotel",
+      "The Davenport Grand",
+      "Northern Quest Resort & Casino",
+      "Spokane Arena"
+    ],
+    "eventVenues": [
+      "The Historic Davenport Hotel",
+      "Northwest Museum of Arts & Culture",
+      "The Davenport Grand",
+      "Northern Quest Resort & Casino"
+    ],
+    "photoSpots": [
+      "Riverfront Park and Spokane Falls",
+      "Manito Park",
+      "Gonzaga University campus",
+      "Bowl and Pitcher in Riverside State Park",
+      "Browne's Addition"
+    ],
+    "neighborhoods": [
+      "Downtown",
+      "Browne's Addition",
+      "South Hill",
+      "Kendall Yards",
+      "Perry District",
+      "Spokane Valley"
+    ],
+    "airport": "Spokane International Airport (GEG)",
+    "blurb": "Spokane is the regional hub of the Inland Northwest, hosting healthcare, education and agriculture conferences, and its Bloomsday run in May and Hoopfest in June draw large crowds downtown. Summers are warm and dry with long evenings while winters are snowy, so most outdoor weddings fall between May and October."
+  },
+  "birmingham-al": {
+    "conferenceVenues": [
+      "Birmingham-Jefferson Convention Complex",
+      "Sheraton Birmingham Hotel",
+      "The Westin Birmingham",
+      "Hyatt Regency Birmingham – The Wynfrey Hotel",
+      "Renaissance Birmingham Ross Bridge Golf Resort & Spa"
+    ],
+    "eventVenues": [
+      "Birmingham Museum of Art",
+      "Birmingham Botanical Gardens",
+      "Vulcan Park and Museum",
+      "Sloss Furnaces National Historic Landmark",
+      "The Tutwiler Hotel"
+    ],
+    "photoSpots": [
+      "Vulcan Park",
+      "Railroad Park",
+      "Sloss Furnaces",
+      "Birmingham Botanical Gardens",
+      "Red Mountain Park"
+    ],
+    "neighborhoods": [
+      "Southside and Five Points South",
+      "Avondale",
+      "Lakeview",
+      "Highland Park",
+      "Homewood",
+      "Mountain Brook"
+    ],
+    "airport": "Birmingham-Shuttlesworth International Airport (BHM)",
+    "blurb": "Birmingham's meetings draw on UAB's medical center, banking and engineering, and the city hosts civil-rights heritage tourism and events at Protective Stadium and the BJCC. Spring blooms and fall color are prime for outdoor shoots; summers are hot and humid with frequent afternoon storms."
+  },
+  "modesto-ca": {
+    "conferenceVenues": [
+      "Modesto Centre Plaza",
+      "DoubleTree by Hilton Modesto",
+      "Gallo Center for the Arts"
+    ],
+    "eventVenues": [
+      "Gallo Center for the Arts",
+      "McHenry Mansion",
+      "The State Theatre",
+      "Del Rio Country Club"
+    ],
+    "photoSpots": [
+      "Modesto Arch",
+      "Graceada Park",
+      "McHenry Mansion grounds",
+      "Tuolumne River Regional Park"
+    ],
+    "neighborhoods": [
+      "Downtown",
+      "College Area",
+      "Village One",
+      "Salida",
+      "Riverbank",
+      "Ceres"
+    ],
+    "airport": "Sacramento International Airport (SMF)",
+    "blurb": "Modesto sits in the agricultural heart of the Central Valley, so food-processing, winery and farm-industry events are common alongside celebrations in the downtown arts district. Valley summers are hot and dry, while spring brings orchard blossoms that work well as wedding and engagement backdrops."
+  },
+  "des-moines-ia": {
+    "conferenceVenues": [
+      "Iowa Events Center",
+      "Hy-Vee Hall",
+      "Des Moines Marriott Downtown",
+      "Embassy Suites by Hilton Des Moines Downtown",
+      "Iowa State Fairgrounds"
+    ],
+    "eventVenues": [
+      "Des Moines Art Center",
+      "Salisbury House & Gardens",
+      "Terrace Hill",
+      "Greater Des Moines Botanical Garden",
+      "Hoyt Sherman Place"
+    ],
+    "photoSpots": [
+      "John and Mary Pappajohn Sculpture Park",
+      "Iowa State Capitol",
+      "Gray's Lake Park",
+      "Principal Riverwalk",
+      "Water Works Park"
+    ],
+    "neighborhoods": [
+      "East Village",
+      "Court Avenue District",
+      "Sherman Hill",
+      "Beaverdale",
+      "Drake neighborhood",
+      "West Des Moines"
+    ],
+    "airport": "Des Moines International Airport (DSM)",
+    "blurb": "Des Moines is an insurance and financial-services center, which drives a steady stream of corporate meetings, and the Iowa State Fair each August is one of the state's biggest annual gatherings. Midwestern winters are cold, so most outdoor weddings and portraits happen from May through October."
+  },
+  "rochester-ny": {
+    "conferenceVenues": [
+      "Joseph A. Floreano Rochester Riverside Convention Center",
+      "Hyatt Regency Rochester",
+      "Del Monte Lodge Renaissance Rochester Hotel & Spa",
+      "Blue Cross Arena"
+    ],
+    "eventVenues": [
+      "George Eastman Museum",
+      "Memorial Art Gallery",
+      "The Strong National Museum of Play",
+      "Eastman Theatre"
+    ],
+    "photoSpots": [
+      "Highland Park",
+      "High Falls",
+      "Durand Eastman Park",
+      "Ontario Beach Park",
+      "Erie Canal path in Pittsford"
+    ],
+    "neighborhoods": [
+      "Park Avenue",
+      "East End",
+      "Corn Hill",
+      "South Wedge",
+      "Neighborhood of the Arts",
+      "Pittsford"
+    ],
+    "airport": "Frederick Douglass Greater Rochester International Airport (ROC)",
+    "blurb": "Rochester's events reflect its optics, imaging and healthcare industries, the University of Rochester and RIT, and May's Lilac Festival in Highland Park. Lake-effect snow makes winters long, so outdoor weddings and portraits typically run from late spring through early fall foliage."
+  },
+  "tacoma-wa": {
+    "conferenceVenues": [
+      "Greater Tacoma Convention Center",
+      "Tacoma Marriott Downtown",
+      "Hotel Murano",
+      "Emerald Queen Casino (Fife)"
+    ],
+    "eventVenues": [
+      "Museum of Glass",
+      "Tacoma Art Museum",
+      "LeMay – America's Car Museum",
+      "Thornewood Castle (Lakewood)"
+    ],
+    "photoSpots": [
+      "Point Defiance Park",
+      "Chihuly Bridge of Glass",
+      "Ruston Way waterfront",
+      "Wright Park",
+      "Stadium High School"
+    ],
+    "neighborhoods": [
+      "Stadium District",
+      "Proctor District",
+      "Sixth Avenue",
+      "Hilltop",
+      "Old Town",
+      "Ruston"
+    ],
+    "airport": "Seattle-Tacoma International Airport (SEA)",
+    "blurb": "Tacoma's event market is shaped by the Port of Tacoma, Joint Base Lewis-McChord and a strong museum district, which makes it a practical alternative to Seattle for conferences and receptions. Rain is common from October to May, so summer is peak outdoor season, with Mount Rainier views on clear days."
+  },
+  "arlington-va": {
+    "conferenceVenues": [
+      "Crystal Gateway Marriott",
+      "Hyatt Regency Crystal City at Reagan National Airport",
+      "Renaissance Arlington Capital View Hotel",
+      "The Westin Arlington Gateway"
+    ],
+    "eventVenues": [
+      "Top of the Town",
+      "Army Navy Country Club",
+      "Washington Golf & Country Club"
+    ],
+    "photoSpots": [
+      "Gravelly Point Park",
+      "Netherlands Carillon",
+      "Marine Corps War Memorial",
+      "U.S. Air Force Memorial",
+      "Theodore Roosevelt Island"
+    ],
+    "neighborhoods": [
+      "Clarendon",
+      "Ballston",
+      "Rosslyn",
+      "National Landing (Crystal City)",
+      "Shirlington",
+      "Courthouse"
+    ],
+    "airport": "Ronald Reagan Washington National Airport (DCA)",
+    "blurb": "Arlington's events are driven by the federal government, defense contractors and Amazon's HQ2 in National Landing, with frequent association and government meetings near the Pentagon and Reagan National. Its overlooks of the Potomac and the DC skyline are popular for portraits, especially during spring cherry-blossom season and in fall."
+  },
+  "fontana-ca": {
+    "conferenceVenues": [
+      "Ontario Convention Center",
+      "Toyota Arena (Ontario)",
+      "Steelworkers' Auditorium"
+    ],
+    "eventVenues": [
+      "Steelworkers' Auditorium",
+      "Lewis Family Playhouse (Rancho Cucamonga)",
+      "The Mission Inn Hotel & Spa (Riverside)"
+    ],
+    "photoSpots": [
+      "Martin Tudor Jurupa Hills Regional Park",
+      "Fontana Park",
+      "Downtown Fontana on Sierra Avenue",
+      "Etiwanda Falls (Rancho Cucamonga)"
+    ],
+    "neighborhoods": [
+      "Downtown Fontana",
+      "Sierra Lakes",
+      "North Fontana",
+      "Rancho Cucamonga",
+      "Rialto"
+    ],
+    "airport": "Ontario International Airport (ONT)",
+    "blurb": "Fontana grew from a steel town into a logistics and warehousing hub, and its events are mostly community celebrations, quinceañeras and family weddings, with conventions held next door in Ontario. Summers are hot and smoggy at times, so cooler months and golden-hour sessions in the foothills work best."
+  },
+  "oxnard-ca": {
+    "conferenceVenues": [
+      "Embassy Suites by Hilton Mandalay Beach Resort",
+      "Oxnard Performing Arts and Convention Center",
+      "Courtyard by Marriott Oxnard Ventura"
+    ],
+    "eventVenues": [
+      "Embassy Suites by Hilton Mandalay Beach Resort",
+      "Oxnard Heritage Square",
+      "Channel Islands Harbor",
+      "Ventura County Fairgrounds (Ventura)"
+    ],
+    "photoSpots": [
+      "Channel Islands Harbor",
+      "Oxnard State Beach Park",
+      "Silver Strand Beach",
+      "Hollywood Beach",
+      "Heritage Square"
+    ],
+    "neighborhoods": [
+      "Channel Islands Harbor",
+      "Mandalay Bay",
+      "Hollywood Beach",
+      "Downtown Oxnard",
+      "Ventura",
+      "Camarillo"
+    ],
+    "airport": "Hollywood Burbank Airport (BUR)",
+    "blurb": "Oxnard's economy rests on agriculture, the Port of Hueneme and Naval Base Ventura County, and its May Strawberry Festival and harbor events anchor the local calendar. Coastal fog is common in late spring and early summer, while fall usually brings the clearest beach light."
+  },
+  "moreno-valley-ca": {
+    "conferenceVenues": [
+      "Riverside Convention Center",
+      "Ontario Convention Center",
+      "Moreno Valley Conference & Recreation Center"
+    ],
+    "eventVenues": [
+      "March Field Air Museum (Riverside)",
+      "The Mission Inn Hotel & Spa (Riverside)",
+      "Moreno Valley Conference & Recreation Center"
+    ],
+    "photoSpots": [
+      "Lake Perris State Recreation Area",
+      "Box Springs Mountain Reserve",
+      "Sycamore Canyon Wilderness Park",
+      "Mount Rubidoux (Riverside)"
+    ],
+    "neighborhoods": [
+      "Sunnymead",
+      "Moreno Valley Ranch",
+      "Edgemont",
+      "Riverside",
+      "Perris"
+    ],
+    "airport": "Ontario International Airport (ONT)",
+    "blurb": "Moreno Valley is a growing Inland Empire city anchored by distribution centers, Riverside University Health System and March Air Reserve Base, with most of its events being family celebrations and community gatherings. Hot, dry summers make spring wildflower season around Lake Perris and the cooler months the easiest times for outdoor shoots."
+  },
+  "fayetteville-nc": {
+    "conferenceVenues": [
+      "Crown Complex",
+      "Embassy Suites by Hilton Fayetteville & Richard M. Wiggins Conference Center",
+      "Cape Fear Botanical Garden"
+    ],
+    "eventVenues": [
+      "Cape Fear Botanical Garden",
+      "Airborne & Special Operations Museum",
+      "Crown Complex",
+      "Highland Country Club"
+    ],
+    "photoSpots": [
+      "Cape Fear Botanical Garden",
+      "Market House",
+      "Festival Park",
+      "Cape Fear River Trail",
+      "Lake Rim Park"
+    ],
+    "neighborhoods": [
+      "Downtown",
+      "Haymount",
+      "Hope Mills",
+      "Spring Lake",
+      "Raeford"
+    ],
+    "airport": "Fayetteville Regional Airport (FAY)",
+    "blurb": "Fayetteville is home to Fort Bragg, one of the largest military installations in the country, so promotions, military balls, homecomings and quick-turnaround weddings are a big part of local event work. Spring azaleas and dogwoods are a highlight; summers are hot and humid."
+  },
+  "huntington-beach-ca": {
+    "conferenceVenues": [
+      "Hyatt Regency Huntington Beach Resort & Spa",
+      "The Waterfront Beach Resort, a Hilton Hotel",
+      "Paséa Hotel & Spa",
+      "Anaheim Convention Center"
+    ],
+    "eventVenues": [
+      "Hyatt Regency Huntington Beach Resort & Spa",
+      "Paséa Hotel & Spa",
+      "The Waterfront Beach Resort, a Hilton Hotel",
+      "Huntington Beach Central Library"
+    ],
+    "photoSpots": [
+      "Huntington Beach Pier",
+      "Bolsa Chica Ecological Reserve",
+      "Huntington Central Park",
+      "Main Street",
+      "Huntington Dog Beach"
+    ],
+    "neighborhoods": [
+      "Downtown/Main Street",
+      "Huntington Harbour",
+      "Seacliff",
+      "Sunset Beach",
+      "Fountain Valley"
+    ],
+    "airport": "John Wayne Airport (SNA)",
+    "blurb": "Known as Surf City USA, Huntington Beach hosts the US Open of Surfing each summer and a steady flow of beachfront corporate retreats and weddings at its oceanfront resorts. Morning marine layer (\"May Gray\" and \"June Gloom\") is common in early summer, so sunset sessions and fall dates often give the clearest skies."
+  },
+  "toronto-on": {
+    "conferenceVenues": [
+      "Metro Toronto Convention Centre",
+      "Enercare Centre at Exhibition Place",
+      "Fairmont Royal York",
+      "Sheraton Centre Toronto Hotel",
+      "The Westin Harbour Castle"
+    ],
+    "eventVenues": [
+      "Casa Loma",
+      "Royal Ontario Museum",
+      "Art Gallery of Ontario",
+      "Evergreen Brick Works",
+      "The Fermenting Cellar in the Distillery District"
+    ],
+    "photoSpots": [
+      "Distillery District",
+      "Toronto Islands",
+      "High Park",
+      "Nathan Phillips Square",
+      "Graffiti Alley"
+    ],
+    "neighborhoods": [
+      "Yorkville",
+      "Distillery District",
+      "Kensington Market",
+      "Queen West",
+      "Liberty Village",
+      "The Annex"
+    ],
+    "airport": "Toronto Pearson International Airport (YYZ)",
+    "blurb": "Toronto is Canada's financial and media capital, hosting large conferences at the Metro Toronto Convention Centre and Exhibition Place and drawing international attention every September during the Toronto International Film Festival. Summer and early fall are peak wedding season, and winter events move indoors to the city's hotels, museums and converted industrial spaces."
+  },
+  "montreal-qc": {
+    "conferenceVenues": [
+      "Palais des congrès de Montréal",
+      "Fairmont The Queen Elizabeth",
+      "Le Centre Sheraton Montréal",
+      "Hôtel Bonaventure Montréal"
+    ],
+    "eventVenues": [
+      "Montreal Museum of Fine Arts",
+      "Pointe-à-Callière",
+      "Marché Bonsecours",
+      "Windsor Station",
+      "Château Ramezay"
+    ],
+    "photoSpots": [
+      "Mount Royal and the Kondiaronk Belvedere",
+      "Old Montreal",
+      "Old Port of Montréal",
+      "Montréal Botanical Garden",
+      "Parc La Fontaine"
+    ],
+    "neighborhoods": [
+      "Old Montreal (Vieux-Montréal)",
+      "Plateau Mont-Royal",
+      "Mile End",
+      "Griffintown",
+      "Little Italy",
+      "Westmount"
+    ],
+    "airport": "Montréal-Trudeau International Airport (YUL)",
+    "blurb": "Montréal is a major host city for international association congresses, aerospace, AI and life-sciences meetings, and its summer festivals, including the Jazz Festival and Just for Laughs, fill the calendar from June to August. Bilingual coverage is often needed, and winters are cold and snowy, so outdoor weddings concentrate between June and early October."
+  },
+  "calgary-ab": {
+    "conferenceVenues": [
+      "BMO Centre at Stampede Park",
+      "Calgary TELUS Convention Centre",
+      "Hyatt Regency Calgary",
+      "Fairmont Palliser",
+      "Hotel Arts"
+    ],
+    "eventVenues": [
+      "Fairmont Palliser",
+      "Heritage Park Historical Village",
+      "Lougheed House",
+      "Studio Bell, home of the National Music Centre",
+      "Calgary Zoo"
+    ],
+    "photoSpots": [
+      "Peace Bridge",
+      "Prince's Island Park",
+      "Crescent Heights lookout",
+      "Fish Creek Provincial Park",
+      "Nose Hill Park"
+    ],
+    "neighborhoods": [
+      "Kensington",
+      "Inglewood",
+      "Beltline",
+      "Mission",
+      "East Village",
+      "Bridgeland"
+    ],
+    "airport": "Calgary International Airport (YYC)",
+    "blurb": "Calgary's corporate event market is anchored by the energy sector and head offices downtown, and the Calgary Stampede each July is the city's biggest event season for parties and client hospitality. With the Rockies about an hour west, many couples add mountain sessions in Banff or Kananaskis; chinooks can bring sudden mild spells even in winter."
+  },
+  "ottawa-on": {
+    "conferenceVenues": [
+      "Rogers Centre Ottawa",
+      "EY Centre",
+      "The Westin Ottawa",
+      "Fairmont Château Laurier",
+      "Delta Hotels by Marriott Ottawa City Centre"
+    ],
+    "eventVenues": [
+      "Fairmont Château Laurier",
+      "National Gallery of Canada",
+      "Canadian Museum of History (Gatineau)",
+      "Canadian Museum of Nature",
+      "Canadian War Museum"
+    ],
+    "photoSpots": [
+      "Parliament Hill",
+      "Rideau Canal",
+      "Major's Hill Park",
+      "ByWard Market",
+      "Dow's Lake and the Central Experimental Farm"
+    ],
+    "neighborhoods": [
+      "ByWard Market",
+      "The Glebe",
+      "Westboro",
+      "Centretown",
+      "New Edinburgh",
+      "Little Italy"
+    ],
+    "airport": "Ottawa Macdonald-Cartier International Airport (YOW)",
+    "blurb": "As Canada's capital, Ottawa hosts government, diplomatic, association and tech-sector meetings, and its calendar includes the Canadian Tulip Festival in May, Canada Day on Parliament Hill and Winterlude in February. Spring tulips and fall colour in nearby Gatineau Park are favourite backdrops, while winters are cold and snowy."
+  },
+  "edmonton-ab": {
+    "conferenceVenues": [
+      "Edmonton Convention Centre",
+      "Edmonton EXPO Centre",
+      "Fairmont Hotel Macdonald",
+      "The Westin Edmonton",
+      "River Cree Resort and Casino"
+    ],
+    "eventVenues": [
+      "Fairmont Hotel Macdonald",
+      "Art Gallery of Alberta",
+      "Royal Alberta Museum",
+      "Fort Edmonton Park",
+      "Muttart Conservatory"
+    ],
+    "photoSpots": [
+      "Alberta Legislature grounds",
+      "North Saskatchewan River valley and Walterdale Bridge",
+      "Muttart Conservatory pyramids",
+      "William Hawrelak Park",
+      "Old Strathcona"
+    ],
+    "neighborhoods": [
+      "Old Strathcona (Whyte Avenue)",
+      "Downtown and ICE District",
+      "124 Street",
+      "Garneau",
+      "Oliver",
+      "Highlands"
+    ],
+    "airport": "Edmonton International Airport (YEG)",
+    "blurb": "Edmonton is Alberta's capital and a hub for government, energy and the University of Alberta, and it calls itself Canada's festival city, with the Fringe and Folk Music festivals in summer. Long summer daylight is ideal for river-valley shoots, while winters are long and cold, so indoor venues dominate from November to March."
+  },
+  "mississauga-on": {
+    "conferenceVenues": [
+      "The International Centre",
+      "Mississauga Convention Centre",
+      "Living Arts Centre",
+      "Pearson Convention Center (Brampton)"
+    ],
+    "eventVenues": [
+      "Adamson Estate",
+      "Glenerin Inn & Spa",
+      "Living Arts Centre",
+      "Bradley Museum",
+      "The Riverwood Conservancy"
+    ],
+    "photoSpots": [
+      "Mississauga Celebration Square",
+      "Port Credit Lighthouse and waterfront",
+      "Jack Darling Memorial Park",
+      "Rattray Marsh Conservation Area",
+      "Kariya Park"
+    ],
+    "neighborhoods": [
+      "Port Credit",
+      "Streetsville",
+      "City Centre",
+      "Erin Mills",
+      "Meadowvale",
+      "Lakeview"
+    ],
+    "airport": "Toronto Pearson International Airport (YYZ)",
+    "blurb": "Mississauga hosts many corporate head offices and trade shows near Pearson Airport, which sits within the city, and its diverse population keeps South Asian, Chinese and Middle Eastern weddings in high demand. Lakeshore parks in Port Credit are popular from late spring to fall, and large banquet halls handle events year-round."
+  },
+  "north-york-on": {
+    "conferenceVenues": [
+      "Novotel Toronto North York",
+      "Meridian Arts Centre",
+      "Aga Khan Museum",
+      "Metro Toronto Convention Centre"
+    ],
+    "eventVenues": [
+      "Graydon Hall Manor",
+      "Toronto Botanical Garden",
+      "Aga Khan Museum",
+      "Black Creek Pioneer Village",
+      "Meridian Arts Centre"
+    ],
+    "photoSpots": [
+      "Edwards Gardens",
+      "Mel Lastman Square",
+      "Downsview Park",
+      "Earl Bales Park",
+      "Sunnybrook Park"
+    ],
+    "neighborhoods": [
+      "Willowdale",
+      "Don Mills",
+      "Bayview Village",
+      "York Mills",
+      "Downsview",
+      "Lawrence Park"
+    ],
+    "airport": "Toronto Pearson International Airport (YYZ)",
+    "blurb": "North York's office towers along Yonge Street and York University generate steady corporate and academic events, and its large Korean, Persian, Chinese and Jewish communities support a busy wedding and celebration calendar. Edwards Gardens and the Toronto Botanical Garden are favourite portrait spots from May through October."
+  },
+  "winnipeg-mb": {
+    "conferenceVenues": [
+      "RBC Convention Centre Winnipeg",
+      "Fairmont Winnipeg",
+      "Delta Hotels by Marriott Winnipeg",
+      "Canad Inns Destination Centre Polo Park"
+    ],
+    "eventVenues": [
+      "Canadian Museum for Human Rights",
+      "The Fort Garry Hotel",
+      "The Leaf at Assiniboine Park",
+      "Royal Aviation Museum of Western Canada",
+      "Winnipeg Art Gallery-Qaumajuq"
+    ],
+    "photoSpots": [
+      "The Forks",
+      "Esplanade Riel",
+      "Exchange District",
+      "Assiniboine Park",
+      "Manitoba Legislative Building"
+    ],
+    "neighborhoods": [
+      "Exchange District",
+      "Osborne Village",
+      "St. Boniface",
+      "Wolseley",
+      "Crescentwood",
+      "Corydon"
+    ],
+    "airport": "Winnipeg James Armstrong Richardson International Airport (YWG)",
+    "blurb": "Winnipeg's event market draws on government, agriculture, insurance and transportation, and it hosts Festival du Voyageur each February and Folklorama in August. Summers are warm with long days, but winters are among Canada's coldest, so outdoor sessions are usually planned from May to early October."
+  },
+  "vancouver-bc": {
+    "conferenceVenues": [
+      "Vancouver Convention Centre",
+      "Fairmont Hotel Vancouver",
+      "Pan Pacific Vancouver",
+      "Hyatt Regency Vancouver",
+      "The Westin Bayshore"
+    ],
+    "eventVenues": [
+      "Museum of Anthropology at UBC",
+      "VanDusen Botanical Garden",
+      "Stanley Park Pavilion",
+      "Fairmont Hotel Vancouver",
+      "Museum of Vancouver"
+    ],
+    "photoSpots": [
+      "Stanley Park Seawall",
+      "Gastown Steam Clock",
+      "Granville Island",
+      "Queen Elizabeth Park",
+      "English Bay"
+    ],
+    "neighborhoods": [
+      "Gastown",
+      "Yaletown",
+      "Kitsilano",
+      "Mount Pleasant",
+      "Coal Harbour",
+      "West End"
+    ],
+    "airport": "Vancouver International Airport (YVR)",
+    "blurb": "Vancouver hosts international conferences such as TED and a large tech, film and clean-energy sector, with the waterfront convention centre at Canada Place as its main hub. Mountains and ocean are minutes from downtown, but rain is frequent from October to April, so covered backup locations matter for off-season shoots."
+  },
+  "scarborough-on": {
+    "conferenceVenues": [
+      "Delta Hotels by Marriott Toronto East",
+      "Toronto Pan Am Sports Centre",
+      "Metro Toronto Convention Centre"
+    ],
+    "eventVenues": [
+      "Guild Park and Gardens",
+      "Toronto Zoo",
+      "Delta Hotels by Marriott Toronto East"
+    ],
+    "photoSpots": [
+      "Scarborough Bluffs and Bluffer's Park",
+      "Rouge National Urban Park",
+      "Guild Park and Gardens",
+      "Rosetta McClain Gardens",
+      "Thomson Memorial Park"
+    ],
+    "neighborhoods": [
+      "Agincourt",
+      "Cliffside",
+      "Guildwood",
+      "Malvern",
+      "Birch Cliff",
+      "Scarborough Village"
+    ],
+    "airport": "Toronto Pearson International Airport (YYZ)",
+    "blurb": "Scarborough is one of Toronto's most diverse areas, so much of its event work is multicultural weddings, banquets and community celebrations, along with university events at U of T Scarborough. The Scarborough Bluffs along Lake Ontario are a signature backdrop in summer and early fall, ideally photographed at sunrise or late afternoon."
+  },
+  "quebec-qc": {
+    "conferenceVenues": [
+      "Centre des congrès de Québec",
+      "Fairmont Le Château Frontenac",
+      "Hilton Québec",
+      "Delta Hotels by Marriott Québec",
+      "Centre de foires de Québec at ExpoCité"
+    ],
+    "eventVenues": [
+      "Fairmont Le Château Frontenac",
+      "Musée national des beaux-arts du Québec",
+      "Musée de la civilisation",
+      "Domaine Cataraqui"
+    ],
+    "photoSpots": [
+      "Dufferin Terrace",
+      "Quartier Petit-Champlain",
+      "Plains of Abraham",
+      "Montmorency Falls",
+      "Place Royale"
+    ],
+    "neighborhoods": [
+      "Old Québec (Vieux-Québec)",
+      "Saint-Roch",
+      "Saint-Jean-Baptiste",
+      "Montcalm",
+      "Limoilou",
+      "Sillery"
+    ],
+    "airport": "Québec City Jean Lesage International Airport (YQB)",
+    "blurb": "Québec City's walled old town, a UNESCO World Heritage Site, makes it a popular choice for association meetings and destination weddings, and its calendar includes the Winter Carnival in February and the Festival d'été in July. French is the primary language of business, and winters are snowy, which also creates distinctive winter-wedding opportunities."
+  },
+  "hamilton-on": {
+    "conferenceVenues": [
+      "Hamilton Convention Centre by Carmen's",
+      "Sheraton Hamilton Hotel",
+      "Carmen's Banquet Centre"
+    ],
+    "eventVenues": [
+      "Dundurn National Historic Site",
+      "Royal Botanical Gardens",
+      "Art Gallery of Hamilton",
+      "Canadian Warplane Heritage Museum",
+      "Carmen's Banquet Centre"
+    ],
+    "photoSpots": [
+      "Albion Falls",
+      "Webster's Falls in Dundas",
+      "Bayfront Park and Pier 4",
+      "Dundurn Castle grounds",
+      "Gage Park"
+    ],
+    "neighborhoods": [
+      "James Street North",
+      "Locke Street",
+      "Westdale",
+      "Dundas",
+      "Ancaster",
+      "Stoney Creek"
+    ],
+    "airport": "Toronto Pearson International Airport (YYZ); John C. Munro Hamilton International Airport (YHM) is closer",
+    "blurb": "Hamilton has shifted from steel toward healthcare, education and the arts, with McMaster University and a lively James Street North art scene driving many of its events. The Niagara Escarpment gives the city dozens of waterfalls that photograph best in spring runoff and fall colour."
+  },
+  "brampton-on": {
+    "conferenceVenues": [
+      "Pearson Convention Center",
+      "Embassy Grand Convention Centre",
+      "Rose Theatre"
+    ],
+    "eventVenues": [
+      "Pearson Convention Center",
+      "Embassy Grand Convention Centre",
+      "Rose Theatre",
+      "Peel Art Gallery Museum + Archives (PAMA)"
+    ],
+    "photoSpots": [
+      "Gage Park",
+      "Chinguacousy Park",
+      "Heart Lake Conservation Area",
+      "Professor's Lake",
+      "Downtown Brampton's Four Corners"
+    ],
+    "neighborhoods": [
+      "Downtown Brampton",
+      "Bramalea",
+      "Springdale",
+      "Mount Pleasant",
+      "Castlemore",
+      "Heart Lake"
+    ],
+    "airport": "Toronto Pearson International Airport (YYZ)",
+    "blurb": "Brampton has one of Canada's largest South Asian communities, which makes large multi-day weddings, sangeets and receptions at its convention-style banquet halls the core of local event work. Summer is peak season for outdoor baraat processions and park portraits, and many events run late into the evening, so plan for low-light coverage."
+  },
+  "surrey-bc": {
+    "conferenceVenues": [
+      "Civic Hotel, Autograph Collection",
+      "Sheraton Vancouver Guildford Hotel",
+      "Aria Banquet & Convention Centre",
+      "Vancouver Convention Centre"
+    ],
+    "eventVenues": [
+      "Aria Banquet & Convention Centre",
+      "Northview Golf & Country Club",
+      "Historic Stewart Farm",
+      "Civic Hotel, Autograph Collection"
+    ],
+    "photoSpots": [
+      "Crescent Beach",
+      "Bear Creek Park",
+      "Redwood Park",
+      "Surrey Civic Plaza",
+      "White Rock Pier"
+    ],
+    "neighborhoods": [
+      "City Centre (Whalley)",
+      "Guildford",
+      "Fleetwood",
+      "Newton",
+      "Cloverdale",
+      "South Surrey"
+    ],
+    "airport": "Vancouver International Airport (YVR)",
+    "blurb": "Surrey is one of British Columbia's fastest-growing cities, with a large South Asian population that keeps big wedding receptions and Vaisakhi celebrations central to its event calendar, plus a growing City Centre business district. Spring and summer are the driest months for outdoor work, with Crescent Beach and White Rock popular for sunset sessions."
+  },
+  "laval-qc": {
+    "conferenceVenues": [
+      "Le Château Royal",
+      "Centre de congrès Palace",
+      "Sheraton Laval Hotel",
+      "Hilton Montréal/Laval"
+    ],
+    "eventVenues": [
+      "Le Château Royal",
+      "Centre de congrès Palace",
+      "Cosmodôme"
+    ],
+    "photoSpots": [
+      "Centre de la nature de Laval",
+      "Parc de la Rivière-des-Mille-Îles",
+      "Vieux-Sainte-Rose"
+    ],
+    "neighborhoods": [
+      "Sainte-Rose",
+      "Chomedey",
+      "Vimont",
+      "Sainte-Dorothée",
+      "Laval-des-Rapides",
+      "Duvernay"
+    ],
+    "airport": "Montréal-Trudeau International Airport (YUL)",
+    "blurb": "Laval, just north of Montréal across the Rivière des Prairies, has large reception halls that host weddings, galas and corporate meetings for the wider Montréal region, much of it conducted in French. The Mille-Îles river and the historic village of Sainte-Rose make good summer and fall backdrops; winters are cold and snowy."
+  }
+}
