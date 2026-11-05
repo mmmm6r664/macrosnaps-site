@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SITE } from "@/lib/site";
-import { NAV_PHOTO, NAV_SERVICES, NAV_VIDEO } from "@/lib/nav";
+import { NAV_PHOTO, NAV_VIDEO } from "@/lib/nav";
+import { EVENT_TYPES } from "@/data/eventTypes";
+import { VERTICALS } from "@/data/verticals";
 import { REVIEW_BADGES } from "@/lib/clients";
 import { usRegions, caRegions } from "@/lib/geo";
 import { SOCIALS } from "./SocialRail";
@@ -10,7 +12,7 @@ const TOP = [
   ["new-york-city-ny", "New York City"], ["washington-dc", "Washington, DC"], ["los-angeles-ca", "Los Angeles"],
   ["chicago-il", "Chicago"], ["houston-tx", "Houston"], ["san-francisco-ca", "San Francisco"], ["boston-ma", "Boston"],
   ["miami-fl", "Miami"], ["atlanta-ga", "Atlanta"], ["dallas-tx", "Dallas"], ["las-vegas-nv", "Las Vegas"],
-  ["seattle-wa", "Seattle"], ["philadelphia-pa", "Philadelphia"], ["toronto-on", "Toronto"], ["vancouver-bc", "Vancouver"], ["montreal-qc", "Montréal"],
+  ["seattle-wa", "Seattle"], ["philadelphia-pa", "Philadelphia"], ["toronto-on", "Toronto"], ["ottawa-on", "Ottawa"], ["montreal-qc", "Montréal"],
 ];
 
 export default function Footer() {
@@ -29,7 +31,7 @@ export default function Footer() {
             </div>
           </div>
           <FooterCol title="Photography" items={NAV_PHOTO.filter(([s]) => s !== "corporate-headshots").map(([s, l]) => [`/${s}`, l])} />
-          <FooterCol title="Videography & More" items={[...NAV_VIDEO, ...NAV_SERVICES].map(([s, l]) => [`/${s}`, l])} />
+          <FooterCol title="Videography" items={[...NAV_VIDEO.map(([s, l]) => [`/${s}`, l]), ["/photo-booth", "Photo Booth"]]} />
           <FooterCol title="Popular Cities" items={TOP.map(([s, l]) => [`/photographers/${s}`, `${l} Photographers`])} />
           <div>
             <h3 className="mb-4 font-serif text-lg text-gold">Contact</h3>
@@ -46,6 +48,12 @@ export default function Footer() {
               <a href={SITE.reviews.theknot} target="_blank" rel="noopener" className="underline hover:text-gold">The Knot</a>
             </div>
           </div>
+        </div>
+
+        <div className="mt-12 grid gap-10 border-t border-white/10 pt-8 md:grid-cols-3">
+          <FooterCol title="Events" items={EVENT_TYPES.map((e) => [`/${e.slug}`, e.name])} />
+          <FooterCol title="Industries" items={VERTICALS.filter((v) => v.kind === "industry").map((v) => [`/industries/${v.slug}`, v.name])} />
+          <FooterCol title="Solutions" items={[...VERTICALS.filter((v) => v.kind === "solution").map((v) => [`/solutions/${v.slug}`, v.name]), ["/corporate", "Corporate & Conferences"]]} />
         </div>
 
         <div className="mt-12 border-t border-white/10 pt-8">

@@ -1,6 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { IMG, photoPicker } from "@/lib/images";
+import { IMG, photoPicker, byTags } from "@/lib/images";
+import { HeroSlideshow } from "@/components/Motion";
+import AskBox from "@/components/AskBox";
+import WhyUs from "@/components/WhyUs";
+import VideoGrid from "@/components/VideoGrid";
+import { VIDEOS } from "@/data/videos";
+import { EVENT_TYPES } from "@/data/eventTypes";
+import { VERTICALS } from "@/data/verticals";
 import { SITE } from "@/lib/site";
 import { EVENTS } from "@/lib/clients";
 import { topCities, cityLabel } from "@/lib/geo";
@@ -16,7 +23,7 @@ const HOME_FAQS = [
   { q: "Are the prices negotiable and do they include taxes?", a: "All prices listed on our website are final and inclusive of taxes and other charges unless stated. We have priced our services so people with all budgets can afford quality work." },
   { q: "Why are the first hour prices different from additional hours?", a: "We keep a gap between shoots so our photographers show up on time and can plan ahead, and we account for that time and the travel to your venue in the first hour. Photography is $250 for the first hour and $100 for each additional hour; videography is $300 for the first hour and $200 for each additional hour. The minimum booking is 2 hours." },
   { q: "What is your refund and rescheduling policy?", a: "We don't offer refunds, because when we receive a booking we reserve the slot for you and give up other bookings for that time. Bookings can be rescheduled free of charge due to extreme weather or an unavoidable emergency (proof required)." },
-  { q: "Can you invoice our company for a conference or corporate event?", a: "Yes. For corporate clients, multi-day conferences and events in several cities we provide a written quote and can invoice your organization. Use the corporate quote form." },
+  { q: "Can you cover a multi-day conference?", a: "Yes. We cover multi-day conferences and events in several cities with our own crews, at the same published hourly rates. Book online or tell us your schedule and we will plan the crew with you." },
   { q: "Can you live stream our event or wedding?", a: "Yes. We live stream conferences, town halls and weddings with multiple cameras and clean audio, and send you a link to share with remote guests." },
 ];
 
@@ -29,25 +36,34 @@ const PILLARS = [
 export default function Home() {
   const pick = photoPicker();
   const hero = pick.use(IMG.hero);
+  const heroSlides = [
+    { src: hero, alt: "Wedding couple photographed by MacroSnaps", pos: "center 22%" },
+    { src: pick.use(IMG.conferenceHero), alt: "Conference audience photographed by MacroSnaps" },
+    { src: pick.one(byTags("indian")), alt: "Indian wedding couple photographed by MacroSnaps" },
+    { src: pick.one(IMG.conference.slice(2)), alt: "Panel discussion at a conference photographed by MacroSnaps" },
+    { src: pick.one(byTags("courthouse")), alt: "Couple at the US Capitol photographed by MacroSnaps" },
+  ];
   const about = pick.use(IMG.about);
-  const banner = pick.use(IMG.conferenceHero);
+  const banner = pick.one(byTags("conference").slice(8), IMG.conference);
   const pillarImg = [pick.one(IMG.conference.slice(1)), pick.one(IMG.conference.slice(7)), pick.one(IMG.wedding)];
   const gallery = pick.many(16, IMG.portfolio, IMG.wedding, IMG.conference, IMG.event);
   const recentEvents = EVENTS.filter((e) => e.image).slice(0, 8);
   return (
     <>
-      {/* Hero — mirrors the macrosnaps.com hero */}
-      <section className="relative isolate flex min-h-[78vh] items-center justify-center overflow-hidden bg-black text-white">
-        <Image src={hero} alt="Wedding couple photographed by MacroSnaps" fill priority sizes="100vw" className="-z-10 object-cover object-[center_22%] opacity-70" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/20 via-black/25 to-black/60" />
-        <div className="px-4 text-center">
-          <svg viewBox="0 0 120 40" className="mx-auto h-12 w-36 text-white" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden><path d="M60 38C40 30 30 18 18 8M60 38C80 30 90 18 102 8M18 8c-4 6 2 10 6 6M102 8c4 6-2 10-6 6M40 22c-6-2-8 4-3 6M80 22c6-2 8 4 3 6M60 38V20M56 16a4 4 0 108 0 4 4 0 10-8 0" /></svg>
-          <p className="mt-4 font-script text-5xl md:text-7xl">MacroSnaps Photography</p>
+      {/* Hero: slideshow + request box */}
+      <section className="relative isolate flex min-h-[86vh] items-center justify-center overflow-hidden bg-black py-20 text-white">
+        <HeroSlideshow slides={heroSlides} />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/45 via-black/35 to-black/75" />
+        <div className="w-full max-w-4xl px-4 text-center">
+          <p className="font-script text-5xl md:text-7xl">MacroSnaps Photography</p>
           <h1 className="mt-5 flex items-center justify-center gap-4 text-xs font-semibold uppercase tracking-[.25em] md:text-sm">
             <span className="hidden h-px w-12 bg-white/70 sm:block" />Global Event, Conference & Wedding Photography & Videography<span className="hidden h-px w-12 bg-white/70 sm:block" />
           </h1>
-          <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <Link href="/book" className="btn-gold">Book a Session</Link>
+          <div className="mx-auto mt-10 max-w-3xl text-left">
+            <AskBox variant="dark" title="" />
+          </div>
+          <div className="mt-6 flex flex-wrap justify-center gap-4">
+            <Link href="/book" className="btn-gold">See Prices & Book</Link>
             <Link href="/corporate" className="btn-outline">For Corporate Teams</Link>
           </div>
         </div>
@@ -55,11 +71,11 @@ export default function Home() {
       <TrustBar />
 
       {/* Pillars */}
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
-        <SectionTitle eyebrow="What we do" title="Photography & videography for the moments that matter to your organization" intro="One company, our own crews across the US and Canada, transparent prices and online booking." />
+      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6" data-reveal>
+        <SectionTitle eyebrow="What we do" title="Photography & videography for the moments that matter" intro="One company with our own crews across all 50 states, Washington, DC, Ontario and Quebec — published prices and online booking." />
         <div className="grid gap-6 md:grid-cols-3">
           {PILLARS.map((p, i) => (
-            <Link key={p.slug} href={`/${p.slug}`} className="group relative block aspect-[4/5] overflow-hidden bg-black text-white">
+            <Link key={p.slug} href={`/${p.slug}`} className="group relative block aspect-[4/5] overflow-hidden bg-black text-white hover-zoom">
               <Image src={pillarImg[i]} alt={p.title} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover opacity-75 transition duration-500 group-hover:scale-105 group-hover:opacity-60" />
               <div className="absolute inset-x-0 bottom-0 p-7">
                 <h2 className="font-script text-4xl">{p.title}</h2>
@@ -78,12 +94,47 @@ export default function Home() {
           <h2 className="font-serif text-4xl">About Us</h2>
           <div className="prose-ms mt-6 text-justify text-[17px]">
             <p>MacroSnaps is a premium global photography and videography company covering conferences, corporate events and weddings.</p>
-            <p>MacroSnaps is part of MacroHype LLC, a digital media and marketing company based out of <Link href="/photographers/new-york-city-ny">New York City</Link> and <Link href="/photographers/washington-dc">Washington DC</Link>, working with businesses since 2011.</p>
-            <p>We provide our award winning photography and videography services across the United States and Canada with our own photographers and videographers — so you deal with one company from booking to delivery.</p>
+            <p>MacroSnaps is part of MacroHype LLC, a digital media and marketing company based out of <Link href="/photographers/new-york-city-ny">New York City</Link> and <Link href="/photographers/washington-dc">Washington DC</Link>, working with businesses for more than 13 years.</p>
+            <p>We provide our award winning photography and videography services across all 50 states, Washington, DC, Ontario and Quebec with our own photographers and videographers, so you deal with one company from booking to delivery. We are insured through State Farm and we publish our prices, so every client pays the same rate.</p>
             <p>Let us help create long lasting memories for you. Hire us today for your conference, corporate event, wedding or any other occasion.</p>
           </div>
           <Link href="/book" className="mt-8 self-start font-sans text-3xl tracking-wide text-ink hover:text-gold-dark">BOOK A SESSION</Link>
         </div>
+      </section>
+
+      <WhyUs where="Every event" />
+
+      {/* Events we cover */}
+      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6" data-reveal>
+        <SectionTitle eyebrow="Celebrations & cultural events" title="Events we photograph and film" intro="From Bar and Bat Mitzvahs and multi-day Indian weddings to galas, quinceañeras and corporate holiday parties, our crews know the traditions, the timelines and the moments that matter." />
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {EVENT_TYPES.map((e) => (
+            <Link key={e.slug} href={`/${e.slug}`} className="group border border-black/10 p-4 transition hover:-translate-y-0.5 hover:border-gold-dark hover:shadow-md">
+              <span className="font-serif text-lg leading-snug group-hover:text-gold-dark">{e.name}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Featured films */}
+      <section className="bg-black px-4 py-16 text-white md:px-6" data-reveal>
+        <div className="mx-auto max-w-7xl">
+          <p className="eyebrow !text-gold text-center">From our YouTube channel</p>
+          <h2 className="mb-10 mt-3 text-center font-serif text-3xl md:text-4xl">Conference, event & wedding films</h2>
+          <VideoGrid videos={[VIDEOS[0], VIDEOS[4], VIDEOS[37], VIDEOS[2], VIDEOS[38], VIDEOS[26]]} />
+          <div className="mt-10 text-center"><a href="https://www.youtube.com/channel/UCYoC7JGFcAQiSxOqKSmIzEw" target="_blank" rel="noopener" className="btn-outline">Watch all {VIDEOS.length} videos on YouTube</a></div>
+        </div>
+      </section>
+
+      {/* Industries & solutions */}
+      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6" data-reveal>
+        <SectionTitle eyebrow="For businesses" title="Photo & video for your industry" intro="Menu photos for restaurants, patient-friendly content for dental and medical practices, video ads for Google, Facebook and local TV, and more. Need a website or ads too? Our sister agency MacroHype builds and runs them." />
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {VERTICALS.filter((v) => v.kind === "industry").map((v) => (
+            <Link key={v.slug} href={`/industries/${v.slug}`} className="border border-black/10 p-4 text-[15px] transition hover:border-gold-dark hover:text-gold-dark">{v.name}</Link>
+          ))}
+        </div>
+        <div className="mt-8 flex flex-wrap justify-center gap-4"><Link href="/industries" className="btn-dark">All industries</Link><Link href="/solutions" className="btn-outline !text-ink">Solutions</Link></div>
       </section>
 
       {/* Portfolio */}

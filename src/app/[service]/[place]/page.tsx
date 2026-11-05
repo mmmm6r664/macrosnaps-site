@@ -7,6 +7,11 @@ import { cityContent, regionContent, resolveTarget, hubServices, imagesFor, targ
 import { PageHero, TrustBar, SectionTitle, Pricing, Faqs, ClientLogos, Gallery, Breadcrumbs, CtaBand, HowItWorks } from "@/components/blocks";
 import JsonLd from "@/components/JsonLd";
 import ContactForm from "@/components/ContactForm";
+import WhyUs from "@/components/WhyUs";
+import VideoGrid from "@/components/VideoGrid";
+import ExploreLinks from "@/components/ExploreLinks";
+import { videosFor } from "@/data/videos";
+import { SERVICE_VIDEO_TAGS, TOUR_STATES } from "@/lib/pageMedia";
 import { serviceSchema } from "@/lib/schema";
 import { photoPicker, rotate } from "@/lib/images";
 import { SITE } from "@/lib/site";
@@ -83,7 +88,7 @@ function CityPage({ t, city }: { t: LocalTarget; city: City }) {
       <JsonLd data={serviceSchema({ name: c.h1, serviceType: targetName(t), description: c.metaDescription, url, area: { type: "City", name: cityLabel(city), containedIn: city.stateName }, prices: services.flatMap((s) => s.packages.map((p) => p.price)) })} />
       <PageHero image={heroImg} eyebrow={`${city.stateName} · ${targetName(t)}`} title={c.h1} subtitle={c.subtitle}>
         <Link href={bookHref} className="btn-gold">Book Now{c.priceFrom ? ` — from $${c.priceFrom}` : ""}</Link>
-        <a href="#quote" className="btn-outline">Get a Corporate Quote</a>
+        <a href="#plan" className="btn-outline">Plan a multi-day event</a>
       </PageHero>
       <TrustBar />
       <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: targetName(t), href: `/${slug}` }, { name: region.name, href: `/${slug}/${region.slug}` }, { name: city.name, href: url }]} />
@@ -140,6 +145,23 @@ function CityPage({ t, city }: { t: LocalTarget; city: City }) {
         </div>
       </section>
 
+      {videosFor(SERVICE_VIDEO_TAGS[slug] ?? [], 3).length > 0 && (
+        <section className="bg-black px-4 pb-16 md:px-6" data-reveal>
+          <div className="mx-auto max-w-7xl text-white">
+            <h2 className="mb-8 text-center font-serif text-3xl">Films by MacroSnaps</h2>
+            <VideoGrid videos={videosFor(SERVICE_VIDEO_TAGS[slug] ?? [], 3, city.id)} />
+          </div>
+        </section>
+      )}
+
+      <WhyUs where={city.name} title={`Why ${city.name} clients choose MacroSnaps`} />
+
+      {TOUR_STATES.includes(city.state) && (
+        <section className="marble px-4 py-10 text-center md:px-6" data-reveal>
+          <p className="mx-auto max-w-3xl text-[17px]">Selling or renting property in {city.name}? We also offer <Link href="/real-estate-photography" className="underline">real estate photography</Link> and <Link href="/virtualtours" className="underline">Matterport 3D virtual tours</Link> in {city.stateName}.</p>
+        </section>
+      )}
+
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
         <SectionTitle eyebrow="Simple booking" title={`How booking a ${targetPro(t).toLowerCase()} in ${city.name} works`} />
         <HowItWorks />
@@ -174,9 +196,11 @@ function CityPage({ t, city }: { t: LocalTarget; city: City }) {
         </div>
       </section>
 
-      <section id="quote" className="bg-marble px-4 py-16 md:px-6">
+      <ExploreLinks where={city.name} />
+
+      <section id="plan" className="bg-marble px-4 py-16 md:px-6">
         <div className="mx-auto max-w-3xl">
-          <SectionTitle eyebrow="Let's Talk" title={`Planning a conference or corporate event in ${city.name}?`} intro="Tell us about your dates, rooms and deliverables. We reply with a crew plan and quote, and can invoice your company." />
+          <SectionTitle eyebrow="Let's Talk" title={`Planning a multi-day or multi-room event in ${city.name}?`} intro="Single events can be booked online at our published rates. For conferences with several days, rooms or cities, tell us your schedule and we'll plan the crew with you." />
           <ContactForm defaultSubject={`${targetName(t)} in ${cityLabel(city)}`} />
         </div>
       </section>
@@ -232,6 +256,14 @@ function RegionPage({ t, region }: { t: LocalTarget; region: Region }) {
 
       <ClientLogos />
 
+      <WhyUs where={region.name} title={`Why clients across ${region.name} choose MacroSnaps`} />
+
+      {TOUR_STATES.includes(region.code) && (
+        <section className="marble px-4 py-10 text-center md:px-6" data-reveal>
+          <p className="mx-auto max-w-3xl text-[17px]">We offer <Link href="/virtualtours" className="underline">Matterport 3D virtual tours</Link> and <Link href="/real-estate-photography" className="underline">real estate photography</Link> throughout {region.name}.</p>
+        </section>
+      )}
+
       <section className="mx-auto max-w-7xl px-4 py-14 md:px-6">
         <h2 className="font-serif text-2xl">Other services in {region.name}</h2>
         <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
@@ -244,6 +276,7 @@ function RegionPage({ t, region }: { t: LocalTarget; region: Region }) {
         <Faqs faqs={(primary?.faqs ?? SERVICES[0].faqs).slice(0, 6)} />
       </section>
 
+      <ExploreLinks where={region.name} />
       <CtaBand title={`Book ${targetName(t).toLowerCase()} in ${region.name}`} bookHref={`/book?service=${primary?.slug ?? ""}`} />
     </>
   );

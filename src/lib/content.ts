@@ -117,7 +117,7 @@ export function cityContent(t: LocalTarget, c: City): CityContent {
     ],
     corporate: [
       `MacroSnaps works with companies in ${c.name} on product launches, holiday parties, client events, award nights and team offsites, delivering polished ${t.kind === "service" && t.service.kind === "video" ? "video" : "images"} your brand, HR and sales teams can use for months.`,
-      `Corporate teams in ${c.name} book MacroSnaps because we are one company with our own crews, upfront pricing and invoicing for businesses — not a marketplace of strangers.`,
+      `Corporate teams in ${c.name} book MacroSnaps because we are one company with our own crews and published prices that are the same for every client — not a marketplace of strangers.`,
       `From executive receptions to all-hands meetings, a MacroSnaps ${pro.toLowerCase()} in ${c.name} captures your company's events the way your communications team needs them.`,
     ],
     event: [
@@ -226,8 +226,8 @@ export function cityContent(t: LocalTarget, c: City): CityContent {
   ];
   if (topic === "conference" || topic === "corporate")
     faqs.push({
-      q: `Can you cover a multi-day conference in ${c.name} and invoice our company?`,
-      a: `Yes. For multi-day programs, multiple rooms, same-day social selects or live streaming in ${c.name}, request a corporate quote and we will propose a crew plan and invoice your organization.`,
+      q: `Can you cover a multi-day conference in ${c.name}?`,
+      a: `Yes. Multi-day programs, several rooms at once and live streaming in ${c.name} are all booked at our published hourly rates. Book online or send us your agenda and we will plan the crew with you.`,
     });
 
   return {

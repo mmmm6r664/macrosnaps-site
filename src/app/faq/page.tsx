@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SERVICES } from "@/lib/services";
 import { Faqs, SectionTitle, CtaBand } from "@/components/blocks";
 
-export const metadata: Metadata = { title: "FAQ: Booking, Pricing, Insurance & Delivery", description: "Answers to common questions about booking MacroSnaps: pricing, insurance, travel, editing, delivery times, refunds and corporate invoicing.", alternates: { canonical: "/faq" } };
+export const metadata: Metadata = { title: "FAQ: Booking, Pricing, Insurance & Delivery", description: "Answers to common questions about booking MacroSnaps: pricing, insurance, travel, editing, delivery times, refunds and multi-day events.", alternates: { canonical: "/faq" } };
 
 export default function FaqPage() {
   const seen = new Set<string>();

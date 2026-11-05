@@ -73,3 +73,17 @@ body {
 
 details > summary { list-style: none; cursor: pointer; }
 details > summary::-webkit-details-marker { display: none; }
+
+/* ── Motion ─────────────────────────────────────────── */
+.js-reveal [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+.js-reveal [data-reveal].is-visible { opacity: 1; transform: none; }
+.kenburns { animation: kenburns 9s ease-out forwards; }
+@keyframes kenburns { from { transform: scale(1.08); } to { transform: scale(1); } }
+.typing-caret::after { content: "|"; margin-left: 2px; animation: blink 1s steps(1) infinite; color: var(--gold-dark); }
+@keyframes blink { 50% { opacity: 0; } }
+.hover-zoom img { transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.hover-zoom:hover img { transform: scale(1.06); }
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal [data-reveal] { opacity: 1; transform: none; transition: none; }
+  .kenburns { animation: none; }
+}

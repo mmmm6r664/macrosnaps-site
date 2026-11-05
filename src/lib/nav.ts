@@ -13,6 +13,8 @@ export const NAV_PHOTO = [
   ["newborn-photography", "Newborn Photography"],
   ["graduation-photography", "Graduation Photography"],
   ["dating-photography", "Dating Photography"],
+  ["photo-retouching", "Photo Retouching"],
+  ["virtualtours", "3D Virtual Tours"],
 ] as const;
 
 export const NAV_VIDEO = [
@@ -23,6 +25,8 @@ export const NAV_VIDEO = [
   ["commercial-videography", "Commercial Videography"],
   ["real-estate-videography", "Real Estate Videography"],
   ["music-videography", "Music Videography"],
+  ["live-stream", "Live Streaming"],
+  ["video-editing", "Video Editing"],
 ] as const;
 
 export const NAV_SERVICES = [

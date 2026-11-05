@@ -1,5 +1,6 @@
 // Service catalog. Copy marked "from macrosnaps.com" is carried over from the current site.
-import { IMG, imagesForService } from "./images";
+import { IMG, photosForService } from "./images";
+import { RATES, hourPrice } from "./pricing";
 
 export type Package = {
   id: string;
@@ -49,9 +50,7 @@ const HOURS = [2, 3, 4, 5, 6, 7];
 const photoPackages = (_legacy?: number[], prefix = "photo"): Package[] =>
   HOURS.map((h) => ({ id: `${prefix}-${h}h`, name: `${h} Hour Photography`, hours: h, price: hourPrice("photo", h), features: PHOTO_FEATURES(h) }));
 
-/** Rate card — minimum booking 2 hours. */
-export const RATES = { photo: { first: 250, extra: 100 }, video: { first: 300, extra: 200 }, minHours: 2 };
-export const hourPrice = (kind: "photo" | "video", h: number) => RATES[kind].first + RATES[kind].extra * (h - 1);
+export { RATES, hourPrice };
 
 const VIDEO_TABLE: [number, number, string, number, string][] = [
   // hours, (old price, unused), clip length, re-edits, turnaround
@@ -98,7 +97,7 @@ const PORTRAITS = (prefix: string) =>
   ]);
 
 const CORPORATE_NOTE =
-  "Multi-day conferences, multi-camera crews, same-day edits, headshot lounges and events in several cities are quoted separately — request a corporate quote and we will invoice your company.";
+  "Multi-day conferences, several rooms at once, second shooters and events in several cities are booked at the same published hourly rates — send us your schedule and we will plan the crew with you.";
 
 const GENERAL_FAQS: Faq[] = [
   {
@@ -129,7 +128,7 @@ export const SERVICES: Service[] = [
     pro: "Conference Photographer",
     title: "Conference Photographer | Corporate Conference Photography Worldwide",
     description:
-      "Professional conference photography for keynotes, panels, breakouts, expos and networking. MacroSnaps crews cover conferences across the US and Canada. From $300.",
+      "Professional conference photography for keynotes, panels, breakouts, expos and networking. MacroSnaps crews cover conferences across the US, Ontario and Quebec. From $350.",
     intro: [
       "Capturing the essence of a conference requires a unique set of skills and equipment, and we are committed to providing top-quality photography services for your event.",
       "From the opening keynote to the closing reception, MacroSnaps photographers document speakers, panels, breakout sessions, sponsors, exhibitors and the conversations that happen between sessions, giving your marketing, PR and sponsorship teams images they can publish the same week.",
@@ -141,7 +140,7 @@ export const SERVICES: Service[] = [
       },
       {
         heading: "Fast delivery for post-event marketing",
-        body: "Every image is retouched and color graded and delivered in a high-resolution online gallery, organized so your team can find each session, speaker and sponsor quickly. Need highlights during the event for social media? Ask about same-day selects when you request a corporate quote.",
+        body: "Every image is retouched and color graded and delivered in a high-resolution online gallery, organized so your team can find each session, speaker and sponsor quickly.",
       },
     ],
     coverage: [
@@ -157,10 +156,8 @@ export const SERVICES: Service[] = [
     packages: EVENT_PHOTO,
     pricingNote: CORPORATE_NOTE,
     faqs: [
-      { q: "Can you cover a multi-day conference?", a: "Yes. We regularly cover two- and three-day conferences, with one or several photographers per day depending on how many rooms run at the same time. Request a corporate quote with your agenda and we will propose a crew plan." },
-      { q: "Can you provide photos during the event for social media?", a: "Yes. Same-day selects can be arranged so your social and comms teams can post while the event is still running. Mention it in your quote request." },
+      { q: "Can you cover a multi-day conference?", a: "Yes. We regularly cover two- and three-day conferences, with one or several photographers per day depending on how many rooms run at the same time. Send us your agenda and we will plan the crew with you, at the same published hourly rates." },
       { q: "Do you also film the conference?", a: "Yes. Our conference videography team records keynotes and panels and edits highlight recap videos, and we can live stream sessions for remote attendees." },
-      { q: "Can you invoice our company instead of paying by card?", a: "Yes, for corporate bookings we can issue an invoice. Use the corporate quote form and tell us your billing requirements." },
       ...GENERAL_FAQS,
     ],
     images: IMG.conference,
@@ -175,7 +172,7 @@ export const SERVICES: Service[] = [
     pro: "Corporate Event Photographer",
     title: "Corporate Event Photographer | Company Events, Galas & Trade Shows",
     description:
-      "Corporate event photography for company parties, product launches, galas, award nights, trade shows and team offsites. Our own crews across the US & Canada. From $300.",
+      "Corporate event photography for company parties, product launches, galas, award nights, trade shows and team offsites. Our own crews across the US, Ontario & Quebec. From $350.",
     intro: [
       "Your company events are some of your best marketing material. MacroSnaps photographs product launches, holiday parties, client appreciation nights, galas, award ceremonies, trade show booths and team offsites, and delivers polished images your brand, HR and sales teams can use for months.",
       "Our photographers dress for the room, work discreetly around executives and guests, and capture both the moments your leadership wants on record and the candid energy that shows what your company is really like.",
@@ -183,7 +180,7 @@ export const SERVICES: Service[] = [
     sections: [
       {
         heading: "One partner for every office",
-        body: "Because MacroSnaps has its own photographers and videographers across the United States and Canada, companies with several offices can book the same standard of coverage in every city, with one point of contact and consistent editing across all of their events.",
+        body: "Because MacroSnaps has its own photographers and videographers across the United States, Ontario and Quebec, companies with several offices can book the same standard of coverage in every city, with one point of contact and consistent editing across all of their events.",
       },
     ],
     coverage: [
@@ -199,9 +196,8 @@ export const SERVICES: Service[] = [
     packages: EVENT_PHOTO,
     pricingNote: CORPORATE_NOTE,
     faqs: [
-      { q: "Do you work with companies that have events in several cities?", a: "Yes. We have our own crews across the US and Canada, so national companies can book consistent coverage for every office or roadshow stop, with one point of contact." },
+      { q: "Do you work with companies that have events in several cities?", a: "Yes. We have our own crews across the US, Ontario and Quebec, so national companies can book consistent coverage for every office or roadshow stop, with one point of contact." },
       { q: "Can you take headshots at our corporate event?", a: "Yes. We can set up a headshot station alongside event coverage. For dedicated headshot sessions, see our business headshots service at MacroHeadshots." },
-      { q: "Can we pay by invoice?", a: "Yes. Corporate clients can request an invoice through the corporate quote form." },
       ...GENERAL_FAQS,
     ],
     images: IMG.corporate,
@@ -216,7 +212,7 @@ export const SERVICES: Service[] = [
     pro: "Trade Show Photographer",
     title: "Trade Show & Expo Photographer | Booth & Exhibitor Photography",
     description:
-      "Trade show and expo photography: booth photos, product demos, crowds, exhibitor and sponsor coverage at convention centers across the US and Canada. From $300.",
+      "Trade show and expo photography: booth photos, product demos, crowds, exhibitor and sponsor coverage at convention centers across the US, Ontario and Quebec. From $350.",
     intro: [
       "A trade show booth costs a lot to design and staff, and good photographs are how you prove its value to leadership and reuse it in marketing. MacroSnaps photographs booths before the doors open, product demos, visitor traffic, meetings and team photos at convention centers across North America.",
       "For show organizers, we cover the full expo floor, sponsor activations, ribbon cuttings and stage programming, so every exhibitor and sponsor gets the proof of exposure they paid for.",
@@ -232,7 +228,7 @@ export const SERVICES: Service[] = [
     packages: EVENT_PHOTO,
     pricingNote: CORPORATE_NOTE,
     faqs: [
-      { q: "Can you photograph several exhibitors at the same show?", a: "Yes. Organizers often book us to cover every sponsor booth; exhibitors can also book individual time slots. Request a corporate quote with the floor plan or exhibitor list." },
+      { q: "Can you photograph several exhibitors at the same show?", a: "Yes. Organizers often book us to cover every sponsor booth; exhibitors can also book individual time slots. Send us the floor plan or exhibitor list and we will plan the coverage with you." },
       ...GENERAL_FAQS,
     ],
     images: IMG.conference,
@@ -247,7 +243,7 @@ export const SERVICES: Service[] = [
     pro: "Conference Videographer",
     title: "Conference Videographer | Keynote Recording & Recap Videos",
     description:
-      "Conference videography: keynote and panel recordings, multi-camera coverage, professional audio and edited highlight recap videos. Nationwide crews. From $450.",
+      "Conference videography: keynote and panel recordings, multi-camera coverage, professional audio and edited highlight recap videos. Nationwide crews. From $500.",
     intro: [
       "From keynote speeches to panel discussions, we'll capture every important moment. We pride ourselves on delivering excellent customer service and a high-quality final product.",
       "MacroSnaps films conferences, keynotes, panels and corporate events with multi-camera coverage and professional audio, then edits highlight videos your team can use to sell next year's tickets, thank sponsors and publish sessions online.",
@@ -265,7 +261,7 @@ export const SERVICES: Service[] = [
     pricingNote: CORPORATE_NOTE,
     faqs: [
       { q: "Can you take audio directly from the venue's AV system?", a: "Yes. Where the venue allows it we take a feed from the soundboard so recorded talks have clean audio, and we also run our own backup microphones." },
-      { q: "Can you live stream our conference?", a: "Yes. We can live stream keynotes and sessions to your platform of choice. See our live stream service or request a corporate quote." },
+      { q: "Can you live stream our conference?", a: "Yes. We can live stream keynotes and sessions to your platform of choice. See our live stream service or contact us to plan the stream." },
       { q: "Can you deliver full session recordings as well as a recap video?", a: "Yes. Tell us which sessions need full-length recordings when you book or request a quote." },
       ...GENERAL_FAQS,
     ],
@@ -281,7 +277,7 @@ export const SERVICES: Service[] = [
     pro: "Corporate Videographer",
     title: "Corporate Videographer | Company Event, Brand & Testimonial Videos",
     description:
-      "Corporate videography for company events, brand stories, executive interviews, client testimonials and training videos. MacroSnaps crews across the US & Canada.",
+      "Corporate videography for company events, brand stories, executive interviews, client testimonials and training videos. MacroSnaps crews across the US, Ontario & Quebec.",
     intro: [
       "Video is now the most-used format in B2B marketing, recruiting and internal communication. MacroSnaps films corporate events, executive interviews, customer testimonials, brand and culture videos and training content, with the same crew quality in every city where you operate.",
       "As part of MacroHype LLC, a digital media and marketing company working with businesses since 2011, our team plans, shoots and edits corporate video with your audience and channels in mind.",
@@ -297,7 +293,7 @@ export const SERVICES: Service[] = [
     packages: videoPackages("corpvideo"),
     pricingNote: CORPORATE_NOTE,
     faqs: [
-      { q: "Do you help with planning and scripting?", a: "Yes. For brand, testimonial and training videos we can help with interview questions, shot lists and structure. Request a corporate quote and describe the project." },
+      { q: "Do you help with planning and scripting?", a: "Yes. For brand, testimonial and training videos we can help with interview questions, shot lists and structure. Contact us and describe the project." },
       ...GENERAL_FAQS,
     ],
     images: IMG.corporate,
@@ -343,7 +339,7 @@ export const SERVICES: Service[] = [
     pro: "Event Videographer",
     title: "Event Videographer | Conferences, Galas & Celebrations",
     description:
-      "Professional event videography nationwide: conference recap videos, keynote recordings, galas, Bar Mitzvahs, Indian events and parties. From $450.",
+      "Professional event videography nationwide: conference recap videos, keynote recordings, galas, Bar Mitzvahs, Indian events and parties. From $500.",
     intro: [
       "Our experienced videographers will work with you to understand your vision for the event and create a customized video that showcases the joy and anticipation of the occasion.",
       "Our versatile approach captures a wide range of events beyond weddings. From birthdays to corporate events, our team of experienced videographers can expertly document the unique story and atmosphere of your event.",
@@ -370,7 +366,7 @@ export const SERVICES: Service[] = [
     pro: "Wedding Photographer",
     title: "Affordable Wedding Photographers | MacroSnaps Captures Perfect Moments",
     description:
-      "Affordable wedding photographers for ceremonies, receptions, elopements and courthouse weddings across the US & Canada. Packages from $350. Book online.",
+      "Affordable wedding photographers for ceremonies, receptions, elopements and courthouse weddings across the US, Ontario & Quebec. Packages from $350. Book online.",
     intro: [
       "Wedding; the special day to celebrate two souls building a sweet bond of forever and vowing to be beside each other for eternity as they both whisper “I Do” in the midst of a teary-eyed crowd. Every emotion, every expression of happiness and excitement that fills the air at that second is a moment we treasure and pledge to capture.",
       "As a couple's big day approaches, they want to ensure that every aspect of their wedding is captured perfectly, including the photography. That's where MacroSnaps comes in. Our wedding photography services offer a comprehensive solution to capturing beautiful, timeless memories of your special day.",
@@ -395,7 +391,7 @@ export const SERVICES: Service[] = [
     pro: "Wedding Videographer",
     title: "Wedding Videographer | Cinematic Wedding Films",
     description:
-      "Wedding videography: cinematic HD highlight films of your ceremony and reception, with music of your choice. MacroSnaps videographers across the US & Canada.",
+      "Wedding videography: cinematic HD highlight films of your ceremony and reception, with music of your choice. MacroSnaps videographers across the US, Ontario & Quebec.",
     intro: [
       "Our videographers capture your remarkable stories in breathtaking cinematic HD videos.",
       "From vows and speeches to the first dance, MacroSnaps wedding videographers film the day as it unfolds and edit a highlight film set to the music you choose, with raw footage available on request.",
@@ -436,7 +432,7 @@ export const SERVICES: Service[] = [
     group: "wedding",
     pro: "Engagement Videographer",
     title: "Engagement & Proposal Videographer",
-    description: "Engagement and proposal videography — a cinematic keepsake of your love story. MacroSnaps videographers across the US & Canada.",
+    description: "Engagement and proposal videography — a cinematic keepsake of your love story. MacroSnaps videographers across the US, Ontario & Quebec.",
     intro: [
       "A stunning and emotional documentation of a couple's unique love story. We capture the special moments, candid and posed shots, and create a cherished keepsake for the couple and their loved ones.",
     ],
@@ -526,6 +522,7 @@ export const SERVICES: Service[] = [
     description: "Professional, high-definition, fully retouched real estate photography for listings, rentals and commercial property.",
     intro: [
       "We understand we are in charge of not just amazing photos, but of marketing your home, property or ranch in the best way possible to get that property sold. MacroSnaps promises professional, high-definition and fully retouched photos in the most convenient way. Captivate more business, win more clients and sell more property with our professional services.",
+      "We photograph listings in every state we serve, and in Virginia, Maryland, Washington, DC, New York and New Jersey we can add a Matterport 3D virtual tour so buyers can walk through the property online before they visit.",
     ],
     coverage: ["Residential listings", "Rentals & Airbnb", "Commercial property", "Twilight & exterior photos"],
     packages: [],
@@ -726,8 +723,8 @@ export const SERVICES: Service[] = [
     group: "business",
     pro: "3D Virtual Tour Provider",
     title: "3D & 360° Virtual Tours | Matterport",
-    description: "Matterport 3D and 360-degree virtual tours for real estate, venues, restaurants, offices and commercial spaces.",
-    intro: ["We provide Matterport 3D virtual tours and 360-degree virtual tour services for real estate, venues, restaurants, offices and commercial spaces. Tours work on phones, tablets, desktops and VR headsets, and can be embedded on your website or listing."],
+    description: "Matterport 3D and 360-degree virtual tours for homes, venues, restaurants and offices in Virginia, Maryland, Washington DC, New York and New Jersey.",
+    intro: ["We provide Matterport 3D virtual tours and 360-degree virtual tour services for real estate, venues, restaurants, offices and commercial spaces. Tours work on phones, tablets, desktops and VR headsets, and can be embedded on your website or listing.", "3D virtual tours are currently offered in Virginia, Maryland, Washington, DC, New York State and New Jersey. Pricing is by the size of the space, starting at $200 for up to 1,000 sq ft, with the first month of hosting included."],
     coverage: ["Matterport 3D tours", "360° virtual tours", "Venue & event space tours", "Google Street View"],
     packages: [],
     faqs: GENERAL_FAQS,
@@ -756,6 +753,8 @@ const PRICES: Record<string, Package[]> = {
   "music-videography": videoPackages("musicvideo"),
   "real-estate-videography": videoPackages("revideo", [350, 500, 650, 800, 950, 1100]),
   "commercial-photography": SESSION_PHOTO("commercial"),
+  "real-estate-photography": photoPackages(undefined, "rephoto"),
+  "food-photography": photoPackages(undefined, "food"),
   "product-photography": SESSION_PHOTO("product"),
   "photo-booth": simple("booth", [
     ["1 Hour Photo Booth", 200, ["Photo booth & attendant", "1 hour", "Digital copies of every photo"]],
@@ -789,7 +788,7 @@ const PRICES: Record<string, Package[]> = {
 };
 for (const s of SERVICES) {
   if (PRICES[s.slug]) s.packages = PRICES[s.slug];
-  s.images = imagesForService(s.slug, s.images);
+  s.images = photosForService(s.slug);
 }
 
 /** City hub "services" — /photographers/{city} and /videographers/{city}. */

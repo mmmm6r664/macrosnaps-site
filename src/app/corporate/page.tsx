@@ -10,7 +10,7 @@ import { IconCheck } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Corporate & Conference Photography and Videography",
-  description: "One photography & videography partner for every conference, company event and office across the US & Canada. Multi-day crews, same-day selects, live streaming and invoicing.",
+  description: "One photography & videography partner for every conference, company event and office across the US, Ontario & Quebec. Multi-day crews, live streaming and published hourly rates.",
   alternates: { canonical: "/corporate" },
 };
 
@@ -18,16 +18,15 @@ const WHY = [
   ["Our own crews in every state & province", "Not a marketplace. MacroSnaps photographers and videographers, one standard of quality, one point of contact."],
   ["Conference specialists", "Official media partner for CDAO, AI in Finance Summit, FIX Americas Trading Conference, IEEE IEDM, Risk Live and more."],
   ["Photo, video & live stream from one team", "Coordinate stills, recap videos, session recordings and streaming without juggling vendors."],
-  ["Fast, organized delivery", "Retouched galleries organized by session, speaker and sponsor; same-day social selects on request."],
+  ["Fast, organized delivery", "Retouched galleries organized by session, speaker and sponsor, delivered in about a week."],
   ["Insured & venue-ready", "State Farm coverage of $1M per occurrence / $2M aggregate, with certificates of insurance for any venue."],
-  ["Invoicing & procurement friendly", "Written quotes, W-9 and company invoicing for multi-day and multi-city programs."],
+  ["Published prices, no bidding games", "Photography is $250 for the first hour plus $100 per additional hour; videography is $300 plus $200 per additional hour, with a 2-hour minimum. Every client pays the same rate."],
 ];
 
 const FAQS = [
   { q: "Can you staff several rooms or several cities on the same day?", a: "Yes. Because we have our own crews across North America, we can staff concurrent sessions or simultaneous events in different cities. Send your agenda and we will propose a crew plan." },
-  { q: "Do you provide same-day images for social media?", a: "Yes. Same-day selects can be delivered during the event so your team can post in real time." },
-  { q: "Can you sign our vendor agreement and provide a certificate of insurance?", a: "Yes. We regularly work through procurement, and we provide certificates of insurance naming your venue or organization." },
-  { q: "Can we pay by invoice?", a: "Yes. Corporate programs are quoted and invoiced to your organization. For single events you can also book and pay online by card." },
+  { q: "Can you provide a certificate of insurance for our venue?", a: "Yes. We are insured through State Farm ($1M per occurrence / $2M aggregate) and send certificates of insurance naming your venue or organization." },
+  { q: "Do multi-day conferences cost more per hour?", a: "No. Every day is booked at the same published hourly rates: photography $250 for the first hour and $100 for each additional hour, videography $300 for the first hour and $200 for each additional hour." },
 ];
 
 export default function Corporate() {
@@ -37,8 +36,8 @@ export default function Corporate() {
   const cardImg = corporate.map((s) => pick.one(s.images, IMG.conference, IMG.event));
   return (
     <>
-      <PageHero image={IMG.conferenceHero} eyebrow="For conference organizers & corporate teams" title="Corporate Photography & Videography" subtitle="One partner for every conference, company event and office — photo, video and live streaming by MacroSnaps' own crews across the US and Canada.">
-        <a href="#quote" className="btn-gold">Request a Corporate Quote</a>
+      <PageHero image={IMG.conferenceHero} eyebrow="For conference organizers & corporate teams" title="Corporate Photography & Videography" subtitle="One partner for every conference, company event and office — photo, video and live streaming by MacroSnaps' own crews across the US, Ontario and Quebec.">
+        <a href="#contact" className="btn-gold">Plan Your Event With Us</a>
         <Link href="/book?service=conference-photography" className="btn-outline">Book a Single Event</Link>
       </PageHero>
       <TrustBar />
@@ -71,9 +70,9 @@ export default function Corporate() {
         </ul>
       </section>
       <section className="bg-marble px-4 py-16 md:px-6"><SectionTitle eyebrow="FAQ" title="Corporate questions" /><Faqs faqs={FAQS} /></section>
-      <section id="quote" className="mx-auto max-w-3xl px-4 py-16">
-        <SectionTitle eyebrow="Corporate quote" title="Tell us about your program" intro="Dates, cities, number of rooms or sessions, and what you need delivered (photos, recap video, session recordings, live stream). We reply within one business day." />
-        <ContactForm defaultSubject="Corporate quote request" />
+      <section id="contact" className="mx-auto max-w-3xl px-4 py-16">
+        <SectionTitle eyebrow="Plan your program" title="Tell us about your event" intro="Dates, cities, number of rooms or sessions, and what you need delivered (photos, recap video, session recordings, live stream)." />
+        <ContactForm defaultSubject="Corporate / conference event" />
       </section>
       <CtaBand title="Let's cover your next event" />
     </>

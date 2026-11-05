@@ -26,7 +26,7 @@ export default async function Success({ searchParams }: { searchParams: Promise<
         <dl className="mx-auto mt-8 grid max-w-md grid-cols-2 gap-2 border border-black/10 bg-marble p-6 text-left text-sm">
           <dt className="text-muted">Service</dt><dd>{m.service}</dd>
           <dt className="text-muted">Package</dt><dd>{m.package}</dd>
-          <dt className="text-muted">Date</dt><dd>{m.date} · {m.start_time}</dd>
+          <dt className="text-muted">Schedule</dt><dd>{m.schedule}</dd>{m.addon && (<><dt className="text-muted">Add-on</dt><dd>{m.addon}</dd></>)}<dt className="text-muted">Total</dt><dd>{m.total}</dd>
           <dt className="text-muted">City</dt><dd>{m.city}</dd>
         </dl>
       )}

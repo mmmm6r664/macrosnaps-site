@@ -11,6 +11,8 @@ import SocialRail from "@/components/SocialRail";
 import JsonLd from "@/components/JsonLd";
 import { SITE } from "@/lib/site";
 import { orgSchema } from "@/lib/schema";
+import { AskBand } from "@/components/AskBox";
+import { ScrollReveal } from "@/components/Motion";
 
 
 export const metadata: Metadata = {
@@ -30,7 +32,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Header />
         <SocialRail />
         <main>{children}</main>
+        <AskBand />
         <Footer />
+        <ScrollReveal />
       </body>
     </html>
   );

@@ -4,7 +4,7 @@ export const SITE = {
   tagline: "Global Photography & Videography for Events, Conferences & Weddings",
   shortTagline: "Award Winning Photography & Videography Services Worldwide",
   description:
-    "MacroSnaps is a global photography and videography company covering conferences, corporate events and weddings, with our own crews across the United States and Canada.",
+    "MacroSnaps is a global photography and videography company covering conferences, corporate events and weddings, with our own crews across the United States, Ontario and Quebec.",
   phone: "877-622-4973",
   phoneHref: "tel:+18776224973",
   email: "info@macrosnaps.com",

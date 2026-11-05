@@ -6,7 +6,7 @@ import { TrustBar } from "@/components/blocks";
 
 export const metadata: Metadata = {
   title: "Book Now: Photography & Videography Online",
-  description: "Book and pay for your MacroSnaps photographer or videographer online: conferences, corporate events, weddings and more across the US & Canada.",
+  description: "Book and pay for your MacroSnaps photographer or videographer online: conferences, corporate events, weddings and more across the US, Ontario & Quebec.",
   alternates: { canonical: "/book" },
 };
 
@@ -14,7 +14,7 @@ type SP = { service?: string; package?: string; city?: string; cancelled?: strin
 
 export default async function BookPage({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
-  const services = BOOKABLE_SERVICES.map((s) => ({ slug: s.slug, name: s.name, kind: s.kind, group: s.group, packages: s.packages.filter((p) => !p.quoteOnly).map(({ id, name, price, priceNote, features }) => ({ id, name, price, priceNote, features })) }));
+  const services = BOOKABLE_SERVICES.map((s) => ({ slug: s.slug, name: s.name, kind: s.kind, group: s.group, packages: s.packages.filter((p) => !p.quoteOnly).map(({ id, name, price, priceNote, features, hours }) => ({ id, name, price, priceNote, features, hours })) }));
   const cityOpts = [...cities].sort((a, b) => b.population - a.population).map((c) => ({ slug: c.slug, label: cityLabel(c) }));
   return (
     <>

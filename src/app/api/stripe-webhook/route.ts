@@ -20,16 +20,16 @@ export async function POST(req: Request) {
     const email = s.customer_details?.email || s.customer_email || "";
     const rows: [string, unknown][] = [
       ["Service", m.service], ["Package", m.package], ["Paid", `$${((s.amount_total || 0) / 100).toFixed(2)}`],
-      ["Date", m.date], ["Start time", m.start_time], ["City", m.city], ["Venue / address", m.venue_address],
+      ["Schedule", m.schedule], ["Add-on", m.addon], ["City", m.city], ["Venue / address", m.venue_address],
       ["Name", m.customer_name], ["Email", email], ["Phone", m.customer_phone], ["Company", m.company], ["Notes", m.notes],
       ["Stripe session", s.id],
     ];
-    await sendMail({ to: TEAM_INBOX, replyTo: email, subject: `NEW PAID BOOKING: ${m.service} — ${m.city} — ${m.date}`, html: table(rows) });
+    await sendMail({ to: TEAM_INBOX, replyTo: email, subject: `NEW PAID BOOKING: ${m.service} — ${m.city} — ${(m.schedule || "").slice(0, 10)}`, html: table(rows) });
     if (email)
       await sendMail({
         to: email,
         replyTo: SITE.email,
-        subject: `Your MacroSnaps booking is confirmed — ${m.date}`,
+        subject: `Your MacroSnaps booking is confirmed — ${(m.schedule || "").slice(0, 10)}`,
         html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#2f2e2e"><p>Hi ${esc(m.customer_name)},</p><p>Thank you for booking MacroSnaps. Your date is reserved and we will confirm your photographer/videographer by email before the shoot.</p>${table(rows.slice(0, 10))}<p>Questions? Reply to this email or call ${SITE.phone}.</p><p>— The MacroSnaps team</p></div>`,
       });
   }

@@ -5,7 +5,7 @@ import { SectionTitle } from "@/components/blocks";
 
 export const metadata: Metadata = {
   title: "Locations: Photographers & Videographers in Every State and Province",
-  description: "MacroSnaps covers all 50 US states, Washington DC and Canada. Find conference, event and wedding photographers and videographers in 1,800+ cities.",
+  description: "MacroSnaps covers all 50 US states, Washington DC and Canada. Find conference, event and wedding photographers and videographers in 1,690+ cities.",
   alternates: { canonical: "/locations" },
 };
 

@@ -3,14 +3,19 @@ import Link from "next/link";
 import { ALL_CLIENTS as CLIENTS } from "@/lib/clients";
 import { SITE } from "@/lib/site";
 import { RATES, hourPrice, type Package } from "@/lib/services";
+import { altFor } from "@/lib/images";
 import JsonLd from "./JsonLd";
 import { breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { IconCheck, IconChevron } from "./Icons";
 
-export function PageHero({ image, eyebrow, title, subtitle, children }: { image: string; eyebrow?: string; title: string; subtitle?: string; children?: React.ReactNode }) {
+export function PageHero({ image, eyebrow, title, subtitle, children }: { image?: string; eyebrow?: string; title: string; subtitle?: string; children?: React.ReactNode }) {
   return (
     <section className="relative isolate overflow-hidden bg-black text-white">
-      <Image src={image} alt="" fill priority sizes="100vw" className="-z-10 object-cover opacity-55" />
+      {image ? (
+        <Image src={image} alt="" fill priority sizes="100vw" className="kenburns -z-10 object-cover object-[center_30%] opacity-55" />
+      ) : (
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_#3a3420_0%,_#000_65%)]" />
+      )}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/30 via-black/30 to-black/70" />
       <div className="mx-auto max-w-5xl px-4 py-24 text-center md:py-32">
         <div className="mx-auto mb-5 h-px w-24 bg-gold" />
@@ -103,9 +108,11 @@ export function ClientLogos({ title = "We Have Worked With" }: { title?: string 
     <section className="overflow-hidden bg-white py-14">
       <SectionTitle eyebrow="Conferences & events we have covered" title={title} />
       <div className="relative">
-        <div className="marquee items-center gap-12">
+        <div className="marquee items-center gap-6">
           {row.map((c, i) => (
-            <Image key={i} src={c.logo} alt={i < logos.length ? c.name : ""} width={140} height={56} className="h-12 w-auto object-contain grayscale transition hover:grayscale-0" />
+            <div key={i} className="flex h-20 w-44 shrink-0 items-center justify-center px-3">
+              <Image src={c.logo} alt={i < logos.length ? `${c.name} logo` : ""} width={176} height={80} className="max-h-16 w-auto max-w-full object-contain" />
+            </div>
           ))}
         </div>
       </div>
@@ -120,7 +127,7 @@ export function Gallery({ images, alt }: { images: string[]; alt: string }) {
       {images.map((src, i) => (
         // block wrapper so a photo is never split across two columns
         <div key={src} className="mb-3 break-inside-avoid">
-          <Image src={src} alt={`${alt} ${i + 1}`} width={600} height={600} sizes="(max-width: 768px) 50vw, 25vw" className="block h-auto w-full" />
+          <Image src={src} alt={altFor(src) ?? `${alt} ${i + 1}`} width={600} height={600} sizes="(max-width: 768px) 50vw, 25vw" className="block h-auto w-full" />
         </div>
       ))}
     </div>
@@ -158,7 +165,7 @@ export function CtaBand({ title, text, bookHref = "/book" }: { title: string; te
 
 export function HowItWorks() {
   const steps = [
-    ["Choose your package", "Pick the service and number of hours. Every price is listed upfront, with no quotes to wait for."],
+    ["Choose your package", "Pick the service and number of hours. Every price is published, so there are no quotes to wait for."],
     ["Book & pay online", "Enter your date, start time and venue, then pay securely by card. Your slot is reserved the moment you book."],
     ["Your crew is confirmed", "We assign a MacroSnaps photographer or videographer for your city and confirm the details by email."],
     ["Receive your gallery", "Every photo is retouched and color graded, then delivered in a private online gallery in high resolution."],
