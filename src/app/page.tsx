@@ -4,6 +4,7 @@ import { IMG, photoPicker, byTags } from "@/lib/images";
 import { HeroSlideshow } from "@/components/Motion";
 import AskBox from "@/components/AskBox";
 import WhyUs from "@/components/WhyUs";
+import Stats from "@/components/Stats";
 import VideoGrid from "@/components/VideoGrid";
 import { VIDEOS } from "@/data/videos";
 import { EVENT_TYPES } from "@/data/eventTypes";
@@ -108,13 +109,15 @@ export default function Home() {
       </div>
       </section>
 
+      <Stats dark />
+
       {/* About — image left, marble right, as on macrosnaps.com */}
       <section id="about" className="grid md:grid-cols-2">
         <div className="relative min-h-[420px]"><Image src={about} alt="Engaged couple laughing, photographed by MacroSnaps" fill sizes="50vw" className="object-cover object-[center_30%]" /></div>
         <div className="marble flex flex-col justify-center px-6 py-16 md:px-14">
           <h2 className="font-serif text-4xl">About Us</h2>
           <div className="prose-ms mt-6 text-justify text-[17px]">
-            <p>MacroSnaps is a premium global photography and videography company covering conferences, corporate events and weddings.</p>
+            <p>MacroSnaps is a premium global photography and videography company covering conferences, corporate events, weddings and celebrations. We have photographed and filmed more than 1,000 corporate events and conferences and over 5,000 weddings and private events.</p>
             <p>MacroSnaps is part of MacroHype LLC, a digital media and marketing company based out of <Link href="/photographers/new-york-city-ny">New York City</Link> and <Link href="/photographers/washington-dc">Washington DC</Link>, working with businesses for more than 13 years.</p>
             <p>We provide our award winning photography and videography services across all 50 states, Washington, DC, Ontario and Quebec with our own photographers and videographers, so you deal with one company from booking to delivery. We are insured through State Farm and we publish our prices, so every client pays the same rate.</p>
             <p>Let us help create long lasting memories for you. Hire us today for your conference, corporate event, wedding or any other occasion.</p>

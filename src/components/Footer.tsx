@@ -75,6 +75,7 @@ export default function Footer() {
           <p>© {new Date().getFullYear()} MacroSnaps. Website by <a href={SITE.parentUrl} className="underline">{SITE.parent}</a>.</p>
           <div className="flex gap-4">
             <Link href="/faq" className="hover:text-gold">FAQ</Link>
+            <Link href="/investors" className="hover:text-gold">Investor Relations</Link>
             <Link href="/locations" className="hover:text-gold">All Locations</Link>
             <Link href="/terms" className="hover:text-gold">Booking Terms</Link>
             <Link href="/privacy" className="hover:text-gold">Privacy</Link>

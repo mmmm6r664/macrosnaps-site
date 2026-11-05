@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import Stats from "@/components/Stats";
 import { IMG } from "@/lib/images";
 import { ClientLogos, CtaBand, TrustBar } from "@/components/blocks";
 import { SITE } from "@/lib/site";
@@ -16,7 +17,7 @@ export default function About() {
           <h1 className="font-serif text-5xl">About Us</h1>
           <div className="prose-ms mt-6 text-[17px]">
             <p>MacroSnaps is a premium global photography and videography company covering conferences, corporate events and weddings, with our own photographers and videographers across the United States, Ontario and Quebec.</p>
-            <p>MacroSnaps is part of <a href={SITE.parentUrl}>MacroHype LLC</a>, a digital media and marketing company based out of New York City and Washington DC. We have been doing commercial and product photography, real estate photography and commercial videography for our clients since 2011, and in January 2020 we established MacroSnaps as a separate company focused on events, weddings and life&apos;s important moments.</p>
+            <p>MacroSnaps is part of <a href={SITE.parentUrl}>MacroHype LLC</a>, a digital media and marketing company based out of New York City and Washington DC. We have been doing commercial and product photography, real estate photography and commercial videography for our clients since 2011, and in January 2020 we established MacroSnaps as a separate company focused on events, weddings and life&apos;s important moments. Since then we have covered more than 1,000 corporate events and conferences and over 5,000 weddings and private events.</p>
             <p>Today we are official media partner to conferences such as CDAO, the AI in Finance Summit and the FIX Americas Trading Conference, and we photograph and film events for organizations including IEEE, PwC, Deloitte, Steelcase and the Department of Justice.</p>
             <p>We are fully insured through State Farm, we list every price on our website, and we are rated 5 stars on Google, Thumbtack, WeddingWire and The Knot.</p>
           </div>
@@ -24,6 +25,7 @@ export default function About() {
         </div>
       </section>
       <TrustBar />
+      <Stats />
       <ClientLogos />
       <CtaBand title="Let us help create long lasting memories" />
     </>

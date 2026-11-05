@@ -13,6 +13,7 @@ import { SITE } from "@/lib/site";
 import { orgSchema } from "@/lib/schema";
 import { AskBand } from "@/components/AskBox";
 import { ScrollReveal } from "@/components/Motion";
+import CookieConsent from "@/components/CookieConsent";
 
 
 export const metadata: Metadata = {
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <AskBand />
         <Footer />
         <ScrollReveal />
+        <CookieConsent />
       </body>
     </html>
   );

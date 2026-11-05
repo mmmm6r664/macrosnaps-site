@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import Stats from "@/components/Stats";
 import { IMG, photoPicker } from "@/lib/images";
 import { EVENTS } from "@/lib/clients";
 import { SERVICES } from "@/lib/services";
@@ -63,6 +64,7 @@ export default function Corporate() {
         </div>
       </section>
       <ClientLogos title="Conferences & companies we work with" />
+      <Stats />
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
         <SectionTitle eyebrow="Track record" title="Recent conferences & corporate events" />
         <ul className="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
