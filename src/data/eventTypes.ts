@@ -1,3 +1,5 @@
+import { MORE_EVENT_TYPES_1 } from "./eventTypes.more1";
+import { MORE_EVENT_TYPES_2 } from "./eventTypes.more2";
 // Content for event-type landing pages (e.g. /bar-mitzvah-photography).
 // Facts used here must stay in line with site-wide pricing, delivery and insurance details.
 
@@ -18,7 +20,7 @@ export type EventType = {
   related: string[]; // 3 other slugs from this file
 };
 
-export const EVENT_TYPES: EventType[] = [
+const BASE_EVENT_TYPES: EventType[] = [
   // ---------------------------------------------------------------- Bar & Bat Mitzvahs
   {
     slug: "bar-mitzvah-photography",
@@ -655,3 +657,13 @@ export const EVENT_TYPES: EventType[] = [
     related: ["gala-fundraiser-photography", "indian-wedding-photography", "graduation-party-photography"],
   },
 ];
+
+const ORDER = [
+  "bar-mitzvah-photography", "indian-wedding-photography", "pakistani-wedding-photography", "muslim-wedding-photography", "jewish-wedding-photography",
+  "chinese-wedding-photography", "african-wedding-photography", "same-sex-wedding-photography", "elopement-photography", "engagement-party-photography",
+  "bridal-shower-photography", "rehearsal-dinner-photography", "quinceanera-photography", "sweet-16-photography", "prom-photography",
+  "birthday-party-photography", "anniversary-party-photography", "gender-reveal-baby-shower-photography", "graduation-party-photography", "retirement-party-photography",
+  "gala-fundraiser-photography", "holiday-party-photography", "award-ceremony-photography", "religious-ceremony-photography", "festival-community-event-photography",
+];
+const ALL = [...BASE_EVENT_TYPES, ...MORE_EVENT_TYPES_1, ...MORE_EVENT_TYPES_2];
+export const EVENT_TYPES: EventType[] = [...ORDER.map((s) => ALL.find((e) => e.slug === s)!).filter(Boolean), ...ALL.filter((e) => !ORDER.includes(e.slug))];

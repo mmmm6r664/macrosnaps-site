@@ -28,6 +28,7 @@ export const SITE = {
     thumbtack: "https://www.thumbtack.com/profile/services/399757465552314374/",
     weddingwire: "https://www.weddingwire.com/biz/macrohype-photography/0904f2e970f84387.html",
     theknot: "https://www.theknot.com/marketplace/macrohype-photography-alexandria-va-2042957",
+    sulekha: "https://us.sulekha.com/hackensack-nj/photography-video/macrohype-photography-1802309",
   },
   headshotsUrl: "https://macroheadshots.com/",
 };

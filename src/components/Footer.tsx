@@ -65,10 +65,14 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-6 rounded bg-white/95 px-4 py-4">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-8 px-4 py-4">
           {REVIEW_BADGES.map((b) => (
             <Image key={b.logo} src={b.logo} alt={b.name} width={130} height={56} className="h-12 w-auto" />
           ))}
+          <a href={SITE.reviews.sulekha} target="_blank" rel="noopener" aria-label="MacroSnaps on Sulekha: 5-star rating" className="flex h-12 flex-col items-center justify-center rounded bg-white px-4 leading-none transition hover:opacity-90">
+            <span className="font-sans text-xl font-bold tracking-tight text-[#e4322b]">sulekha</span>
+            <span className="mt-1 text-[11px] tracking-[.2em] text-[#f5a623]" aria-hidden>★★★★★</span>
+          </a>
         </div>
 
         <div className="mt-8 flex flex-col items-center justify-between gap-3 text-xs md:flex-row">

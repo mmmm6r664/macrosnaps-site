@@ -29,13 +29,13 @@ const HOME_FAQS = [
   { q: "Can you live stream our event or wedding?", a: "Yes. We live stream conferences, town halls and weddings with multiple cameras and clean audio, and send you a link to share with remote guests." },
 ];
 
-const PILLARS: { slug: string; title: string; text: string; tags?: string[]; film?: string }[] = [
+const PILLARS: { slug: string; title: string; text: string; tags?: string[]; film?: string; image?: string }[] = [
   { slug: "conference-photography", title: "Conferences", text: "Keynotes, panels, expos and networking for multi-day programs.", tags: ["conference"] },
   { slug: "wedding-photography", title: "Weddings", text: "Ceremonies, receptions, courthouse weddings and elopements.", tags: ["wedding"] },
   { slug: "corporate-event-photography", title: "Corporate Events", text: "Launches, galas, award nights, holiday parties and offsites.", tags: ["corporate", "gala"] },
   { slug: "engagement-photography", title: "Engagements", text: "Proposals and engagement sessions at places you love.", tags: ["engagement"] },
   { slug: "indian-wedding-photography", title: "Indian Weddings", text: "Haldi, mehndi, sangeet, baraat, pheras and reception.", tags: ["indian"] },
-  { slug: "trade-show-photography", title: "Trade Shows", text: "Booths, product demos, crowds and sponsor coverage.", film: "e8jnAZRr2Ls" },
+  { slug: "trade-show-photography", title: "Trade Shows", text: "Booths, product demos, crowds and sponsor coverage.", image: "https://images.unsplash.com/photo-1752155222944-675c2c3bfafd" }, // stock (Unsplash License): exhibition hall
   { slug: "events", title: "Celebrations", text: "Bar & Bat Mitzvahs, Sweet 16s, quinceañeras and birthdays.", tags: ["party"] },
   { slug: "gala-fundraiser-photography", title: "Galas & Fundraisers", text: "Red carpets, speeches, auctions and honorees.", tags: ["gala"] },
   { slug: "family-photography", title: "Family Portraits", text: "Outdoor and at-home family sessions.", tags: ["family"] },
@@ -61,7 +61,7 @@ export default function Home() {
   ];
   const about = pick.use(IMG.about);
   const banner = pick.one(bannerSafe(byTags("conference")).slice(3));
-  const pillarImg = PILLARS.map((p) => (p.film ? `https://i.ytimg.com/vi/${p.film}/hqdefault.jpg` : pick.one(byTags(...(p.tags ?? [])).slice(1), byTags(...(p.tags ?? [])))));
+  const pillarImg = PILLARS.map((p) => (p.image ? p.image : p.film ? `https://i.ytimg.com/vi/${p.film}/hqdefault.jpg` : pick.one(byTags(...(p.tags ?? [])).slice(1), byTags(...(p.tags ?? [])))));
   const gallery = pick.many(16, IMG.portfolio, IMG.wedding, IMG.conference, IMG.event);
   const recentEvents = EVENTS.filter((e) => e.image).slice(0, 8);
   return (
@@ -71,7 +71,7 @@ export default function Home() {
         <HeroSlideshow slides={heroSlides} />
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/45 via-black/35 to-black/75" />
         <div className="w-full max-w-4xl px-4 text-center">
-          <p className="font-script text-5xl md:text-7xl">MacroSnaps Photography</p>
+          <p className="font-script text-5xl md:text-7xl">MacroSnaps</p>
           <h1 className="mt-5 flex items-center justify-center gap-4 text-xs font-semibold uppercase tracking-[.25em] md:text-sm">
             <span className="hidden h-px w-12 bg-white/70 sm:block" />Global Event, Conference & Wedding Photography & Videography<span className="hidden h-px w-12 bg-white/70 sm:block" />
           </h1>
@@ -97,7 +97,7 @@ export default function Home() {
         <div className="marquee slow gap-5 px-5">
           {[...PILLARS, ...PILLARS].map((p, i) => (
             <Link key={i} href={`/${p.slug}`} aria-hidden={i >= PILLARS.length} tabIndex={i >= PILLARS.length ? -1 : undefined} className="group relative block aspect-[4/5] w-72 shrink-0 overflow-hidden bg-black text-white md:w-80 hover-zoom">
-              <Image src={pillarImg[i % PILLARS.length]} alt={i < PILLARS.length ? `${p.title} photographed by MacroSnaps` : ""} fill sizes="320px" className="object-cover opacity-75 transition duration-500 group-hover:opacity-60" />
+              <Image src={pillarImg[i % PILLARS.length]} alt={i < PILLARS.length ? (p.image ? `${p.title}: exhibition hall` : `${p.title} photographed by MacroSnaps`) : ""} fill sizes="320px" className="object-cover opacity-75 transition duration-500 group-hover:opacity-60" />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6">
                 <h3 className="font-script text-3xl">{p.title}</h3>
                 <p className="mt-1 text-sm text-white/90">{p.text}</p>

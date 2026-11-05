@@ -92,13 +92,14 @@ export default function Header() {
           <Image src={SITE.logo} alt="MacroSnaps logo" width={300} height={192} priority className="h-24 w-auto md:h-40" />
         </Link>
 
-        <div className="hidden flex-1 flex-col items-end gap-2 lg:flex">
-          <div className="flex items-center gap-8 font-nav text-sm">
-            <a href={`mailto:${SITE.email}`} className="flex items-center gap-2 hover:text-gold"><IconMail className="h-4 w-4" />{SITE.email}</a>
-            <a href={SITE.phoneHref} className="flex items-center gap-2 hover:text-gold"><IconPhone className="h-4 w-4" />{SITE.phone}</a>
-            <Link href="/book" className="btn-gold !py-2 !px-4 font-sans">Book Now</Link>
+        <div className="hidden flex-1 flex-col items-stretch lg:flex">
+          <div className="flex items-center justify-end gap-6 pb-3 font-sans text-sm tracking-wide text-white/85">
+            <a href={`mailto:${SITE.email}`} className="flex items-center gap-2 hover:text-gold"><IconMail className="h-4 w-4 text-gold" />{SITE.email}</a>
+            <span className="h-4 w-px bg-white/20" aria-hidden />
+            <a href={SITE.phoneHref} className="flex items-center gap-2 hover:text-gold"><IconPhone className="h-4 w-4 text-gold" />{SITE.phone}</a>
+            <Link href="/book" className="btn-gold ml-2 !py-2 !px-5 font-sans">Book Now</Link>
           </div>
-          <nav aria-label="Main" className="flex items-center gap-1 font-nav text-[15px]">
+          <nav aria-label="Main" className="flex items-center justify-end gap-1 border-t [&>a:last-child]:pr-0 border-white/10 pt-3 font-nav text-[15px]">
             {NAV.map((item) =>
               item.mega || item.solutions ? (
                 <div key={item.label} className="group relative">

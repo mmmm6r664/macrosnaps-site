@@ -1,5 +1,6 @@
 // Serves images from the Wix media CDN at the requested width (no Vercel image costs).
 export default function wixLoader({ src, width, quality }: { src: string; width: number; quality?: number }) {
+  if (src.startsWith("https://images.unsplash.com/")) return `${src.split("?")[0]}?w=${width}&q=${quality || 75}&auto=format&fit=crop`;
   if (!src.includes("static.wixstatic.com/media/")) return src;
   const base = src.split("/v1/")[0];
   const name = base.split("/").pop()!.replace(/~/g, "_");
