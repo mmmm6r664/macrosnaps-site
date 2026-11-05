@@ -32,10 +32,18 @@ export const RADIUS = ["Up to 10 miles", "Up to 25 miles", "Up to 50 miles", "Up
 export const ROLES = ["Photographer", "Videographer", "Both photo & video"];
 export const SHOOT_TYPES = ["Conferences & corporate events", "Weddings", "Same-sex weddings", "Engagements & couples", "Boudoir", "Parties & private events", "Cultural & religious ceremonies", "Headshots & portraits", "Family, maternity & newborn", "Real estate", "Product & food", "Commercial / brand video", "Live streaming", "Drone (FAA Part 107)"];
 
-export const NOT_ELIGIBLE =
-  "Thank you for your interest in MacroSnaps. At this time we can only accept applications from photographers and videographers with at least 1 year of professional experience and a primary camera body released in 2015 or later, valued at $1,000 or more. You're welcome to apply again once you meet these requirements.";
+/** "Check all that apply": selecting any of these makes an applicant ineligible. */
+export const DISQUALIFIERS = [
+  { id: "under18", label: "I am under 18 years old" },
+  { id: "noWorkPermit", label: "I am not authorized to work in the US (or in Canada, if applying there)" },
+  { id: "noLicense", label: "I don't have a valid driver's license or government-issued ID" },
+];
 
-export function checkEligibility(input: { experience: string; camera: string; otherYear?: string; otherValue?: string }) {
+export const NOT_ELIGIBLE =
+  "Thank you for your interest in MacroSnaps. Based on your answers, you don't meet our current requirements, so we can't accept your application at this time. You're welcome to apply again once you meet them.";
+
+export function checkEligibility(input: { experience: string; camera: string; otherYear?: string; otherValue?: string; flags?: string[] }) {
+  if (input.flags?.some((f) => DISQUALIFIERS.some((d) => d.id === f))) return false;
   const exp = EXPERIENCE.find((e) => e.id === input.experience);
   if (!exp || !exp.ok) return false;
   if (input.camera === "other") return input.otherYear === "2015+" && input.otherValue === "1000+";

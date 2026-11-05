@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { BRANDS, CAMERAS, EXPERIENCE, RADIUS, ROLES, WORK_STATUS, AVAILABILITY, SHOOT_TYPES, NOT_ELIGIBLE, checkEligibility } from "@/lib/careers";
+import { BRANDS, CAMERAS, EXPERIENCE, RADIUS, ROLES, WORK_STATUS, AVAILABILITY, SHOOT_TYPES, DISQUALIFIERS, NOT_ELIGIBLE, checkEligibility } from "@/lib/careers";
 
 export default function CareerForm() {
   const [camera, setCamera] = useState("");
@@ -12,8 +12,9 @@ export default function CareerForm() {
     const fd = new FormData(e.currentTarget);
     const data: Record<string, unknown> = Object.fromEntries(fd.entries());
     data.shootTypes = fd.getAll("shootTypes");
+    data.flags = fd.getAll("flags");
     if (!(data.shootTypes as string[]).length) { setError("Please choose at least one type of shoot."); setState("error"); return; }
-    if (!checkEligibility({ experience: String(data.experience), camera: String(data.camera), otherYear: String(data.otherYear ?? ""), otherValue: String(data.otherValue ?? "") })) {
+    if (!checkEligibility({ experience: String(data.experience), camera: String(data.camera), otherYear: String(data.otherYear ?? ""), otherValue: String(data.otherValue ?? ""), flags: data.flags as string[] })) {
       setState("rejected");
       window.scrollTo({ top: (e.currentTarget as HTMLElement).offsetTop - 160, behavior: "smooth" });
       return;
@@ -91,6 +92,18 @@ export default function CareerForm() {
         <div><label className={label} htmlFor="lenses">Lens kit *</label><textarea id="lenses" name="lenses" required className={big} placeholder="e.g. 24-70mm f/2.8, 70-200mm f/2.8, 35mm f/1.4, 85mm f/1.8…" /></div>
         <div><label className={label} htmlFor="lighting">Lighting kit</label><textarea id="lighting" name="lighting" className={big} placeholder="Speedlights, strobes, LED panels, modifiers, stands…" /></div>
         <div><label className={label} htmlFor="notes">Anything else we should know?</label><textarea id="notes" name="notes" rows={3} className={field} placeholder="Availability, languages, drone license, specialties…" /></div>
+      </fieldset>
+
+      <fieldset>
+        <legend className="mb-1 font-serif text-2xl">Do any of these apply to you?</legend>
+        <p className="mb-4 text-sm text-muted">Check all that apply. Leave blank if none apply.</p>
+        <div className="grid gap-3">
+          {DISQUALIFIERS.map((d) => (
+            <label key={d.id} className="flex cursor-pointer items-center gap-3 border border-black/10 bg-white px-4 py-3 hover:border-gold-dark has-[:checked]:border-gold-dark has-[:checked]:bg-gold/10">
+              <input type="checkbox" name="flags" value={d.id} className="h-4 w-4 accent-[#a8963b]" />{d.label}
+            </label>
+          ))}
+        </div>
       </fieldset>
 
       <input name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />

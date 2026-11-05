@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   const need = [b.name, b.phone, b.city, b.radius, b.role, b.experience, b.status, b.hours, b.portfolio, b.camera, b.lenses];
   if (need.some((v) => !s(v)) || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return NextResponse.json({ error: "Please complete all required fields" }, { status: 400 });
   // Same eligibility rules as the form, enforced on the server
-  if (!checkEligibility({ experience: s(b.experience), camera: s(b.camera), otherYear: s(b.otherYear), otherValue: s(b.otherValue) }))
+  if (!checkEligibility({ experience: s(b.experience), camera: s(b.camera), otherYear: s(b.otherYear), otherValue: s(b.otherValue), flags: Array.isArray(b.flags) ? b.flags.map((x: unknown) => s(x, 40)) : [] }))
     return NextResponse.json({ error: NOT_ELIGIBLE }, { status: 422 });
 
   const cam = CAMERAS.find((c) => c.id === s(b.camera));
