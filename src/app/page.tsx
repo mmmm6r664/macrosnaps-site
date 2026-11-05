@@ -5,6 +5,7 @@ import { HeroSlideshow } from "@/components/Motion";
 import AskBox from "@/components/AskBox";
 import WhyUs from "@/components/WhyUs";
 import Stats from "@/components/Stats";
+import TeamQuote from "@/components/TeamQuote";
 import VideoGrid from "@/components/VideoGrid";
 import { VIDEOS } from "@/data/videos";
 import { EVENT_TYPES } from "@/data/eventTypes";
@@ -35,7 +36,7 @@ const PILLARS: { slug: string; title: string; text: string; tags?: string[]; fil
   { slug: "corporate-event-photography", title: "Corporate Events", text: "Launches, galas, award nights, holiday parties and offsites.", tags: ["corporate", "gala"] },
   { slug: "engagement-photography", title: "Engagements", text: "Proposals and engagement sessions at places you love.", tags: ["engagement"] },
   { slug: "indian-wedding-photography", title: "Indian Weddings", text: "Haldi, mehndi, sangeet, baraat, pheras and reception.", tags: ["indian"] },
-  { slug: "trade-show-photography", title: "Trade Shows", text: "Booths, product demos, crowds and sponsor coverage.", tags: ["tradeshow"] },
+  { slug: "trade-show-photography", title: "Trade Shows", text: "Booths, product demos, crowds and sponsor coverage.", film: "e8jnAZRr2Ls" },
   { slug: "events", title: "Celebrations", text: "Bar & Bat Mitzvahs, Sweet 16s, quinceañeras and birthdays.", tags: ["party"] },
   { slug: "gala-fundraiser-photography", title: "Galas & Fundraisers", text: "Red carpets, speeches, auctions and honorees.", tags: ["gala"] },
   { slug: "family-photography", title: "Family Portraits", text: "Outdoor and at-home family sessions.", tags: ["family"] },
@@ -43,7 +44,7 @@ const PILLARS: { slug: string; title: string; text: string; tags?: string[]; fil
   { slug: "newborn-photography", title: "Newborn", text: "Newborn portraits in the first weeks, studio or at home.", tags: ["newborn"] },
   { slug: "graduation-photography", title: "Graduation", text: "Cap & gown portraits, ceremonies and parties.", tags: ["graduation"] },
   { slug: "real-estate-photography", title: "Real Estate & 3D Tours", text: "Listing photos, video and Matterport tours.", tags: ["realestate"] },
-  { slug: "commercial-videography", title: "Ads & Commercials", text: "Restaurant, brand and product videos for Google, Facebook & TV.", film: "sEPh6gEZVYM" },
+  { slug: "solutions/video-ads", title: "TV & Video Ads", text: "Commercials for local TV, Google, YouTube, Facebook & Instagram.", film: "7ph9aLGnKzk" },
   { slug: "live-stream", title: "Live Streaming", text: "Multi-camera streams of keynotes and ceremonies.", tags: ["conference"] },
   { slug: "photo-booth", title: "Photo Booth", text: "Booth, backdrop and attendant for your event.", tags: ["photobooth"] },
   { slug: "photo-retouching", title: "Retouching", text: "Portrait, product and commercial retouching.", tags: ["retouching"] },
@@ -125,6 +126,8 @@ export default function Home() {
           <Link href="/book" className="mt-8 self-start font-sans text-3xl tracking-wide text-ink hover:text-gold-dark">BOOK A SESSION</Link>
         </div>
       </section>
+
+      <TeamQuote />
 
       <WhyUs where="Every event" />
 

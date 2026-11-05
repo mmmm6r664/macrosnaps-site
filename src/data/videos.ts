@@ -1,8 +1,17 @@
 // MacroSnaps YouTube channel (UCYoC7JGFcAQiSxOqKSmIzEw). Tags decide which pages show each video.
-export type Tag = "conference" | "corporate" | "tradeshow" | "wedding" | "event" | "party" | "commercial" | "restaurant" | "community";
+export type Tag = "conference" | "corporate" | "tradeshow" | "wedding" | "event" | "party" | "commercial" | "restaurant" | "community" | "ad" | "medical" | "tech" | "homeservices" | "recruiting";
 export type Video = { id: string; title: string; tags: Tag[] };
 
 export const VIDEOS: Video[] = [
+  // Video advertisements (TV, social & web) produced by MacroSnaps / MacroHype
+  { id: "7ph9aLGnKzk", title: "Universal Windows — TV & Video Advertisement", tags: ["ad", "commercial", "homeservices"] },
+  { id: "ViJv2ALJO9Y", title: "Agyro Restaurant — Brooklyn Social Media Ad", tags: ["ad", "commercial", "restaurant"] },
+  { id: "PFsasgtFtMw", title: "Kintone Software — Video Advertisement", tags: ["ad", "commercial", "tech", "corporate"] },
+  { id: "WrwRyUhenlE", title: "Patricia Chen Chiropractor — Video Advertisement", tags: ["ad", "commercial", "medical"] },
+  { id: "1j4mkO1gZS8", title: "Forward Kitchens — Introduction (Behind the Scenes)", tags: ["ad", "commercial", "restaurant"] },
+  { id: "y8I-9Ii37nw", title: "JAC Products — Careers Video Advertisement", tags: ["ad", "commercial", "recruiting", "corporate"] },
+  { id: "wNm1f9a2juU", title: "Dogwood by Active Yards — Video Advertisement", tags: ["ad", "commercial", "homeservices"] },
+  { id: "umw9hy0ysiA", title: "Universal Relocations — TV Commercial", tags: ["ad", "commercial", "homeservices"] },
   { id: "nanbTWYjc0k", title: "IBM Summit Highlights 2025", tags: ["conference", "corporate"] },
   { id: "lQuiII7QpXw", title: "The Mid Atlantic Summit Highlights", tags: ["conference"] },
   { id: "ND4PHVfzcvg", title: "BNY Event Highlights", tags: ["corporate", "conference"] },
@@ -30,8 +39,6 @@ export const VIDEOS: Video[] = [
   { id: "Fr2pu7pnXis", title: "AP Space: Chelsea's Contemporary Art Hub", tags: ["commercial"] },
   { id: "0Tuwx0k_TZg", title: "Exploring The Islamic Seminary of America", tags: ["commercial", "community"] },
   { id: "sEPh6gEZVYM", title: "Agyro Restaurant Advertisement, Brooklyn", tags: ["commercial", "restaurant"] },
-  { id: "ViJv2ALJO9Y", title: "Agyro Restaurant Ad | Brooklyn Restaurant", tags: ["commercial", "restaurant"] },
-  { id: "1j4mkO1gZS8", title: "Forward Kitchens - Behind the Scenes", tags: ["commercial", "restaurant"] },
   { id: "Hc2wE2reDLQ", title: "Ava's Sweet 16 Birthday Party, New Jersey", tags: ["party", "event"] },
   { id: "r6slEiVqSr8", title: "Cathrine's Birthday Celebration", tags: ["party", "event"] },
   { id: "eL1kCWaLIDU", title: "Sweet 16 Birthday Bash", tags: ["party", "event"] },

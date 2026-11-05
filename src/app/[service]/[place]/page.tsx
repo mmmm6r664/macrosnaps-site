@@ -8,6 +8,7 @@ import { PageHero, TrustBar, SectionTitle, Pricing, Faqs, ClientLogos, Gallery, 
 import JsonLd from "@/components/JsonLd";
 import ContactForm from "@/components/ContactForm";
 import WhyUs from "@/components/WhyUs";
+import TeamQuote from "@/components/TeamQuote";
 import VideoGrid from "@/components/VideoGrid";
 import ExploreLinks from "@/components/ExploreLinks";
 import { videosFor } from "@/data/videos";
@@ -167,6 +168,7 @@ function CityPage({ t, city }: { t: LocalTarget; city: City }) {
         </section>
       )}
 
+      <TeamQuote region={city.state} />
       <WhyUs where={city.name} title={`Why ${city.name} clients choose MacroSnaps`} />
 
       {TOUR_STATES.includes(city.state) && (
@@ -269,6 +271,7 @@ function RegionPage({ t, region }: { t: LocalTarget; region: Region }) {
 
       <ClientLogos />
 
+      <TeamQuote region={region.code} />
       <WhyUs where={region.name} title={`Why clients across ${region.name} choose MacroSnaps`} />
 
       {TOUR_STATES.includes(region.code) && (
