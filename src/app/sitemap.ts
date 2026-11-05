@@ -5,9 +5,11 @@ import { cities, regions } from "@/lib/geo";
 import { EVENT_TYPES } from "@/data/eventTypes";
 import { VERTICALS } from "@/data/verticals";
 
-// One sitemap per local service (each < 2,000 URLs) plus one for core pages.
+// Sitemap ids: core pages, one per local service and one per event type
+// (each local sitemap = all states/provinces + all cities, < 2,000 URLs, far under the 50,000 limit).
+const SITEMAP_IDS = ["core", ...LOCAL_SLUGS, ...EVENT_TYPES.map((e) => e.slug)];
 export async function generateSitemaps() {
-  return [{ id: "core" }, ...LOCAL_SLUGS.map((id) => ({ id }))];
+  return SITEMAP_IDS.map((id) => ({ id }));
 }
 
 export default async function sitemap(props: { id: Promise<string> | string }): Promise<MetadataRoute.Sitemap> {
@@ -23,5 +25,7 @@ export default async function sitemap(props: { id: Promise<string> | string }): 
       ...VERTICALS.map((v) => u(`/${v.kind === "industry" ? "industries" : "solutions"}/${v.slug}`, 0.7)),
     ];
   }
-  return [...regions.map((r) => u(`/${id}/${r.slug}`, 0.7)), ...cities.map((c) => u(`/${id}/${c.slug}`, c.rank <= 10 ? 0.7 : 0.5))];
+  if (!SITEMAP_IDS.includes(id)) return [];
+  const isEvent = EVENT_TYPES.some((e) => e.slug === id);
+  return [...regions.map((r) => u(`/${id}/${r.slug}`, isEvent ? 0.6 : 0.7)), ...cities.map((c) => u(`/${id}/${c.slug}`, c.rank <= 10 ? (isEvent ? 0.6 : 0.7) : isEvent ? 0.4 : 0.5))];
 }

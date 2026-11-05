@@ -4,7 +4,8 @@ import { RATES, hourPrice } from "@/lib/services";
 import { byTags, photoPicker, bannerSafe } from "@/lib/images";
 import { videosFor, type Tag } from "@/data/videos";
 import { EVENT_PHOTO_TAGS } from "@/lib/pageMedia";
-import { topCities, cityLabel } from "@/lib/geo";
+import { cityLabel, usRegions, caRegions } from "@/lib/geo";
+import { an, eventPrerenderCities } from "@/lib/eventLocal";
 import { PageHero, TrustBar, SectionTitle, Faqs, Gallery, Breadcrumbs, CtaBand } from "./blocks";
 import VideoGrid from "./VideoGrid";
 import WhyUs from "./WhyUs";
@@ -88,8 +89,30 @@ export default function EventTypePage({ e }: { e: EventType }) {
         <Faqs faqs={e.faqs} />
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6" data-reveal>
+        <SectionTitle eyebrow="Locations" title={`Find ${an(e.pro)} ${e.pro} near you`} intro="Our own photographers and videographers work across all 50 states, Washington, DC, Ontario and Quebec, at the same published price everywhere." />
+        <div className="grid gap-10 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <h3 className="mb-3 font-serif text-xl">United States</h3>
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-[15px] sm:grid-cols-3">
+              {usRegions.map((r) => <li key={r.slug}><Link className="hover:text-gold-dark hover:underline" href={`/${e.slug}/${r.slug}`}>{r.name}</Link></li>)}
+            </ul>
+            <h3 className="mb-3 mt-8 font-serif text-xl">Canada</h3>
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-[15px] sm:grid-cols-3">
+              {caRegions.map((r) => <li key={r.slug}><Link className="hover:text-gold-dark hover:underline" href={`/${e.slug}/${r.slug}`}>{r.name}</Link></li>)}
+            </ul>
+          </div>
+          <div>
+            <h3 className="mb-3 font-serif text-xl">Popular cities</h3>
+            <ul className="grid grid-cols-1 gap-y-1.5 text-[15px] sm:grid-cols-2 lg:grid-cols-1">
+              {eventPrerenderCities().map((c) => <li key={c.slug}><Link className="hover:text-gold-dark hover:underline" href={`/${e.slug}/${c.slug}`}>{e.pro} in {cityLabel(c)}</Link></li>)}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-14 md:px-6" data-reveal>
-        <div className="grid gap-10 md:grid-cols-3">
+        <div className="grid gap-10 md:grid-cols-2">
           <div>
             <h2 className="font-serif text-2xl">Related events</h2>
             <ul className="mt-4 space-y-2">{related.map((r) => <li key={r.slug}><Link href={`/${r.slug}`} className="hover:text-gold-dark hover:underline">{r.h1}</Link></li>)}<li><Link href="/events" className="font-semibold underline">All event types →</Link></li></ul>
@@ -102,10 +125,6 @@ export default function EventTypePage({ e }: { e: EventType }) {
               <li><Link href="/photo-booth" className="hover:text-gold-dark hover:underline">Photo Booth</Link></li>
               <li><Link href="/live-stream" className="hover:text-gold-dark hover:underline">Live Streaming</Link></li>
             </ul>
-          </div>
-          <div>
-            <h2 className="font-serif text-2xl">Popular cities</h2>
-            <ul className="mt-4 grid grid-cols-2 gap-2 text-[15px]">{topCities(10).map((c) => <li key={c.slug}><Link href={`/${isWedding ? "wedding-photography" : "event-photography"}/${c.slug}`} className="hover:text-gold-dark hover:underline">{cityLabel(c)}</Link></li>)}</ul>
           </div>
         </div>
       </section>

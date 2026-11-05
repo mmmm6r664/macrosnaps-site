@@ -17,6 +17,9 @@ import { serviceSchema } from "@/lib/schema";
 import { photoPicker, rotate, bannerSafe } from "@/lib/images";
 import { SITE } from "@/lib/site";
 import { IconCheck } from "@/components/Icons";
+import { EVENT_TYPES } from "@/data/eventTypes";
+import { EventCityPage, EventRegionPage } from "@/components/EventLocalPage";
+import { getEventType, eventPrerenderCities, eventCityContent, eventRegionContent } from "@/lib/eventLocal";
 
 export const revalidate = 604800; // re-render weekly
 export const dynamicParams = true;
@@ -29,6 +32,12 @@ export function generateStaticParams(): Params[] {
   for (const service of LOCAL_SLUGS) {
     for (const r of regions) out.push({ service, place: r.slug });
     for (const place of cities) out.push({ service, place });
+  }
+  // Event type × location: all states/provinces + the largest cities; the rest render on demand (ISR).
+  const eventCities = eventPrerenderCities().map((c) => c.slug);
+  for (const e of EVENT_TYPES) {
+    for (const r of regions) out.push({ service: e.slug, place: r.slug });
+    for (const place of eventCities) out.push({ service: e.slug, place });
   }
   return out;
 }
@@ -43,8 +52,33 @@ function load(p: Params) {
   return null;
 }
 
+function loadEvent(p: Params) {
+  const e = getEventType(p.service);
+  if (!e) return null;
+  const city = getCity(p.place);
+  if (city) return { e, city } as const;
+  const region = getRegion(p.place);
+  if (region) return { e, region } as const;
+  return null;
+}
+
+function eventMetadata(p: Params): Metadata | null {
+  const d = loadEvent(p);
+  if (!d) return null;
+  const url = `/${p.service}/${p.place}`;
+  const c = "city" in d && d.city ? eventCityContent(d.e, d.city) : eventRegionContent(d.e, (d as { region: Region }).region);
+  return {
+    title: { absolute: c.metaTitle },
+    description: c.metaDescription,
+    alternates: { canonical: url },
+    openGraph: { title: c.metaTitle, description: c.metaDescription, url },
+  };
+}
+
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const p = await params;
+  const em = eventMetadata(p);
+  if (em) return em;
   const d = load(p);
   if (!d) return {};
   const url = `/${p.service}/${p.place}`;
@@ -59,6 +93,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 
 export default async function Page({ params }: { params: Promise<Params> }) {
   const p = await params;
+  const ev = loadEvent(p);
+  if (ev) return "city" in ev && ev.city ? <EventCityPage e={ev.e} city={ev.city} /> : <EventRegionPage e={ev.e} region={(ev as { region: Region }).region} />;
   const d = load(p);
   if (!d) notFound();
   if ("city" in d && d.city) return <CityPage t={d.t} city={d.city} />;
@@ -211,7 +247,7 @@ function CityPage({ t, city }: { t: LocalTarget; city: City }) {
         </div>
       </section>
 
-      <ExploreLinks where={city.name} />
+      <ExploreLinks where={city.name} place={city.slug} />
 
       <section id="plan" className="bg-marble px-4 py-16 md:px-6">
         <div className="mx-auto max-w-3xl">
@@ -292,7 +328,7 @@ function RegionPage({ t, region }: { t: LocalTarget; region: Region }) {
         <Faqs faqs={(primary?.faqs ?? SERVICES[0].faqs).slice(0, 6)} />
       </section>
 
-      <ExploreLinks where={region.name} />
+      <ExploreLinks where={region.name} place={region.slug} />
       <CtaBand title={`Book ${targetName(t).toLowerCase()} in ${region.name}`} bookHref={`/book?service=${primary?.slug ?? ""}`} />
     </>
   );
