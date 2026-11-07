@@ -16,9 +16,8 @@ export default function Portfolio() {
     { title: "Weddings & Engagements", images: [...new Set([...IMG.wedding, ...IMG.engagement])] },
     { title: "Events & Celebrations", images: SERVICES.find((s) => s.slug === "event-photography")?.images ?? IMG.event },
     { title: "Portraits & Family", images: [...new Set([...IMG.personal, ...(SERVICES.find((s) => s.slug === "newborn-photography")?.images ?? [])])] },
-    { title: "Commercial & Product", images: SERVICES.find((s) => s.slug === "product-photography")?.images ?? IMG.commercial },
   ];
-  const sets = raw.map((r) => ({ title: r.title, images: pick.many(16, r.images) }));
+  const sets = raw.map((r) => ({ title: r.title, images: pick.many(16, r.images) })).filter((s) => s.images.length);
   return (
     <>
       <section className="bg-black px-4 py-16 text-center text-white">

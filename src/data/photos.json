@@ -1116,16 +1116,6 @@
 "banner": true
 },
 {
-"src": "https://static.wixstatic.com/media/d5bdc3_c70eb26d45f94913b8ce1c62d531b09f~mv2.jpg",
-"tags": [
-"studio",
-"commercial"
-],
-"alt": "Photo studio lighting setup",
-"orient": "L",
-"banner": false
-},
-{
 "src": "https://static.wixstatic.com/media/d5bdc3_667fd60b5be7413d9caa902773942cb0~mv2.jpg",
 "tags": [
 "newborn"
@@ -1305,40 +1295,6 @@
 "retouching"
 ],
 "alt": "Headshot being edited on a laptop",
-"orient": "L"
-},
-{
-"src": "https://static.wixstatic.com/media/d5bdc3_4306cb83fc054ebcb8c477ad6bb72784~mv2.png",
-"tags": [
-"product",
-"studio"
-],
-"alt": "Product photo of a wooden chair",
-"orient": "P"
-},
-{
-"src": "https://static.wixstatic.com/media/d5bdc3_ec162e719f9c4d4583fc6a3b06329164~mv2.png",
-"tags": [
-"studio",
-"product"
-],
-"alt": "Studio product photography lighting setup",
-"orient": "P"
-},
-{
-"src": "https://static.wixstatic.com/media/d5bdc3_d801325a043044b0bb6d8efe32d51ed8~mv2.png",
-"tags": [
-"product"
-],
-"alt": "Product photo of running shoes",
-"orient": "L"
-},
-{
-"src": "https://static.wixstatic.com/media/d5bdc3_220f8abfc25442aebf16f59e26ddda6c~mv2.png",
-"tags": [
-"product"
-],
-"alt": "Product photo of a cosmetic jar with wooden lid",
 "orient": "L"
 }
 ]
