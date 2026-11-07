@@ -9,7 +9,7 @@ export type Person = {
   kind: "staff" | "applicant";
   name: string; email: string; phone: string | null;
   city: string; lat: number | null; lng: number | null; radius: number;
-  roles: string; shootTypes: string[]; experience?: string; portfolio?: string;
+  roles: string; shootTypes: string[]; experience?: string; portfolio?: string; camera?: string; gear?: string;
   active: boolean; miles?: number;
 };
 
@@ -19,8 +19,8 @@ export const parseRadius = (s: string | null | undefined) => {
 };
 
 export async function allPeople(): Promise<Person[]> {
-  const staff = await q<{ id: number; name: string; email: string; active: boolean; phone: string | null; city: string | null; lat: number | null; lng: number | null; radius_miles: number | null; roles: string[] | null; shoot_types: string[] | null; portfolio: string | null }[]>`
-    select u.id, u.name, u.email, u.active, p.phone, p.city, p.lat, p.lng, p.radius_miles, p.roles, p.shoot_types, p.portfolio
+  const staff = await q<{ id: number; name: string; email: string; active: boolean; phone: string | null; city: string | null; lat: number | null; lng: number | null; radius_miles: number | null; roles: string[] | null; shoot_types: string[] | null; portfolio: string | null; gear: string | null }[]>`
+    select u.id, u.name, u.email, u.active, p.phone, p.city, p.lat, p.lng, p.radius_miles, p.roles, p.shoot_types, p.portfolio, p.gear
     from users u left join staff_profiles p on p.user_id = u.id where u.role = 'staff'`;
   const apps = await q<{ id: number; name: string; email: string; phone: string | null; data: Record<string, string> }[]>`
     select i.id, i.name, i.email, i.phone, i.data from inquiries i
@@ -28,14 +28,15 @@ export async function allPeople(): Promise<Person[]> {
       and not exists (select 1 from users u where u.email = lower(i.email))`;
   const out: Person[] = staff.map((s) => ({
     key: `u:${s.id}`, userId: s.id, inquiryId: null, kind: "staff", name: s.name, email: s.email, phone: s.phone, city: s.city ?? "",
-    lat: s.lat, lng: s.lng, radius: s.radius_miles ?? 25, roles: (s.roles ?? []).join(", "), shootTypes: s.shoot_types ?? [], portfolio: s.portfolio ?? undefined, active: s.active,
+    lat: s.lat, lng: s.lng, radius: s.radius_miles ?? 25, roles: (s.roles ?? []).join(", "), shootTypes: s.shoot_types ?? [], portfolio: s.portfolio ?? undefined, gear: s.gear ?? undefined, active: s.active,
   }));
   for (const a of apps) {
     const c = resolveCity(a.data.city ?? "");
     out.push({
       key: `a:${a.id}`, userId: null, inquiryId: a.id, kind: "applicant", name: a.name, email: a.email, phone: a.phone, city: a.data.city ?? "",
       lat: c?.lat ?? null, lng: c?.lng ?? null, radius: parseRadius(a.data.radius), roles: a.data.role ?? "",
-      shootTypes: String(a.data.shootTypes ?? "").split(",").map((x) => x.trim()).filter(Boolean), experience: a.data.experience, portfolio: a.data.portfolio, active: true,
+      shootTypes: String(a.data.shootTypes ?? "").split(",").map((x) => x.trim()).filter(Boolean), experience: a.data.experience, portfolio: a.data.portfolio, camera: a.data.camera,
+      gear: [a.data.secondary && `Second bodies: ${a.data.secondary}`, a.data.lenses && `Lenses: ${a.data.lenses}`, a.data.lighting && `Lighting: ${a.data.lighting}`].filter(Boolean).join("\n"), active: true,
     });
   }
   return out;
