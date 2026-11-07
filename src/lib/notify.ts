@@ -19,8 +19,8 @@ export async function logMessage(channel: "email" | "sms", recipient: string, su
 
 export async function emailPerson(to: string, subject: string, text: string, by: number | null, cta?: { label: string; url: string }) {
   const html = emailWrap(subject, textToHtml(text) + (cta ? `<p style="margin:22px 0"><a href="${esc(cta.url)}" style="background:#ccba56;color:#000;padding:12px 22px;text-decoration:none;font-weight:bold;letter-spacing:1px;text-transform:uppercase;font-size:13px">${esc(cta.label)}</a></p>` : ""));
-  const r = await sendMail({ to, subject, html, replyTo: SITE.email });
-  await logMessage("email", to, subject, text, r.ok, r.ok ? undefined : "Email not sent (check RESEND_API_KEY)", by);
+  const r = await sendMail({ to, subject, html, replyTo: SITE.email }); // logged in the email log by sendMail
+  void by;
   return r.ok;
 }
 

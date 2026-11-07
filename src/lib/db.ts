@@ -293,6 +293,13 @@ alter table crew_assignments add column if not exists drive_link_at timestamptz;
 alter table crew_assignments add column if not exists drive_asked_at timestamptz;
 alter table crew_assignments add column if not exists drive_reminded_at timestamptz;
 alter table crew_assignments add column if not exists drive_overdue_at timestamptz;
+create table if not exists email_log (
+  id serial primary key,
+  to_addr text not null, subject text not null default '', html text, reply_to text, attachments text[] not null default '{}',
+  status text not null, error text, provider_id text,
+  created_at timestamptz not null default now()
+);
+create index if not exists email_log_created on email_log(created_at desc);
 create table if not exists file_requests (
   id serial primary key,
   name text not null, email text not null, shoot text not null default '', shoot_date text not null default '',

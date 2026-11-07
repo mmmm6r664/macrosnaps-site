@@ -79,6 +79,8 @@ export async function runDailyAutomations() {
     const m = feedbackRequest(g.customer_name, g.service_name, `${ORIGIN}/account/orders/${g.ref}`);
     if ((await sendMail({ to: g.email, subject: m.subject, html: m.html })).ok) out.feedback++;
   }
+  // Keep the email log light: drop the stored copy of emails older than 180 days (the log line stays).
+  await q`update email_log set html = null where html is not null and created_at < now() - interval '180 days'`.catch(() => null);
   return out;
 }
 

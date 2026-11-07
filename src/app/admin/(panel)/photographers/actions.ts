@@ -62,7 +62,7 @@ export async function messagePeople(_: S, f: FormData): Promise<S> {
     if (viaSms && p.phone && (await textPerson(p.phone, `MacroSnaps: ${body}`.slice(0, 600), u.id))) t++;
   }
   await audit(u.id, "network_message", `${people.length} people, ${e} emails, ${t} texts`);
-  return { ok: `Sent ${e} email${e === 1 ? "" : "s"} and ${t} text${t === 1 ? "" : "s"} to ${people.length} people.${(viaEmail && e < people.length) || (viaSms && t < people.length) ? " Some weren't sent: check that email/text are connected and phone numbers are valid (see Messages log)." : ""}` };
+  return { ok: `Sent ${e} email${e === 1 ? "" : "s"} and ${t} text${t === 1 ? "" : "s"} to ${people.length} people.${(viaEmail && e < people.length) || (viaSms && t < people.length) ? " Some weren't sent: check that email/text are connected and phone numbers are valid (see Sent emails & texts)." : ""}` };
 }
 
 /** Offer a shoot to selected people: email + text + staff-portal notification, each with Accept / Decline. */
