@@ -38,8 +38,8 @@ export function SectionTitle({ eyebrow, title, intro, center = true }: { eyebrow
   );
 }
 
-export function TrustBar({ events = false }: { events?: boolean }) {
-  const items = [events ? "6,000+ events" : "13+ years of experience", "Rated 5 stars", "Insured by State Farm: $1M / $2M", "Published prices, book & pay online"];
+export function TrustBar(_: { events?: boolean } = {}) {
+  const items = ["750+ conferences · 2,200+ weddings", "Rated 5 stars", "Insured by State Farm: $1M / $2M", "Published prices, book & pay online"];
   return (
     <div className="border-y border-black/5 bg-marble">
       <ul className="mx-auto grid max-w-7xl gap-3 px-4 py-5 text-sm text-ink sm:grid-cols-2 lg:grid-cols-4">

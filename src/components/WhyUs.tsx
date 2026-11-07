@@ -2,7 +2,7 @@ import Link from "next/link";
 import { RATES } from "@/lib/services";
 
 const POINTS = (where: string, events = false) => [
-  [events ? "13+ years, 6,000+ events" : "13+ years of experience", `MacroSnaps and our parent company MacroHype have been photographing and filming for more than 13 years: over 750 corporate events and conferences and more than 2,200 weddings and private events. ${where} gets the same experienced crews and standards we bring to every city we work in.`],
+  ["13+ years, 750+ conferences, 2,200+ weddings", `MacroSnaps and our parent company MacroHype have been photographing and filming for more than 13 years: over 750 corporate events and conferences and more than 2,200 weddings and private events. ${where} gets the same experienced crews and standards we bring to every city we work in.`],
   ["Prices published, not negotiated", `Many vendors price by how much they think you can pay. We publish every rate: photography is $${RATES.photo.first} for the first hour and $${RATES.photo.extra} for each additional hour, videography is $${RATES.video.first} for the first hour and $${RATES.video.extra} for each additional hour, with a ${RATES.minHours}-hour minimum. Everyone pays the same price.`],
   ["Insured by State Farm", "We carry $1 million per occurrence and $2 million general aggregate liability coverage. If your venue needs a certificate of insurance, we send it before your event."],
   ["Our own network, not a marketplace", "We are one company with our own photographers and videographers across all 50 states, Washington, DC, Ontario and Quebec, so the quality, editing and delivery standards stay the same wherever you book."],
