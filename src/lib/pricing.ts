@@ -11,7 +11,7 @@ export const hourPrice = (kind: Kind, h: number) => RATES[kind].first + RATES[ki
 /** Each additional photographer/videographer: the additional-hour rate for every hour of coverage. */
 export const crewPrice = (kind: Kind, h: number) => RATES[kind].extra * h;
 
-export type SessionInput = { date: string; start: string; end: string; venue?: string; extraCrew?: number };
+export type SessionInput = { date: string; start: string; end: string; venue?: string; extraCrew?: number; companionHours?: number };
 
 const toMin = (t: string) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
 export const durationHours = (s: { start: string; end: string }) =>
@@ -22,7 +22,11 @@ export const billedHours = (s: { start: string; end: string }) =>
 export type Line = { label: string; amount: number };
 
 /** Hourly booking: main service + extra crew + optional companion service (photo↔video), per day. */
-export function quoteHourly(kind: Kind, sessions: SessionInput[], addCompanion: boolean) {
+/** Photography-only editing upgrades, charged per photographer-hour (hours × photographers). */
+export const EDIT_RATES = { premiumEdit: 50, colorGrade: 25 };
+export type EditOpts = { premiumEdit?: boolean; colorGrade?: boolean };
+
+export function quoteHourly(kind: Kind, sessions: SessionInput[], addCompanion: boolean, edit: EditOpts = {}) {
   const other: Kind = kind === "photo" ? "video" : "photo";
   const lines: Line[] = [];
   sessions.forEach((s, i) => {
@@ -31,7 +35,16 @@ export function quoteHourly(kind: Kind, sessions: SessionInput[], addCompanion: 
     lines.push({ label: `${tag}: ${kind === "photo" ? "Photography" : "Videography"}, ${h} hrs`, amount: hourPrice(kind, h) });
     const crew = Math.min(Math.max(Math.floor(s.extraCrew ?? 0), 0), RATES.maxCrew);
     if (crew) lines.push({ label: `${tag}: ${crew} additional ${kind === "photo" ? "photographer" : "videographer"}${crew > 1 ? "s" : ""}, ${h} hrs`, amount: crew * crewPrice(kind, h) });
-    if (addCompanion) lines.push({ label: `${tag}: ${other === "photo" ? "Photography" : "Videography"} add-on, ${h} hrs`, amount: hourPrice(other, h) });
+    if (addCompanion) {
+      // The add-on can cover fewer hours than the main booking (2-hour minimum).
+      const ch = Math.min(h, Math.max(RATES.minHours, Math.floor(s.companionHours || h)));
+      lines.push({ label: `${tag}: ${other === "photo" ? "Photography" : "Videography"} add-on, ${ch} hrs`, amount: hourPrice(other, ch) });
+    }
+    if (kind === "photo") {
+      const ph = h * (1 + crew);
+      if (edit.premiumEdit) lines.push({ label: `${tag}: Premium editing, ${ph} photographer-hr${ph === 1 ? "" : "s"}`, amount: EDIT_RATES.premiumEdit * ph });
+      if (edit.colorGrade) lines.push({ label: `${tag}: Professional color grading, ${ph} photographer-hr${ph === 1 ? "" : "s"}`, amount: EDIT_RATES.colorGrade * ph });
+    }
   });
   return { lines, total: lines.reduce((a, l) => a + l.amount, 0) };
 }

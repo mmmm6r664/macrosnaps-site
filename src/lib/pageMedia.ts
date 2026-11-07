@@ -16,6 +16,7 @@ export const VERTICAL_MEDIA: Record<string, { photos: string[]; videos: Tag[] }>
   "tech-startups": { photos: ["conference", "corporate"], videos: ["tech", "conference"] },
   "financial-services": { photos: ["corporate"], videos: ["corporate"] },
   "nonprofits-associations": { photos: ["gala", "event", "conference"], videos: ["community", "corporate"] },
+  "government-public-sector": { photos: ["conference"], videos: ["conference"] },
   education: { photos: ["graduation"], videos: ["party"] },
   "home-services": { photos: [], videos: ["homeservices", "ad"] },
   "video-ads": { photos: [], videos: ["ad"] },

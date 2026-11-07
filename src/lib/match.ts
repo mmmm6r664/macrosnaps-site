@@ -14,7 +14,7 @@ const RULES: Rule[] = [
   { re: /\b(bar|bat|b'nai) mitzvah/, slug: "bar-mitzvah-photography", kind: "event" },
   { re: /\b(indian|hindu|sikh|punjabi|gujarati|desi) wedding|\bsangeet\b|\bhaldi\b|\bbaraat\b/, slug: "indian-wedding-photography", kind: "event" },
   { re: /\bpakistani wedding|\bvalima\b|\bmehndi\b|\bdholki\b|\brukhsati\b/, slug: "pakistani-wedding-photography", kind: "event" },
-  { re: /\b(muslim|islamic|arab|lebanese|turkish|egyptian) wedding|\bnikah\b|\bwalima\b|\bzaffa\b/, slug: "muslim-wedding-photography", kind: "event" },
+  { re: /\b(muslim|islamic|arab|lebanese|turkish|egyptian) wedding|\bnikk?ah\b|\bnikaah\b|\bwalima\b|\bzaffa\b/, slug: "muslim-wedding-photography", kind: "event" },
   { re: /\b(jewish|orthodox jewish|hasidic) wedding|\bchuppah\b|\bketubah\b|\bbedeken\b/, slug: "jewish-wedding-photography", kind: "event" },
   { re: /\b(same[- ]sex|gay|lesbian|lgbtq?\+?|queer) (wedding|marriage|couple)/, slug: "same-sex-wedding-photography", kind: "event" },
   { re: /\b(chinese|vietnamese|korean|asian|taiwanese|filipino) wedding|\btea ceremony\b|\bpyebaek\b/, slug: "chinese-wedding-photography", kind: "event" },
@@ -35,6 +35,7 @@ const RULES: Rule[] = [
   { re: /\b(baptism|christening|communion|bris|aqiqah)\b/, slug: "religious-ceremony-photography", kind: "event" },
   { re: /\b(festival|parade|5k|marathon|community event|street fair)\b/, slug: "festival-community-event-photography", kind: "event" },
   { re: /\bgraduation party\b/, slug: "graduation-party-photography", kind: "event" },
+  { re: /\b(government|gov't|public sector|(?<!(marketing|ad|advertising|creative|digital|design|branding|talent|modeling|model|travel|staffing|insurance|media|pr|web|seo|real estate|rental) )agenc(y|ies)|federal|municipal|press conferences?|town ?halls?|swearing[- ]in|oath of office|public (meeting|hearing)s?)\b/, slug: "government-public-sector", kind: "industry" },
   { re: /\b(trade ?show|expo|exhibit(or|ion)|booth)\b/, slug: "trade-show-photography", kind: "service" },
   { re: /\b(conference|summit|convention|keynote|symposium|panel|forum|seminar|congress)\b/, slug: "conference-photography", kind: "service", video: "conference-videography" },
   { re: /\blive ?stream/, slug: "live-stream", kind: "service" },
@@ -120,11 +121,47 @@ export type MatchResult = {
   links: { label: string; href: string }[];
 };
 
+// Places we don't serve. Countries always count; foreign cities only when no US/Canadian city was found
+// (so "London, ON" or "Paris, TX" still work).
+const COUNTRIES = "afghanistan|albania|algeria|argentina|armenia|australia|austria|azerbaijan|bahamas|bahrain|bangladesh|barbados|belarus|belgium|belize|bolivia|bosnia|brazil|bulgaria|cambodia|cameroon|chile|china|colombia|costa rica|croatia|cuba|cyprus|czech|czechia|denmark|dominican republic|ecuador|egypt|el salvador|england|estonia|ethiopia|fiji|finland|france|germany|ghana|greece|guatemala|haiti|honduras|hong kong|hungary|iceland|india|indonesia|iran|iraq|ireland|israel|italy|jamaica|japan|jordan|kazakhstan|kenya|korea|kuwait|laos|latvia|lebanon|libya|lithuania|luxembourg|malaysia|maldives|malta|mexico|moldova|monaco|mongolia|montenegro|morocco|myanmar|nepal|netherlands|holland|new zealand|nicaragua|nigeria|norway|oman|pakistan|palestine|panama|paraguay|peru|philippines|poland|portugal|qatar|romania|russia|rwanda|saudi arabia|saudi|scotland|senegal|serbia|singapore|slovakia|slovenia|somalia|south africa|spain|sri lanka|sudan|sweden|switzerland|syria|taiwan|tanzania|thailand|trinidad|tunisia|turkey|turkiye|uganda|ukraine|united kingdom|uk|uae|united arab emirates|uruguay|uzbekistan|venezuela|vietnam|wales|yemen|zambia|zimbabwe|dubai";
+const FOREIGN_CITIES = "karachi|lahore|islamabad|rawalpindi|faisalabad|delhi|new delhi|mumbai|bombay|bangalore|bengaluru|hyderabad|chennai|kolkata|pune|ahmedabad|jaipur|dhaka|kathmandu|colombo|dubai|abu dhabi|doha|riyadh|jeddah|kuwait city|muscat|manama|cairo|istanbul|ankara|tehran|baghdad|amman|beirut|tel aviv|jerusalem|london|manchester|birmingham uk|edinburgh|glasgow|dublin|paris|marseille|berlin|munich|frankfurt|hamburg|madrid|barcelona|lisbon|rome|milan|venice|florence|amsterdam|brussels|vienna|zurich|geneva|prague|warsaw|budapest|athens|stockholm|oslo|copenhagen|helsinki|moscow|kyiv|kiev|tokyo|osaka|seoul|beijing|shanghai|hong kong|singapore|bangkok|manila|jakarta|bali|kuala lumpur|hanoi|ho chi minh|sydney|melbourne|brisbane|perth|auckland|mexico city|cancun|guadalajara|tulum|cabo|sao paulo|rio de janeiro|buenos aires|bogota|lima|santiago|lagos|abuja|accra|nairobi|johannesburg|cape town|casablanca|marrakech";
+const OTHER_CANADA = "british columbia|vancouver|victoria bc|surrey bc|burnaby|alberta|calgary|edmonton|saskatchewan|saskatoon|regina|manitoba|winnipeg|nova scotia|halifax|new brunswick|moncton|fredericton|newfoundland|st\\.? john'?s|prince edward island|charlottetown|yukon|whitehorse|nunavut|northwest territories|yellowknife";
+const RE_COUNTRY = new RegExp(`\\b(${COUNTRIES})\\b`);
+const RE_FOREIGN_CITY = new RegExp(`\\b(${FOREIGN_CITIES})\\b`);
+const RE_OTHER_CANADA = new RegExp(`\\b(${OTHER_CANADA})\\b`);
+const titleCase = (t: string) => t.replace(/\b\w/g, (c) => c.toUpperCase());
+
+const US_CA_CODES = new Set([...regions.map((r) => r.code.toLowerCase()), "dc"]);
+function outOfArea(q: string, foundUsCa: boolean): MatchResult | null {
+  // "Paris, TX": a US state or Canadian province code after the town means it's ours even if not in our city list.
+  const code = q.match(/,\s*([a-z]{2})\b/)?.[1];
+  if (code && US_CA_CODES.has(code)) foundUsCa = true;
+  const country = q.match(RE_COUNTRY)?.[1];
+  const ca = !foundUsCa ? q.match(RE_OTHER_CANADA)?.[1] : undefined;
+  const city = !foundUsCa ? q.match(RE_FOREIGN_CITY)?.[1] : undefined;
+  const place = country ?? ca ?? city;
+  if (!place) return null;
+  const name = place.length <= 3 ? place.toUpperCase() : titleCase(place);
+  return {
+    headline: `Sorry, we don't cover ${name}`,
+    url: "/locations",
+    note: ca
+      ? "In Canada we work in Ontario and Quebec only. In the US we cover all 50 states and Washington, DC."
+      : "MacroSnaps works in all 50 US states, Washington, DC, and in Canada in Ontario and Quebec. If your event is in one of these areas, add the city to your request.",
+    links: [{ label: "See all locations", href: "/locations" }, { label: "Contact us", href: "/contact" }],
+  };
+}
+
 export function matchRequest(raw: string): MatchResult {
   const q = norm(raw);
   const video = isVideo(q);
   const rule = RULES.find((r) => r.re.test(q));
-  const { city, region } = findPlace(q);
+  const found = findPlace(q);
+  const { city } = found;
+  // A town we don't list ("Paris, TX") still gets the state's page.
+  const region = found.region ?? (!city ? regions.find((r) => r.code.toLowerCase() === q.match(/,\s*([a-z]{2})\b/)?.[1]) : undefined);
+  const away = outOfArea(q, !!(city || region));
+  if (away) return away;
   const where = city ? cityLabel(city) : region?.name;
   const place = city?.slug ?? region?.slug;
   const links: { label: string; href: string }[] = [];
@@ -163,11 +200,12 @@ export function matchRequest(raw: string): MatchResult {
   if (rule.kind === "event") {
     const e = EVENT_TYPES.find((x) => x.slug === rule.slug)!;
     if (place) links.push({ label: `Event ${video ? "videographers" : "photographers"} in ${where}`, href: `/${video ? "event-videography" : "event-photography"}/${place}` });
+    if (place) links.push({ label: `About ${e.name.toLowerCase()}`, href: `/${e.slug}` });
     links.push({ label: "Event photography prices", href: "/event-photography" });
     return {
       headline: `${e.pro}${where ? ` in ${where}` : ""}`,
-      url: `/${e.slug}`,
-      bookUrl: `/book?service=${video ? "event-videography" : "event-photography"}${city ? `&city=${city.slug}` : ""}`,
+      url: place ? `/${e.slug}/${place}` : `/${e.slug}`,
+      bookUrl: `/book?service=${/wedding|elopement/.test(e.slug) ? (video ? "wedding-videography" : "wedding-photography") : video ? "event-videography" : "event-photography"}${city ? `&city=${city.slug}` : ""}`,
       priceFrom: from,
       links,
     };

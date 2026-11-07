@@ -17,6 +17,7 @@ import { serviceSchema } from "@/lib/schema";
 import { photoPicker, rotate, bannerSafe } from "@/lib/images";
 import { SITE } from "@/lib/site";
 import { IconCheck } from "@/components/Icons";
+import PhotoSpots from "@/components/PhotoSpots";
 import { EVENT_TYPES } from "@/data/eventTypes";
 import { EventCityPage, EventRegionPage } from "@/components/EventLocalPage";
 import { getEventType, eventPrerenderCities, eventCityContent, eventRegionContent } from "@/lib/eventLocal";
@@ -188,6 +189,8 @@ function CityPage({ t, city }: { t: LocalTarget; city: City }) {
         </section>
       )}
 
+      <PhotoSpots city={city} bookHref={bookHref} />
+
       <section className="bg-black px-4 py-16 md:px-6">
         <div className="mx-auto max-w-7xl">
           <h2 className="mb-10 text-center font-serif text-3xl text-white">Our Work</h2>
@@ -297,7 +300,7 @@ function RegionPage({ t, region }: { t: LocalTarget; region: Region }) {
       <section className="bg-marble px-4 py-16 md:px-6">
         <div className="mx-auto max-w-7xl">
           <SectionTitle eyebrow="Pricing" title={`${targetName(t)} prices in ${region.name}`} intro="The same transparent prices in every city. Book and pay online." />
-          {services.filter((s) => s.packages.length).slice(0, 1).map((s) => <Pricing key={s.slug} packages={s.packages} serviceSlug={s.slug} note={s.pricingNote} />)}
+          {services.filter((s) => s.packages.length).slice(0, 1).map((s) => <Pricing key={s.slug} packages={s.packages} serviceSlug={s.slug} note={s.pricingNote} canada={region.country === "canada"} />)}
         </div>
       </section>
 

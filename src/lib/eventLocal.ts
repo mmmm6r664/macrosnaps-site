@@ -162,7 +162,7 @@ export function eventCityContent(e: EventType, c: City) {
   /* local section */
   const lists: { title: string; items: string[] }[] = [];
   if (venues) lists.push({ title: group === "wedding" ? `${c.name} wedding & reception venues we cover` : `${c.name} venues we cover`, items: venues.items });
-  if (portraitSpots.length) lists.push({ title: `Portrait locations around ${c.name}`, items: portraitSpots });
+  // Portrait / photo spots have their own section on the page (components/PhotoSpots).
   if (L.neighborhoods?.length) lists.push({ title: "Neighborhoods & areas", items: L.neighborhoods.slice(0, 6) });
   if (nearby.length) lists.push({ title: "Also serving nearby", items: nearby.slice(0, 6).map((n) => `${n.name} (${n.mi} mi)`) });
 

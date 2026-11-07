@@ -1,15 +1,17 @@
 "use client";
+import { cleanTyped, MAX_QUERY } from "@/lib/safeInput";
 import TermsList from "@/components/TermsList";
 import { TERMS_VERSION } from "@/lib/terms";
 import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { createPortal } from "react-dom";
-import { RATES, quoteHourly, billedHours as billed, durationHours, earliestStart, isTooSoon, MIN_NOTICE_HOURS, type Kind } from "@/lib/pricing";
+import type { Addon } from "@/lib/addons";
+import { RATES, EDIT_RATES, quoteHourly, billedHours as billed, durationHours, earliestStart, isTooSoon, MIN_NOTICE_HOURS, type Kind } from "@/lib/pricing";
 
 type Pkg = { id: string; name: string; price: number; priceNote?: string; features: string[]; hours?: number };
 type Svc = { slug: string; name: string; kind: string; group: string; packages: Pkg[] };
-type CityOpt = { slug: string; label: string };
-type Session = { key: number; date: string; start: string; end: string; venue: string; extraCrew: number };
+type CityOpt = { slug: string; label: string; state?: string };
+type Session = { key: number; date: string; start: string; end: string; venue: string; extraCrew: number; companionHours?: number };
 
 const GROUPS: Record<string, string> = { corporate: "Conferences & Corporate", wedding: "Weddings & Engagements", business: "Business & Commercial", personal: "Portraits & Family", post: "Editing" };
 const MAX_SESSIONS = 10;
@@ -17,11 +19,16 @@ const MAX_SESSIONS = 10;
 const toMin = (t: string) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
 const fromMin = (n: number) => { const x = ((n % 1440) + 1440) % 1440; return `${String(Math.floor(x / 60)).padStart(2, "0")}:${String(x % 60).padStart(2, "0")}`; };
 const durationH = durationHours;
+/** Bookable times: every 30 minutes. */
+const SLOTS = Array.from({ length: 48 }, (_, i) => `${String(Math.floor(i / 2)).padStart(2, "0")}:${i % 2 ? "30" : "00"}`);
 const fmtTime = (t: string) => { if (!t) return ""; const [h, m] = t.split(":").map(Number); return `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`; };
 
-export default function BookingForm({ services, cities, initial }: { services: Svc[]; cities: CityOpt[]; initial: { service?: string; package?: string; city?: string; cancelled?: boolean } }) {
+export default function BookingForm({ services, cities, addons = [], paused = {}, initial }: { services: Svc[]; cities: CityOpt[]; addons?: Addon[]; paused?: Record<string, string>; initial: { service?: string; package?: string; city?: string; cancelled?: boolean } }) {
   const rates = RATES;
   const [addCompanion, setAddCompanion] = useState(false);
+  const [premiumEdit, setPremiumEdit] = useState(false);
+  const [colorGrade, setColorGrade] = useState(false);
+  const [chosenAddons, setChosenAddons] = useState<string[]>([]);
   const [serviceSlug, setServiceSlug] = useState(services.find((s) => s.slug === initial.service)?.slug ?? services[0].slug);
   const service = services.find((s) => s.slug === serviceSlug)!;
   const hourly = service.packages.every((p) => p.hours) && (service.kind === "photo" || service.kind === "video");
@@ -38,6 +45,36 @@ export default function BookingForm({ services, cities, initial }: { services: S
   const [accepted, setAccepted] = useState(false);
   const pending = useRef<Record<string, FormDataEntryValue> | null>(null);
   const [error, setError] = useState("");
+  const [ask, setAsk] = useState("");
+  const [askState, setAskState] = useState<{ busy?: boolean; msg?: string; tone?: "ok" | "warn" }>({});
+
+  // "Describe your booking" assistant: fills the form from a plain-English request.
+  async function quickFill(e: React.FormEvent) {
+    e.preventDefault();
+    if (!ask.trim()) return;
+    setAskState({ busy: true });
+    const r = await fetch("/api/parse-booking", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: ask }) }).catch(() => null);
+    const p = r ? await r.json().catch(() => null) : null;
+    if (!r?.ok || !p) return setAskState({ msg: p?.error ?? "Sorry, something went wrong. Please fill in the form below.", tone: "warn" });
+    if (p.outOfArea) return setAskState({ msg: p.outOfArea, tone: "warn" });
+    const svc = services.find((x) => x.slug === p.service);
+    if (svc) { setServiceSlug(svc.slug); setPkgId(svc.packages[0].id); }
+    if (p.location) setLocation(p.location);
+    if (typeof p.addCompanion === "boolean") setAddCompanion(p.addCompanion);
+    const n = Math.max(1, p.days ?? 1);
+    setSessions(Array.from({ length: n }, (_, i) => {
+      let date = p.date ?? "";
+      if (date && i) { const d = new Date(`${date}T12:00:00`); d.setDate(d.getDate() + i); date = d.toISOString().slice(0, 10); }
+      return { key: Date.now() + i, date, start: p.start ?? "", end: p.end ?? "", venue: p.venue ?? "", extraCrew: p.extraCrew ?? 0 };
+    }));
+    if (p.venue) { const a = document.getElementById("address") as HTMLInputElement | HTMLTextAreaElement | null; if (a && !a.value) a.value = p.venue; }
+    const tooSoon = p.date && p.start && isTooSoon(p.date, p.start);
+    setAskState({
+      tone: p.notes.length || tooSoon ? "warn" : "ok",
+      msg: tooSoon ? `Filled in, but bookings need ${MIN_NOTICE_HOURS} hours' notice. Please pick a later date or call 877-622-4973.`
+        : p.notes.length ? `Filled in what we could. Please ${p.notes.join(", ")} below.` : "Done! Check the details below, then add your contact info.",
+    });
+  }
   const today = useMemo(() => earliestStart().slice(0, 10), []); // earliest date allowed (48 hours' notice)
 
   const grouped = useMemo(() => {
@@ -49,9 +86,15 @@ export default function BookingForm({ services, cities, initial }: { services: S
   // Price per session: hourly services use the published rate (min hours per day); package services use the package price.
   const billedHours = billed;
   const kind = service.kind as Kind;
-  const quote = hourly ? quoteHourly(kind, sessions, addCompanion) : null;
-  const sessionPrice = (s: Session) => (hourly ? quoteHourly(kind, [s], addCompanion).total : pkg.price);
-  const total = quote ? quote.total : pkg.price * sessions.length;
+  const edit = kind === "photo" ? { premiumEdit, colorGrade } : {};
+  const quote = hourly ? quoteHourly(kind, sessions, addCompanion, edit) : null;
+  const sessionPrice = (s: Session) => (hourly ? quoteHourly(kind, [s], addCompanion, edit).total : pkg.price);
+  // Extra add-ons: shown only for matching services (and, for 3D tours, cities in the tour states). Prices are recomputed server-side.
+  const cityState = cities.find((c) => c.label.toLowerCase() === location.trim().toLowerCase())?.state;
+  const visibleAddons = addons.filter((a) => a.services.includes(serviceSlug) && (!a.states || (!!cityState && a.states.includes(cityState))));
+  const activeAddons = visibleAddons.filter((a) => chosenAddons.includes(a.id));
+  const addonLines = activeAddons.map((a) => ({ label: `${a.title} add-on: ${a.packageName}`, amount: a.price }));
+  const total = (quote ? quote.total : pkg.price * sessions.length) + addonLines.reduce((a, l) => a + l.amount, 0);
   const other = kind === "photo" ? "Videography" : "Photography";
   const otherRate = kind === "photo" ? rates.video : rates.photo;
   const shiftEnd = (s: Session, delta: number) => {
@@ -99,7 +142,7 @@ export default function BookingForm({ services, cities, initial }: { services: S
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...f, service: service.slug, package: pkg.id, location, citySlug, agree: true, signature: signature.trim(), termsVersion: TERMS_VERSION, sessions: sessions.map(({ date, start, end, venue, extraCrew }) => ({ date, start, end, venue, extraCrew })), addCompanion: hourly && addCompanion }),
+        body: JSON.stringify({ ...f, service: service.slug, package: pkg.id, location, citySlug, agree: true, signature: signature.trim(), termsVersion: TERMS_VERSION, sessions: sessions.map(({ date, start, end, venue, extraCrew, companionHours }) => ({ date, start, end, venue, extraCrew, companionHours })), addCompanion: hourly && addCompanion, premiumEdit: hourly && kind === "photo" && premiumEdit, colorGrade: hourly && kind === "photo" && colorGrade, addons: activeAddons.map((a) => a.id) }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Something went wrong");
@@ -126,6 +169,17 @@ export default function BookingForm({ services, cities, initial }: { services: S
     <form onSubmit={submit} className="grid gap-10 lg:grid-cols-3">
       <div className="space-y-10 lg:col-span-2">
         {initial.cancelled && <p className="border border-black/10 bg-marble p-4 text-sm">Payment was cancelled — your booking hasn&apos;t been made. You can try again below.</p>}
+
+        <div className="mb-10 border-2 border-gold bg-white p-5 shadow-sm">
+          <label htmlFor="quickfill" className="block font-serif text-2xl">Describe your booking</label>
+          <p className="mt-1 text-sm text-muted">Type it in one line and we&apos;ll fill in the form for you.</p>
+          <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+            <input id="quickfill" value={ask} onChange={(e) => setAsk(cleanTyped(e.target.value))} onKeyDown={(e) => { if (e.key === "Enter") quickFill(e); }} maxLength={MAX_QUERY}
+              placeholder="Conference photography at the Javits Center in New York City from 9 am to 5 pm, 2 photographers, November 12th" className={`${field} flex-1`} />
+            <button type="button" onClick={quickFill} disabled={askState.busy} className="btn-gold whitespace-nowrap">{askState.busy ? "Filling…" : "Fill in for me"}</button>
+          </div>
+          {askState.msg && <p role="status" className={`mt-3 text-sm ${askState.tone === "ok" ? "text-emerald-800" : "text-amber-800"}`}>{askState.msg}</p>}
+        </div>
 
         <fieldset>
           <legend className="mb-4 font-serif text-2xl">1. Choose your service</legend>
@@ -169,8 +223,8 @@ export default function BookingForm({ services, cities, initial }: { services: S
                   </div>
                   <div className="grid gap-3 sm:grid-cols-3">
                     <div><label className={label} htmlFor={`date-${s.key}`}>Date *</label><input id={`date-${s.key}`} type="date" min={today} required value={s.date} onChange={(e) => update(s.key, { date: e.target.value })} className={field} /></div>
-                    <div><label className={label} htmlFor={`start-${s.key}`}>Start time *</label><input id={`start-${s.key}`} type="time" required value={s.start} onChange={(e) => update(s.key, { start: e.target.value })} className={field} /></div>
-                    <div><label className={label} htmlFor={`end-${s.key}`}>End time *</label><input id={`end-${s.key}`} type="time" required value={s.end} onChange={(e) => update(s.key, { end: e.target.value })} className={field} /></div>
+                    <div><label className={label} htmlFor={`start-${s.key}`}>Start time *</label><select id={`start-${s.key}`} required value={s.start} onChange={(e) => update(s.key, { start: e.target.value })} className={field}><option value="">Select</option>{SLOTS.map((t) => <option key={t} value={t}>{fmtTime(t)}</option>)}</select></div>
+                    <div><label className={label} htmlFor={`end-${s.key}`}>End time *</label><select id={`end-${s.key}`} required value={s.end} onChange={(e) => update(s.key, { end: e.target.value })} className={field}><option value="">Select</option>{SLOTS.map((t) => <option key={t} value={t}>{fmtTime(t)}{s.start && t <= s.start ? " (next day)" : ""}</option>)}</select></div>
                   </div>
                   {hourly && (
                     <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
@@ -213,11 +267,50 @@ export default function BookingForm({ services, cities, initial }: { services: S
               <span className="mt-1 block text-sm text-muted">
                 {kind === "photo"
                   ? "Add a videographer for the same hours and get an edited highlight video (music of your choice, re-edit included) alongside your photos."
-                  : "Add a photographer for the same hours and get a retouched, high-resolution photo gallery alongside your video."}{" "}
+                  : "Add a photographer for all or part of your event and get a retouched, high-resolution photo gallery alongside your video."}{" "}
                 ${otherRate.first} first hour + ${otherRate.extra} each additional hour.
               </span>
             </span>
           </label>
+        )}
+
+        {hourly && addCompanion && (
+          <div className="-mt-4 border-2 border-t-0 border-gold-dark bg-gold/5 px-5 pb-5 pt-3">
+            <p className="mb-2 text-sm font-semibold">How many hours of {other.toLowerCase()}?</p>
+            <div className="space-y-2">
+              {sessions.map((x, i) => {
+                const h = billed(x);
+                const val = Math.min(h, x.companionHours || h);
+                return (
+                  <label key={x.key} className="flex flex-wrap items-center gap-3 text-sm">
+                    <span className="w-40 text-muted">{sessions.length > 1 ? `Day ${i + 1}${x.date ? ` (${x.date})` : ""}` : "Your event"}</span>
+                    <select value={val} onChange={(e) => update(x.key, { companionHours: Number(e.target.value) })} className="border border-black/15 bg-white px-2 py-1.5" aria-label={`${other} hours`}>
+                      {Array.from({ length: Math.max(1, h - rates.minHours + 1) }, (_, k) => rates.minHours + k).map((n) => <option key={n} value={n}>{n === h ? `All ${n} hours` : `${n} hours`}</option>)}
+                    </select>
+                    <span className="text-xs text-muted">${(otherRate.first + otherRate.extra * (val - 1)).toLocaleString()}</span>
+                  </label>
+                );
+              })}
+            </div>
+            <p className="mt-2 text-xs text-muted">Tell us in your notes which part of the day you want covered (e.g. ceremony and first dance).</p>
+          </div>
+        )}
+
+        {hourly && kind === "photo" && (
+          <fieldset className="space-y-3">
+            <legend className="mb-1 font-serif text-xl">Editing upgrades</legend>
+            <p className="text-sm text-muted">Every booking includes standard editing of your delivered photos (exposure, white balance and color correction). Upgrade for more:</p>
+            {([
+              ["premiumEdit", premiumEdit, setPremiumEdit, "Premium editing", `+$${EDIT_RATES.premiumEdit} per hour of photography`, "Detailed retouching of every delivered photo: skin and blemish touch-ups, removing distractions from the background, straightening and perfecting each image."],
+              ["colorGrade", colorGrade, setColorGrade, "Professional color grading", `+$${EDIT_RATES.colorGrade} per hour of photography`, "A custom, consistent color style across your whole gallery, finished by our color specialists, from bright and airy to warm, moody or cinematic."],
+            ] as const).map(([key, on, set, title, price, desc]) => (
+              <label key={key} className={`flex cursor-pointer gap-4 border p-4 transition ${on ? "border-gold-dark bg-gold/10" : "border-black/10 bg-white hover:border-gold"}`}>
+                <input type="checkbox" checked={on} onChange={(e) => set(e.target.checked)} className="mt-1 h-5 w-5 accent-[#a8963b]" />
+                <span><span className="block font-semibold">{title} <span className="font-normal text-gold-dark">{price}</span></span><span className="mt-1 block text-sm text-muted">{desc}</span></span>
+              </label>
+            ))}
+            <p className="text-xs text-muted">Charged for each photographer&apos;s hours: with 2 photographers for 4 hours, that&apos;s 8 hours of photography.</p>
+          </fieldset>
         )}
 
         <fieldset className="grid gap-5 sm:grid-cols-2">
@@ -230,6 +323,24 @@ export default function BookingForm({ services, cities, initial }: { services: S
           </div>
           <div className="sm:col-span-2"><label className={label} htmlFor="address">Venue name & address *</label><input id="address" name="address" required className={field} placeholder="e.g. Moscone Center, 747 Howard St" /></div>
         </fieldset>
+
+        {visibleAddons.length > 0 && (
+          <div className="space-y-3">
+            <p className="font-serif text-xl">Popular add-ons</p>
+            {visibleAddons.map((a) => {
+              const on = chosenAddons.includes(a.id);
+              return (
+                <label key={a.id} className={`flex cursor-pointer gap-4 border-2 p-5 transition ${on ? "border-gold-dark bg-gold/10" : "border-dashed border-gold bg-white hover:bg-gold/5"}`}>
+                  <input type="checkbox" checked={on} onChange={(e) => setChosenAddons((l) => (e.target.checked ? [...l, a.id] : l.filter((x) => x !== a.id)))} className="mt-1 h-5 w-5 accent-[#a8963b]" />
+                  <span>
+                    <span className="block font-serif text-xl">Add a {a.title.toLowerCase()}: {a.packageName} (${a.price.toLocaleString()})</span>
+                    <span className="mt-1 block text-sm text-muted">{a.blurb}</span>
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        )}
 
         <fieldset className="grid gap-5 sm:grid-cols-2">
           <legend className="mb-4 font-serif text-2xl sm:col-span-2">4. Your details</legend>
@@ -247,7 +358,7 @@ export default function BookingForm({ services, cities, initial }: { services: S
           <p className="mt-4 font-semibold">{service.name}</p>
           {!hourly && <p className="text-sm text-muted">{pkg.name}</p>}
           {quote && sessions.every((x) => x.date && x.start && x.end) ? (
-            <ul className="mt-3 space-y-1.5 text-sm">{quote.lines.map((l, i) => <li key={i} className="flex justify-between gap-3"><span className="text-muted">{l.label}</span><span>${l.amount.toLocaleString()}</span></li>)}</ul>
+            <ul className="mt-3 space-y-1.5 text-sm">{[...quote.lines, ...addonLines].map((l, i) => <li key={i} className="flex justify-between gap-3"><span className="text-muted">{l.label}</span><span>${l.amount.toLocaleString()}</span></li>)}</ul>
           ) : (
           <ul className="mt-3 space-y-1.5 text-sm">
             {sessions.map((s, i) => (
@@ -256,15 +367,20 @@ export default function BookingForm({ services, cities, initial }: { services: S
                 <span>${sessionPrice(s).toLocaleString()}</span>
               </li>
             ))}
+            {addonLines.map((l) => <li key={l.label} className="flex justify-between gap-3"><span className="text-muted">{l.label}</span><span>${l.amount.toLocaleString()}</span></li>)}
           </ul>
           )}
           {!hourly && <ul className="mt-3 space-y-1 text-xs text-muted">{pkg.features.map((f) => <li key={f}>• {f}</li>)}</ul>}
           <div className="mt-5 flex items-baseline justify-between border-t border-black/10 pt-4">
             <span className="text-sm uppercase tracking-widest">Total</span>
-            <span className="font-serif text-4xl">${total.toLocaleString()}</span>
+            <span className="font-serif text-4xl">${total.toLocaleString()} <span className="align-middle font-sans text-xs tracking-widest text-muted">USD</span></span>
           </div>
+          {cityState === "ON" || cityState === "QC" || /\b(ontario|quebec|québec|canada)\b|, (on|qc)$/i.test(location.trim())
+            ? <p className="mt-3 rounded bg-gold/15 px-3 py-2 text-xs font-semibold">Bookings in Canada are charged in US dollars (USD).</p>
+            : <p className="mt-2 text-right text-xs text-muted">All prices in US dollars</p>}
           <p className="mt-5 text-xs leading-relaxed text-muted">Next, you&apos;ll review and sign our <Link href="/terms" className="underline" target="_blank">Terms and Conditions</Link>. All bookings are non-refundable.</p>
-          <button disabled={state === "sending"} className="btn-gold mt-5 w-full">{state === "sending" ? "Redirecting…" : "Review terms & continue to payment"}</button>
+          {paused[serviceSlug] && <p className="mt-5 rounded bg-amber-100 px-3 py-2 text-sm font-semibold text-amber-900">{paused[serviceSlug]}</p>}
+          <button disabled={state === "sending" || !!paused[serviceSlug]} className="btn-gold mt-5 w-full disabled:cursor-not-allowed disabled:opacity-50">{state === "sending" ? "Redirecting…" : "Review terms & continue to payment"}</button>
           {state === "error" && <p className="mt-3 text-sm text-red-700">{error}</p>}
           <p className="mt-4 text-center text-xs text-muted">Secure card payment by Stripe. Planning something larger? <Link href="/corporate" className="underline">Talk to our team</Link>.</p>
         </div>

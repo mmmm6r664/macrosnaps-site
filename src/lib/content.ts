@@ -169,7 +169,7 @@ export function cityContent(t: LocalTarget, c: City): CityContent {
   if (venueList?.length)
     lists.push({ title: topic === "wedding" ? `Popular ${c.name} wedding & reception venues` : topic === "event" ? `Event venues in ${c.name}` : `Conference & event venues in ${c.name}`, items: venueList });
   if (topic === "conference" && L.eventVenues?.length) lists.push({ title: `Gala, reception & after-party venues`, items: L.eventVenues });
-  if ((topic === "wedding" || topic === "general" || topic === "event") && L.photoSpots?.length) lists.push({ title: `Favorite photo locations around ${c.name}`, items: L.photoSpots });
+  // Photo spots have their own section on the page (components/PhotoSpots).
   if (L.neighborhoods?.length) lists.push({ title: `Neighborhoods & areas we cover`, items: L.neighborhoods });
   if (c.nearby.length) lists.push({ title: `Also serving nearby`, items: c.nearby.slice(0, 6).map((n) => `${n.name} (${n.mi} mi)`) });
 

@@ -49,12 +49,14 @@ export function TrustBar() {
   );
 }
 
-export function Pricing({ packages, serviceSlug, citySlug, note }: { packages: Package[]; serviceSlug: string; citySlug?: string; note?: string }) {
+export function Pricing({ packages, serviceSlug, citySlug, note, canada }: { packages: Package[]; serviceSlug: string; citySlug?: string; note?: string; canada?: boolean }) {
   if (!packages.length) return null;
+  const inCanada = canada || /-(on|qc)$/.test(citySlug ?? "");
   return (
     <div>
+      {inCanada && <p className="mx-auto mb-6 max-w-2xl rounded bg-gold/15 px-4 py-3 text-center text-sm font-semibold">All prices are in US dollars (USD). Bookings in Ontario and Quebec are charged in USD.</p>}
       {rateLine(packages) && <p className="mb-8 text-center text-sm font-semibold uppercase tracking-[.15em] text-gold-dark">{rateLine(packages)}</p>}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className={packages.length === 1 ? "mx-auto grid max-w-md gap-6" : "grid gap-6 sm:grid-cols-2 lg:grid-cols-3"}>
         {packages.map((p) => (
           <div key={p.id} className="flex flex-col border border-black/10 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
             <h3 className="text-sm font-bold uppercase tracking-[.2em] text-ink">{p.name}</h3>

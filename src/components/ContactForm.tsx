@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-export default function ContactForm({ defaultSubject = "", compact = false }: { defaultSubject?: string; compact?: boolean }) {
+export default function ContactForm({ defaultSubject = "", compact = false, showDate = true, messagePlaceholder, submitLabel = "Send" }: { defaultSubject?: string; compact?: boolean; showDate?: boolean; messagePlaceholder?: string; submitLabel?: string }) {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [error, setError] = useState("");
 
@@ -31,12 +31,12 @@ export default function ContactForm({ defaultSubject = "", compact = false }: { 
       <input name="email" type="email" required placeholder="Email *" className={field} autoComplete="email" />
       <input name="phone" type="tel" placeholder="Phone" className={field} autoComplete="tel" />
       {!compact && <input name="company" placeholder="Company / Organization" className={field} autoComplete="organization" />}
-      {!compact && <input name="date" placeholder="Event date(s)" className={field} />}
+      {!compact && showDate && <input name="date" placeholder="Event date(s)" className={field} />}
       <input name="subject" defaultValue={defaultSubject} placeholder="Subject" className={`${field} sm:col-span-2`} />
-      <textarea name="message" required rows={4} placeholder="Tell us about your event: venue, schedule, number of days/rooms, deliverables *" className={`${field} sm:col-span-2`} />
+      <textarea name="message" required rows={4} placeholder={messagePlaceholder ?? "Tell us about your event: venue, schedule, number of days/rooms, deliverables *"} className={`${field} sm:col-span-2`} />
       <input name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
       <div className="sm:col-span-2">
-        <button disabled={state === "sending"} className="btn-dark w-full sm:w-auto">{state === "sending" ? "Sending…" : "Send"}</button>
+        <button disabled={state === "sending"} className="btn-dark w-full sm:w-auto">{state === "sending" ? "Sending…" : submitLabel}</button>
         {state === "error" && <p className="mt-3 text-sm text-red-700">{error}. You can also email info@macrosnaps.com or call 877-622-4973.</p>}
       </div>
     </form>

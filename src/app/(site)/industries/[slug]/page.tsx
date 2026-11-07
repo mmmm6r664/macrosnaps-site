@@ -4,7 +4,7 @@ import { VERTICALS } from "@/data/verticals";
 import VerticalPage from "@/components/VerticalPage";
 
 const LIST = VERTICALS.filter((v) => v.kind === "industry");
-export const dynamicParams = false;
+export const dynamicParams = true; // unknown slugs still 404 via notFound(); "false" breaks pages after a site-wide revalidate
 export function generateStaticParams() {
   return LIST.map((v) => ({ slug: v.slug }));
 }

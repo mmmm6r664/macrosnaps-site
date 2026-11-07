@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import BookingForm from "@/components/BookingForm";
-import { BOOKABLE_SERVICES } from "@/lib/services";
+import { BOOKABLE_SERVICES, PAUSED_SERVICES } from "@/lib/services";
 import { cities, cityLabel } from "@/lib/geo";
 import { TrustBar } from "@/components/blocks";
+import { addonCatalog } from "@/lib/addons";
 
 export const metadata: Metadata = {
   title: "Book Now: Photography & Videography Online",
@@ -15,7 +16,7 @@ type SP = { service?: string; package?: string; city?: string; cancelled?: strin
 export default async function BookPage({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
   const services = BOOKABLE_SERVICES.map((s) => ({ slug: s.slug, name: s.name, kind: s.kind, group: s.group, packages: s.packages.filter((p) => !p.quoteOnly).map(({ id, name, price, priceNote, features, hours }) => ({ id, name, price, priceNote, features, hours })) }));
-  const cityOpts = [...cities].sort((a, b) => b.population - a.population).map((c) => ({ slug: c.slug, label: cityLabel(c) }));
+  const cityOpts = [...cities].sort((a, b) => b.population - a.population).map((c) => ({ slug: c.slug, label: cityLabel(c), state: c.state }));
   return (
     <>
       <section className="bg-black px-4 py-14 text-center text-white">
@@ -24,7 +25,7 @@ export default async function BookPage({ searchParams }: { searchParams: Promise
       </section>
       <TrustBar />
       <div className="mx-auto max-w-7xl px-4 py-12 md:px-6">
-        <BookingForm services={services} cities={cityOpts} initial={{ service: sp.service, package: sp.package, city: sp.city, cancelled: sp.cancelled === "1" }} />
+        <BookingForm services={services} cities={cityOpts} addons={addonCatalog()} paused={PAUSED_SERVICES} initial={{ service: sp.service, package: sp.package, city: sp.city, cancelled: sp.cancelled === "1" }} />
       </div>
     </>
   );
