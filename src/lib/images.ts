@@ -1,5 +1,5 @@
-// MacroSnaps' own photos, hand-tagged by subject (src/data/photos.json), served from the Wix media CDN.
-// Only MacroSnaps' own work is used in galleries: no stock (Unsplash / Wix library), no duplicates, no graphics.
+// MacroSnaps' own photos, hand-tagged by subject (src/data/photos.json).
+// Only MacroSnaps' own work is used in galleries: no stock (Unsplash / stock libraries), no duplicates, no graphics.
 import catalog from "@/data/photos.json";
 import illustrations from "@/data/illustrations.json";
 

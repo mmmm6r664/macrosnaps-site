@@ -1,4 +1,4 @@
-// 301s from the old Wix URLs so existing rankings and links carry over.
+// 301s from the old site URLs so existing rankings and links carry over.
 type R = { source: string; destination: string; permanent: true };
 const r = (source: string, destination: string): R => ({ source, destination, permanent: true });
 
@@ -11,7 +11,7 @@ const PRODUCT: Record<string, string> = {
 };
 
 export const redirects: R[] = [
-  // Old Wix blog: every post and blog page goes to the homepage (specific post redirects listed below take priority).
+  // Old blog: every post and blog page goes to the homepage (specific post redirects listed below take priority).
   r("/blog", "/"),
   r("/blog/:path*", "/"),
   r("/blogs/:path*", "/"),
