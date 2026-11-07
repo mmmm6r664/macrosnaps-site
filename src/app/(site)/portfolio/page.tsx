@@ -4,6 +4,7 @@ import { IMG, photoPicker } from "@/lib/images";
 import { EVENTS } from "@/lib/clients";
 import { SERVICES } from "@/lib/services";
 import { ClientLogos, CtaBand, Gallery, SectionTitle } from "@/components/blocks";
+import { ALBUMS, driveEmbedUrl, driveFolderUrl } from "@/lib/albums";
 
 export const metadata: Metadata = { title: "Portfolio: Conference, Event & Wedding Photography", description: "Portfolio of MacroSnaps photography and videography: conferences, corporate events, weddings, engagements and portraits.", alternates: { canonical: "/portfolio" } };
 
@@ -21,8 +22,33 @@ export default function Portfolio() {
     <>
       <section className="bg-black px-4 py-16 text-center text-white">
         <h1 className="font-script text-5xl md:text-6xl">Portfolio</h1>
-        <p className="mx-auto mt-4 max-w-2xl text-white/80">We have provided videography and photography services to conferences, companies, couples and families across North America.</p>
+        <p className="mx-auto mt-4 max-w-2xl text-white/80">Photography and videography for conferences, companies, couples and families across the US, Ontario and Quebec.</p>
       </section>
+      {ALBUMS.some((a) => a.photos.length) && (
+        <section id="recent-galleries" className="bg-marble px-4 py-14 md:px-6">
+          <div className="mx-auto max-w-7xl">
+            <SectionTitle eyebrow="Recent client galleries" title="See complete events, not just highlights" intro="Browse full galleries from recent conferences and weddings: every photo the client received, exactly as delivered." />
+            <div className="space-y-14">
+              {ALBUMS.filter((a) => a.photos.length).map((a) => (
+                <article key={a.key}>
+                  <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+                    <div>
+                      <h3 className="font-serif text-3xl">{a.title}</h3>
+                      <p className="text-sm text-muted">{a.subtitle} · {a.count} photos delivered</p>
+                    </div>
+                    <a href={driveFolderUrl(a.folderId)} target="_blank" rel="noopener noreferrer" className="btn-outline !py-2.5">View full album ↗</a>
+                  </div>
+                  <Gallery images={a.photos.map((p) => p.src)} alt={a.title} />
+                  <details className="group mt-4 border border-black/10 bg-white">
+                    <summary className="flex cursor-pointer items-center justify-between px-5 py-4 font-semibold">Browse all {a.count} photos from this {a.title.toLowerCase().includes("wedding") ? "wedding" : "event"}<span className="text-gold-dark transition group-open:rotate-180">▾</span></summary>
+                    <iframe title={`${a.title}: full gallery`} src={driveEmbedUrl(a.folderId)} loading="lazy" className="h-[70vh] w-full border-t border-black/10 bg-white" />
+                  </details>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
       {sets.map((s) => (
         <section key={s.title} className="mx-auto max-w-7xl px-4 py-12 md:px-6">
           <h2 className="mb-6 font-serif text-3xl">{s.title}</h2>

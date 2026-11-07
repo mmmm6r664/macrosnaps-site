@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
       "img-src 'self' data: blob: https://static.wixstatic.com https://i.ytimg.com https://images.unsplash.com https://www.macrohype.com https://macrohype.com https://my.matterport.com https://*.matterport.com https://*.public.blob.vercel-storage.com https://c.statcounter.com https://*.statcounter.com https://*.google-analytics.com https://*.googletagmanager.com",
       "font-src 'self' data:",
       "connect-src 'self' https://www.googleapis.com https://vercel.com https://*.blob.vercel-storage.com https://*.statcounter.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
-      "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://my.matterport.com",
+      "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://my.matterport.com https://drive.google.com",
       "media-src 'self' https://static.wixstatic.com",
       "object-src 'none'",
       "base-uri 'self'",

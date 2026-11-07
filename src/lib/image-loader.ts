@@ -1,6 +1,8 @@
 // Serves images from the media CDN at the requested width (no Vercel image costs).
 export default function imageLoader({ src, width, quality }: { src: string; width: number; quality?: number }) {
   if (src.startsWith("https://images.unsplash.com/")) return `${src.split("?")[0]}?w=${width}&q=${quality || 75}&auto=format&fit=crop`;
+  // Our own hosted photos come in two sizes: use the 800px copy for anything that small.
+  if (src.includes(".blob.vercel-storage.com/") && src.endsWith("-2000.jpg")) return width <= 900 ? src.replace(/-2000\.jpg$/, "-800.jpg") : src;
   if (!src.includes("static.wixstatic.com/media/")) return src;
   const base = src.split("/v1/")[0];
   const name = base.split("/").pop()!.replace(/~/g, "_");
