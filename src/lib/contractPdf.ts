@@ -2,7 +2,7 @@
 import "server-only";
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage, type PDFImage } from "pdf-lib";
 import { SITE } from "./site";
-import { LOGO } from "./emailTemplate";
+import { LOGO_PNG_BASE64 } from "./logoData";
 
 export type ContractPdfInput = {
   id: number; title: string; version: string; sections: { title: string; body: string }[];
@@ -31,16 +31,11 @@ function wrap(text: string, font: PDFFont, size: number, width: number) {
 const fmt = (d: Date) => d.toLocaleString("en-US", { timeZone: "America/New_York", dateStyle: "long", timeStyle: "long" });
 const fmtDate = (d: Date) => d.toLocaleDateString("en-US", { timeZone: "America/New_York", month: "2-digit", day: "2-digit", year: "numeric" });
 
-/** The logo is fetched once per signature; if that fails the header falls back to the wordmark. */
+/** The logo is embedded in the code, so building a PDF never needs the network. */
 async function logo(pdf: PDFDocument): Promise<PDFImage | null> {
-  try {
-    const r = await fetch(LOGO, { signal: AbortSignal.timeout(5000) });
-    if (!r.ok) return null;
-    return await pdf.embedPng(new Uint8Array(await r.arrayBuffer()));
-  } catch { return null; }
+  try { return await pdf.embedPng(Buffer.from(LOGO_PNG_BASE64, "base64")); } catch { return null; }
 }
 
-/** Accepts only a well-formed PNG of sane size (a malformed image can hang the PDF encoder). */
 export function validSignaturePng(dataUrl: string | null): boolean {
   if (!dataUrl?.startsWith("data:image/png;base64,")) return false;
   const b = Buffer.from(dataUrl.slice(22), "base64");
@@ -68,7 +63,7 @@ export async function buildContractPdf(c: ContractPdfInput): Promise<Uint8Array>
   let y = 0;
   const header = (pg: PDFPage) => {
     pg.drawRectangle({ x: 0, y: H - 70, width: W, height: 70, color: BLACK });
-    if (logoImg) { const s = 50 / logoImg.height; pg.drawImage(logoImg, { x: M, y: H - 61, width: logoImg.width * s, height: 50 }); }
+    if (logoImg) { const s = 54 / logoImg.height; pg.drawImage(logoImg, { x: M, y: H - 63, width: logoImg.width * s, height: 54 }); }
     else pg.drawText("MacroSnaps", { x: M, y: H - 45, size: 24, font: script, color: GOLD });
     const t = clean(c.title);
     pg.drawText(t, { x: W - M - script.widthOfTextAtSize(t, 15), y: H - 42, size: 15, font: script, color: GOLD });

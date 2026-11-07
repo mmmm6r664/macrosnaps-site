@@ -15,7 +15,7 @@ export const redirects: R[] = [
   r("/blog", "/"),
   r("/blog/:path*", "/"),
   r("/blogs/:path*", "/"),
-  r("/favicon.ico", "https://static.wixstatic.com/media/1f3625_e1b0968a0a4344fa92e40a800af6d464~mv2.png/v1/fit/w_64,h_64,q_90,enc_auto/favicon.png"),
+  r("/favicon.ico", "/icon-64.png"),
   r("/new-york-city-photographers", "/photographers/new-york-city-ny"),
   r("/newyorkheadshots", "/photographers/new-york-city-ny"),
   r("/reston-virginia-photography", "/photographers/reston-va"),

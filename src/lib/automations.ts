@@ -7,7 +7,7 @@ import { q, hasDb } from "@/lib/db";
 import { sendMail } from "@/lib/mail";
 import { ORIGIN } from "@/lib/emailTemplate";
 import { abandoned1, abandoned2, abandoned3, nurture1, nurture2, nurture3, feedbackRequest } from "@/lib/emails";
-import { unsubUrl } from "@/lib/newsletter";
+import { unsubUrl, listUnsubscribe } from "@/lib/newsletter";
 
 const SECRET = () => process.env.CRON_SECRET || process.env.ADMIN_SETUP_CODE || "dev-only-secret";
 export const signRef = (ref: string, purpose: string) => createHmac("sha256", SECRET()).update(`${purpose}:${ref}`).digest("base64url").slice(0, 32);
@@ -31,7 +31,7 @@ export async function sendReminder(b: Pending, n: 1 | 2 | 3) {
   if (!claimed.length) return false;
   const a = { firstName: b.customer_name, service: b.service_name, schedule: when(b.schedule), city: b.city ?? undefined, lines: b.lines, total: `$${(b.total_cents / 100).toLocaleString("en-US")} USD`, resumeUrl: resumeUrl(b.ref), stopUrl: stopUrl(b.ref) };
   const m = n === 1 ? abandoned1(a) : n === 2 ? abandoned2(a) : abandoned3(a);
-  const r = await sendMail({ to: b.email, subject: m.subject, html: m.html });
+  const r = await sendMail({ to: b.email, subject: m.subject, html: m.html, headers: { "List-Unsubscribe": `<${stopUrl(b.ref)}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } });
   return r.ok;
 }
 
@@ -88,7 +88,7 @@ export async function sendNurture(s: { id: number; email: string; name: string; 
   if (!claimed.length) return false;
   const u = unsubUrl(s.token);
   const m = n === 1 ? nurture1(s.name, u) : n === 2 ? nurture2(s.name, u) : nurture3(s.name, u);
-  return (await sendMail({ to: s.email, subject: m.subject, html: m.html })).ok;
+  return (await sendMail({ to: s.email, subject: m.subject, html: m.html, headers: listUnsubscribe(s.token) })).ok;
 }
 
 /** New subscriber: start the welcome series right away. */

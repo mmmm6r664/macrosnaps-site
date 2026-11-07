@@ -22,7 +22,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-14 md:px-6">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
-            <Image src={SITE.logo} alt="MacroSnaps" width={150} height={96} className="h-20 w-auto" />
+            <Image src={SITE.logo} alt="MacroSnaps" width={150} height={101} className="h-20 w-auto" />
             <p className="mt-3 text-sm">Part of <a href={SITE.parentUrl} className="underline hover:text-gold" target="_blank" rel="noopener">{SITE.parent}</a></p>
             <p className="mt-4 text-sm leading-relaxed">{SITE.description}</p>
             <div className="mt-5 flex gap-2">

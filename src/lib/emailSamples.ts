@@ -8,6 +8,32 @@ const lines = [{ label: "Nov 20: Photography, 4 hrs", amount: 550 }, { label: "N
 const booking: E.BookingInfo = { firstName: "Sara Khan", service: "Wedding Photography", ref: "MS-SAMPLE1", schedule: "Fri, Nov 20, 2:00 PM–6:00 PM", city: "Dallas, TX", venue: "The Adolphus", lines, total: "$750.00 USD", email: "sara@example.com", phone: "555-111-2222", notes: "Please capture the grandparents." };
 const ab = { firstName: "Sara", service: "Wedding Photography", schedule: "Fri, Nov 20, 2:00 PM–6:00 PM", city: "Dallas, TX", lines, total: "$750 USD", resumeUrl: `${ORIGIN}/book`, stopUrl: `${ORIGIN}/` };
 const unsub = `${ORIGIN}/unsubscribe`;
+const W = "https://static.wixstatic.com/media/";
+export const NEWSLETTER_SAMPLE = `# Fall wedding season is here
+
+Hi friends,
+
+October and November are some of the most beautiful months to get married, and Saturdays are booking fast. Here's what's new at MacroSnaps this month.
+
+![A golden-hour portrait from a fall wedding](${W}1f3625_d2741b395b5d446da5d8ca57e5f286b2~mv2.jpg)
+
+## Three tips for golden-hour portraits
+
+- Plan 20 minutes for portraits in the hour before sunset.
+- Scout one spot with open shade as a backup.
+- Keep the bouquet low so it doesn't hide your hands.
+
+> "They captured every moment, and we had our gallery in a week." Sara & Ali, Dallas
+
+## Recently on our blog and YouTube
+
+{{Conference season recap | Highlights from summits in New York, DC and Toronto. | ${W}b8cb3c_af143925a50c4d24a9cdd29895d94165~mv2.jpg | https://www.macrosnaps.com/conference-photography}}
+
+{{Planning an Indian wedding? | What to expect from a multi-day celebration. | ${W}1f3625_79013331208a4ec8826fcde024545575~mv2.jpg | https://www.macrosnaps.com/indian-wedding-photography}}
+
+---
+
+[[See available dates|https://www.macrosnaps.com/book]]`;
 
 export const SAMPLES: { key: string; group: string; when: string; build: () => E.Email }[] = [
   { key: "confirm", group: "Bookings", when: "Customer pays", build: () => E.bookingConfirmed(booking) },
@@ -28,5 +54,5 @@ export const SAMPLES: { key: string; group: string; when: string; build: () => E
   { key: "c-send", group: "Photographer network", when: "You send a contract from admin → Contracts", build: () => E.contractToSign("Juan Perez", "Rehman Siddiq", "Contractor Photographer & Videographer Agreement", `${ORIGIN}/sign/sample`, "MS-C7") },
   { key: "c-signed", group: "Photographer network", when: "Photographer signs (to them, signed PDF attached)", build: () => E.contractSignedSigner("Juan Perez", "Contractor Photographer & Videographer Agreement", "2026-11-07.2", "MS-C7", "juan@example.com", "Rehman Siddiq") },
   { key: "c-team", group: "Photographer network", when: "Photographer signs (to info@macrosnaps.com, signed PDF attached)", build: () => E.contractSignedTeam("Juan Perez", "Contractor Photographer & Videographer Agreement", "2026-11-07.2", "MS-C7", "juan@example.com", "Rehman Siddiq") },
-  { key: "news", group: "Newsletters", when: "When you send a newsletter", build: () => ({ subject: "Sample newsletter", html: emailHtml("Fall wedding season is here", "Tips and dates", "# Planning a fall wedding?\n\nOctober and November Saturdays are booking fast. Here are three tips for golden-hour portraits.\n\n[[Book your date|https://www.macrosnaps.com/book]]", unsub) }) },
+  { key: "news", group: "Newsletters", when: "When you send a newsletter", build: () => ({ subject: "Fall wedding season is here", html: emailHtml("Fall wedding season is here", "Three tips for golden-hour portraits", NEWSLETTER_SAMPLE, unsub) }) },
 ];

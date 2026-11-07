@@ -18,7 +18,7 @@ export default function NewsletterEditor({ n, previewHtml, subscribers, locked }
         </div>
         <div className={tab === "write" ? "" : "hidden"}>
           <textarea name="body" defaultValue={n.body} disabled={locked} rows={22} className={`${inputCls} font-mono text-sm`} placeholder={"# Spring wedding dates are filling up\n\nHi there,\n\nWe have a few **Saturday** dates left in May and June.\n\n![Wedding couple](https://…/photo.jpg)\n\n[[Book your date|https://macrosnaps.com/book]]"} />
-          <p className="mt-2 text-xs leading-relaxed text-black/55">Formatting: <code># Heading</code> · <code>**bold**</code> · <code>[link text](https://…)</code> · <code>![description](https://image-url)</code> · <code>[[Button text|https://…]]</code> · leave a blank line between paragraphs.</p>
+          <p className="mt-2 text-xs leading-relaxed text-black/55">Formatting (leave a blank line between blocks): <code># Big heading</code> · <code>## Section heading</code> · <code>**bold**</code> · <code>[link text](https://…)</code> · <code>![caption](https://image)</code> full-width photo · <code>- bullet</code> · <code>&gt; quote</code> · <code>---</code> divider · <code>[[Button text|https://…]]</code> · <code>{"{{"}Title | text | https://image | https://link{"}}"}</code> feature card (2 per row)</p>
         </div>
         {tab === "preview" && <iframe title="Preview" srcDoc={previewHtml} sandbox="" className="h-[640px] w-full rounded border border-black/10 bg-[#f3f1ec]" />}
       </div>

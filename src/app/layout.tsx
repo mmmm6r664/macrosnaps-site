@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", site: "@macrosnaps" },
   // The MacroSnaps logo as the browser-tab icon (sized for icons).
   icons: {
-    icon: [{ url: `${SITE.logo}/v1/fit/w_64,h_64,q_90,enc_auto/favicon.png`, sizes: "64x64", type: "image/png" }, { url: `${SITE.logo}/v1/fit/w_192,h_192,q_90,enc_auto/icon.png`, sizes: "192x192", type: "image/png" }],
-    apple: [{ url: `${SITE.logo}/v1/fit/w_180,h_180,q_90,enc_auto/apple-icon.png`, sizes: "180x180" }],
+    icon: [{ url: "/icon-64.png", sizes: "64x64", type: "image/png" }, { url: "/icon-512.png", sizes: "512x512", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180" }],
   },
   verification: { google: "dffAgEdAJaiidpO52xm7Tgu1wHrNqhSey0fgzU5ggkM", other: { "msvalidate.01": "BE47118A1D1D58472CC63C1E447D472E", "facebook-domain-verification": "7lv76i77jpkmphak9zh8vrwaqw1avl" } },
 };

@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 const page = (token: string) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Sign in · MacroSnaps</title></head>
 <body style="margin:0;min-height:100vh;display:grid;place-items:center;background:#000;font-family:Arial,sans-serif;color:#fff;text-align:center">
-<form method="post" style="padding:24px"><img src="https://static.wixstatic.com/media/1f3625_e1b0968a0a4344fa92e40a800af6d464~mv2.png/v1/fit/w_300,h_200,q_90/logo.png" alt="MacroSnaps" width="150" style="height:auto"><h1 style="font-family:Georgia,serif;font-weight:400">Sign in to your client portal</h1>
+<form method="post" style="padding:24px"><img src="/logo.png" alt="MacroSnaps" width="150" style="height:auto"><h1 style="font-family:Georgia,serif;font-weight:400">Sign in to your client portal</h1>
 <input type="hidden" name="token" value="${token.replace(/[^\w-]/g, "")}"><button style="background:#ccba56;color:#000;border:0;padding:14px 32px;font-size:16px;font-weight:bold;letter-spacing:.1em;cursor:pointer">SIGN IN</button></form></body></html>`;
 
 export async function GET(req: NextRequest) {

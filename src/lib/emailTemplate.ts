@@ -3,7 +3,8 @@
 import { SITE } from "./site";
 
 export const ORIGIN = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : SITE.url);
-export const LOGO = "https://static.wixstatic.com/media/1f3625_e1b0968a0a4344fa92e40a800af6d464~mv2.png/v1/fit/w_320,h_220,q_90/logo.png";
+// Hosted on macrosnaps.com itself (public/logo.png), so emails never depend on another service.
+export const LOGO = "https://www.macrosnaps.com/logo.png";
 const GOLD = "#ccba56", GOLD_DARK = "#8a7a2b", INK = "#1d1d1d", MUTED = "#6b6b6b", CREAM = "#f6f3ec";
 const SERIF = "Georgia,'Times New Roman',serif", SANS = "'Helvetica Neue',Helvetica,Arial,sans-serif";
 
@@ -98,7 +99,7 @@ export function layout(o: LayoutOpts) {
   </td></tr>
   <tr><td align="center" style="background:#000;padding:26px 30px 30px">
     <p style="margin:0 0 12px">${social}</p>
-    <p style="margin:0 0 6px;font:12px/1.6 ${SANS};color:#9a9a9a">America's premier event &amp; wedding photography and videography company<br>All 50 states, Washington, DC, Ontario &amp; Quebec</p>
+    <p style="margin:0 0 6px;font:12px/1.6 ${SANS};color:#9a9a9a">America's premier event &amp; wedding photography and videography company</p>
     <p style="margin:0;font:12px/1.6 ${SANS};color:#777">© ${year} MacroSnaps · part of MacroHype LLC · <a href="${ORIGIN}" style="color:${GOLD};text-decoration:none">macrosnaps.com</a></p>
     ${o.footerNote ? `<p style="margin:12px 0 0;font:11px/1.6 ${SANS};color:#777">${o.footerNote}</p>` : ""}
     ${o.unsubUrl ? `<p style="margin:8px 0 0;font:11px/1.6 ${SANS}"><a href="${esc(o.unsubUrl)}" style="color:#9a9a9a">Unsubscribe</a></p>` : ""}

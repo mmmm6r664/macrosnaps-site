@@ -10,7 +10,7 @@ export const SITE = {
   email: "info@macrosnaps.com",
   parent: "MacroHype LLC",
   parentUrl: "https://www.macrohype.com",
-  logo: "https://static.wixstatic.com/media/1f3625_e1b0968a0a4344fa92e40a800af6d464~mv2.png",
+  logo: "/logo-lg.png", // gold MacroSnaps logo on black, hosted on this site
   offices: [
     { name: "New York City (Times Square)", street: "115 W 45th Street Suite 606", city: "New York", region: "NY", zip: "10036", country: "US" },
     { name: "Washington, DC", street: "1300 I St NW", city: "Washington", region: "DC", zip: "20005", country: "US" },
