@@ -194,6 +194,19 @@ create table if not exists staff_uploads (
   file_name text not null, size_bytes bigint, drive_file_id text, drive_folder_id text,
   created_at timestamptz not null default now()
 );
+
+alter table users add column if not exists totp_secret text;
+alter table users add column if not exists totp_enabled boolean not null default false;
+alter table users add column if not exists totp_last_counter bigint not null default 0;
+alter table sessions add column if not exists mfa_pending boolean not null default false;
+alter table sessions add column if not exists ip text;
+alter table sessions add column if not exists user_agent text;
+create table if not exists recovery_codes (
+  id serial primary key,
+  user_id int not null references users(id) on delete cascade,
+  code_hash text not null,
+  used_at timestamptz
+);
 `;
 
 /** The SQL client, with tables created on first use. */

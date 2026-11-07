@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 const ITEMS: [string, string][] = [
   ["Home", "/staff"], ["Available shoots", "/staff/offers"], ["My shoots", "/staff/shoots"], ["Upload photos", "/staff/uploads"], ["Payments", "/staff/payments"],
-  ["Profile & payout", "/staff/profile"], ["Tax info (W-9)", "/staff/tax"], ["Contract", "/staff/contract"], ["Knowledge base", "/staff/knowledge"], ["Support", "/staff/support"],
+  ["Profile & payout", "/staff/profile"], ["Tax info (W-9)", "/staff/tax"], ["Contract", "/staff/contract"], ["Knowledge base", "/staff/knowledge"], ["Support", "/staff/support"], ["Security", "/staff/security"],
 ];
 
 export default function StaffNav({ badges }: { badges: Record<string, number> }) {

@@ -13,13 +13,17 @@ export async function login(_: FormState, f: FormData): Promise<FormState> {
   const ip = await clientIp();
   if (await tooManyAttempts(email, ip)) return { error: "Too many attempts. Try again in 15 minutes." };
   const sql = await db();
-  const [u] = await sql<{ id: number; password_hash: string; active: boolean }[]>`select id, password_hash, active from users where email = ${email}`;
+  const [u] = await sql<{ id: number; password_hash: string; active: boolean; totp_enabled: boolean }[]>`select id, password_hash, active, totp_enabled from users where email = ${email}`;
   // Compare against a dummy hash when the user doesn't exist so timing doesn't reveal valid emails.
   const ok = await verifyPassword(password, u?.password_hash ?? dummyHash());
   if (!u || !ok || !u.active) {
     await audit(null, "login_failed", email);
     await audit(null, "login_failed", "ip:" + ip);
     return { error: "Wrong email or password." };
+  }
+  if (u.totp_enabled) {
+    await createSession(u.id, true); // password OK; the 2FA code is next
+    redirect("/admin/login/verify");
   }
   await createSession(u.id);
   await audit(u.id, "login", ip);

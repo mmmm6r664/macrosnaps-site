@@ -12,12 +12,16 @@ export async function staffLogin(_: FS, f: FormData): Promise<FS> {
   const password = String(f.get("password") ?? "").slice(0, 200);
   const ip = await clientIp();
   if (await tooManyAttempts(email, ip)) return { error: "Too many attempts. Try again in 15 minutes." };
-  const [u] = await q<{ id: number; password_hash: string; active: boolean }[]>`select id, password_hash, active from users where email = ${email}`;
+  const [u] = await q<{ id: number; password_hash: string; active: boolean; totp_enabled: boolean }[]>`select id, password_hash, active, totp_enabled from users where email = ${email}`;
   const ok = await verifyPassword(password, u?.password_hash ?? dummyHash());
   if (!u || !ok || !u.active) {
     await audit(null, "login_failed", email);
     await audit(null, "login_failed", "ip:" + ip);
     return { error: "Wrong email or password." };
+  }
+  if (u.totp_enabled) {
+    await createSession(u.id, true); // password OK; the 2FA code is next
+    redirect("/staff/verify");
   }
   await createSession(u.id);
   await audit(u.id, "staff_login", ip);
