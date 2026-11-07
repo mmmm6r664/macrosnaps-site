@@ -360,3 +360,18 @@ export function contractSignedTeam(name: string, docTitle: string, version: stri
 /* ---------- generic (contact forms, staff, admin alerts, newsletters) ---------- */
 export const generic = (title: string, bodyHtml: string, opts: { preheader?: string; unsubUrl?: string; footerNote?: string; signoff?: boolean } = {}) => layout({ title, body: bodyHtml, ...opts });
 export { details as detailsTable };
+
+/* ---------- replies from the admin inbox ---------- */
+/** A personal reply typed in the admin inbox. Plain text in, branded email out; optional "Book online" button. */
+export function inquiryReply(subject: string, message: string, bookButton: boolean): Email {
+  const linkify = (s: string) => s.replace(/https?:\/\/[^\s<]+[^\s<.,;:!?)]/g, (u) => `<a href="${u}" style="color:#8a7a2c">${u}</a>`);
+  const paras = message.trim().split(/\n\s*\n/).map((para) => p(linkify(esc(para.trim())).replace(/\n/g, "<br>"))).join("");
+  return {
+    subject,
+    html: layout({
+      title: subject.replace(/^re:\s*/i, ""),
+      preheader: message.trim().split("\n").find((l) => l.trim() && !/^(hi|hello|dear)\b/i.test(l.trim()))?.slice(0, 120) ?? "",
+      body: paras + (bookButton ? button("Book your date online", `${ORIGIN}/book`) : ""),
+    }),
+  };
+}

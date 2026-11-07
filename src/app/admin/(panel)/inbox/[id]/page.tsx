@@ -4,6 +4,7 @@ import { db, q } from "@/lib/db";
 import { PageHead, Card, Badge, fmtDate, inputCls, labelCls, btnPrimary } from "@/components/admin/ui";
 import { updateInquiry } from "../actions";
 import ApproveButton from "@/components/admin/ApproveButton";
+import ReplyForm from "@/components/admin/ReplyForm";
 import { q as qq } from "@/lib/db";
 
 export const metadata = { title: "Message" };
@@ -12,6 +13,23 @@ const LABELS: Record<string, string> = {
   experience: "Experience", workStatus: "Work status", hours: "Working hours", portfolio: "Portfolio", shootTypes: "Shoot types", camera: "Primary camera",
   secondary: "Secondary cameras", lenses: "Lens kit", lighting: "Lighting kit", notes: "Notes",
 };
+
+/** A ready-to-send "we're available, please book online" reply, personalised from the inquiry. */
+function draftReply(name: string, d: Record<string, string>) {
+  const first = (name || "").trim().split(/\s+/)[0] || "there";
+  const what = (d.subject || "").trim();
+  const wedding = /wedding|engage/i.test(`${what} ${d.message ?? ""}`);
+  const date = (d.date || "").trim();
+  const subject = what ? `Re: ${what}${date ? ` on ${date}` : ""}` : "Thank you for contacting MacroSnaps";
+  const message = [
+    `Hi ${first},`,
+    `Thank you so much for reaching out${wedding ? ", and congratulations!" : "!"}`,
+    `Good news: we're available${date ? ` on ${date}` : ""} and would love to provide our ${what ? what.toLowerCase() : "photography and videography"} services${wedding ? " for your big day" : " for your event"}.`,
+    "The easiest way to reserve your date is to book directly on our website. You can choose your hours and any add-ons, see your price instantly, and confirm in just a few minutes. Popular dates fill up quickly, so we recommend booking soon.",
+    "If you have any questions before booking, just reply to this email or give us a call. We're happy to help.",
+  ].join("\n\n");
+  return { subject, message };
+}
 
 export default async function InquiryPage({ params }: { params: Promise<{ id: string }> }) {
   await requireUser();
@@ -38,6 +56,9 @@ export default async function InquiryPage({ params }: { params: Promise<{ id: st
               ? <p className="text-sm">Approved: this person has a staff login.</p>
               : <><p className="mb-3 text-sm text-black/60">Creates their private /staff login and emails them a link to set a password, sign the contractor agreement and complete their profile.</p><ApproveButton id={r.id} /></>}
           </Card>
+        )}
+        {r.kind === "contact" && r.email && (
+          <Card title="Reply by email"><ReplyForm id={r.id} to={r.email} {...draftReply(r.name, r.data)} /></Card>
         )}
         <Card title="Status & notes">
           <form action={updateInquiry} className="space-y-3">
