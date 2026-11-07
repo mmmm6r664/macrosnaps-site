@@ -92,7 +92,7 @@ export default function Header() {
       <Suspense fallback={null}><MenuCloser /></Suspense>
       <div className="mx-auto flex max-w-7xl items-center gap-6 px-4 py-3 md:px-6">
         <Link href="/" className="shrink-0" aria-label="MacroSnaps home">
-          <Image src={SITE.logo} alt="MacroSnaps logo" width={300} height={202} priority className="h-24 w-auto md:h-40" />
+          <Image src={SITE.logo} alt="MacroSnaps logo" width={300} height={202} priority className="h-16 w-auto md:h-28" />
         </Link>
 
         <div className="hidden flex-1 flex-col items-stretch lg:flex">
