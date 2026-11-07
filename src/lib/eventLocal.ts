@@ -1,7 +1,7 @@
 // Content for event-type × location landing pages, e.g. /indian-wedding-photography/dallas-tx and
 // /bar-mitzvah-photography/florida. Event copy comes from src/data/eventTypes*.ts; local copy from
 // src/data/cities.json + src/data/local. Site facts here must match the rest of the site:
-// 13+ years, 6,000+ events, own crews (US + Ontario & Quebec), State Farm $1M/$2M,
+// 13+ years, own crews (US + Ontario & Quebec), State Farm $1M/$2M,
 // retouched gallery in about a week, highlight videos in 2–4 weeks, same published price for everyone.
 import { EVENT_TYPES, type EventType } from "@/data/eventTypes";
 import { City, Region, LocalInfo, cityLabel, citiesIn, fmtPop, getCity, getLocal, pick, topCities } from "./geo";
@@ -180,7 +180,7 @@ export function eventCityContent(e: EventType, c: City) {
   const faqs = [
     {
       q: `Do you have ${an(e.pro)} ${e.pro} near ${c.name}?`,
-      a: `Yes. MacroSnaps has its own photographers and videographers working across ${c.stateName}, and we assign a crew for your ${noun} in ${c.name} as soon as you book${nearby.length ? `. We also cover nearby ${listText(nearby.slice(0, 3).map((n) => n.name))}` : ""}. You deal with one company, with 13+ years and 6,000+ events behind it, from booking to delivery.`,
+      a: `Yes. MacroSnaps has its own photographers and videographers working across ${c.stateName}, and we assign a crew for your ${noun} in ${c.name} as soon as you book${nearby.length ? `. We also cover nearby ${listText(nearby.slice(0, 3).map((n) => n.name))}` : ""}. You deal with one company, with 13+ years of experience behind it, from booking to delivery.`,
     },
     {
       q: `How much does ${an(e.pro)} ${e.pro} cost in ${c.name}?`,

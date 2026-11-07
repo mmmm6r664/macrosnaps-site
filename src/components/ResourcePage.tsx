@@ -157,7 +157,7 @@ export function ResourcesIndex() {
           </div>
           <div className="border border-black/10 p-6">
             <h3 className="font-serif text-xl">Insured and experienced</h3>
-            <p className="mt-2 text-muted">13+ years&apos; experience and 6,000+ events covered. Insured by State Farm: $1M per occurrence / $2M aggregate, COI on request.</p>
+            <p className="mt-2 text-muted">13+ years&apos; experience, with 750+ conferences and 2,200+ weddings and private events covered. Insured by State Farm: $1M per occurrence / $2M aggregate, COI on request.</p>
             <Link href="/events" className="mt-3 inline-block text-sm font-semibold underline">Events we cover →</Link>
           </div>
         </div>

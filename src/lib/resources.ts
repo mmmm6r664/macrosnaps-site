@@ -65,7 +65,7 @@ export const AUDIENCES: Audience[] = [
     intro: [
       "Event planners juggle venues, catering, AV, décor and a run-of-show that has to hold together on the day. Photography and video should be the easy part. MacroSnaps gives you one company to call for conferences, corporate events, galas, weddings and private celebrations, with our own photographers and videographers across all US states, Washington, DC, Ontario and Quebec.",
       "Our prices are published and the same for every client, so you can build them into a proposal without waiting for a quote: photography is $250 for the first hour and $100 for each additional hour, and videography is $300 for the first hour and $200 for each additional hour, with a two-hour minimum. Multi-day programs, several rooms at once and events in several cities are booked at the same hourly rates.",
-      "MacroSnaps is part of MacroHype LLC, with 13+ years' experience and 6,000+ events covered, including 750+ corporate events and conferences and 2,200+ weddings and private events.",
+      "MacroSnaps is part of MacroHype LLC, with 13+ years' experience and 750+ corporate events and conferences and 2,200+ weddings and private events.",
     ],
     helps: [
       { title: "Published prices you can quote", body: "No quotes or back-and-forth. Add photo or video coverage to a client proposal using the same rates every client pays, and book and pay online." },
@@ -77,7 +77,7 @@ export const AUDIENCES: Audience[] = [
     ],
     why: [
       "Our own photographers and videographers, not a marketplace of strangers",
-      "13+ years' experience and 6,000+ events covered",
+      "13+ years' experience, 750+ conferences and 2,200+ weddings and private events",
       "Published prices, the same for every client",
       "Insured by State Farm: $1M per occurrence / $2M aggregate",
       "Conferences, corporate events, weddings and private celebrations",
@@ -125,7 +125,7 @@ export const AUDIENCES: Audience[] = [
       "We are insured through State Farm ($1 million per occurrence, $2 million aggregate) and send a certificate of insurance naming your venue on request.",
     ],
     helps: [
-      { title: "A vendor you can recommend with confidence", body: "Our own insured crews, published prices and online booking, backed by 13+ years' experience and 6,000+ events covered." },
+      { title: "A vendor you can recommend with confidence", body: "Our own insured crews, published prices and online booking, backed by 13+ years' experience." },
       { title: "We follow your house rules", body: "Load-in times, restricted areas, flash rules during ceremonies, noise limits and dress codes: tell us once and every crew we send follows them." },
       { title: "Certificates of insurance on request", body: "Send us your certificate holder details and we provide a COI for your venue." },
       { title: "Weddings, conferences and everything between", body: "Weddings, galas, conferences, corporate events, holiday parties, quinceañeras, bar and bat mitzvahs and more." },
@@ -179,7 +179,7 @@ export const AUDIENCES: Audience[] = [
     intro: [
       "Every photographer and videographer turns work away: a date that is already booked, a city you do not travel to, a video request when you only shoot stills, or a corporate job that is not your style. MacroSnaps gives you two ways to work with us.",
       "If you want steady work, join the MacroSnaps crew. We book the clients and handle all the editing, so you focus on shooting conferences, corporate events, weddings and celebrations in your area. If you run your own business, become a referral partner and earn a commission on every booking you send us.",
-      "MacroSnaps is part of MacroHype LLC, with 13+ years' experience and 6,000+ events covered, and our own photographers and videographers across all US states, Washington, DC, Ontario and Quebec.",
+      "MacroSnaps is part of MacroHype LLC, with 13+ years' experience, and our own photographers and videographers across all US states, Washington, DC, Ontario and Quebec.",
     ],
     helps: [
       { title: "Join the crew", body: "Get confirmed shoots in your area with no editing required: our post-production team retouches and edits everything. Apply on our careers page." },
@@ -192,7 +192,7 @@ export const AUDIENCES: Audience[] = [
     why: [
       "Join the crew: confirmed shoots and no editing",
       "Or refer clients and earn a commission on every referred booking",
-      "13+ years' experience and 6,000+ events covered",
+      "13+ years' experience, 750+ conferences and 2,200+ weddings and private events",
       "Published prices, the same for every client",
       "Conferences, corporate events, weddings and private events",
       "Coverage across all US states, DC, Ontario and Quebec",

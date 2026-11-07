@@ -157,7 +157,7 @@ export function EventCityPage({ e, city }: { e: EventType; city: City }) {
               <div className="flex justify-between gap-4"><dt>Videography, {c.cost.vh} hours</dt><dd className="font-semibold">${c.cost.video.toLocaleString()}</dd></div>
             </dl>
             <ul className="mt-6 space-y-3 border-t border-black/10 pt-5 text-[15px]">
-              {["13+ years and 6,000+ events", "Our own crews across " + city.stateName, "Insured by State Farm ($1M / $2M)", "Retouched gallery in about a week", "Same published price for everyone"].map((x) => (
+              {["13+ years of experience", "Our own crews across " + city.stateName, "Insured by State Farm ($1M / $2M)", "Retouched gallery in about a week", "Same published price for everyone"].map((x) => (
                 <li key={x} className="flex gap-3"><IconCheck className="mt-1 h-4 w-4 shrink-0 text-gold-dark" />{x}</li>
               ))}
             </ul>

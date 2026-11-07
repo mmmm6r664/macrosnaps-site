@@ -17,7 +17,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Bad signature" }, { status: 400 });
   }
 
-  if (event.type === "checkout.session.completed") {
+  // Most methods (cards, wallets, Klarna, Afterpay) are paid at checkout. Delayed methods finish later
+  // with checkout.session.async_payment_succeeded, so only confirm once the money is actually in.
+  const isCheckout = event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded";
+  if (isCheckout && (event.data.object as Stripe.Checkout.Session).payment_status === "paid") {
     const s = event.data.object as Stripe.Checkout.Session;
     const m = s.metadata || {};
     const email = s.customer_details?.email || s.customer_email || "";

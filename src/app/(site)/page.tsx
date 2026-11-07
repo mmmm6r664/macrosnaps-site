@@ -76,7 +76,7 @@ export default async function Home() {
           </div>
         </div>
       </section>
-      <TrustBar />
+      <TrustBar events />
 
       {/* Pillars */}
       <section className="py-16">
@@ -118,7 +118,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <WhyUs where="Every event" />
+      <WhyUs where="Every event" events />
 
       {/* Events we cover */}
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-6" data-reveal>

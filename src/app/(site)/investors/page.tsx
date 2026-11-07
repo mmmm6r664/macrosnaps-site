@@ -52,7 +52,7 @@ export default function Investors() {
           <div className="marble border border-black/5 p-7">
             <h3 className="font-serif text-2xl">At a glance</h3>
             <dl className="mt-5 space-y-3 text-[15px]">
-              {[["Parent company", "MacroHype LLC"], ["Headquarters", "New York, NY · Washington, DC"], ["Coverage", "50 US states, Washington, DC, Ontario & Quebec"], ["Experience", "13+ years"], ["Events covered", "6,000+"], ["Insurance", "State Farm, $1M / $2M"]].map(([k, v]) => (
+              {[["Parent company", "MacroHype LLC"], ["Headquarters", "New York, NY · Washington, DC"], ["Coverage", "50 US states, Washington, DC, Ontario & Quebec"], ["Experience", "13+ years"], ["Events covered", "750+ conferences, 2,200+ weddings & private events"], ["Insurance", "State Farm, $1M / $2M"]].map(([k, v]) => (
                 <div key={k} className="flex justify-between gap-4 border-b border-black/5 pb-2"><dt className="text-muted">{k}</dt><dd className="text-right font-semibold">{v}</dd></div>
               ))}
             </dl>

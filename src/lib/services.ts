@@ -702,7 +702,7 @@ export const SERVICES: Service[] = [
     intro: [
       "Already have footage? Our editors turn raw clips into finished videos: conference and event recaps, corporate and training videos, interviews and testimonials, social media cut-downs and YouTube content. Every edit includes color correction, audio clean-up and music, and we add captions, titles, lower thirds and simple motion graphics where they help.",
       "It works the same whether the footage was filmed by your own team on phones and mirrorless cameras, recorded from a Zoom call or webinar, captured by a drone, or shot by another production company. You share the files, tell us what the video is for and who will watch it, and we cut a first version for you to review.",
-      "Video editing is done by the same post-production team that edits the highlight films from MacroSnaps' conference, corporate and wedding shoots. MacroSnaps is part of MacroHype LLC, with 13+ years' experience and 6,000+ events covered, so our editors know what organizers, marketing teams and couples expect from a finished video.",
+      "Video editing is done by the same post-production team that edits the highlight films from MacroSnaps' conference, corporate and wedding shoots. MacroSnaps is part of MacroHype LLC, with 13+ years' experience, so our editors know what organizers, marketing teams and couples expect from a finished video.",
     ],
     sections: [
       {
@@ -759,7 +759,7 @@ export const SERVICES: Service[] = [
     description: "Professional photo retouching: commercial and product retouching, portrait retouching, color grading and advanced Photoshop editing with fast turnaround.",
     intro: [
       "Our professional photo retouching services cover commercial and product retouching, model and portrait retouching, photo correction, color grading and advanced Photoshop editing. Brands, photographers and agencies send us images from anywhere, and we return polished files with a fast turnaround.",
-      "Retouching is done by the same post-production team that edits every gallery MacroSnaps delivers from our conference, corporate, wedding and portrait shoots. MacroSnaps is part of MacroHype LLC, with 13+ years' experience and 6,000+ events covered, so we are used to working at volume while keeping color, crops and skin tones consistent across a whole set.",
+      "Retouching is done by the same post-production team that edits every gallery MacroSnaps delivers from our conference, corporate, wedding and portrait shoots. MacroSnaps is part of MacroHype LLC, with 13+ years' experience, so we are used to working at volume while keeping color, crops and skin tones consistent across a whole set.",
       "You can send a handful of portraits or a full product catalog. Tell us how the images will be used, for example an online store, a website, print or a magazine, and we match the editing style, sizes and file formats to it.",
     ],
     sections: [
