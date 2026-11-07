@@ -4,7 +4,7 @@ import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID || ""; // e.g. G-XXXXXXXXXX
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-YMGR75GPME";
 const SC_PROJECT = 12926296;
 const SC_SECURITY = "75fb2d0f";
 const PRIVATE = /^\/(admin|staff|account|ms-)/;
