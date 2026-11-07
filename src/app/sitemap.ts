@@ -5,6 +5,7 @@ import { cities, regions } from "@/lib/geo";
 import { EVENT_TYPES } from "@/data/eventTypes";
 import { VERTICALS } from "@/data/verticals";
 import { AUDIENCES } from "@/lib/resources";
+import { ALBUMS } from "@/lib/albums";
 
 // Sitemap ids: core pages, one per local service and one per event type
 // (each local sitemap = all states/provinces + all cities, < 2,000 URLs, far under the 50,000 limit).
@@ -26,6 +27,7 @@ export default async function sitemap(props: { id: Promise<string> | string }): 
       ...VERTICALS.map((v) => u(`/${v.kind === "industry" ? "industries" : "solutions"}/${v.slug}`, 0.7)),
       u("/resources", 0.6),
       ...AUDIENCES.map((a) => u(`/resources/${a.slug}`, 0.5)),
+      ...ALBUMS.map((a) => u(`/portfolio/${a.slug}`, 0.5)),
     ];
   }
   if (!SITEMAP_IDS.includes(id)) return [];
