@@ -51,7 +51,7 @@ export default async function Page({ params }: { params: Promise<{ service: stri
 function LocationDirectory({ slug, pro }: { slug: string; pro: string }) {
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
-      <SectionTitle eyebrow="Locations" title={`Find a ${pro.toLowerCase()} near you`} intro="Our own photographers and videographers work across all 50 states, Washington, DC and Canada. Choose your state, province or city." />
+      <SectionTitle eyebrow="Locations" title={`Find a ${pro.toLowerCase()} near you`} intro="Our own photographers and videographers work across all 50 states, Washington, DC, Ontario and Quebec. Choose your state, province or city." />
       <div className="grid gap-10 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <h3 className="mb-3 font-serif text-xl">United States</h3>
@@ -233,7 +233,7 @@ function HubPage({ slug }: { slug: keyof typeof HUBS }) {
   const services = SERVICES.filter((s) => s.kind === h.kind && s.local);
   return (
     <>
-      <PageHero image={h.kind === "photo" ? IMG.conferenceHero : IMG.conferenceVideo[0]} eyebrow="1,690+ cities across the US, Ontario & Quebec" title={`${h.pro}s Near You`} subtitle={`MacroSnaps is a global photography and videography company with our own ${h.pro.toLowerCase()}s — not a marketplace. Find your state, province or city for local venues, prices and booking.`}>
+      <PageHero image={h.kind === "photo" ? IMG.conferenceHero : IMG.conferenceVideo[0]} eyebrow="1,690+ cities across the US, Ontario & Quebec" title={`${h.pro}s Near You`} subtitle={`MacroSnaps is a US and Canada photography and videography company with our own ${h.pro.toLowerCase()}s — not a marketplace. Find your state, province or city for local venues, prices and booking.`}>
         <Link href="/book" className="btn-gold">Book Now</Link>
       </PageHero>
       <TrustBar />

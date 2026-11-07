@@ -266,7 +266,7 @@ export default function BookingForm({ services, cities, addons = [], paused = {}
               <span className="block font-serif text-xl">Would you like to add {other.toLowerCase()} as well?</span>
               <span className="mt-1 block text-sm text-muted">
                 {kind === "photo"
-                  ? "Add a videographer for the same hours and get an edited highlight video (music of your choice, re-edit included) alongside your photos."
+                  ? "Add a videographer for the same hours and get an edited highlight video (music of your choice, one re-edit included) alongside your photos."
                   : "Add a photographer for all or part of your event and get a retouched, high-resolution photo gallery alongside your video."}{" "}
                 ${otherRate.first} first hour + ${otherRate.extra} each additional hour.
               </span>

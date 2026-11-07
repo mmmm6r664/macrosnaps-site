@@ -46,7 +46,7 @@ export default function Investors() {
         <div className="prose-ms text-[17px] lg:col-span-3">
           <h2 className="mb-5 font-serif text-3xl">Company overview</h2>
           <p>MacroSnaps provides photography, videography, live streaming and related services for conferences, corporate events, weddings and private celebrations. The business operates as part of <a href={SITE.parentUrl}>MacroHype LLC</a>, a digital media and marketing company based in New York City and Washington, DC, and draws on more than 13 years of experience.</p>
-          <p>MacroSnaps has covered more than 1,000 corporate events and conferences and over 5,000 weddings and private events. It serves clients in all 50 US states, Washington, DC, Ontario and Quebec with its own network of photographers and videographers, and publishes {VIDEOS.length} client films on its YouTube channel.</p>
+          <p>MacroSnaps has covered more than 750 corporate events and conferences and over 2,200 weddings and private events. It serves clients in all 50 US states, Washington, DC, Ontario and Quebec with its own network of photographers and videographers, and publishes {VIDEOS.length} client films on its YouTube channel.</p>
         </div>
         <aside className="lg:col-span-2">
           <div className="marble border border-black/5 p-7">

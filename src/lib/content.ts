@@ -132,7 +132,7 @@ export function cityContent(t: LocalTarget, c: City): CityContent {
     ],
     general: [
       `Looking for a professional ${pro.toLowerCase()} in ${c.name}? MacroSnaps covers weddings, engagements, family portraits, birthdays and celebrations, conferences and corporate events across ${c.stateName}, with our own photographers and videographers rather than freelancers from a marketplace.`,
-      `MacroSnaps is a global photography and videography company, and our crews work in ${c.name} for weddings and engagements, family and maternity sessions, parties and celebrations, and conferences and corporate events.`,
+      `MacroSnaps is a photography and videography company serving the US, Ontario and Quebec, and our crews work in ${c.name} for weddings and engagements, family and maternity sessions, parties and celebrations, and conferences and corporate events.`,
       `From corporate conferences to weddings, MacroSnaps provides ${name.toLowerCase()} in ${c.name}, ${c.stateName}, with packages you can book and pay for online in minutes.`,
     ],
   }[topic];
@@ -218,7 +218,7 @@ export function cityContent(t: LocalTarget, c: City): CityContent {
     },
     {
       q: "When will I receive my photos or video?",
-      a: "Photos are retouched, color graded and delivered in an online gallery in about a week. Edited highlight videos are delivered in 2 to 4 weeks depending on the package. Faster turnaround for corporate events can be arranged.",
+      a: "Photos are edited, retouched and delivered in an online gallery in about a week. Edited highlight videos are delivered in 2 to 4 weeks depending on the package. Faster turnaround for corporate events can be arranged.",
     },
     {
       q: `Can you provide a certificate of insurance for my ${c.name} venue?`,

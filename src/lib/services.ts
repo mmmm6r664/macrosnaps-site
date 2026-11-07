@@ -43,7 +43,7 @@ export type Service = {
 const PHOTO_FEATURES = (h: number) => [
   "1 photographer",
   `${h} hours of coverage`,
-  "All pictures retouched, edited and color graded",
+  "All pictures edited and retouched",
   "Online gallery of high-resolution pictures",
   "Raw pictures delivered on request",
   "Turnaround time: 1 week",
@@ -133,7 +133,7 @@ export const SERVICES: Service[] = [
     kind: "photo",
     group: "corporate",
     pro: "Conference Photographer",
-    title: "Conference Photographer | Corporate Conference Photography Worldwide",
+    title: "Conference Photographer | Corporate Conference Photography in the US & Canada",
     description:
       "Conference photography for keynotes, panels, breakouts, expos and networking. Our own crews across the US, Ontario & Quebec. From $350, book online.",
     intro: [
@@ -147,7 +147,7 @@ export const SERVICES: Service[] = [
       },
       {
         heading: "Fast delivery for post-event marketing",
-        body: "Every image is retouched and color graded and delivered in a high-resolution online gallery, organized so your team can find each session, speaker and sponsor quickly.",
+        body: "Every image is edited and retouched and delivered in a high-resolution online gallery, organized so your team can find each session, speaker and sponsor quickly.",
       },
     ],
     coverage: [
@@ -645,7 +645,7 @@ export const SERVICES: Service[] = [
     description: "Natural, flattering online dating profile photos that help you stand out on dating apps.",
     intro: [
       "MacroSnaps specializes in making sure that not only are you seen in the best light but also that the most honest version of you shines like a diamond from every angle, because YOU are the moment for us.",
-      "Our online dating photographers create natural, flattering profile photos that help you stand out on dating apps, with sessions in Washington DC, New York, Boston and cities across the US.",
+      "Our online dating photographers create natural, flattering profile photos that help you stand out on dating apps, with sessions in Washington, DC, New York, Boston and cities across the US.",
     ],
     coverage: ["Dating app profile photos", "Outdoor lifestyle portraits", "Multiple outfits & locations"],
     packages: [],
@@ -798,7 +798,7 @@ export const SERVICES: Service[] = [
       { q: "How fast is the turnaround?", a: "Solo orders are returned in 48 to 72 hours. For large catalogs we agree a delivery schedule with you when you send the images." },
       { q: "Can you retouch photos you did not take?", a: "Yes. Brands, photographers and agencies send us images from anywhere. Send the original, full-resolution files for the best result." },
       { q: "What file formats do you deliver?", a: "High-resolution JPEG, PNG (including transparent backgrounds) or TIFF, cropped and sized to your specifications." },
-      { q: "Are photos from MacroSnaps shoots already retouched?", a: "Yes. Every picture we deliver from our own shoots is retouched, edited and color graded. Additional editing requests, such as slimming or skin-tone changes, are available at an extra charge, and re-edits of any photo you are not happy with are free." },
+      { q: "Are photos from MacroSnaps shoots already retouched?", a: "Yes. Every picture we deliver from our own shoots is edited and retouched. Additional editing requests, such as slimming or skin-tone changes, are available at an extra charge, and re-edits of any photo you are not happy with are free." },
     ],
     images: IMG.commercial,
     local: false,
@@ -811,7 +811,7 @@ export const SERVICES: Service[] = [
     group: "business",
     pro: "3D Virtual Tour Provider",
     title: "3D & 360° Virtual Tours | Matterport",
-    description: "Matterport 3D and 360-degree virtual tours for homes, venues, restaurants and offices in Virginia, Maryland, Washington DC, New York and New Jersey.",
+    description: "Matterport 3D and 360-degree virtual tours for homes, venues, restaurants and offices in Virginia, Maryland, Washington, DC, New York and New Jersey.",
     intro: ["We provide Matterport 3D virtual tours and 360-degree virtual tour services for real estate, venues, restaurants, offices and commercial spaces. Tours work on phones, tablets, desktops and VR headsets, and can be embedded on your website or listing.", "3D virtual tours are currently offered in Virginia, Maryland, Washington, DC, New York State and New Jersey. Pricing is by the size of the space, starting at $200 for up to 1,000 sq ft, with the first month of hosting included."],
     coverage: ["Matterport 3D tours", "360° virtual tours", "Dollhouse & floor plan views", "Venue & event space tours", "Restaurants, hotels & museums", "Offline tour files"],
     packages: [],

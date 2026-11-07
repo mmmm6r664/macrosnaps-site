@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 const PERKS = [
   ["Up to 10 confirmed shoots every week", "We book the clients, you show up and shoot. Steady, confirmed work in your area — conferences, corporate events, weddings and celebrations."],
   ["No editing — ever", "All retouching, color grading and video editing is handled by our post-production team, so your time goes into shooting, not sitting at a computer."],
-  ["A rapidly growing nationwide company", "MacroSnaps covers all 50 states, Washington, DC, Ontario and Quebec, with more than 1,000 corporate events and 5,000 weddings and private events behind us."],
+  ["A rapidly growing nationwide company", "MacroSnaps covers all 50 states, Washington, DC, Ontario and Quebec, with more than 750 corporate events and 2,200 weddings and private events behind us."],
   ["Work with big nationwide brands", "Shoot summits, conferences and corporate events for national organizations and brands alongside weddings and private events."],
   ["A team that grows with you", "Lead photographers and videographers grow into regional roles, like our heads of the DC Metro and New York Metro regions."],
   ["Be part of the MacroSnaps family", "Clear briefs, published client pricing, insured events and a team that has your back on every shoot."],
@@ -38,7 +38,7 @@ export default function Careers() {
       <section className="mx-auto max-w-3xl px-4 py-16" data-reveal>
         <SectionTitle eyebrow="Requirements" title="Who we're looking for" />
         <ul className="space-y-3 text-[17px]">
-          {["At least 4 years of professional photography or videography experience", "The latest professional camera body and lenses", "A portfolio that shows your event, wedding or corporate work", "Reliable, punctual and comfortable working with clients and guests"].map((r) => <li key={r} className="flex gap-3"><IconCheck className="mt-1 h-5 w-5 shrink-0 text-gold-dark" />{r}</li>)}
+          {["At least 2 years of professional photography or videography experience", "The latest professional camera body and lenses", "A portfolio that shows your event, wedding or corporate work", "Reliable, punctual and comfortable working with clients and guests"].map((r) => <li key={r} className="flex gap-3"><IconCheck className="mt-1 h-5 w-5 shrink-0 text-gold-dark" />{r}</li>)}
         </ul>
       </section>
       <section id="apply" className="bg-marble px-4 py-16 md:px-6">

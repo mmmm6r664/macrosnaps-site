@@ -76,7 +76,7 @@ function EventPricing({ e, where, citySlug }: { e: EventType; where: string; cit
             <p className="mt-3 font-serif text-4xl">${RATES.photo.first} <span className="text-base text-muted">first hour</span></p>
             <p className="mt-1 text-muted">+ ${RATES.photo.extra} each additional hour</p>
             <p className="mt-4 text-[15px]">Typical {e.name.toLowerCase()} coverage: <strong>{ph} hours = ${hourPrice("photo", ph).toLocaleString()}</strong></p>
-            <p className="mt-2 text-sm text-muted">Every photo retouched and color graded, online gallery in about a week.</p>
+            <p className="mt-2 text-sm text-muted">Every photo edited and retouched, online gallery in about a week.</p>
             <Link href={`/book?service=${photoSvc}${q}`} className="btn-dark mt-6 w-full">Book Photography</Link>
           </div>
           <div className="border border-black/10 bg-white p-7">

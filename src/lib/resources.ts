@@ -65,7 +65,7 @@ export const AUDIENCES: Audience[] = [
     intro: [
       "Event planners juggle venues, catering, AV, décor and a run-of-show that has to hold together on the day. Photography and video should be the easy part. MacroSnaps gives you one company to call for conferences, corporate events, galas, weddings and private celebrations, with our own photographers and videographers across all US states, Washington, DC, Ontario and Quebec.",
       "Our prices are published and the same for every client, so you can build them into a proposal without waiting for a quote: photography is $250 for the first hour and $100 for each additional hour, and videography is $300 for the first hour and $200 for each additional hour, with a two-hour minimum. Multi-day programs, several rooms at once and events in several cities are booked at the same hourly rates.",
-      "MacroSnaps is part of MacroHype LLC, with 13+ years' experience and 6,000+ events covered: 1,000+ corporate events and conferences and 5,000+ weddings and private events.",
+      "MacroSnaps is part of MacroHype LLC, with 13+ years' experience and 6,000+ events covered, including 750+ corporate events and conferences and 2,200+ weddings and private events.",
     ],
     helps: [
       { title: "Published prices you can quote", body: "No quotes or back-and-forth. Add photo or video coverage to a client proposal using the same rates every client pays, and book and pay online." },
@@ -73,7 +73,7 @@ export const AUDIENCES: Audience[] = [
       { title: "One company, every city", body: "Planning events in several cities? Our own crews cover all US states, DC, Ontario and Quebec, so you deal with one team and one standard." },
       { title: "Insurance and venue paperwork", body: "Fully insured through State Farm ($1M per occurrence / $2M aggregate). Certificates of insurance for venues are available on request." },
       { title: "More than photos", body: "Photography, videography and highlight films, live streaming and photo booths, so one partner covers the whole event." },
-      { title: "Delivered on time", body: "Photos are retouched, color graded and delivered in an online gallery in about a week; edited highlight videos usually take two to four weeks." },
+      { title: "Delivered on time", body: "Photos are edited, retouched and delivered in an online gallery in about a week; edited highlight videos usually take two to four weeks." },
     ],
     why: [
       "Our own photographers and videographers, not a marketplace of strangers",
@@ -235,7 +235,7 @@ export const AUDIENCES: Audience[] = [
     intro: [
       "Couples often meet their officiant early and ask for recommendations. Whether you lead religious ceremonies, civil weddings, elopements or courthouse marriages, the photographer and videographer in the room affect how the ceremony feels. MacroSnaps crews follow your rules on positioning, flash and movement, and stay out of the way of the vows.",
       "Our prices are published and the same for every couple: photography is $250 for the first hour and $100 for each additional hour, and videography is $300 for the first hour and $200 for each additional hour, with a two-hour minimum. That makes short ceremonies and elopements affordable to cover, and couples can book and pay online.",
-      "MacroSnaps has covered 5,000+ weddings and private events, with our own photographers and videographers across all US states, Washington, DC, Ontario and Quebec.",
+      "MacroSnaps has covered 2,200+ weddings and private events, with our own photographers and videographers across all US states, Washington, DC, Ontario and Quebec.",
     ],
     helps: [
       { title: "Crews that respect the ceremony", body: "Tell us your guidelines on flash, aisle movement and where photographers may stand, and we brief every crew we send." },
@@ -246,7 +246,7 @@ export const AUDIENCES: Audience[] = [
       { title: "Insured and professional", body: "Insured through State Farm ($1M per occurrence / $2M aggregate), with certificates of insurance for venues on request." },
     ],
     why: [
-      "5,000+ weddings and private events covered",
+      "2,200+ weddings and private events covered",
       "Crews who follow your ceremony guidelines",
       "Published prices, the same for every couple",
       "Elopements, courthouse and religious ceremonies",

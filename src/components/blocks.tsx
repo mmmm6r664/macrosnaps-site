@@ -170,7 +170,7 @@ export function HowItWorks() {
     ["Choose your package", "Pick the service and number of hours. Every price is published, so there are no quotes to wait for."],
     ["Book & pay online", "Enter your date, start time and venue, then pay securely by card. Your slot is reserved the moment you book."],
     ["Your crew is confirmed", "We assign a MacroSnaps photographer or videographer for your city and confirm the details by email."],
-    ["Receive your gallery", "Every photo is retouched and color graded, then delivered in a private online gallery in high resolution."],
+    ["Receive your gallery", "Every photo is edited and retouched, then delivered in a private online gallery in high resolution."],
   ];
   return (
     <ol className="grid gap-8 md:grid-cols-4">

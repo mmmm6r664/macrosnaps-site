@@ -20,7 +20,7 @@ export const BRANDS = [...new Set(CAMERAS.map((c) => c.brand))];
 export const EXPERIENCE = [
   { id: "starting", label: "Just starting out", ok: false },
   { id: "lt1", label: "Less than 1 year", ok: false },
-  { id: "1-2", label: "1–2 years", ok: true },
+  { id: "1-2", label: "1–2 years", ok: false },
   { id: "2-5", label: "2–5 years", ok: true },
   { id: "5-10", label: "5–10 years", ok: true },
   { id: "10+", label: "10+ years", ok: true },

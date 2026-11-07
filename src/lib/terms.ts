@@ -1,6 +1,6 @@
 // MacroSnaps Terms and Conditions: shown in the booking signature popup and on /terms.
 // Bump TERMS_VERSION whenever the wording changes; each signed booking records the version it was signed against.
-export const TERMS_VERSION = "2026-11-05";
+export const TERMS_VERSION = "2026-11-07";
 
 export const TERMS: { title: string; body: string }[] = [
   { title: "Scope of Services", body: "MacroSnaps provides professional photography and videography services for events and projects as agreed upon in each client booking. Services include on-site coverage and post-production editing according to professional standards." },
@@ -9,7 +9,7 @@ export const TERMS: { title: string; body: string }[] = [
   { title: "Printing Rights", body: "Prints are not included in the service price. Clients may print delivered images through third-party platforms for personal use only. MacroSnaps is not responsible for variations in print color or quality from outside vendors." },
   { title: "Permissions & Venue Access", body: "Clients are responsible for securing all required permissions or permits for photography/videography at event locations. MacroSnaps will not be held liable for limitations or restrictions imposed by venues or event organizers." },
   { title: "Exclusive Photographer", body: "To ensure consistency and creative control, no other professional or amateur photographers or videographers are permitted to operate during the event without MacroSnaps' prior consent." },
-  { title: "Artistic Rights", body: "MacroSnaps retains full artistic control over image composition, color grading, and editing style. Final images reflect the photographer's creative judgment and are not subject to revision based on personal taste." },
+  { title: "Artistic Rights", body: "MacroSnaps retains full artistic control over image composition, color grading, and editing style. Final images reflect the photographer's creative judgment and are not subject to revision based on personal taste. The one exception: each highlight video includes one round of re-edits, requested within 14 days of delivery." },
   { title: "File Storage", body: "Edited digital files are stored for up to 30 days after delivery. Clients are encouraged to download and back up their media promptly, as long-term storage is not guaranteed." },
   { title: "Refund Policy", body: "All retainers and booking fees are non-refundable, as they secure the date and professional commitment of the MacroSnaps team. Refunds are only issued if MacroSnaps is unable to perform services due to unforeseen circumstances (e.g., illness, equipment failure, or events beyond control). In such cases, clients will receive a full refund of all payments made. Cancellations by the client for any reason will not be eligible for a refund or rescheduling." },
   { title: "Indemnification", body: "Clients agree to hold MacroSnaps harmless against any claims, losses, or damages resulting from venue restrictions, accidents, data loss, or conditions beyond the photographer's reasonable control." },

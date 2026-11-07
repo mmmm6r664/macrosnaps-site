@@ -1,10 +1,10 @@
 export const SITE = {
   name: "MacroSnaps",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.macrosnaps.com",
-  tagline: "Global Photography & Videography for Events, Conferences & Weddings",
-  shortTagline: "Award-Winning Photography & Videography Services Worldwide",
+  tagline: "Event, Conference & Wedding Photography & Videography Across the US & Canada",
+  shortTagline: "Award-Winning Photography & Videography Across the US & Canada",
   description:
-    "MacroSnaps is a global photography and videography company for conferences, corporate events, weddings and celebrations, with 6,000+ events covered by our own crews.",
+    "MacroSnaps is America's premier event and wedding photography and videography company, covering conferences, corporate events, weddings and celebrations across the US, Ontario and Quebec, with 6,000+ events shot by our own crews.",
   phone: "877-622-4973",
   phoneHref: "tel:+18776224973",
   email: "info@macrosnaps.com",
