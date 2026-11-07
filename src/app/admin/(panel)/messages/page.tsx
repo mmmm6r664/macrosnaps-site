@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
+import ImportEmails from "@/components/admin/ImportEmails";
 import { PageHead, Table, Badge, Empty, Pager, fmtDate, btnGhost, inputCls, btnPrimary } from "@/components/admin/ui";
 
 export const metadata = { title: "Sent emails & texts" };
@@ -45,6 +46,7 @@ export default async function Messages({ searchParams }: { searchParams: Promise
           order by id desc limit ${SIZE + 1} offset ${(page - 1) * SIZE}`;
         return (
           <>
+            <ImportEmails />
             <p className="mb-3 text-sm text-black/60">{today} sent today · {week} in the last 7 days{failed ? <> · <Link className="font-semibold text-red-700 underline" href="/admin/messages?status=failed">{failed} not delivered</Link></> : null}</p>
             {rows.length ? (
               <Table head={["When", "To", "Subject", "Status"]}>
