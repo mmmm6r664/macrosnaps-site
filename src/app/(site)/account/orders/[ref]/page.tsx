@@ -36,6 +36,7 @@ export default async function OrderPage({ params, searchParams }: { params: Prom
         </div>
 
         <div className="mt-8 border border-black/10 bg-white p-5 md:p-8"><StageTracker stage={o.stage} /></div>
+        <p className="mt-3 text-sm text-muted">Question about this order? <Link className="underline" href={`/support?order=${encodeURIComponent(o.ref)}`}>Open a support request</Link>.</p>
 
         {published && (
           <div id="gallery" className="mt-8 border border-black/10 bg-white p-5 md:p-8">

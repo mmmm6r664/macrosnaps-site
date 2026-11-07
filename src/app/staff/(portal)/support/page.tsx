@@ -1,26 +1,26 @@
+import Link from "next/link";
 import { requireStaff } from "@/lib/auth";
-import { q } from "@/lib/db";
 import { PageHead, Badge, Empty, fmtDate } from "@/components/admin/ui";
 import { TicketForm } from "@/components/staff/StaffForms";
+import { ticketsFor, signedPath, ticketNo, STATUS_LABEL, CATEGORIES } from "@/lib/tickets";
 
 export const metadata = { title: "Support" };
 
 export default async function Support() {
   const u = await requireStaff();
-  const rows = await q<{ id: number; subject: string; body: string; status: string; reply: string | null; created_at: Date }[]>`select id, subject, body, status, reply, created_at from support_tickets where user_id = ${u.id} order by id desc`;
+  const rows = await ticketsFor({ userId: u.id });
   return (
     <>
-      <PageHead title="Support" sub="Questions about a shoot, payments or anything else? Ask here." />
+      <PageHead title="Support" sub="Questions about a shoot, payments or anything else? Open a ticket. You'll get email updates at every step." />
       <div className="grid gap-6 xl:grid-cols-[420px_1fr]">
-        <TicketForm />
+        <TicketForm categories={CATEGORIES} />
         <div className="space-y-3">
           {rows.length ? rows.map((t) => (
-            <div key={t.id} className="rounded-lg border border-black/10 bg-white p-4 text-sm">
-              <div className="flex justify-between gap-2"><b>{t.subject}</b><Badge status={t.status === "open" ? "new" : t.status === "answered" ? "done" : "cancelled"}>{t.status}</Badge></div>
-              <p className="text-xs text-black/40">{fmtDate(t.created_at, true)}</p>
-              <p className="mt-2 whitespace-pre-wrap">{t.body}</p>
-              {t.reply && <p className="mt-2 whitespace-pre-wrap rounded bg-black/[.03] p-3"><b>MacroSnaps:</b> {t.reply}</p>}
-            </div>
+            <Link key={t.id} href={signedPath(t.id)} className="block rounded-lg border border-black/10 bg-white p-4 text-sm hover:border-black/30">
+              <div className="flex justify-between gap-2"><b>{t.subject}</b><Badge status={t.status}>{STATUS_LABEL[t.status] ?? t.status}</Badge></div>
+              <p className="text-xs text-black/50">{ticketNo(t.id)} · {t.category} · updated {fmtDate(t.updated_at, true)}</p>
+              <p className="mt-1 text-xs underline">View conversation & reply →</p>
+            </Link>
           )) : <Empty>No requests yet.</Empty>}
         </div>
       </div>

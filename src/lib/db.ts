@@ -293,6 +293,39 @@ alter table crew_assignments add column if not exists drive_link_at timestamptz;
 alter table crew_assignments add column if not exists drive_asked_at timestamptz;
 alter table crew_assignments add column if not exists drive_reminded_at timestamptz;
 alter table crew_assignments add column if not exists drive_overdue_at timestamptz;
+create table if not exists tickets (
+  id serial primary key,
+  source text not null,                              -- client | photographer | guest
+  user_id int references users(id) on delete set null,
+  client_id int,
+  name text not null default '', email text not null, phone text,
+  order_ref text, category text not null default 'General question',
+  subject text not null,
+  status text not null default 'open',              -- open | in_progress | waiting | resolved | closed
+  priority text not null default 'normal',
+  legacy_id int unique,
+  created_at timestamptz not null default now(), updated_at timestamptz not null default now(), resolved_at timestamptz
+);
+create index if not exists tickets_status on tickets(status, updated_at desc);
+do $$ begin if not exists (select 1 from tickets) then perform setval('tickets_id_seq', 1000, true); end if; end $$;
+create table if not exists ticket_messages (
+  id serial primary key,
+  ticket_id int not null references tickets(id) on delete cascade,
+  author text not null,                               -- customer | team | note
+  author_name text not null default '',
+  body text not null,
+  created_at timestamptz not null default now()
+);
+create index if not exists ticket_messages_ticket on ticket_messages(ticket_id, id);
+insert into tickets (source, user_id, name, email, subject, status, legacy_id, created_at, updated_at, resolved_at)
+  select 'photographer', s.user_id, u.name, u.email, s.subject, case s.status when 'answered' then 'waiting' when 'closed' then 'resolved' else 'open' end, s.id, s.created_at, coalesce(s.replied_at, s.created_at), case when s.status = 'closed' then coalesce(s.replied_at, s.created_at) end
+  from support_tickets s join users u on u.id = s.user_id where not exists (select 1 from tickets t where t.legacy_id = s.id);
+insert into ticket_messages (ticket_id, author, author_name, body, created_at)
+  select t.id, 'customer', t.name, s.body, s.created_at from support_tickets s join tickets t on t.legacy_id = s.id
+  where not exists (select 1 from ticket_messages m where m.ticket_id = t.id);
+insert into ticket_messages (ticket_id, author, author_name, body, created_at)
+  select t.id, 'team', 'MacroSnaps', s.reply, s.replied_at from support_tickets s join tickets t on t.legacy_id = s.id
+  where s.reply is not null and (select count(*) from ticket_messages m where m.ticket_id = t.id) = 1;
 create table if not exists email_log (
   id serial primary key,
   to_addr text not null, subject text not null default '', html text, reply_to text, attachments text[] not null default '{}',

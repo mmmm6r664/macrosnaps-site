@@ -1,21 +1,20 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { q, audit } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
-import { notifyUser, emailPerson } from "@/lib/notify";
+import { teamUpdate, STATUS_LABEL } from "@/lib/tickets";
 
-export async function replyTicket(f: FormData) {
+export type UState = { ok?: string; error?: string } | undefined;
+
+export async function updateTicket(_: UState, f: FormData): Promise<UState> {
   const u = await requireUser();
   const id = Number(f.get("id"));
-  const reply = String(f.get("reply") ?? "").trim().slice(0, 5000);
-  const status = f.get("close") === "1" ? "closed" : reply ? "answered" : "open";
-  const [t] = await q<{ user_id: number; subject: string; email: string; name: string }[]>`
-    update support_tickets t set reply = coalesce(nullif(${reply}, ''), t.reply), replied_at = case when ${reply} <> '' then now() else t.replied_at end, status = ${status}
-    from users u where t.id = ${id} and u.id = t.user_id returning t.user_id, t.subject, u.email, u.name`;
-  if (t && reply) {
-    await notifyUser(t.user_id, `Reply to: ${t.subject}`, reply.slice(0, 300), "/staff/support");
-    await emailPerson(t.email, `Re: ${t.subject}`, `Hi ${t.name.split(" ")[0]},\n\n${reply}\n\nThe MacroSnaps team`, u.id);
-  }
-  await audit(u.id, "support_reply", `#${id} ${status}`);
+  const reply = String(f.get("reply") ?? "").trim().slice(0, 8000);
+  const note = String(f.get("note") ?? "").trim().slice(0, 8000);
+  const status = String(f.get("status") ?? "");
+  const r = await teamUpdate(id, { by: { id: u.id, name: u.name }, reply, note, status });
+  if ("error" in r) return { error: r.error };
+  revalidatePath(`/admin/support/${id}`);
   revalidatePath("/admin/support");
+  const parts = [reply && "Reply sent", note && "Note saved", `status: ${STATUS_LABEL[r.status] ?? r.status}`].filter(Boolean).join(" · ");
+  return { ok: `${parts}${r.emailed ? " · customer emailed" : ""}.` };
 }

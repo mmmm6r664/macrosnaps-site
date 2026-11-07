@@ -4,6 +4,7 @@ import { requireClient } from "@/lib/clientAuth";
 import { ordersFor } from "@/lib/clientData";
 import StageTracker from "@/components/client/StageTracker";
 import { signOut, updateProfile } from "./actions";
+import { ticketsFor, signedPath, ticketNo, STATUS_LABEL } from "@/lib/tickets";
 
 export const metadata: Metadata = { title: "My Account", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
@@ -13,6 +14,7 @@ const fmtDate = (d: string | null) => (d ? new Date(`${d.slice(0, 10)}T12:00:00Z
 export default async function AccountPage() {
   const c = await requireClient("/account");
   const orders = await ordersFor(c.email);
+  const tickets = await ticketsFor({ email: c.email }).catch(() => []);
   const today = new Date().toISOString().slice(0, 10);
   const upcoming = orders.filter((o) => (o.first_date ?? "9999") >= today);
   const past = orders.filter((o) => (o.first_date ?? "9999") < today);
@@ -27,6 +29,7 @@ export default async function AccountPage() {
           </div>
           <div className="flex gap-3">
             <Link href="/book" className="btn-gold !py-2.5">Book a new shoot</Link>
+            <Link href="/support" className="btn-dark !py-2.5">Get help</Link>
             <form action={signOut}><button className="btn-dark !py-2.5">Sign out</button></form>
           </div>
         </div>
@@ -62,6 +65,20 @@ export default async function AccountPage() {
               ) : null,
             )}
           </>
+        )}
+
+        {tickets.length > 0 && (
+          <div className="mt-10">
+            <h2 className="mb-4 font-serif text-2xl">Your support requests</h2>
+            <div className="divide-y divide-black/10 border border-black/10 bg-white">
+              {tickets.map((t) => (
+                <Link key={t.id} href={signedPath(t.id)} className="flex flex-wrap items-center justify-between gap-2 p-4 hover:bg-black/[.02]">
+                  <span><b>{t.subject}</b><span className="block text-xs text-muted">{ticketNo(t.id)} · {t.category}</span></span>
+                  <span className={`text-sm ${t.status === "resolved" || t.status === "closed" ? "text-emerald-700" : "font-semibold"}`}>{STATUS_LABEL[t.status] ?? t.status} →</span>
+                </Link>
+              ))}
+            </div>
+          </div>
         )}
 
         <details className="mt-12 border border-black/10 bg-white p-5">

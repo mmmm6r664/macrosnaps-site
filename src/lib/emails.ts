@@ -418,3 +418,63 @@ export function crewDriveTeam(kind: "received" | "overdue", c: { name: string; e
     }),
   };
 }
+
+/* ---------- support tickets ---------- */
+export type TicketMail = { no: string; name: string; subject: string; category: string; orderRef?: string | null; url: string };
+const quote = (body: string) => `<div style="margin:0 0 22px;padding:14px 18px;border-left:3px solid #ccba56;background:#faf8f2;font:15px/1.6 Arial,sans-serif;color:#333">${esc(body).replace(/\n/g, "<br>")}</div>`;
+
+/** To the person who opened the ticket. */
+export function ticketOpened(t: TicketMail, body: string): Email {
+  return {
+    subject: `We received your request [${t.no}]: ${t.subject}`,
+    html: layout({
+      title: "We’re on it",
+      preheader: `Your ticket number is ${t.no}. We usually reply within one business day.`,
+      body:
+        p(`Hi ${first(t.name)},`) +
+        p(`Thanks for contacting MacroSnaps. We’ve received your request and a member of our team will reply <b>within one business day</b> (usually much sooner).`) +
+        details([["Ticket", t.no], ["Topic", t.category], ["Order", t.orderRef], ["Subject", t.subject]]) +
+        quote(body) +
+        button("View or add to your ticket", t.url) +
+        small("Keep this email: the button above always takes you back to your ticket. To add more details or links, open the ticket and write a reply."),
+    }),
+  };
+}
+
+/** Our reply, or a status change, to the person who opened the ticket. */
+export function ticketUpdated(t: TicketMail, status: string, message: string | null): Email {
+  const resolved = status === "resolved";
+  const label: Record<string, string> = { open: "Open", in_progress: "In progress", waiting: "Waiting for your reply", resolved: "Resolved", closed: "Closed" };
+  return {
+    subject: resolved ? `Resolved [${t.no}]: ${t.subject}` : message ? `New reply on your request [${t.no}]: ${t.subject}` : `Update on your request [${t.no}]: ${label[status] ?? status}`,
+    html: layout({
+      title: resolved ? "Your request is resolved" : message ? "We replied to your request" : "Your request was updated",
+      preheader: message ? message.slice(0, 120) : `Status: ${label[status] ?? status}`,
+      body:
+        p(`Hi ${first(t.name)},`) +
+        (message ? quote(message) : "") +
+        (resolved
+          ? p("We’ve marked this request as <b>resolved</b>. If anything still isn’t right, just open the ticket and reply. It will reopen automatically.")
+          : status === "waiting"
+            ? p("We need a little more information from you to continue. Please open the ticket and reply.")
+            : !message ? p(`Your request is now <b>${esc(label[status] ?? status)}</b>.`) : "") +
+        details([["Ticket", t.no], ["Status", label[status] ?? status], ["Subject", t.subject]]) +
+        button(resolved ? "View ticket" : "Open & reply", t.url),
+    }),
+  };
+}
+
+/** To the team: a new ticket, or the customer replied. */
+export function ticketTeam(kind: "new" | "reply", t: TicketMail & { email: string; source: string; phone?: string | null }, body: string): Email {
+  return {
+    subject: `${kind === "new" ? "New support ticket" : "Customer replied"} [${t.no}]: ${t.subject}`,
+    html: layout({
+      title: kind === "new" ? "New support ticket" : "New reply on a ticket",
+      signoff: false,
+      body:
+        details([["Ticket", t.no], ["From", `${t.name} <${t.email}>`], ["Phone", t.phone], ["Who", t.source === "photographer" ? "Photographer / videographer" : t.source === "client" ? "Client (signed in)" : "Website visitor"], ["Topic", t.category], ["Order", t.orderRef], ["Subject", t.subject]]) +
+        quote(body) +
+        button("Open in admin", t.url),
+    }),
+  };
+}

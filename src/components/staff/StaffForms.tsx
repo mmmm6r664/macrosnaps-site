@@ -78,10 +78,12 @@ export function ContractForm() {
   );
 }
 
-export function TicketForm() {
+export function TicketForm({ categories = [] }: { categories?: string[] }) {
   const [s, act, pending] = useActionState<S, FormData>(openTicket, undefined);
   return (
     <form onSubmit={noReset(act)} className="space-y-3 rounded-lg border border-black/10 bg-white p-5">
+      <div><label className={labelCls} htmlFor="cat">Topic</label><select id="cat" name="category" className={inputCls}>{categories.map((c) => <option key={c}>{c}</option>)}</select></div>
+      <div><label className={labelCls} htmlFor="ord">Order number (optional)</label><input id="ord" name="order" className={inputCls} /></div>
       <div><label className={labelCls} htmlFor="sub">Subject</label><input id="sub" name="subject" required className={inputCls} /></div>
       <div><label className={labelCls} htmlFor="bd">How can we help?</label><textarea id="bd" name="body" rows={5} required className={inputCls} /></div>
       <Msg s={s} />

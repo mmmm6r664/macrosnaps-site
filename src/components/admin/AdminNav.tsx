@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 const MANAGER = [
   ["Dashboard", "/admin"], ["Bookings", "/admin/bookings"], ["Calendar", "/admin/calendar"], ["Payments & refunds", "/admin/payments"],
-  ["Invoices", "/admin/invoices"], ["Inbox", "/admin/inbox"], ["Photographers", "/admin/photographers"], ["Contracts", "/admin/contracts"], ["Shoot offers", "/admin/offers"], ["Payouts & 1099s", "/admin/payouts"], ["Knowledge base", "/admin/knowledge"], ["Support requests", "/admin/support"], ["Sent emails & texts", "/admin/messages"], ["Newsletters", "/admin/newsletters"], ["Emails & automations", "/admin/emails"], ["Subscribers", "/admin/subscribers"],
+  ["Invoices", "/admin/invoices"], ["Inbox", "/admin/inbox"], ["Photographers", "/admin/photographers"], ["Contracts", "/admin/contracts"], ["Shoot offers", "/admin/offers"], ["Payouts & 1099s", "/admin/payouts"], ["Knowledge base", "/admin/knowledge"], ["Support tickets", "/admin/support"], ["Sent emails & texts", "/admin/messages"], ["Newsletters", "/admin/newsletters"], ["Emails & automations", "/admin/emails"], ["Subscribers", "/admin/subscribers"],
   ["Website", "/admin/website"], ["Team", "/admin/team"], ["Security log", "/admin/activity"], ["My security (2FA)", "/admin/security"], ["My account", "/admin/account"],
 ];
 const STAFF = [["My shoots", "/admin"], ["Calendar", "/admin/calendar"], ["My account", "/admin/account"]];
