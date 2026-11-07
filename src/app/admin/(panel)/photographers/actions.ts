@@ -1,4 +1,6 @@
 "use server";
+import { photographerAccepted } from "@/lib/emails";
+import { sendMail } from "@/lib/mail";
 import { sendContract } from "@/lib/esign";
 import { randomBytes } from "crypto";
 import { revalidatePath } from "next/cache";
@@ -33,14 +35,14 @@ export async function approveApplicant(_: S, f: FormData): Promise<S> {
     return nu.id;
   });
   const token = await createPasswordToken(userId, "set");
-  const sent = await emailPerson(email, "Welcome to the MacroSnaps team", `Hi ${a.name.split(" ")[0]},\n\nCongratulations, your application to MacroSnaps has been accepted.\n\nSet your password to open your staff portal. There you'll sign the contractor agreement, complete your profile and payout details, and see shoots available in your area.\n\nThis link works for 7 days.`, u.id, { label: "Set up my account", url: `${ORIGIN}/staff/set-password?t=${token}` });
+  const setupUrl = `${ORIGIN}/staff/set-password?t=${token}`;
+  // One welcome email: congratulations + contract to e-sign (optional) + account setup.
+  const contract = f.get("contract") === "on" ? await sendContract({ name: a.name, email, userId, inquiryId: a.id, companySigner: u.name, by: u.id, email_it: false }) : null;
+  const m = photographerAccepted(a.name, contract?.url ?? null, setupUrl);
+  const sent = (await sendMail({ to: email, subject: m.subject, html: m.html })).ok;
   await audit(u.id, "staff_approve", `${email} (application #${a.id})`);
-  let contractNote = "";
-  if (f.get("contract") === "on") {
-    const c = await sendContract({ name: a.name, email, userId, inquiryId: a.id, companySigner: u.name, by: u.id });
-    contractNote = c.emailed ? " The contractor agreement was sent for e-signature." : ` Contract created (MS-C${c.id}) but not emailed; signing link: ${c.url}`;
-  }
-  return sent ? { ok: `Approved. ${a.name} has been emailed a link to set up their account.${contractNote}` } : { ok: `Approved, but the invite email couldn't be sent (email isn't connected). Send them this link: ${ORIGIN}/staff/set-password?t=${token}${contractNote}` };
+  const contractNote = contract ? ` Contract MS-C${contract.id} is included for e-signature.` : "";
+  return sent ? { ok: `Approved. ${a.name} has been emailed their welcome.${contractNote}` } : { ok: `Approved, but the welcome email couldn't be sent. Account setup link: ${setupUrl}${contract ? ` · Signing link: ${contract.url}` : ""}` };
 }
 
 /** Email and/or text a group of people from the directory. */

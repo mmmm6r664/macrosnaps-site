@@ -287,6 +287,33 @@ export function nurture3(name: string, unsubUrl: string): Email {
   };
 }
 
+/* ---------- photographer / videographer network ---------- */
+export function photographerAccepted(name: string, signUrl: string | null, setupUrl: string): Email {
+  return {
+    subject: "Congratulations! You've been accepted to MacroSnaps 🎉",
+    html: layout({
+      title: "Welcome to the team!",
+      preheader: "Your application was accepted. Two quick steps to start getting shoots.",
+      hero: IMG.conferenceHero,
+      body:
+        p(`Hi ${first(name)},`) +
+        p("Congratulations! We loved your portfolio, and we're excited to welcome you to the MacroSnaps network of photographers and videographers.") +
+        p("Here's how to get started. It takes about 10 minutes:") +
+        steps([
+          ...(signUrl ? ([["Sign your contractor agreement", "Review and e-sign our Contractor Photographer &amp; Videographer Agreement. You'll get a signed PDF copy by email."]] as [string, string][]) : []),
+          ["Set up your staff portal", "Create your password, then add your payout method (Venmo, PayPal or Cash App), W-9 details and the shoot types you want."],
+          ["Start getting shoots", "We'll send shoot offers in your area by email and in your portal. Accept the ones that fit your schedule."],
+        ]) +
+        (signUrl ? button("Review & sign the agreement", signUrl) : "") +
+        button(signUrl ? "Set up my staff portal" : "Set up my account", setupUrl) +
+        small("The account setup link works for 7 days. Your signing link is private to you, so please don't forward it.") +
+        divider() +
+        p("Questions? Just reply to this email. We're happy to help."),
+      footerNote: "You're receiving this because you applied to join the MacroSnaps team.",
+    }),
+  };
+}
+
 /* ---------- generic (contact forms, staff, admin alerts, newsletters) ---------- */
 export const generic = (title: string, bodyHtml: string, opts: { preheader?: string; unsubUrl?: string; footerNote?: string; signoff?: boolean } = {}) => layout({ title, body: bodyHtml, ...opts });
 export { details as detailsTable };
