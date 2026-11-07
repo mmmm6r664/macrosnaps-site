@@ -1,4 +1,5 @@
 "use server";
+import { sendContract } from "@/lib/esign";
 import { randomBytes } from "crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -34,7 +35,12 @@ export async function approveApplicant(_: S, f: FormData): Promise<S> {
   const token = await createPasswordToken(userId, "set");
   const sent = await emailPerson(email, "Welcome to the MacroSnaps team", `Hi ${a.name.split(" ")[0]},\n\nCongratulations, your application to MacroSnaps has been accepted.\n\nSet your password to open your staff portal. There you'll sign the contractor agreement, complete your profile and payout details, and see shoots available in your area.\n\nThis link works for 7 days.`, u.id, { label: "Set up my account", url: `${ORIGIN}/staff/set-password?t=${token}` });
   await audit(u.id, "staff_approve", `${email} (application #${a.id})`);
-  return sent ? { ok: `Approved. ${a.name} has been emailed a link to set up their account.` } : { ok: `Approved, but the invite email couldn't be sent (email isn't connected). Send them this link: ${ORIGIN}/staff/set-password?t=${token}` };
+  let contractNote = "";
+  if (f.get("contract") === "on") {
+    const c = await sendContract({ name: a.name, email, userId, inquiryId: a.id, companySigner: u.name, by: u.id });
+    contractNote = c.emailed ? " The contractor agreement was sent for e-signature." : ` Contract created (MS-C${c.id}) but not emailed; signing link: ${c.url}`;
+  }
+  return sent ? { ok: `Approved. ${a.name} has been emailed a link to set up their account.${contractNote}` } : { ok: `Approved, but the invite email couldn't be sent (email isn't connected). Send them this link: ${ORIGIN}/staff/set-password?t=${token}${contractNote}` };
 }
 
 /** Email and/or text a group of people from the directory. */

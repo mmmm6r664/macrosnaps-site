@@ -47,7 +47,7 @@ export async function middleware(req: NextRequest) {
     res.headers.set("cache-control", "no-store");
     return res;
   }
-  if (path === "/staff" || path.startsWith("/staff/") || path === "/account" || path.startsWith("/account/")) {
+  if (path === "/staff" || path.startsWith("/staff/") || path === "/account" || path.startsWith("/account/") || path.startsWith("/sign/")) {
     const res = NextResponse.next();
     res.headers.set("x-robots-tag", "noindex, nofollow");
     res.headers.set("cache-control", "no-store");

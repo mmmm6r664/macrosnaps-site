@@ -257,6 +257,29 @@ create table if not exists gallery_photos (
   created_at timestamptz not null default now()
 );
 create index if not exists gallery_photos_gallery on gallery_photos(gallery_id, sort);
+-- E-signatures: contracts sent to photographers/applicants, signed via a secure link, stored as PDF with an audit trail.
+create table if not exists contracts (
+  id serial primary key,
+  user_id int references users(id) on delete set null,
+  inquiry_id int references inquiries(id) on delete set null,
+  signer_name text not null,
+  signer_email text not null,
+  doc_title text not null,
+  doc_version text not null,
+  doc_sections jsonb not null,               -- exact text sent (frozen at send time)
+  company_signer text not null,
+  company_signed_at timestamptz not null default now(),
+  token_hash text unique not null,
+  status text not null default 'sent',       -- sent | viewed | signed | voided
+  sent_at timestamptz not null default now(),
+  viewed_at timestamptz, viewed_ip text,
+  signed_at timestamptz, signed_name text, signed_ip text, signed_ua text, signature_png text, consent boolean,
+  pdf bytea, pdf_sha256 text, doc_sha256 text,
+  created_by int references users(id) on delete set null
+);
+create index if not exists contracts_email on contracts(lower(signer_email));
+alter table contracts add column if not exists signer_phone text;
+alter table contracts add column if not exists signer_address text;
 -- Email automations: abandoned-booking reminders, subscriber welcome series, review requests.
 -- Columns are added with a "done" default so existing rows never get emailed, then new rows start at 0.
 alter table bookings add column if not exists reminders_sent int not null default 3;
