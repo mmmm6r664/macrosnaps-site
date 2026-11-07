@@ -58,17 +58,21 @@ export default function AskBox({ variant = "light", title = "Tell us what you ne
   return (
     <div className="w-full">
       {title && <p className={`mb-3 font-serif text-2xl md:text-3xl ${dark ? "text-white" : "text-ink"}`}>{title}</p>}
-      <form onSubmit={submit} className={`flex items-center gap-2 rounded-full border p-2 pl-6 shadow-xl transition focus-within:ring-2 focus-within:ring-gold ${dark ? "border-white/20 bg-white/95" : "border-black/10 bg-white"}`}>
+      <form onSubmit={submit} className={`flex items-center gap-2 rounded-[2rem] border p-2 pl-5 shadow-xl transition focus-within:ring-2 focus-within:ring-gold md:pl-6 ${dark ? "border-white/20 bg-white/95" : "border-black/10 bg-white"}`}>
         <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-gold-dark" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-        <input
+        {/* Textarea so long examples wrap instead of being cut off on phones; Enter still submits. */}
+        <textarea
           value={q}
-          onChange={(e) => setQ(cleanTyped(e.target.value))}
+          rows={2}
+          onChange={(e) => setQ(cleanTyped(e.target.value.replace(/\n/g, " ")))}
+          onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); e.currentTarget.form?.requestSubmit(); } }}
           maxLength={MAX_QUERY}
           spellCheck={false}
+          enterKeyHint="search"
           onFocus={() => (focused.current = true)}
           placeholder={ph}
           aria-label="Describe the photography or videography you need"
-          className="min-w-0 flex-1 bg-transparent py-3 text-base text-ink outline-none placeholder:text-muted"
+          className="min-w-0 flex-1 resize-none bg-transparent py-1.5 text-base leading-snug text-ink outline-none placeholder:text-muted md:h-12 md:overflow-hidden md:py-3 md:leading-6"
         />
         <button disabled={busy} className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gold text-black transition hover:scale-105 hover:bg-[#ddcb67] disabled:opacity-60" aria-label="Find the right service">
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden><path d="M3 20.5 21 12 3 3.5l.01 6.6L15 12 3.01 13.9z" /></svg>
