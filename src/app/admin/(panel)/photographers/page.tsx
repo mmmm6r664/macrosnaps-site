@@ -6,6 +6,8 @@ import { smsReady } from "@/lib/sms";
 import { PageHead, Notice, inputCls, btnGhost } from "@/components/admin/ui";
 import Directory from "@/components/admin/Directory";
 import AddPhotographer from "@/components/admin/AddPhotographer";
+import RequestFiles from "@/components/admin/RequestFiles";
+import { listFileRequests } from "@/lib/crewDelivery";
 
 export const metadata = { title: "Photographers & videographers" };
 
@@ -24,6 +26,8 @@ export default async function Photographers({ searchParams }: { searchParams: Pr
     <>
       <PageHead title="Photographers & videographers" sub="Your team and every applicant. Filter by area and shoot type, then email, text or offer them a shoot." />
       <AddPhotographer />
+      <RequestFiles rows={(await listFileRequests().catch(() => [])).map((r) => ({ id: r.id, name: r.name, email: r.email, shoot: r.shoot, shoot_date: r.shoot_date, link: r.drive_link,
+        due: new Date(r.due_at).toLocaleString("en-US", { timeZone: "America/New_York", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) }))} />
       {!smsReady() && <Notice>Text messaging isn&apos;t connected yet (Twilio). Email and portal notifications still work.</Notice>}
       {booking && <Notice tone="green">Finding crew for booking {booking.ref}: {booking.service_name} in {booking.city}. The offer form is filled in for you.</Notice>}
       <form className="mb-4 grid gap-2 rounded-lg border border-black/10 bg-white p-4 sm:grid-cols-2 xl:grid-cols-6">

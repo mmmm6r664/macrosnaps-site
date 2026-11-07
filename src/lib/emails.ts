@@ -375,3 +375,46 @@ export function inquiryReply(subject: string, message: string, bookButton: boole
     }),
   };
 }
+
+/* ---------- crew: deliver files after the shoot ---------- */
+export type CrewShoot = { name: string; service: string; ref: string; order?: string; client: string; when: string; venue: string; deadline: string; url: string; folder: string };
+
+/** Sent to each photographer/videographer when the shoot ends (and once more as a reminder) asking for the Google Drive link. */
+export function crewDriveRequest(c: CrewShoot, reminder = false): Email {
+  return {
+    subject: reminder ? `Reminder: Google Drive link for ${c.ref} is due by ${c.deadline}` : `Thank you! Please send the Google Drive link for ${c.ref} within 24 hours`,
+    html: layout({
+      title: reminder ? "Your files are due soon" : "Thanks for a great shoot!",
+      preheader: `Upload everything to Google Drive and send us the link by ${c.deadline}.`,
+      body:
+        p(`Hi ${first(c.name)},`) +
+        p(reminder
+          ? `We haven't received the Google Drive link for this shoot yet. As a reminder, all files are due <b>within 24 hours of the event</b>, by <b>${esc(c.deadline)}</b>.`
+          : `Thank you for covering this shoot for MacroSnaps. Please upload <b>all original RAW files and the edited .JPG files</b> (and video files, if you filmed) to a Google Drive folder and send us the link <b>within 24 hours</b>, by <b>${esc(c.deadline)}</b>.`) +
+        details([["Order", c.order], ["Shoot", c.service], ["Client", c.client], ["When", c.when], ["Venue", c.venue]]) +
+        button("Send the Google Drive link", c.url) +
+        steps([
+          ["Create one folder", `Name it “${esc(c.folder)}”, with RAW and Edited subfolders.`],
+          ["Share it", "Set sharing to “Anyone with the link can view” (or share it with info@macrosnaps.com)."],
+          ["Paste the link", "Use the button above. It only takes a moment and no login is needed."],
+        ]) +
+        small("Payment for the shoot is released once all edited and RAW files are delivered. Questions? Just reply to this email."),
+    }),
+  };
+}
+
+/** Team alert when a crew member sends their link, or when one is overdue. */
+export function crewDriveTeam(kind: "received" | "overdue", c: { name: string; email: string; ref: string; service: string; client: string; link?: string; adminUrl: string }): Email {
+  return {
+    subject: kind === "received" ? `Files delivered for ${c.ref} by ${c.name}` : `Overdue: no Google Drive link for ${c.ref} from ${c.name}`,
+    html: layout({
+      title: kind === "received" ? "Files delivered" : "Files overdue",
+      signoff: false,
+      body:
+        p(kind === "received" ? `${esc(c.name)} sent the Google Drive link for this shoot.` : `It has been more than 24 hours since the shoot ended and ${esc(c.name)} (${esc(c.email)}) hasn't sent the Google Drive link yet. They've had the request and one reminder.`) +
+        details([["Order", c.ref], ["Service", c.service], ["Client", c.client], ["Crew", `${c.name} <${c.email}>`], ...(c.link ? [["Drive link", c.link] as [string, string]] : [])]) +
+        (c.link ? button("Open the Drive folder", c.link) : "") +
+        button("Open the booking", c.adminUrl),
+    }),
+  };
+}

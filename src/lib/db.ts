@@ -288,6 +288,19 @@ alter table bookings add column if not exists last_reminder_at timestamptz;
 alter table bookings add column if not exists reminders_stopped boolean not null default false;
 alter table subscribers add column if not exists nurture_step int not null default 3;
 alter table subscribers alter column nurture_step set default 0;
+alter table crew_assignments add column if not exists drive_link text;
+alter table crew_assignments add column if not exists drive_link_at timestamptz;
+alter table crew_assignments add column if not exists drive_asked_at timestamptz;
+alter table crew_assignments add column if not exists drive_reminded_at timestamptz;
+alter table crew_assignments add column if not exists drive_overdue_at timestamptz;
+create table if not exists file_requests (
+  id serial primary key,
+  name text not null, email text not null, shoot text not null default '', shoot_date text not null default '',
+  due_at timestamptz not null,
+  drive_link text, drive_link_at timestamptz, reminded_at timestamptz, overdue_at timestamptz,
+  created_by int references users(id) on delete set null,
+  created_at timestamptz not null default now()
+);
 alter table subscribers add column if not exists nurture_at timestamptz;
 create table if not exists feedback (
   id serial primary key,

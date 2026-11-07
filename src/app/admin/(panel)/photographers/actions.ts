@@ -122,3 +122,20 @@ export async function addPhotographer(_: S, f: FormData): Promise<S> {
   const note = contract ? ` Contractor agreement MS-C${contract.id} is included for e-signature.` : "";
   return sent ? { ok: `${name} has been added and emailed their welcome.${note}` } : { ok: `${name} was added, but the email couldn't be sent. Account setup link: ${setupUrl}${contract ? ` · Signing link: ${contract.url}` : ""}` };
 }
+
+/** Ask a photographer/videographer for the Google Drive link of a shoot (due in 24 hours; automatic reminder + overdue alert). */
+export async function requestFiles(_: S, f: FormData): Promise<S> {
+  const u = await requireUser();
+  const name = String(f.get("name") ?? "").replace(/[<>]/g, "").trim().slice(0, 100);
+  const email = String(f.get("email") ?? "").trim().toLowerCase().slice(0, 200);
+  const shoot = String(f.get("shoot") ?? "").replace(/[<>]/g, "").trim().slice(0, 120) || "Photography";
+  const date = String(f.get("date") ?? "").trim();
+  if (!name) return { error: "Enter their name." };
+  if (!/^[^\s@<>]+@[^\s@<>]+\.[a-z]{2,}$/i.test(email)) return { error: "Enter a valid email address." };
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return { error: "Choose the shoot date." };
+  const shootDate = new Date(`${date}T12:00:00Z`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+  const { createFileRequest } = await import("@/lib/crewDelivery");
+  const r = await createFileRequest({ name, email, shoot, shootDate, by: u.id });
+  revalidatePath("/admin/photographers");
+  return r.emailed ? { ok: `Sent to ${email}. Files are due by ${r.due}. They'll get a reminder 6 hours before, and you'll be emailed when the link arrives (or if it's late).` } : { ok: `Created, but the email couldn't be sent. Send them this link: ${r.url}` };
+}
