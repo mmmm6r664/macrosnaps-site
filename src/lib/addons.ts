@@ -13,7 +13,7 @@ const EVENTS = [
 type Def = { id: string; service: string; title: string; blurb: string; services: string[]; states?: string[] };
 const DEFS: Def[] = [
   { id: "live-stream", service: "live-stream", title: "Live streaming", blurb: "Stream your event to remote guests or attendees.", services: EVENTS },
-  { id: "photo-booth", service: "photo-booth", title: "Photo booth", blurb: "A photo booth with an attendant and digital copies of every photo. Need more time? Tell us in your notes.", services: EVENTS },
+  { id: "photo-booth", service: "photo-booth", title: "Photo booth", blurb: "An iPad photo booth with an attendant for 3 hours (the minimum). Digital photos only, shared instantly by text or email; no prints.", services: EVENTS },
   { id: "re-photo", service: "real-estate-photography", title: "Real estate photography", blurb: "Professional listing photos of the same property, taken during the same visit.", services: ["virtualtours"] },
   { id: "re-video", service: "real-estate-videography", title: "Real estate video", blurb: "A walkthrough video of the property for your listing and social media.", services: ["virtualtours"] },
   { id: "virtual-tour", service: "virtualtours", title: "3D virtual tour", blurb: "A Matterport 3D tour of the property with the first month of hosting included. Larger properties are priced by size on our 3D tours page.", services: ["real-estate-photography", "real-estate-videography"], states: TOUR_STATES },
