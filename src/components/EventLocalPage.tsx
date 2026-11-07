@@ -13,6 +13,7 @@ import VideoGrid from "./VideoGrid";
 import WhyUs from "./WhyUs";
 import { IconCheck } from "./Icons";
 import { SITE } from "@/lib/site";
+import PhotoSpots from "./PhotoSpots";
 
 const linkCls = "underline-offset-4 hover:text-gold-dark hover:underline";
 
@@ -183,6 +184,8 @@ export function EventCityPage({ e, city }: { e: EventType; city: City }) {
           </div>
         )}
       </section>
+
+      <PhotoSpots city={city} bookHref={bookHref} />
 
       <Work e={e} images={images} seed={city.id} alt={`${e.name} in ${city.name}`} />
       <Planning e={e} where={city.name} />

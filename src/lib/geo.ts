@@ -79,3 +79,29 @@ export function pick<T>(arr: T[], seed: number, salt = 0): T {
   const x = Math.abs(Math.sin(seed * 9301 + salt * 49297) * 233280);
   return arr[Math.floor(x) % arr.length];
 }
+
+/** Great-circle distance in miles. */
+export function milesBetween(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
+  const r = Math.PI / 180;
+  const dLat = (b.lat - a.lat) * r;
+  const dLng = (b.lng - a.lng) * r;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLng / 2) ** 2;
+  return 3958.8 * 2 * Math.asin(Math.min(1, Math.sqrt(h)));
+}
+
+let spotCities: City[] | undefined;
+/**
+ * Researched photo & video spots for a city (src/data/local). Cities without their own data borrow the spots of the
+ * nearest city that has them, within `maxMiles`; otherwise null (never invent places).
+ */
+export function photoSpotsFor(c: City, maxMiles = 60): { from: City; spots: string[]; miles: number; own: boolean } | null {
+  const own = getLocal(c.slug)?.photoSpots;
+  if (own?.length) return { from: c, spots: own, miles: 0, own: true };
+  spotCities ??= cities.filter((x) => getLocal(x.slug)?.photoSpots?.length);
+  let best: { city: City; mi: number } | undefined;
+  for (const x of spotCities) {
+    const mi = milesBetween(c, x);
+    if (mi <= maxMiles && (!best || mi < best.mi)) best = { city: x, mi };
+  }
+  return best ? { from: best.city, spots: getLocal(best.city.slug)!.photoSpots!, miles: Math.max(1, Math.round(best.mi)), own: false } : null;
+}

@@ -17,6 +17,7 @@ import { serviceSchema } from "@/lib/schema";
 import { photoPicker, rotate, bannerSafe } from "@/lib/images";
 import { SITE } from "@/lib/site";
 import { IconCheck } from "@/components/Icons";
+import PhotoSpots from "@/components/PhotoSpots";
 import { EVENT_TYPES } from "@/data/eventTypes";
 import { EventCityPage, EventRegionPage } from "@/components/EventLocalPage";
 import { getEventType, eventPrerenderCities, eventCityContent, eventRegionContent } from "@/lib/eventLocal";
@@ -187,6 +188,8 @@ function CityPage({ t, city }: { t: LocalTarget; city: City }) {
           </div>
         </section>
       )}
+
+      <PhotoSpots city={city} bookHref={bookHref} />
 
       <section className="bg-black px-4 py-16 md:px-6">
         <div className="mx-auto max-w-7xl">
