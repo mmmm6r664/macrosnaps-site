@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { findPackage, getService } from "@/lib/services";
-import { quoteHourly, type Kind, type SessionInput, type Line } from "@/lib/pricing";
+import { quoteHourly, isTooSoon, MIN_NOTICE_HOURS, type Kind, type SessionInput, type Line } from "@/lib/pricing";
 import { getCity, cityLabel } from "@/lib/geo";
 import { SITE } from "@/lib/site";
 import { sendMail, table, TEAM_INBOX } from "@/lib/mail";
@@ -30,6 +30,8 @@ export async function POST(req: Request) {
   });
   if (!sessions.length || sessions.some((x) => !isDate(x.date) || !isTime(x.start) || !isTime(x.end)))
     return NextResponse.json({ error: "Please enter a future date and start and end times for every day" }, { status: 400 });
+  if (sessions.some((x) => isTooSoon(x.date, x.start)))
+    return NextResponse.json({ error: `Bookings need at least ${MIN_NOTICE_HOURS} hours' notice. For a sooner date, please call 877-622-4973.` }, { status: 400 });
 
   const email = s(b.email);
   const required = { name: s(b.name), email, phone: s(b.phone, 40), location: s(b.location), address: s(b.address, 400) };

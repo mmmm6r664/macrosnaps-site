@@ -4,7 +4,7 @@ import { TERMS_VERSION } from "@/lib/terms";
 import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { createPortal } from "react-dom";
-import { RATES, quoteHourly, billedHours as billed, durationHours, type Kind } from "@/lib/pricing";
+import { RATES, quoteHourly, billedHours as billed, durationHours, earliestStart, isTooSoon, MIN_NOTICE_HOURS, type Kind } from "@/lib/pricing";
 
 type Pkg = { id: string; name: string; price: number; priceNote?: string; features: string[]; hours?: number };
 type Svc = { slug: string; name: string; kind: string; group: string; packages: Pkg[] };
@@ -38,7 +38,7 @@ export default function BookingForm({ services, cities, initial }: { services: S
   const [accepted, setAccepted] = useState(false);
   const pending = useRef<Record<string, FormDataEntryValue> | null>(null);
   const [error, setError] = useState("");
-  const today = useMemo(() => new Date(Date.now() + 86400000).toISOString().slice(0, 10), []);
+  const today = useMemo(() => earliestStart().slice(0, 10), []); // earliest date allowed (48 hours' notice)
 
   const grouped = useMemo(() => {
     const g: Record<string, Svc[]> = {};
@@ -78,6 +78,11 @@ export default function BookingForm({ services, cities, initial }: { services: S
   // Step 1: the form is valid, so open the Terms and Conditions popup for signature.
   function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (sessions.some((x) => x.date && x.start && isTooSoon(x.date, x.start))) {
+      setError(`Bookings need at least ${MIN_NOTICE_HOURS} hours' notice. For a sooner date, please call 877-622-4973.`);
+      setState("error");
+      return;
+    }
     pending.current = Object.fromEntries(new FormData(e.currentTarget).entries());
     setError("");
     setSignOpen(true);

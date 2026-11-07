@@ -35,3 +35,13 @@ export function quoteHourly(kind: Kind, sessions: SessionInput[], addCompanion: 
   });
   return { lines, total: lines.reduce((a, l) => a + l.amount, 0) };
 }
+
+/** Bookings need at least 48 hours' notice. Times are compared in US Eastern time. */
+export const MIN_NOTICE_HOURS = 48;
+const nyLocal = (d: Date) => {
+  const p = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(d).map((x) => [x.type, x.value]));
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
+};
+/** Earliest allowed start, as "YYYY-MM-DDTHH:MM" (Eastern). */
+export const earliestStart = (now = new Date()) => nyLocal(new Date(now.getTime() + MIN_NOTICE_HOURS * 3600e3));
+export const isTooSoon = (date: string, start: string, now = new Date()) => `${date}T${start}` < earliestStart(now);
