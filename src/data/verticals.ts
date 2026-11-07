@@ -2079,7 +2079,7 @@ export const VERTICALS: Vertical[] = [
     intro: [
       "An event lasts a day or two. The content from it can sell the next one for a year. Recap videos, speaker clips and photo galleries show prospective attendees and sponsors what they missed, give sponsors proof of what they paid for and give your marketing team material long after the venue is cleared.",
       "MacroSnaps covers conferences, trade shows, summits, galas, product launches and corporate events across the US, Ontario and Quebec. Our photographers and videographers capture keynotes, panels, booths, networking and the details planners worked hard on, with a shot list built around your marketing plan and sponsor commitments. Multi-track events get enough crew to cover parallel sessions.",
-      "We can live stream keynotes and sessions for remote attendees, and deliver the full retouched gallery in about a week. Highlight and recap videos are edited in two to four weeks, with short speaker and sponsor clips cut from the same footage. Multi-day events get a custom quote.",
+      "We can live stream keynotes and sessions for remote attendees, and deliver the full retouched gallery in about a week. Highlight and recap videos are edited in two to four weeks, with short speaker and sponsor clips cut from the same footage. Each day of a multi-day event is booked at the same hourly rates.",
     ],
     challenges: [
       {
@@ -2151,7 +2151,7 @@ export const VERTICALS: Vertical[] = [
       },
       {
         q: "What does event coverage cost?",
-        a: "Photography is $250 for the first hour and $100 for each additional hour; video is $300 for the first hour and $200 for each additional hour. Two-hour minimum. Multi-day events get a custom quote.",
+        a: "Photography is $250 for the first hour and $100 for each additional hour; video is $300 for the first hour and $200 for each additional hour. Two-hour minimum. Multi-day events are booked day by day at the same hourly rates.",
       },
     ],
     macrohype:

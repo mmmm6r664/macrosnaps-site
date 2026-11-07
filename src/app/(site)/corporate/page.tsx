@@ -21,7 +21,7 @@ const WHY = [
   ["Photo, video & live stream from one team", "Coordinate stills, recap videos, session recordings and streaming without juggling vendors."],
   ["Fast, organized delivery", "Retouched galleries organized by session, speaker and sponsor, delivered in about a week."],
   ["Insured & venue-ready", "State Farm coverage of $1M per occurrence / $2M aggregate, with certificates of insurance for any venue."],
-  ["Published prices, no bidding games", "Photography is $250 for the first hour plus $100 per additional hour; videography is $300 plus $200 per additional hour, with a 2-hour minimum. Every client pays the same rate."],
+  ["Published prices, no bidding games", "Photography is $250 for the first hour plus $100 per additional hour; videography is $300 for the first hour plus $200 per additional hour, with a 2-hour minimum. Every client pays the same rate."],
 ];
 
 const FAQS = [

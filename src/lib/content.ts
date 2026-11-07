@@ -204,7 +204,7 @@ export function cityContent(t: LocalTarget, c: City): CityContent {
     {
       q: `How much does a ${pro.toLowerCase()} cost in ${c.name}?`,
       a: priceFrom
-        ? `MacroSnaps ${name.toLowerCase()} packages in ${c.name} start at $${priceFrom} for 2 hours of coverage, and every package price is listed on this page. The first-hour price includes travel, so ${c.name} costs the same as any other city we serve. Multi-day and multi-camera corporate events are quoted separately.`
+        ? `MacroSnaps ${name.toLowerCase()} packages in ${c.name} start at $${priceFrom} for 2 hours of coverage, and every package price is listed on this page. The first-hour price includes travel, so ${c.name} costs the same as any other city we serve. Multi-day and multi-camera corporate events are booked at the same published hourly rates.`
         : `Contact us with your date and requirements and we will send a quote for ${c.name}.`,
     },
     { q: "How are your prices so affordable?", a: "We are affordable, but not cheap. We don't believe hiring a professional photographer or videographer should break the bank, and your wedding day certainly shouldn't cost you $10,000 to $20,000 just for photography. We keep prices down by how we work: our crews cover several events a day, so we run at high volume instead of charging one client for an entire day; our post-production team includes dedicated editors, some based overseas, who retouch and edit efficiently; and we share people, equipment and systems with our parent company, MacroHype. The result is professional cameras and lighting, experienced photographers and videographers, and careful, professional editing at a price that is published on our website and the same for every client." },
@@ -218,7 +218,7 @@ export function cityContent(t: LocalTarget, c: City): CityContent {
     },
     {
       q: "When will I receive my photos or video?",
-      a: "Photos are retouched, color graded and delivered in an online gallery within 1 week. Edited highlight videos are delivered in 2 to 4 weeks depending on the package. Faster turnaround for corporate events can be arranged.",
+      a: "Photos are retouched, color graded and delivered in an online gallery in about a week. Edited highlight videos are delivered in 2 to 4 weeks depending on the package. Faster turnaround for corporate events can be arranged.",
     },
     {
       q: `Can you provide a certificate of insurance for my ${c.name} venue?`,

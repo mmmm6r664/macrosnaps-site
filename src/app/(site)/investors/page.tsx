@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 const MODEL = [
-  ["Published, uniform pricing", `Photography is $${RATES.photo.first} for the first hour plus $${RATES.photo.extra} per additional hour; videography is $${RATES.video.first} plus $${RATES.video.extra}. Customers book and pay online, which shortens the sales cycle and removes quoting overhead.`],
+  ["Published, uniform pricing", `Photography is $${RATES.photo.first} for the first hour plus $${RATES.photo.extra} per additional hour; videography is $${RATES.video.first} for the first hour plus $${RATES.video.extra} per additional hour. Customers book and pay online, which shortens the sales cycle and removes quoting overhead.`],
   ["High-utilization crew model", "Crews cover several events per day, so revenue per photographer-day is driven by volume rather than by a single high-priced booking."],
   ["Shared infrastructure", "Post-production (including editors based overseas), marketing, technology and back office are shared with our parent company, MacroHype LLC, keeping operating costs low."],
   ["Balanced customer mix", "Corporate clients (conferences, company events, trade shows, brand content) sit alongside consumer bookings (weddings, engagements, celebrations, family portraits)."],
