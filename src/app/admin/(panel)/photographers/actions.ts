@@ -92,3 +92,33 @@ export async function createOffer(_: S, f: FormData): Promise<S> {
   await audit(u.id, "offer_create", `#${o.id} to ${people.length}`);
   redirect(`/admin/offers/${o.id}`);
 }
+
+/** Add a photographer you've hired outside the careers form: staff login + profile, contractor agreement, one welcome email. */
+export async function addPhotographer(_: S, f: FormData): Promise<S> {
+  const u = await requireUser();
+  const name = String(f.get("name") ?? "").replace(/[<>]/g, "").trim().replace(/\s+/g, " ").slice(0, 100);
+  const email = String(f.get("email") ?? "").trim().toLowerCase().slice(0, 200);
+  const phone = String(f.get("phone") ?? "").replace(/[^\d+()\-. ]/g, "").trim().slice(0, 30) || null;
+  const cityIn = String(f.get("city") ?? "").trim().slice(0, 120);
+  const role = String(f.get("role") ?? "Photographer");
+  if (name.split(" ").length < 2) return { error: "Enter their first and last name." };
+  if (!/^[^\s@<>]+@[^\s@<>]+\.[a-z]{2,}$/i.test(email)) return { error: "Enter a valid email address." };
+  if ((await q`select 1 from users where email = ${email}`).length) return { error: "Someone with that email already has a login." };
+  const city = cityIn ? resolveCity(cityIn) : null;
+  const roles = role === "Both" ? ["Photographer", "Videographer"] : [role === "Videographer" ? "Videographer" : "Photographer"];
+  const sql = await db();
+  const userId = await sql.begin(async (tx) => {
+    const [nu] = await tx<{ id: number }[]>`insert into users (email, name, password_hash, role) values (${email}, ${name}, ${await hashPassword(randomBytes(24).toString("hex"))}, 'staff') returning id`;
+    await tx`insert into staff_profiles (user_id, phone, city, lat, lng, roles) values (${nu.id}, ${phone}, ${city ? `${city.name}, ${city.state}` : cityIn}, ${city?.lat ?? null}, ${city?.lng ?? null}, ${roles})`;
+    return nu.id;
+  });
+  const token = await createPasswordToken(userId, "set");
+  const setupUrl = `${ORIGIN}/staff/set-password?t=${token}`;
+  const contract = f.get("contract") === "on" ? await sendContract({ name, email, userId, companySigner: u.name, by: u.id, email_it: false }) : null;
+  const m = photographerAccepted(name, contract?.url ?? null, setupUrl);
+  const sent = (await sendMail({ to: email, subject: m.subject, html: m.html })).ok;
+  await audit(u.id, "staff_add", email);
+  revalidatePath("/admin/photographers");
+  const note = contract ? ` Contractor agreement MS-C${contract.id} is included for e-signature.` : "";
+  return sent ? { ok: `${name} has been added and emailed their welcome.${note}` } : { ok: `${name} was added, but the email couldn't be sent. Account setup link: ${setupUrl}${contract ? ` · Signing link: ${contract.url}` : ""}` };
+}

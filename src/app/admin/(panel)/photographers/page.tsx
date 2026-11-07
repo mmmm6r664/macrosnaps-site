@@ -5,6 +5,7 @@ import { SHOOT_TYPES } from "@/lib/careers";
 import { smsReady } from "@/lib/sms";
 import { PageHead, Notice, inputCls, btnGhost } from "@/components/admin/ui";
 import Directory from "@/components/admin/Directory";
+import AddPhotographer from "@/components/admin/AddPhotographer";
 
 export const metadata = { title: "Photographers & videographers" };
 
@@ -22,6 +23,7 @@ export default async function Photographers({ searchParams }: { searchParams: Pr
   return (
     <>
       <PageHead title="Photographers & videographers" sub="Your team and every applicant. Filter by area and shoot type, then email, text or offer them a shoot." />
+      <AddPhotographer />
       {!smsReady() && <Notice>Text messaging isn&apos;t connected yet (Twilio). Email and portal notifications still work.</Notice>}
       {booking && <Notice tone="green">Finding crew for booking {booking.ref}: {booking.service_name} in {booking.city}. The offer form is filled in for you.</Notice>}
       <form className="mb-4 grid gap-2 rounded-lg border border-black/10 bg-white p-4 sm:grid-cols-2 xl:grid-cols-6">
