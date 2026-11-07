@@ -28,7 +28,7 @@ const W = "https://static.wixstatic.com/media/";
 export const IMG = {
   hero: `${W}1f3625_d2741b395b5d446da5d8ca57e5f286b2~mv2.jpg`,
   about: `${W}1f3625_79013331208a4ec8826fcde024545575~mv2.jpg`,
-  conferenceHero: `${W}b8cb3c_af143925a50c4d24a9cdd29895d94165~mv2.jpg`, // audience in a darkened auditorium (wide-safe)
+  conferenceHero: "https://u5lzcjgumozqfr1a.public.blob.vercel-storage.com/portfolio/1D2X1OlJInTxxBxfPYPFQpij6jIuPheOl-2000.jpg", // packed room, FIX Trading conference (wide-safe)
   conference: byTags("conference"),
   corporate: byTags("corporate", "gala"),
   conferenceVideo: byTags("conference"),
