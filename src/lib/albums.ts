@@ -19,6 +19,7 @@ export const CATEGORIES: Record<string, { label: string; service: string; servic
   party: { label: "Galas & parties", service: "/event-photography", serviceName: "event photography" },
   family: { label: "Family & baby", service: "/family-photography", serviceName: "family photography" },
   baby: { label: "Family & baby", service: "/gender-reveal-baby-shower-photography", serviceName: "baby shower photography" },
+  headshots: { label: "Headshots", service: "https://macroheadshots.com/", serviceName: "headshot photography" },
 };
 
 const slugify = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[^\w\s-]/g, "").replace(/[\s_·]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "").slice(0, 70);
