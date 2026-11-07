@@ -4,6 +4,8 @@ import { SITE } from "@/lib/site";
 import { NAV_PHOTO, NAV_VIDEO } from "@/lib/nav";
 import { IconChevron, IconMail, IconPhone } from "./Icons";
 import CitySearch from "./CitySearch";
+import MenuCloser from "./MenuCloser";
+import { Suspense } from "react";
 import { EVENT_TYPES } from "@/data/eventTypes";
 import { VERTICALS } from "@/data/verticals";
 
@@ -87,6 +89,7 @@ function hrefOf(slug: string) {
 export default function Header() {
   return (
     <header className="sticky top-0 z-40 bg-black text-white">
+      <Suspense fallback={null}><MenuCloser /></Suspense>
       <div className="mx-auto flex max-w-7xl items-center gap-6 px-4 py-3 md:px-6">
         <Link href="/" className="shrink-0" aria-label="MacroSnaps home">
           <Image src={SITE.logo} alt="MacroSnaps logo" width={300} height={192} priority className="h-24 w-auto md:h-40" />
@@ -136,7 +139,7 @@ export default function Header() {
         {/* Mobile */}
         <div className="ml-auto flex items-center gap-3 lg:hidden">
           <a href={SITE.phoneHref} aria-label="Call MacroSnaps" className="p-2 text-gold"><IconPhone className="h-6 w-6" /></a>
-          <details className="group">
+          <details className="group" data-mobile-menu>
             <summary aria-label="Open menu" className="p-2 text-gold">
               <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
             </summary>
