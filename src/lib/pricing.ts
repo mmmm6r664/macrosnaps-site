@@ -43,8 +43,8 @@ export function quoteHourly(kind: Kind, sessions: SessionInput[], addCompanion: 
     }
     if (kind === "photo") {
       const ph = h * (1 + crew);
-      if (edit.premiumEdit) lines.push({ label: `${tag}: Premium editing, ${ph} photographer-hr${ph === 1 ? "" : "s"}`, amount: EDIT_RATES.premiumEdit * ph });
-      if (edit.colorGrade) lines.push({ label: `${tag}: Professional color grading, ${ph} photographer-hr${ph === 1 ? "" : "s"}`, amount: EDIT_RATES.colorGrade * ph });
+      if (edit.premiumEdit) lines.push({ label: sessions.length > 1 ? `${tag}: Premium editing` : "Premium editing", amount: EDIT_RATES.premiumEdit * ph });
+      if (edit.colorGrade) lines.push({ label: sessions.length > 1 ? `${tag}: Professional color grading` : "Professional color grading", amount: EDIT_RATES.colorGrade * ph });
     }
   });
   return { lines, total: lines.reduce((a, l) => a + l.amount, 0) };
