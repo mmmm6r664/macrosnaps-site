@@ -129,7 +129,7 @@ export async function buildContractPdf(c: ContractPdfInput): Promise<Uint8Array>
     page.drawText("Sign:", { x, y: yy - 46, size: 12, font: reg, color: INK });
     const sx = x + 38, sw = colW - 38;
     if (kind === "image" && validSignaturePng(c.signaturePng)) {
-      const img = await pdf.embedPng(Buffer.from(c.signaturePng.split(",")[1], "base64"));
+      const img = await pdf.embedPng(Buffer.from(c.signaturePng!.split(",")[1], "base64"));
       const s = Math.min(sw / img.width, 50 / img.height);
       page.drawImage(img, { x: sx, y: yy - 50, width: img.width * s, height: img.height * s });
     } else page.drawText(clean(name), { x: sx + 4, y: yy - 44, size: 22, font: script, color: INK });
