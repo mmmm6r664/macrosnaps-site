@@ -110,9 +110,9 @@ export default async function Home() {
           <h2 className="font-serif text-4xl">About Us</h2>
           <div className="prose-ms mt-6 text-justify text-[17px]">
             <p>MacroSnaps is a premium global photography and videography company covering conferences, corporate events, weddings and celebrations. We have photographed and filmed more than 1,000 corporate events and conferences and over 5,000 weddings and private events.</p>
-            <p>MacroSnaps is part of MacroHype LLC, a digital media and marketing company based out of <Link href="/photographers/new-york-city-ny">New York City</Link> and <Link href="/photographers/washington-dc">Washington DC</Link>, working with businesses for more than 13 years.</p>
-            <p>We provide our award winning photography and videography services across all 50 states, Washington, DC, Ontario and Quebec with our own photographers and videographers, so you deal with one company from booking to delivery. We are insured through State Farm and we publish our prices, so every client pays the same rate.</p>
-            <p>Let us help create long lasting memories for you. Hire us today for your conference, corporate event, wedding or any other occasion.</p>
+            <p>MacroSnaps is part of MacroHype LLC, a digital media and marketing company based out of <Link href="/photographers/new-york-city-ny">New York City</Link> and <Link href="/photographers/washington-dc">Washington, DC</Link>, working with businesses for more than 13 years.</p>
+            <p>We provide our award-winning photography and videography services across all 50 states, Washington, DC, Ontario and Quebec with our own photographers and videographers, so you deal with one company from booking to delivery. We are insured through State Farm and we publish our prices, so every client pays the same rate.</p>
+            <p>Let us help create long-lasting memories for you. Hire us today for your conference, corporate event, wedding or any other occasion.</p>
           </div>
           <Link href="/book" className="mt-8 self-start font-sans text-3xl tracking-wide text-ink hover:text-gold-dark">BOOK A SESSION</Link>
         </div>
@@ -165,7 +165,7 @@ export default async function Home() {
         <div className="mx-auto max-w-4xl text-center">
           <p className="eyebrow !text-gold">Conference Photography & Videography</p>
           <p className="mt-6 font-script text-4xl md:text-5xl">&ldquo;Capturing the moments of today that will wow your heart tomorrow&rdquo;</p>
-          <p className="mx-auto mt-6 max-w-2xl text-white/85">Official media partner for summits and industry conferences in New York, Washington DC, San Francisco, Toronto and beyond — photography, videography, recap videos and live streaming.</p>
+          <p className="mx-auto mt-6 max-w-2xl text-white/85">Official media partner for summits and industry conferences in New York, Washington, DC, San Francisco, Toronto and beyond — photography, videography, recap videos and live streaming.</p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link href="/conference-photography" className="btn-gold">Conference Photography</Link>
             <Link href="/conference-videography" className="btn-outline">Conference Videography</Link>

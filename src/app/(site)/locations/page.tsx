@@ -5,7 +5,7 @@ import { SectionTitle } from "@/components/blocks";
 
 export const metadata: Metadata = {
   title: "Locations: Photographers in Every State, Ontario & Quebec",
-  description: "MacroSnaps covers all 50 US states, Washington DC and Canada. Find conference, event and wedding photographers and videographers in 1,690+ cities.",
+  description: "MacroSnaps covers all 50 US states, Washington, DC, Ontario and Quebec. Find conference, event and wedding photographers and videographers in 1,690+ cities.",
   alternates: { canonical: "/locations" },
 };
 
@@ -29,7 +29,7 @@ export default function Locations() {
     <>
       <section className="bg-black px-4 py-16 text-center text-white">
         <h1 className="font-script text-5xl md:text-6xl">Locations We Serve</h1>
-        <p className="mx-auto mt-4 max-w-2xl text-white/80">Our own photographers and videographers cover conferences, corporate events and weddings in every US state, Washington DC and across Canada.</p>
+        <p className="mx-auto mt-4 max-w-2xl text-white/80">Our own photographers and videographers cover conferences, corporate events and weddings in every US state, Washington, DC, Ontario and Quebec.</p>
       </section>
       <div className="pt-6"><SectionTitle title="Choose your state, province or city" /></div>
       {block("United States", "united-states", usRegions)}

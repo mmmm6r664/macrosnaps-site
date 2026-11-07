@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 const WHY = [
-  ["Our own crews in every state & province", "Not a marketplace. MacroSnaps photographers and videographers, one standard of quality, one point of contact."],
+  ["Our own crews in every state, Ontario & Quebec", "Not a marketplace. MacroSnaps photographers and videographers, one standard of quality, one point of contact."],
   ["Conference specialists", "Official media partner for CDAO, AI in Finance Summit, FIX Americas Trading Conference, IEEE IEDM, Risk Live and more."],
   ["Photo, video & live stream from one team", "Coordinate stills, recap videos, session recordings and streaming without juggling vendors."],
   ["Fast, organized delivery", "Retouched galleries organized by session, speaker and sponsor, delivered in about a week."],
@@ -25,7 +25,7 @@ const WHY = [
 ];
 
 const FAQS = [
-  { q: "Can you staff several rooms or several cities on the same day?", a: "Yes. Because we have our own crews across North America, we can staff concurrent sessions or simultaneous events in different cities. Send your agenda and we will propose a crew plan." },
+  { q: "Can you staff several rooms or several cities on the same day?", a: "Yes. Because we have our own crews across the US, Ontario and Quebec, we can staff concurrent sessions or simultaneous events in different cities. Send your agenda and we will propose a crew plan." },
   { q: "Can you provide a certificate of insurance for our venue?", a: "Yes. We are insured through State Farm ($1M per occurrence / $2M aggregate) and send certificates of insurance naming your venue or organization." },
   { q: "Do multi-day conferences cost more per hour?", a: "No. Every day is booked at the same published hourly rates: photography $250 for the first hour and $100 for each additional hour, videography $300 for the first hour and $200 for each additional hour." },
 ];

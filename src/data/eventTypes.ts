@@ -481,7 +481,7 @@ const BASE_EVENT_TYPES: EventType[] = [
       { q: "Can you provide a certificate of insurance?", a: "Yes. We are insured through State Farm with $1M per occurrence and $2M general aggregate coverage and provide certificates for venues on request." },
       { q: "When will we receive the photos?", a: "Every photo is retouched and color graded, and the online gallery is usually ready in about one week. Highlight videos take 2 to 4 weeks." },
       { q: "Do you offer a photo booth?", a: "Yes, a photo booth is available and works well at holiday parties." },
-      { q: "Do you cover parties in multiple offices?", a: "Yes. We have our own photographers and videographers across all 50 states, Washington DC, Ontario and Quebec, so companies can book parties in several cities with the same pricing." },
+      { q: "Do you cover parties in multiple offices?", a: "Yes. We have our own photographers and videographers across all 50 states, Washington, DC, Ontario and Quebec, so companies can book parties in several cities with the same pricing." },
     ],
     videoTags: ["corporate", "party", "event"],
     imageSet: "corporate",

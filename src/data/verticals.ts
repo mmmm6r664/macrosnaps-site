@@ -482,7 +482,7 @@ export const VERTICALS: Vertical[] = [
     eyebrow: "Listings, tours & agent branding",
     intro: [
       "Buyers start nearly every home search online, and the listing photos decide whether they schedule a showing. Bright, straight, well-composed photos make rooms read correctly and help a home stand out on the MLS, Zillow and Realtor.com. A property video and a 3D tour let relocating and out-of-town buyers walk the home before they ever book a flight.",
-      "MacroSnaps real estate photographers and videographers shoot homes, condos, rentals and commercial properties for agents and brokerages across the US, Ontario and Quebec. We capture interiors, exteriors, amenities and neighborhood details, and in Virginia, Maryland, Washington DC, New York and New Jersey we offer Matterport 3D virtual tours for listings that need them. Edited listing photos come back quickly so you can go live on your schedule.",
+      "MacroSnaps real estate photographers and videographers shoot homes, condos, rentals and commercial properties for agents and brokerages across the US, Ontario and Quebec. We capture interiors, exteriors, amenities and neighborhood details, and in Virginia, Maryland, Washington, DC, New York and New Jersey we offer Matterport 3D virtual tours for listings that need them. Edited listing photos come back quickly so you can go live on your schedule.",
       "We also photograph and film the agent. Headshots, personal brand photos, intro videos and team portraits help you win the listing appointment, not just market the home once you have it. Brokerages can use the same crews to give every agent and office a consistent look across websites, signs, mailers, social posts and paid ad campaigns.",
     ],
     challenges: [
@@ -539,7 +539,7 @@ export const VERTICALS: Vertical[] = [
     faqs: [
       {
         q: "Do you offer Matterport 3D tours?",
-        a: "Yes, in Virginia, Maryland, Washington DC, New York and New Jersey. We scan properties with Matterport and deliver an interactive 3D tour you can embed on your listing and website. Tours start at $200 for up to 1,000 sq ft, with the first month of hosting included.",
+        a: "Yes, in Virginia, Maryland, Washington, DC, New York and New Jersey. We scan properties with Matterport and deliver an interactive 3D tour you can embed on your listing and website. Tours start at $200 for up to 1,000 sq ft, with the first month of hosting included.",
       },
       {
         q: "Can you shoot commercial and multifamily properties?",
@@ -570,7 +570,7 @@ export const VERTICALS: Vertical[] = [
     eyebrow: "Hotels, inns & resorts",
     intro: [
       "Travelers compare hotels on photos long before they compare prices. On Booking.com, Expedia, Google Hotels and your own site, the images show room size, light, view and the feel of the property. If yours are old, dark or inconsistent from one room type to the next, guests assume the property is too, and they keep scrolling.",
-      "MacroSnaps photographs and films hotels, boutique inns, resorts and serviced apartments. We cover every room type, the lobby, restaurant and bar, pool and spa, meeting and event rooms, and the neighborhood around you. In Virginia, Maryland, Washington DC, New York and New Jersey we can also create Matterport 3D tours of suites, ballrooms and meeting space for planners and couples who cannot visit in person.",
+      "MacroSnaps photographs and films hotels, boutique inns, resorts and serviced apartments. We cover every room type, the lobby, restaurant and bar, pool and spa, meeting and event rooms, and the neighborhood around you. In Virginia, Maryland, Washington, DC, New York and New Jersey we can also create Matterport 3D tours of suites, ballrooms and meeting space for planners and couples who cannot visit in person.",
       "Lifestyle shoots with models bring the property to life, and short video gives your social channels and ad campaigns something to run. We coordinate with housekeeping and the front desk so guests are not disturbed. Smaller properties can book by the hour online; larger multi-day shoots for resorts and hotel groups get a custom quote and a detailed schedule.",
     ],
     challenges: [
@@ -658,7 +658,7 @@ export const VERTICALS: Vertical[] = [
     eyebrow: "Wedding & event spaces",
     intro: [
       "Couples and event planners shortlist venues from photos. They want to see the room empty so they can picture their own design, the room set for a wedding or a gala, and the room full of people having a good time. Most venues only have one of the three, and it is often a few years old.",
-      "MacroSnaps photographs and films ballrooms, barns, lofts, rooftops, estates, galleries and private dining rooms. We shoot your spaces empty and styled, create Matterport 3D tours for remote planners (available in Virginia, Maryland, Washington DC, New York and New Jersey), and can cover real weddings and events held at your venue with the hosts' agreement. Seasonal shoots keep gardens, terraces and outdoor ceremony sites current throughout the year.",
+      "MacroSnaps photographs and films ballrooms, barns, lofts, rooftops, estates, galleries and private dining rooms. We shoot your spaces empty and styled, create Matterport 3D tours for remote planners (available in Virginia, Maryland, Washington, DC, New York and New Jersey), and can cover real weddings and events held at your venue with the hosts' agreement. Seasonal shoots keep gardens, terraces and outdoor ceremony sites current throughout the year.",
       "Because our photographers already cover weddings, conferences and corporate events across the US, Ontario and Quebec, we know which angles planners look for and which details couples ask about: ceiling height, natural light, ceremony sight lines, the bar and the getting-ready rooms. Edited photos arrive in about a week, ready for your website, listing sites, sales kits and ads.",
     ],
     challenges: [
@@ -723,7 +723,7 @@ export const VERTICALS: Vertical[] = [
       },
       {
         q: "Do you offer 3D virtual tours?",
-        a: "Yes, in Virginia, Maryland, Washington DC, New York and New Jersey. We create Matterport tours of venues, which planners can share with their clients and use to plan layouts. Tours are priced by the size of the space, from $200 for up to 1,000 sq ft.",
+        a: "Yes, in Virginia, Maryland, Washington, DC, New York and New Jersey. We create Matterport tours of venues, which planners can share with their clients and use to plan layouts. Tours are priced by the size of the space, from $200 for up to 1,000 sq ft.",
       },
       {
         q: "What does a venue shoot cost?",
@@ -1007,7 +1007,7 @@ export const VERTICALS: Vertical[] = [
     h1: "Photography & Video for Tech Companies & Startups",
     title: "Tech Company & Startup Photography & Video | MacroSnaps",
     description:
-      "Photo and video for tech companies and startups: product launches, team and office photos, conference coverage and recruiting videos in the US and Canada.",
+      "Photo and video for tech companies and startups: product launches, team and office photos, conference coverage and recruiting videos in the US, Ontario and Quebec.",
     eyebrow: "Software, hardware & startups",
     intro: [
       "Tech companies need a lot of visual content and rarely have time to plan it. A launch needs a demo video. The careers page needs real photos of the team. The founder needs a headshot for a funding announcement. The booth at next month's conference needs coverage, and the sales team wants customer stories it can send to prospects.",
@@ -1188,7 +1188,7 @@ export const VERTICALS: Vertical[] = [
     intro: [
       "Donors and members support organizations they can see in action. A gala photo gallery, a three-minute fundraising video or a set of program photos shows where the money goes and who it helps. Without those images, appeals, annual reports and grant applications lean on text alone, and supporters have a harder time connecting with the work.",
       "MacroSnaps covers galas, award dinners, annual meetings, advocacy days, member conferences and community programs. We photograph honorees, speakers, sponsors and attendees, and we film fundraising videos, impact stories and event recaps. Program participants are photographed only with consent and under your organization's guidelines, with extra care taken for vulnerable groups and minors.",
-      "MacroSnaps is part of MacroHype, a New York and Washington DC digital media and marketing company working with businesses since 2011, and our crews cover events across the US, Ontario and Quebec. Hourly pricing makes it possible to cover a reception or a short program without a large production budget, and gala photos arrive in about a week, in time for thank-you notes and sponsor follow-ups.",
+      "MacroSnaps is part of MacroHype, a New York and Washington, DC digital media and marketing company working with businesses since 2011, and our crews cover events across the US, Ontario and Quebec. Hourly pricing makes it possible to cover a reception or a short program without a large production budget, and gala photos arrive in about a week, in time for thank-you notes and sponsor follow-ups.",
     ],
     challenges: [
       {
@@ -1814,7 +1814,7 @@ export const VERTICALS: Vertical[] = [
     eyebrow: "Photos for every page",
     intro: [
       "A website built on stock images looks like every other website in your industry. Visitors notice, even if they cannot say why. Your own photos and video show the real people, place and work behind the business, which makes the copy around them more believable and gives visitors a reason to call, book or buy instead of going back to search.",
-      "MacroSnaps plans website shoots around your page layouts. We photograph wide hero images with room for headlines, team and office photos for the About page, service and product shots for inner pages, and short silent loops for homepage backgrounds. In Virginia, Maryland, Washington DC, New York and New Jersey we can also create Matterport 3D tours of showrooms, offices and venues that embed directly on your site.",
+      "MacroSnaps plans website shoots around your page layouts. We photograph wide hero images with room for headlines, team and office photos for the About page, service and product shots for inner pages, and short silent loops for homepage backgrounds. In Virginia, Maryland, Washington, DC, New York and New Jersey we can also create Matterport 3D tours of showrooms, offices and venues that embed directly on your site.",
       "If you are redesigning a site, book the shoot while the design is in progress so the images are made to fit. Share your wireframes and we will build the shot list and crops around them. We deliver high-resolution files plus web-optimized versions, so pages look sharp on large screens and still load quickly on phones.",
     ],
     challenges: [

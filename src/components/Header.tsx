@@ -43,10 +43,10 @@ function LocationsPanel() {
       <div>
         <p className="mb-2 text-xs font-semibold uppercase tracking-[.2em] text-gold">Find your city</p>
         <CitySearch />
-        <p className="mt-3 text-xs text-white/60">1,690+ cities across all 50 states, DC and Canada.</p>
+        <p className="mt-3 text-xs text-white/60">1,690+ cities across all 50 states, Washington, DC, Ontario and Quebec.</p>
         <div className="mt-6 space-y-2 text-sm">
           <Link href="/locations#united-states" className="block hover:text-gold">All US states →</Link>
-          <Link href="/locations#canada" className="block hover:text-gold">All Canadian provinces →</Link>
+          <Link href="/locations#canada" className="block hover:text-gold">Ontario & Quebec →</Link>
           <Link href="/locations" className="block hover:text-gold">Browse every location →</Link>
         </div>
       </div>
