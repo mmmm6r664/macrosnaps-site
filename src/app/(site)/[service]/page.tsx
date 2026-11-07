@@ -113,7 +113,7 @@ function ServicePage({ s }: { s: Service }) {
       {s.packages.length > 0 && (
         <section className="bg-marble px-4 py-16 md:px-6">
           <div className="mx-auto max-w-7xl">
-            <SectionTitle eyebrow="Pricing Plans" title={`${s.name} packages`} intro="Every price is listed upfront. Book and pay online in minutes." />
+            <SectionTitle eyebrow="Pricing Plans" title={`${s.name} packages`} intro={bookable ? "Every price is listed upfront. Book and pay online in minutes." : "Every price is listed upfront and the same for every client. Tell us about your project to get started."} />
             <Pricing packages={s.packages} serviceSlug={s.slug} note={s.pricingNote} />
           </div>
         </section>
@@ -149,10 +149,26 @@ function ServicePage({ s }: { s: Service }) {
 
       <WhyUs where={s.name} />
 
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
-        <SectionTitle eyebrow="How it works" title="Booking is simple" />
-        <HowItWorks />
-      </section>
+      {s.process?.length ? (
+        <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
+          <SectionTitle eyebrow="How it works" title={`How ${s.name.toLowerCase()} works`} />
+          <ol className="grid gap-x-8 gap-y-10 md:grid-cols-3 lg:grid-cols-5">
+            {s.process.map((x, i) => (
+              <li key={x.title} className="border-t-2 border-gold pt-4">
+                <span className="font-serif text-2xl text-gold-dark">0{i + 1}</span>
+                <h3 className="mt-1 font-serif text-xl">{x.title}</h3>
+                <p className="mt-2 text-[15px] text-muted">{x.body}</p>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-10 text-center"><Link href={`/contact?subject=${encodeURIComponent(s.name)}`} className="btn-dark">Start a {s.name.toLowerCase()} project</Link></p>
+        </section>
+      ) : (
+        <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
+          <SectionTitle eyebrow="How it works" title="Booking is simple" />
+          <HowItWorks />
+        </section>
+      )}
 
       {s.local && <LocationDirectory slug={s.slug} pro={s.pro} />}
 

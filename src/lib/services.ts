@@ -27,6 +27,8 @@ export type Service = {
   heroTitle?: string;
   intro: string[];
   sections?: { heading: string; body: string }[];
+  /** Step-by-step process for services that are not on-site shoots (editing, retouching). */
+  process?: { title: string; body: string }[];
   coverage: string[];
   packages: Package[];
   pricingNote?: string;
@@ -694,15 +696,57 @@ export const SERVICES: Service[] = [
     kind: "other",
     group: "post",
     pro: "Video Editor",
-    title: "Video Editing Services",
-    description: "Professional video editing for event recaps, corporate videos, social content and YouTube.",
-    intro: ["Already have footage? Our editors cut event recaps, corporate videos, social clips and YouTube content, with color correction, audio clean-up, graphics and captions."],
-    coverage: ["Event & conference recaps", "Social media cut-downs", "Color grading & audio mixing", "Captions & motion graphics"],
+    title: "Video Editing Services for Events & Brands",
+    description: "Send us your footage and our editors deliver event recaps, corporate videos, social clips and YouTube edits, with color, audio, captions and graphics.",
+    intro: [
+      "Already have footage? Our editors turn raw clips into finished videos: conference and event recaps, corporate and training videos, interviews and testimonials, social media cut-downs and YouTube content. Every edit includes color correction, audio clean-up and music, and we add captions, titles, lower thirds and simple motion graphics where they help.",
+      "It works the same whether the footage was filmed by your own team on phones and mirrorless cameras, recorded from a Zoom call or webinar, captured by a drone, or shot by another production company. You share the files, tell us what the video is for and who will watch it, and we cut a first version for you to review.",
+      "Video editing is done by the same post-production team that edits the highlight films from MacroSnaps' conference, corporate and wedding shoots. MacroSnaps is part of MacroHype LLC, with 13+ years' experience and 6,000+ events covered, so our editors know what organizers, marketing teams and couples expect from a finished video.",
+    ],
+    sections: [
+      {
+        heading: "What we edit",
+        body: "Conference and event recaps; keynote, panel and webinar recordings; corporate, training and explainer videos; interviews and customer testimonials; product and promotional videos; wedding and celebration films from your own footage; YouTube videos; and vertical cut-downs for Instagram Reels, TikTok, YouTube Shorts and LinkedIn. One long recording can become several assets, for example a full-length session video plus a few short social clips.",
+      },
+      {
+        heading: "Turnaround",
+        body: "Turnaround depends on how much footage there is and what the edit involves: a short social clip is quicker than a ten-minute recap with interviews and graphics. We confirm the delivery date when we review your footage and brief, before work starts. If you book one of our videographers instead, the edited highlight video is delivered in the turnaround listed in that package, usually two to four weeks.",
+      },
+      {
+        heading: "File delivery and formats",
+        body: "Finished videos are delivered as high-quality MP4 files by download link, in the shapes you need: 16:9 for websites and YouTube, 9:16 vertical for Reels, TikTok and Shorts, and 1:1 square for feeds. Caption files (SRT) are available for accessibility and for platforms that take captions separately. Tell us where the video will be published and we will export the right sizes.",
+      },
+    ],
+    process: [
+      { title: "Upload your footage", body: "Share your clips with a Google Drive, Dropbox or WeTransfer link, along with any logos, fonts, music or slides you want used." },
+      { title: "Send your brief", body: "Tell us what the video is for, who will watch it, the length and formats you need, and any must-have moments, speakers or messages." },
+      { title: "First cut", body: "Our editor assembles a first cut with music, color correction, audio clean-up and any titles or captions you asked for." },
+      { title: "Revisions", body: "You review the first cut and send notes, ideally with timestamps. We make the changes and send the revised version for approval." },
+      { title: "Delivery", body: "We export the final video in the formats and sizes you need (16:9, 9:16, 1:1, with captions if requested) and send a download link." },
+    ],
+    coverage: [
+      "Event & conference recaps",
+      "Keynote, panel & webinar edits",
+      "Corporate, training & explainer videos",
+      "Interviews & testimonial videos",
+      "Social media cut-downs (9:16, 1:1)",
+      "Color correction & audio clean-up",
+      "Captions, titles & lower thirds",
+      "Motion graphics & brand templates",
+    ],
     packages: [],
-    faqs: GENERAL_FAQS,
+    faqs: [
+      { q: "Can you edit footage we filmed ourselves?", a: "Yes. We edit footage from phones, mirrorless and DSLR cameras, drones, screen recordings and Zoom or webinar recordings. Share the original files rather than copies downloaded from social media so we have the best quality to work with." },
+      { q: "How do we send you the footage?", a: "Share a Google Drive, Dropbox or WeTransfer link with the original files. Include any logos, fonts, music, slides or scripts you want used, and a short brief describing the video." },
+      { q: "How do revisions work?", a: "You review the first cut and send notes, and we revise it before final delivery. If you expect several rounds or a substantially different second version, tell us in the brief so we can plan for it." },
+      { q: "What formats do you deliver?", a: "High-quality MP4 files in 16:9, 9:16 vertical and 1:1 square, sized for your website, YouTube, Instagram, TikTok and LinkedIn, plus SRT caption files on request." },
+      { q: "What does the Video Editing Plan include?", a: "The Video Editing Plan is $699 per month and includes brand templates and stock videos, proof-read captions and up to 10 assets per order, with friendly customer support. Contact us with your footage and goals to get started." },
+      { q: "Can you film the event too?", a: "Yes. Our videographers film conferences, corporate events and weddings at $300 for the first hour and $200 for each additional hour, with a two-hour minimum, and the edited highlight video is included. Bookings need 48 hours' notice." },
+      ...GENERAL_FAQS.filter((f) => f.q.startsWith("What is your refund")),
+    ],
     images: IMG.conferenceVideo,
     local: false,
-    related: ["photo-retouching", "commercial-videography"],
+    related: ["conference-videography", "event-videography", "commercial-videography", "photo-retouching"],
   },
   {
     slug: "photo-retouching",
@@ -712,13 +756,52 @@ export const SERVICES: Service[] = [
     pro: "Photo Retoucher",
     title: "Photo Retouching Services",
     description: "Professional photo retouching: commercial and product retouching, portrait retouching, color grading and advanced Photoshop editing with fast turnaround.",
-    intro: ["Our professional photo retouching services cover commercial and product retouching, model and portrait retouching, photo correction, color grading and advanced Photoshop editing. Brands, photographers and agencies send us images from anywhere, and we return polished files with a fast turnaround."],
-    coverage: ["Product & commercial retouching", "Portrait & model retouching", "Color grading", "Background removal & compositing"],
+    intro: [
+      "Our professional photo retouching services cover commercial and product retouching, model and portrait retouching, photo correction, color grading and advanced Photoshop editing. Brands, photographers and agencies send us images from anywhere, and we return polished files with a fast turnaround.",
+      "Retouching is done by the same post-production team that edits every gallery MacroSnaps delivers from our conference, corporate, wedding and portrait shoots. MacroSnaps is part of MacroHype LLC, with 13+ years' experience and 6,000+ events covered, so we are used to working at volume while keeping color, crops and skin tones consistent across a whole set.",
+      "You can send a handful of portraits or a full product catalog. Tell us how the images will be used, for example an online store, a website, print or a magazine, and we match the editing style, sizes and file formats to it.",
+    ],
+    sections: [
+      {
+        heading: "What we retouch",
+        body: "Product photos for online stores and marketplaces (background removal, clipping paths, shadows, color matching across variants), commercial and brand images, headshots and portraits (skin, stray hairs, glare on glasses, backgrounds), model and fashion images, real estate and interior photos (straightening, exposure blending, window pulls), and event or wedding images that need correction or restoration.",
+      },
+      {
+        heading: "Turnaround and pricing",
+        body: "Pricing is per picture and listed below: Solo editing is $25 per picture with a 5-picture minimum and a 48 to 72 hour turnaround; the Professional plan is $10 per picture for advanced editing and color matching; and Enterprise pricing goes as low as $3 per picture for high-volume brands, retailers and studios. There are no contracts.",
+      },
+      {
+        heading: "File delivery and formats",
+        body: "Finished images are delivered by download link in the format your platform needs: high-resolution JPEG, PNG (including transparent backgrounds for product cut-outs) or TIFF for print, cropped and sized to your specifications, for example square images for marketplaces or set dimensions for your website template.",
+      },
+    ],
+    process: [
+      { title: "Upload your images", body: "Share your original, full-resolution files with a Google Drive, Dropbox or WeTransfer link." },
+      { title: "Send your instructions", body: "Tell us the style, background, crop, sizes and file format you need, and send a reference image if you have one." },
+      { title: "We retouch", body: "Our retouchers edit each image to your instructions, keeping color, exposure and style consistent across the set." },
+      { title: "Review & revisions", body: "Check the edited images and send notes on anything you want changed, and we revise those images." },
+      { title: "Delivery", body: "Final files arrive by download link as JPEG, PNG or TIFF, named and sized the way you asked." },
+    ],
+    coverage: [
+      "Product & e-commerce retouching",
+      "Background removal & clipping paths",
+      "Portrait, headshot & model retouching",
+      "Color correction & color matching",
+      "Real estate & interior photo editing",
+      "Photo restoration & correction",
+      "Compositing & advanced Photoshop work",
+    ],
     packages: [],
-    faqs: GENERAL_FAQS,
+    faqs: [
+      { q: "How much does photo retouching cost?", a: "Solo editing is $25 per picture with a 5-picture minimum, the Professional plan is $10 per picture for advanced editing and color matching, and Enterprise pricing goes as low as $3 per picture for high-volume brands, retailers and studios. Contact us with a few sample images and we will confirm which plan fits." },
+      { q: "How fast is the turnaround?", a: "Solo orders are returned in 48 to 72 hours. For large catalogs we agree a delivery schedule with you when you send the images." },
+      { q: "Can you retouch photos you did not take?", a: "Yes. Brands, photographers and agencies send us images from anywhere. Send the original, full-resolution files for the best result." },
+      { q: "What file formats do you deliver?", a: "High-resolution JPEG, PNG (including transparent backgrounds) or TIFF, cropped and sized to your specifications." },
+      { q: "Are photos from MacroSnaps shoots already retouched?", a: "Yes. Every picture we deliver from our own shoots is retouched, edited and color graded. Additional editing requests, such as slimming or skin-tone changes, are available at an extra charge, and re-edits of any photo you are not happy with are free." },
+    ],
     images: IMG.commercial,
     local: false,
-    related: ["video-editing", "product-photography"],
+    related: ["video-editing", "product-photography", "commercial-photography"],
   },
   {
     slug: "virtualtours",
