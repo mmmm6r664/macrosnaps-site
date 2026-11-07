@@ -27,7 +27,7 @@ export default function About() {
       <TrustBar />
       <Stats />
       <ClientLogos />
-      <CtaBand title="Let us help create long lasting memories" />
+      <CtaBand title="Let us help create long-lasting memories" />
     </>
   );
 }

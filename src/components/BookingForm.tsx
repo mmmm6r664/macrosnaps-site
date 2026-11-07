@@ -175,7 +175,7 @@ export default function BookingForm({ services, cities, addons = [], paused = {}
           <p className="mt-1 text-sm text-muted">Type it in one line and we&apos;ll fill in the form for you.</p>
           <div className="mt-3 flex flex-col gap-2 sm:flex-row">
             <input id="quickfill" value={ask} onChange={(e) => setAsk(cleanTyped(e.target.value))} onKeyDown={(e) => { if (e.key === "Enter") quickFill(e); }} maxLength={MAX_QUERY}
-              placeholder="Conference photography at the Javits Center in New York City from 9 am to 5 pm, 2 photographers, November 12th" className={`${field} flex-1`} />
+              placeholder="Conference photography at the Javits Center in New York City from 9 AM to 5 PM, 2 photographers, November 12th" className={`${field} flex-1`} />
             <button type="button" onClick={quickFill} disabled={askState.busy} className="btn-gold whitespace-nowrap">{askState.busy ? "Filling…" : "Fill in for me"}</button>
           </div>
           {askState.msg && <p role="status" className={`mt-3 text-sm ${askState.tone === "ok" ? "text-emerald-800" : "text-amber-800"}`}>{askState.msg}</p>}

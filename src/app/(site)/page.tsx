@@ -206,7 +206,7 @@ export default async function Home() {
       </section>
 
       <section id="faqs" className="bg-marble px-4 py-16 md:px-6">
-        <SectionTitle eyebrow="FAQs" title="Frequently Asked Questions" />
+        <SectionTitle eyebrow="FAQs" title="Frequently asked questions" />
         <Faqs faqs={faqs} />
       </section>
 

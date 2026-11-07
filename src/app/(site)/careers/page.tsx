@@ -43,7 +43,7 @@ export default function Careers() {
       </section>
       <section id="apply" className="bg-marble px-4 py-16 md:px-6">
         <div className="mx-auto max-w-4xl">
-          <SectionTitle eyebrow="Apply" title="Photographer & Videographer Application" intro="Takes about 5 minutes. We review every application and contact photographers and videographers in the areas where we need crews." />
+          <SectionTitle eyebrow="Apply" title="Photographer & videographer application" intro="Takes about 5 minutes. We review every application and contact photographers and videographers in the areas where we need crews." />
           <CareerForm />
         </div>
       </section>

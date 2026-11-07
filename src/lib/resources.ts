@@ -170,7 +170,7 @@ export const AUDIENCES: Audience[] = [
   {
     slug: "photographers-videographers",
     name: "Photographers & Videographers",
-    title: "Resources for Photographers & Videographers",
+    title: "Resources for Photographers & Videographers | MacroSnaps",
     description: "Photographers and videographers: join the MacroSnaps crew or refer the clients you can't take and earn a commission on every booking you refer.",
     eyebrow: "For photographers & videographers",
     h1: "Work With MacroSnaps: Join the Crew or Refer Clients",

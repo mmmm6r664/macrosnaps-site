@@ -14,7 +14,7 @@ export async function confirmRecipient(f: FormData) {
   await q`update offers set status = 'filled', assigned_user_id = ${r.user_id} where id = ${r.offer_id}`;
   if (r.booking_id && r.user_id) await q`insert into crew_assignments (booking_id, user_id) values (${r.booking_id}, ${r.user_id}) on conflict do nothing`;
   if (r.user_id) await notifyUser(r.user_id, `You're confirmed: ${r.title}`, r.shoot_date, "/staff/shoots");
-  if (r.email) await emailPerson(r.email, `You're confirmed: ${r.title}`, `Hi ${r.name.split(" ")[0]},\n\nYou're confirmed for ${r.title} on ${r.shoot_date}. We'll send the full details${r.user_id ? ", and it's in your staff portal under Upcoming shoots" : ""}.\n\nThank you!`, u.id);
+  if (r.email) await emailPerson(r.email, `You're confirmed: ${r.title}`, `Hi ${r.name.split(" ")[0]},\n\nYou're confirmed for ${r.title} on ${r.shoot_date}. We'll send the full details${r.user_id ? ", and it's in your staff portal under My shoots" : ""}.\n\nThank you!`, u.id);
   const others = await q<{ user_id: number | null; email: string | null; name: string }[]>`select user_id, email, name from offer_recipients where offer_id = ${r.offer_id} and id <> ${rid} and response = 'accepted'`;
   for (const o of others) {
     if (o.user_id) await notifyUser(o.user_id, `Filled: ${r.title}`, "Thanks for responding. This shoot has been filled.", "/staff/offers");
