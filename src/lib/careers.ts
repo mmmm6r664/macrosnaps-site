@@ -31,10 +31,9 @@ export const AVAILABILITY = ["Weekdays (daytime)", "Weekday evenings", "Weekends
 export const RADIUS = ["Up to 10 miles", "Up to 25 miles", "Up to 50 miles", "Up to 100 miles", "100+ miles / willing to travel"];
 export const ROLES = ["Photographer", "Videographer", "Both photo & video"];
 export const SHOOT_TYPES = [
-  "Conferences & corporate events", "Government & public sector", "Trade shows", "Galas & award ceremonies",
-  "Weddings", "Indian weddings", "Pakistani weddings", "Muslim weddings", "Jewish weddings", "Chinese & Asian weddings", "Nigerian & African weddings", "Same-sex weddings", "Elopements & courthouse weddings",
-  "Engagements & couples", "Boudoir", "Bar & Bat Mitzvahs", "Quinceañeras & Sweet 16s", "Parties & private events", "Cultural & religious ceremonies",
-  "Headshots & portraits", "Family, maternity & newborn", "Real estate", "Product & food", "Commercial / brand video", "Live streaming", "Photo booth", "Drone (FAA Part 107)",
+  "Conferences & corporate events", "Weddings (all cultures)", "Engagements & couples", "Parties & private events",
+  "Cultural & religious events", "Headshots & portraits", "Family, maternity & newborn", "Boudoir", "Real estate",
+  "Product & food", "Commercial / brand video", "Live streaming", "Photo booth", "Drone (FAA Part 107)",
 ];
 
 /** "Check all that apply": selecting any of these makes an applicant ineligible. */
