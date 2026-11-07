@@ -14,8 +14,9 @@ export const dynamic = "force-dynamic";
 const t12 = (t: string) => { const [h, m] = t.split(":").map(Number); return `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`; };
 const fmtDate = (d: string) => new Date(`${d}T12:00:00Z`).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 
-export default async function OrderPage({ params }: { params: Promise<{ ref: string }> }) {
+export default async function OrderPage({ params, searchParams }: { params: Promise<{ ref: string }>; searchParams: Promise<{ rate?: string }> }) {
   const ref = (await params).ref.slice(0, 40);
+  const rate = Math.min(5, Math.max(0, Math.round(Number((await searchParams).rate) || 0)));
   const c = await requireClient(`/account/orders/${ref}`);
   const o = await orderFor(c.email, ref);
   if (!o) notFound();
@@ -67,12 +68,12 @@ export default async function OrderPage({ params }: { params: Promise<{ ref: str
               {o.venue_address && <p className="mt-2 text-sm"><span className="text-muted">Address:</span> {o.venue_address}</p>}
             </div>
             {canReview && (
-              <div className="border border-black/10 bg-white p-5 md:p-8">
+              <div id="feedback" className="scroll-mt-48 border border-black/10 bg-white p-5 md:p-8">
                 <h2 className="font-serif text-2xl">Your feedback</h2>
                 {fb ? (
                   <p className="mt-2 text-muted"><span className="text-gold">{"★".repeat(fb.rating)}</span><span className="text-black/15">{"★".repeat(5 - fb.rating)}</span> Thanks for sending your feedback on {new Date(fb.created_at).toLocaleDateString("en-US", { month: "long", day: "numeric" })}.</p>
                 ) : (
-                  <div className="mt-3"><FeedbackForm refId={o.ref} /></div>
+                  <div className="mt-3"><FeedbackForm refId={o.ref} initial={rate} /></div>
                 )}
               </div>
             )}

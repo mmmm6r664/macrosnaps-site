@@ -103,6 +103,8 @@ export async function POST(req: Request) {
     payment_intent_data: { description: `MacroSnaps: ${service.name} — ${location} — ${sessions.map((x) => x.date).join(", ")}`.slice(0, 1000), metadata: details },
     invoice_creation: { enabled: true, invoice_data: { description: `MacroSnaps ${service.name}`, footer: `${SITE.name} · ${SITE.phone} · ${SITE.email}` } },
     allow_promotion_codes: true,
+    // Unpaid checkout pages expire after an hour; Stripe then notifies us and the first reminder email goes out.
+    expires_at: Math.floor(Date.now() / 1000) + 60 * 60,
     success_url: `${origin}/book/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/book?service=${service.slug}${city ? `&city=${city.slug}` : ""}&cancelled=1`,
   });

@@ -2,9 +2,9 @@
 import { useActionState, useState } from "react";
 import { sendFeedback, type FeedbackState } from "@/app/(site)/account/actions";
 
-export default function FeedbackForm({ refId }: { refId: string }) {
+export default function FeedbackForm({ refId, initial = 0 }: { refId: string; initial?: number }) {
   const [state, act, busy] = useActionState<FeedbackState, FormData>(sendFeedback, {});
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(initial);
   const [hover, setHover] = useState(0);
   if (state.ok)
     return (

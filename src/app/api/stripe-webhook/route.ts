@@ -7,6 +7,7 @@ import { markPaid } from "@/lib/records";
 import { db, hasDb, q } from "@/lib/db";
 import { ORIGIN } from "@/lib/emailTemplate";
 import { bookingConfirmed, teamNewBooking } from "@/lib/emails";
+import { onCheckoutExpired } from "@/lib/automations";
 
 export async function POST(req: Request) {
   if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) return NextResponse.json({ error: "Not configured" }, { status: 503 });
@@ -49,6 +50,8 @@ export async function POST(req: Request) {
       await sendMail({ to: email, replyTo: SITE.email, subject: c.subject, html: c.html });
     }
   }
+  // Customer left the payment page without paying → first abandoned-booking reminder.
+  if (event.type === "checkout.session.expired") await onCheckoutExpired((event.data.object as Stripe.Checkout.Session).id).catch((e) => console.error("[webhook] expired", e));
   // Refunds made directly in the Stripe dashboard stay in sync with the admin portal.
   if (event.type === "charge.refunded" && hasDb) {
     const ch = event.data.object as Stripe.Charge;
