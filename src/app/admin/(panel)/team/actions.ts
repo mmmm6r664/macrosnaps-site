@@ -51,3 +51,19 @@ export async function changePassword(_: S, f: FormData): Promise<S> {
   await audit(u.id, "password_change");
   return { ok: "Password changed." };
 }
+
+/** Emails a fresh "set your password" link (also shown here in case email isn't connected). */
+export async function sendLoginLink(_: S, f: FormData): Promise<S> {
+  const u = await requireUser();
+  const id = Number(f.get("id"));
+  const sql = await db();
+  const [t] = await sql<{ email: string; name: string; role: string }[]>`select email, name, role from users where id = ${id} and active`;
+  if (!t || t.role === "owner") return { error: "Not available for this account." };
+  const { createPasswordToken } = await import("@/lib/auth");
+  const { emailPerson, ORIGIN } = await import("@/lib/notify");
+  const token = await createPasswordToken(id, "set");
+  const url = `${ORIGIN}/staff/set-password?t=${token}`; // admins can also sign in through /staff, then use their private admin address
+  const sent = await emailPerson(t.email, "Your MacroSnaps login link", `Hi ${t.name.split(" ")[0]},\n\nUse the button below to set your password. The link works for 7 days.`, u.id, { label: "Set my password", url });
+  await audit(u.id, "login_link", t.email);
+  return { ok: sent ? `Emailed a login link to ${t.email}.` : `Email isn't connected. Send ${t.name} this link: ${url}` };
+}

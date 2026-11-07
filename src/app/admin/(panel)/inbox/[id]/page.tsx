@@ -3,6 +3,8 @@ import { requireUser } from "@/lib/auth";
 import { db, q } from "@/lib/db";
 import { PageHead, Card, Badge, fmtDate, inputCls, labelCls, btnPrimary } from "@/components/admin/ui";
 import { updateInquiry } from "../actions";
+import ApproveButton from "@/components/admin/ApproveButton";
+import { q as qq } from "@/lib/db";
 
 export const metadata = { title: "Message" };
 const LABELS: Record<string, string> = {
@@ -29,6 +31,14 @@ export default async function InquiryPage({ params }: { params: Promise<{ id: st
             ))}
           </dl>
         </Card>
+        <div className="space-y-5">
+        {r.kind === "application" && (
+          <Card title="Hire">
+            {(await qq`select 1 from users where email = ${r.email.toLowerCase()}`).length
+              ? <p className="text-sm">Approved: this person has a staff login.</p>
+              : <><p className="mb-3 text-sm text-black/60">Creates their private /staff login and emails them a link to set a password, sign the contractor agreement and complete their profile.</p><ApproveButton id={r.id} /></>}
+          </Card>
+        )}
         <Card title="Status & notes">
           <form action={updateInquiry} className="space-y-3">
             <input type="hidden" name="id" value={r.id} />
@@ -38,6 +48,7 @@ export default async function InquiryPage({ params }: { params: Promise<{ id: st
             <button className={btnPrimary}>Save</button>
           </form>
         </Card>
+        </div>
       </div>
     </>
   );

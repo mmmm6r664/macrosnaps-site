@@ -8,6 +8,7 @@ import AdminNav from "@/components/admin/AdminNav";
 export default async function Panel({ children }: { children: React.ReactNode }) {
   if (!hasDb) redirect("/admin/login");
   const u = await requireUser(["owner", "admin", "staff"]);
+  if (!isManager(u)) redirect("/staff");
   return (
     <div className="lg:grid lg:min-h-screen lg:grid-cols-[230px_1fr]">
       <aside className="border-b border-black/10 bg-[#111] text-white lg:border-b-0 lg:border-r">

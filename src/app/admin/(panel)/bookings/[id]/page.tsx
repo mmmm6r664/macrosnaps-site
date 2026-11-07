@@ -62,6 +62,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
         <div className="space-y-5">
           {manager ? (
             <>
+              <Link href={`/admin/photographers?booking=${b.id}`} className="block rounded-lg bg-[#ccba56] px-4 py-3 text-center text-sm font-semibold text-black hover:bg-[#bfae4c]">Find crew &amp; offer this shoot →</Link>
               <Card title="Manage"><BookingEditForm id={b.id} status={b.status} statuses={BOOKING_STATUSES} notes={b.internal_notes} crew={b.crew.map((c) => c.id)} staff={staff} /></Card>
               <Card title="Payment">
                 <p className="text-sm">{b.stripe_payment_intent ? <>Paid by card through Stripe. <a className="underline" target="_blank" rel="noopener" href={`https://dashboard.stripe.com/payments/${b.stripe_payment_intent}`}>Open in Stripe ↗</a></> : b.status === "requested" ? "Booking request: not paid online." : "No card payment recorded yet."}</p>

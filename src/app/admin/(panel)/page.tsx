@@ -42,6 +42,7 @@ export default async function Dashboard() {
       (select count(*)::int from subscribers where status = 'subscribed') as subs,
       (select count(*)::int from bookings where status = 'requested') as requested`;
   const upcoming = await bookingsBetween(ymd(today), ymd(in30));
+  const alerts = await sql<{ id: number; title: string; body: string; link: string | null; created_at: Date }[]>`select id, title, body, link, created_at from notifications where user_id is null order by id desc limit 12`;
   const tiles: [string, string, string][] = [
     ["Bookings, last 7 days", String(stats.newb), "/admin/bookings"],
     ["Revenue this month", money(stats.revenue), "/admin/payments"],
@@ -62,6 +63,18 @@ export default async function Dashboard() {
           </Link>
         ))}
       </div>
+      {alerts.length > 0 && (
+        <Card title="Team alerts" className="mb-6">
+          <ul className="divide-y divide-black/5">
+            {alerts.map((a) => (
+              <li key={a.id} className="flex flex-wrap justify-between gap-2 py-2 text-sm">
+                <span>{a.link ? <Link href={a.link} className="font-semibold hover:underline">{a.title}</Link> : <b>{a.title}</b>}{a.body && <span className="block text-black/60">{a.body}</span>}</span>
+                <span className="text-xs text-black/40">{fmtDate(a.created_at, true)}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
       <Card title="Upcoming shoots (30 days)" actions={<Link href="/admin/calendar" className="text-sm underline">Calendar</Link>}><Upcoming rows={upcoming} /></Card>
     </>
   );

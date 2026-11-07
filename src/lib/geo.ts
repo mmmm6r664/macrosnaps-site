@@ -79,3 +79,25 @@ export function pick<T>(arr: T[], seed: number, salt = 0): T {
   const x = Math.abs(Math.sin(seed * 9301 + salt * 49297) * 233280);
   return arr[Math.floor(x) % arr.length];
 }
+
+/** Best-effort match of free text like "Arlington, VA" or "san francisco" to a city we cover. */
+export function resolveCity(text: string): City | undefined {
+  const t = text.toLowerCase().replace(/[^a-z\s,]/g, " ").replace(/\s+/g, " ").trim();
+  if (!t) return undefined;
+  const [namePart, statePart = ""] = t.split(",").map((x) => x.trim());
+  const st = statePart.replace(/\s/g, "");
+  const byName = cities.filter((c) => c.name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "") === namePart);
+  const pick = (list: City[]) => [...list].sort((a, b) => b.population - a.population)[0];
+  if (byName.length) {
+    const exact = byName.filter((c) => st && (c.state.toLowerCase() === st || c.stateName.toLowerCase().replace(/\s/g, "") === st));
+    return pick(exact.length ? exact : byName);
+  }
+  return undefined;
+}
+
+export function milesBetween(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
+  const R = 3958.8, toR = Math.PI / 180;
+  const dLat = (b.lat - a.lat) * toR, dLng = (b.lng - a.lng) * toR;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * toR) * Math.cos(b.lat * toR) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}

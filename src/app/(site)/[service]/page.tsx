@@ -11,6 +11,8 @@ import VideoGrid from "@/components/VideoGrid";
 import ExploreLinks from "@/components/ExploreLinks";
 import { videosFor } from "@/data/videos";
 import { SERVICE_VIDEO_TAGS, TOUR_STATES } from "@/lib/pageMedia";
+import TourGallery from "@/components/TourGallery";
+import { TOUR_INDUSTRIES, TOUR_CITIES, TOUR_TESTIMONIAL } from "@/data/virtualTours";
 import { EVENT_TYPES } from "@/data/eventTypes";
 import JsonLd from "@/components/JsonLd";
 import { serviceSchema } from "@/lib/schema";
@@ -138,11 +140,34 @@ function ServicePage({ s }: { s: Service }) {
       )}
 
       {s.slug === "virtualtours" && (
-        <section className="marble px-4 py-12 text-center md:px-6" data-reveal>
-          <h2 className="font-serif text-2xl">Where we offer Matterport 3D tours</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-muted">3D virtual tours are currently available in Virginia, Maryland, Washington, DC, New York and New Jersey. Real estate photography and videography are available in every state we serve.</p>
-          <div className="mt-5 flex flex-wrap justify-center gap-3">{[["virginia","Virginia"],["maryland","Maryland"],["district-of-columbia","Washington, DC"],["new-york","New York"],["new-jersey","New Jersey"]].map(([slug, n]) => <Link key={slug} href={`/photographers/${slug}`} className="border border-black/15 px-4 py-2 text-sm hover:border-gold-dark">{n}</Link>)}</div>
-        </section>
+        <>
+          <section id="tours" className="mx-auto max-w-7xl px-4 py-16 md:px-6" data-reveal>
+            <SectionTitle eyebrow="Portfolio" title="Explore our live 3D tours" intro="Click any tour to walk through it. Use the dollhouse and floor plan buttons to see the whole space." />
+            <TourGallery />
+          </section>
+          <section className="bg-black px-4 py-14 text-center text-white md:px-6" data-reveal>
+            <blockquote className="mx-auto max-w-3xl font-serif text-2xl italic md:text-3xl">&ldquo;{TOUR_TESTIMONIAL.quote}&rdquo;</blockquote>
+            <p className="mt-4 text-sm uppercase tracking-widest text-gold">{TOUR_TESTIMONIAL.name} · {TOUR_TESTIMONIAL.role}</p>
+          </section>
+          <section className="mx-auto max-w-7xl px-4 py-16 md:px-6" data-reveal>
+            <SectionTitle eyebrow="Industries" title="Virtual tours for every kind of space" intro="Is your industry not listed? We can still help: call 877-622-4973." />
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">{TOUR_INDUSTRIES.map((x) => <div key={x} className="border border-black/10 bg-white px-4 py-4 text-center font-serif text-lg">{x}</div>)}</div>
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
+              {[["Every device", "Tours work on iPhone, iPad, Android, Microsoft Surface, Mac and PC, and in VR headsets."], ["Offline sharing", "We can export your tour as an offline file to share without an internet connection."], ["Share anywhere", "Get a link and embed code for your website, MLS listing, Google Business Profile and social media."]].map(([t, d]) => (
+                <div key={t} className="border-t-2 border-gold pt-4"><h3 className="font-serif text-xl">{t}</h3><p className="mt-2 text-muted">{d}</p></div>
+              ))}
+            </div>
+          </section>
+          <section className="marble px-4 py-14 md:px-6" data-reveal>
+            <SectionTitle eyebrow="Service area" title="Featured cities we serve" intro="Matterport 3D tours are available in Virginia, Maryland, Washington, DC, New York and New Jersey. Real estate photography and videography are available in every state we serve." />
+            <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-5">
+              {TOUR_CITIES.map((r) => (
+                <div key={r.region}><h3 className="mb-2 font-serif text-xl">{r.region}</h3><ul className="space-y-1 text-sm text-muted">{r.cities.map((c) => <li key={c}>{c}</li>)}</ul></div>
+              ))}
+            </div>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">{[["virginia","Virginia"],["maryland","Maryland"],["district-of-columbia","Washington, DC"],["new-york","New York"],["new-jersey","New Jersey"]].map(([slug, n]) => <Link key={slug} href={`/real-estate-photography/${slug}`} className="border border-black/15 px-4 py-2 text-sm hover:border-gold-dark">Real estate photography in {n}</Link>)}</div>
+          </section>
+        </>
       )}
 
       {corporate && <ClientLogos />}

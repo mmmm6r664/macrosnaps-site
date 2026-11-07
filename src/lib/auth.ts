@@ -79,3 +79,30 @@ export function setupCodeMatches(code: string) {
 let dummy: string | undefined;
 /** A real bcrypt hash used when an email doesn't exist, so response time doesn't reveal which emails are valid. */
 export const dummyHash = () => (dummy ??= bcrypt.hashSync(randomBytes(16).toString("hex"), 12));
+
+/** Staff portal pages (/staff): photographers and videographers. Managers may view it too. */
+export async function requireStaff(): Promise<User> {
+  const u = await currentUser();
+  if (!u) redirect("/staff/login");
+  return u;
+}
+
+/** One-time link for setting or resetting a password (valid 7 days for invites, 2 hours for resets). */
+export async function createPasswordToken(userId: number, purpose: "set" | "reset") {
+  const token = randomBytes(32).toString("base64url");
+  const hours = purpose === "set" ? 24 * 7 : 2;
+  const sql = await db();
+  await sql`delete from password_tokens where user_id = ${userId}`;
+  await sql`insert into password_tokens (token_hash, user_id, purpose, expires_at) values (${sha(token)}, ${userId}, ${purpose}, ${new Date(Date.now() + hours * 3600e3)})`;
+  return token;
+}
+
+export async function consumePasswordToken(token: string, newPassword: string): Promise<number | null> {
+  if (!token || token.length > 100) return null;
+  const sql = await db();
+  const [row] = await sql<{ user_id: number }[]>`delete from password_tokens where token_hash = ${sha(token)} and expires_at > now() returning user_id`;
+  if (!row) return null;
+  await sql`update users set password_hash = ${await hashPassword(newPassword)} where id = ${row.user_id}`;
+  await sql`delete from sessions where user_id = ${row.user_id}`;
+  return row.user_id;
+}

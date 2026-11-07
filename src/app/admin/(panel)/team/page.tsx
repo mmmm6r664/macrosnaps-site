@@ -1,7 +1,7 @@
 import { requireUser } from "@/lib/auth";
 import { db, q } from "@/lib/db";
 import { PageHead, Card, Table, Badge, fmtDate } from "@/components/admin/ui";
-import { AddMemberForm } from "@/components/admin/TeamForms";
+import { AddMemberForm, LoginLinkButton } from "@/components/admin/TeamForms";
 import { setActive } from "./actions";
 
 export const metadata = { title: "Team" };
@@ -23,6 +23,7 @@ export default async function Team() {
               <td className="px-4 py-3"><Badge status={m.active ? "done" : "cancelled"}>{m.active ? "Active" : "Disabled"}</Badge></td>
               <td className="px-4 py-3 text-black/60">{fmtDate(m.created_at)}</td>
               <td className="px-4 py-3 text-right">
+                {canToggle && m.active && <div className="mb-1"><LoginLinkButton id={m.id} /></div>}
                 {canToggle && <form action={setActive}><input type="hidden" name="id" value={m.id} /><input type="hidden" name="active" value={m.active ? "0" : "1"} /><button className="text-sm underline">{m.active ? "Disable" : "Enable"}</button></form>}
               </td>
             </tr>

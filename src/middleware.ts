@@ -47,6 +47,12 @@ export async function middleware(req: NextRequest) {
     res.headers.set("cache-control", "no-store");
     return res;
   }
+  if (path === "/staff" || path.startsWith("/staff/")) {
+    const res = NextResponse.next();
+    res.headers.set("x-robots-tag", "noindex, nofollow");
+    res.headers.set("cache-control", "no-store");
+    return res;
+  }
   return NextResponse.next();
 }
 

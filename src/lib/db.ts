@@ -119,6 +119,81 @@ create table if not exists audit_log (
   detail text not null default '',
   created_at timestamptz not null default now()
 );
+create table if not exists staff_profiles (
+  user_id int primary key references users(id) on delete cascade,
+  phone text, city text, lat double precision, lng double precision, radius_miles int not null default 25,
+  roles text[] not null default '{}', shoot_types text[] not null default '{}', gear text not null default '', bio text not null default '',
+  portfolio text, application_id int,
+  payout_method text, payout_handle text,
+  tax_legal_name text, tax_business_name text, tax_classification text, tax_address text,
+  tin_type text, tin_enc text, tin_last4 text, w9_signed_at timestamptz, w9_signature text,
+  contract_version text, contract_signature text, contract_signed_at timestamptz, contract_ip text,
+  updated_at timestamptz not null default now()
+);
+create table if not exists password_tokens (
+  token_hash text primary key,
+  user_id int not null references users(id) on delete cascade,
+  purpose text not null default 'set',
+  expires_at timestamptz not null
+);
+create table if not exists notifications (
+  id serial primary key,
+  user_id int references users(id) on delete cascade,  -- null = for the admin team
+  title text not null, body text not null default '', link text,
+  read_at timestamptz, created_at timestamptz not null default now()
+);
+create index if not exists notifications_user on notifications(user_id, read_at);
+create table if not exists offers (
+  id serial primary key,
+  booking_id int references bookings(id) on delete set null,
+  title text not null, city text, shoot_date text, details text not null default '', pay text,
+  status text not null default 'open',               -- open | filled | cancelled
+  assigned_user_id int references users(id) on delete set null,
+  created_by int references users(id) on delete set null,
+  created_at timestamptz not null default now()
+);
+create table if not exists offer_recipients (
+  id serial primary key,
+  offer_id int not null references offers(id) on delete cascade,
+  user_id int references users(id) on delete cascade,
+  inquiry_id int references inquiries(id) on delete cascade,
+  name text not null default '', email text, phone text,
+  token text unique not null,
+  response text not null default 'pending',          -- pending | accepted | declined
+  responded_at timestamptz
+);
+create table if not exists outbound_messages (
+  id serial primary key,
+  channel text not null, recipient text not null, subject text, body text not null,
+  status text not null, error text, created_by int references users(id) on delete set null,
+  created_at timestamptz not null default now()
+);
+create table if not exists payouts (
+  id serial primary key,
+  user_id int not null references users(id) on delete cascade,
+  amount_cents int not null, paid_on date not null, method text, booking_id int references bookings(id) on delete set null,
+  note text not null default '', created_by int references users(id) on delete set null,
+  created_at timestamptz not null default now()
+);
+create table if not exists kb_articles (
+  id serial primary key,
+  title text not null, body text not null default '', category text not null default 'General',
+  published boolean not null default true, sort int not null default 0,
+  updated_at timestamptz not null default now()
+);
+create table if not exists support_tickets (
+  id serial primary key,
+  user_id int not null references users(id) on delete cascade,
+  subject text not null, body text not null, status text not null default 'open',  -- open | answered | closed
+  reply text, replied_at timestamptz, created_at timestamptz not null default now()
+);
+create table if not exists staff_uploads (
+  id serial primary key,
+  user_id int not null references users(id) on delete cascade,
+  booking_id int references bookings(id) on delete set null,
+  file_name text not null, size_bytes bigint, drive_file_id text, drive_folder_id text,
+  created_at timestamptz not null default now()
+);
 `;
 
 /** The SQL client, with tables created on first use. */

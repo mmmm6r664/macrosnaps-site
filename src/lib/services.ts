@@ -1,3 +1,4 @@
+import { TOUR_FAQS } from "@/data/virtualTours";
 // Service catalog. Copy marked "from macrosnaps.com" is carried over from the current site.
 import { IMG, photosForService } from "./images";
 import { RATES, hourPrice } from "./pricing";
@@ -729,9 +730,9 @@ export const SERVICES: Service[] = [
     title: "3D & 360° Virtual Tours | Matterport",
     description: "Matterport 3D and 360-degree virtual tours for homes, venues, restaurants and offices in Virginia, Maryland, Washington DC, New York and New Jersey.",
     intro: ["We provide Matterport 3D virtual tours and 360-degree virtual tour services for real estate, venues, restaurants, offices and commercial spaces. Tours work on phones, tablets, desktops and VR headsets, and can be embedded on your website or listing.", "3D virtual tours are currently offered in Virginia, Maryland, Washington, DC, New York State and New Jersey. Pricing is by the size of the space, starting at $200 for up to 1,000 sq ft, with the first month of hosting included."],
-    coverage: ["Matterport 3D tours", "360° virtual tours", "Venue & event space tours", "Google Street View"],
+    coverage: ["Matterport 3D tours", "360° virtual tours", "Dollhouse & floor plan views", "Venue & event space tours", "Restaurants, hotels & museums", "Offline tour files"],
     packages: [],
-    faqs: GENERAL_FAQS,
+    faqs: TOUR_FAQS,
     images: IMG.realEstate,
     local: false,
     related: ["real-estate-photography", "real-estate-videography"],
