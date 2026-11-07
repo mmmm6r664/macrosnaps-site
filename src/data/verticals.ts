@@ -1265,6 +1265,98 @@ export const VERTICALS: Vertical[] = [
     imageSet: "event",
   },
   {
+    slug: "government-public-sector",
+    kind: "industry",
+    name: "Government & Public Sector",
+    h1: "Photography & Video for Government & Public Sector",
+    title: "Government Event Photography & Video | MacroSnaps",
+    description:
+      "Photo and video for federal, state and local agencies: press conferences, public meetings, swearing-in ceremonies, town halls, summits and training videos.",
+    eyebrow: "Federal, state & local agencies",
+    intro: [
+      "Public agencies have to show their work. A press conference, a swearing-in, a ribbon cutting or a community town hall is part of the public record, and the photos and video from it end up on agency websites, in press releases, in annual reports and on social media. Communications offices need a crew that arrives on time, follows protocol, stays out of the way of officials and press, and delivers usable files without a long back-and-forth.",
+      "MacroSnaps photographs and films events for federal, state and local agencies: press conferences and media availabilities, public meetings and hearings, swearing-in and oath-of-office ceremonies, town halls, agency conferences and summits, award ceremonies, ribbon cuttings and site visits. We also produce training and explainer videos and official headshots and portraits for leadership pages and directories. Our crews dress for the setting, work quietly around podiums, flags and press risers, and follow your communications team's guidance on who and what can be photographed.",
+      "Our Washington, DC office is downtown at 1300 I St NW, and our New York City studio is in Times Square, with our own photographers and videographers across every US state, Washington, DC, Ontario and Quebec. Prices are published and the same for every client, every shoot is insured through State Farm ($1 million per occurrence, $2 million aggregate), and we send a certificate of insurance for your venue or building on request. Bookings need 48 hours' notice.",
+    ],
+    challenges: [
+      {
+        title: "Events run on a tight protocol",
+        body: "Officials arrive on a schedule, press needs clear sight lines and the order of program cannot slip. Our crew reviews the run-of-show in advance and positions itself so it never blocks a camera, a podium or an exit.",
+      },
+      {
+        title: "Content has to be ready for the public record",
+        body: "Photos and video go into press releases, websites, reports and social posts. They need accurate captions, consistent framing of officials and files organized so your staff can find each speaker and moment.",
+      },
+      {
+        title: "Professional conduct in sensitive settings",
+        body: "Hearings, ceremonies and community meetings call for discretion. Our photographers and videographers dress appropriately, follow your guidance on restricted areas and people, and keep a low profile throughout.",
+      },
+    ],
+    deliverables: [
+      {
+        title: "Press conference and media event coverage",
+        body: "Podium shots of every speaker, wide room views, officials with stakeholders and the moments the press will ask for, delivered in an online gallery.",
+      },
+      {
+        title: "Swearing-in and ceremony photography",
+        body: "Oath-of-office moments, family and staff groups, award presentations, ribbon cuttings and formal portraits of the people being honored.",
+      },
+      {
+        title: "Public meeting and town hall video",
+        body: "Recordings of public meetings, hearings and town halls, with clean audio from your sound system, edited for your website or archive. Live streaming is available for remote residents.",
+      },
+      {
+        title: "Agency conference and summit coverage",
+        body: "Keynotes, panels, breakouts, exhibitors and networking at agency conferences, summits and training days, with recap videos for next year.",
+      },
+      {
+        title: "Training and explainer videos",
+        body: "Interviews, demonstrations and on-screen instructions filmed and edited into training modules and public-facing explainers.",
+      },
+      {
+        title: "Official headshots and portraits",
+        body: "Consistent headshots of leadership and staff for agency websites, directories and press kits, photographed on site with our own lighting and backdrop.",
+      },
+    ],
+    uses: [
+      "Agency websites & newsrooms",
+      "Press releases & media kits",
+      "Social media accounts",
+      "Annual and performance reports",
+      "Public meeting archives",
+      "Internal training portals",
+      "Newsletters & constituent updates",
+      "Leadership and staff directories",
+    ],
+    services: ["conference-photography", "conference-videography", "live-stream", "corporate-event-photography"],
+    faqs: [
+      {
+        q: "Can you provide a certificate of insurance for a government building?",
+        a: "Yes. MacroSnaps is insured through State Farm for $1 million per occurrence and $2 million aggregate. Email info@macrosnaps.com with the certificate holder's details and we will send a certificate of insurance on request.",
+      },
+      {
+        q: "Do you cover press conferences and swearing-in ceremonies on short notice?",
+        a: "Bookings need at least 48 hours' notice. For anything sooner, call 877-622-4973 and we will tell you honestly whether a photographer or videographer is available.",
+      },
+      {
+        q: "Do you work with agencies outside Washington, DC?",
+        a: "Yes. Our office is in Washington, DC and our studio is in New York City, and we have our own photographers and videographers across all US states, DC, Ontario and Quebec, so we cover state capitols, city halls and regional offices too.",
+      },
+      {
+        q: "What does it cost?",
+        a: "Our prices are published and the same for every client. Photography is $250 for the first hour and $100 for each additional hour; videography is $300 for the first hour and $200 for each additional hour, with a two-hour minimum. Multi-day summits and several rooms at once are booked at the same hourly rates.",
+      },
+      {
+        q: "Can you record public meetings and town halls?",
+        a: "Yes. We record public meetings, hearings and town halls and can live stream them for residents who cannot attend in person. We connect to your venue's sound system where possible for clear audio.",
+      },
+    ],
+    macrohype:
+      "Our sister agency MacroHype builds websites and runs digital outreach and social media campaigns, so your agency's photos and videos reach the public they are meant for.",
+    related: ["nonprofits-associations", "event-marketing-content", "team-headshots"],
+    imageSet: "conference",
+  },
+  {
     slug: "education",
     kind: "industry",
     name: "Schools & Universities",

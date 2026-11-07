@@ -35,6 +35,7 @@ const RULES: Rule[] = [
   { re: /\b(baptism|christening|communion|bris|aqiqah)\b/, slug: "religious-ceremony-photography", kind: "event" },
   { re: /\b(festival|parade|5k|marathon|community event|street fair)\b/, slug: "festival-community-event-photography", kind: "event" },
   { re: /\bgraduation party\b/, slug: "graduation-party-photography", kind: "event" },
+  { re: /\b(government|gov't|public sector|(?<!(marketing|ad|advertising|creative|digital|design|branding|talent|modeling|model|travel|staffing|insurance|media|pr|web|seo|real estate|rental) )agenc(y|ies)|federal|municipal|press conferences?|town ?halls?|swearing[- ]in|oath of office|public (meeting|hearing)s?)\b/, slug: "government-public-sector", kind: "industry" },
   { re: /\b(trade ?show|expo|exhibit(or|ion)|booth)\b/, slug: "trade-show-photography", kind: "service" },
   { re: /\b(conference|summit|convention|keynote|symposium|panel|forum|seminar|congress)\b/, slug: "conference-photography", kind: "service", video: "conference-videography" },
   { re: /\blive ?stream/, slug: "live-stream", kind: "service" },
