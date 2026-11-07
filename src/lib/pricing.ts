@@ -31,7 +31,8 @@ export function quoteHourly(kind: Kind, sessions: SessionInput[], addCompanion: 
   const lines: Line[] = [];
   sessions.forEach((s, i) => {
     const h = billedHours(s);
-    const tag = sessions.length > 1 ? `Day ${i + 1} (${s.date})` : s.date;
+    const fmt = s.date ? new Date(s.date + "T12:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" }) : "";
+    const tag = sessions.length > 1 ? `Day ${i + 1}${fmt ? ` (${fmt})` : ""}` : fmt || "Day 1";
     lines.push({ label: `${tag}: ${kind === "photo" ? "Photography" : "Videography"}, ${h} hrs`, amount: hourPrice(kind, h) });
     const crew = Math.min(Math.max(Math.floor(s.extraCrew ?? 0), 0), RATES.maxCrew);
     if (crew) lines.push({ label: `${tag}: ${crew} additional ${kind === "photo" ? "photographer" : "videographer"}${crew > 1 ? "s" : ""}, ${h} hrs`, amount: crew * crewPrice(kind, h) });

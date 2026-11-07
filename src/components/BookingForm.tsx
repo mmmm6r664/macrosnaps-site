@@ -358,8 +358,11 @@ export default function BookingForm({ services, cities, addons = [], paused = {}
           <h2 className="font-serif text-2xl">Your booking</h2>
           <p className="mt-4 font-semibold">{service.name}</p>
           {!hourly && <p className="text-sm text-muted">{pkg.name}</p>}
-          {quote && sessions.every((x) => x.date && x.start && x.end) ? (
-            <ul className="mt-3 space-y-1.5 text-sm">{[...quote.lines, ...addonLines].map((l, i) => <li key={i} className="flex justify-between gap-3"><span className="text-muted">{l.label}</span><span>${l.amount.toLocaleString()}</span></li>)}</ul>
+          {quote ? (
+            <>
+              <ul className="mt-3 space-y-1.5 text-sm">{[...quote.lines, ...addonLines].map((l, i) => <li key={i} className="flex justify-between gap-3"><span className="text-muted">{l.label}</span><span className="shrink-0">${l.amount.toLocaleString()}</span></li>)}</ul>
+              {!sessions.every((x) => x.start && x.end) && <p className="mt-2 text-xs text-muted">Priced at the {rates.minHours}-hour minimum until you choose start and end times.</p>}
+            </>
           ) : (
           <ul className="mt-3 space-y-1.5 text-sm">
             {sessions.map((s, i) => (

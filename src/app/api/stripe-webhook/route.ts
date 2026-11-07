@@ -4,7 +4,8 @@ import { stripe } from "@/lib/stripe";
 import { sendMail, table, TEAM_INBOX, esc } from "@/lib/mail";
 import { SITE } from "@/lib/site";
 import { markPaid } from "@/lib/records";
-import { db, hasDb } from "@/lib/db";
+import { db, hasDb, q } from "@/lib/db";
+import { emailWrap, ORIGIN } from "@/lib/notify";
 
 export async function POST(req: Request) {
   if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) return NextResponse.json({ error: "Not configured" }, { status: 503 });
@@ -27,13 +28,35 @@ export async function POST(req: Request) {
       ["Name", m.customer_name], ["Email", email], ["Phone", m.customer_phone], ["Company", m.company], ["Notes", m.notes],
       ["Booking ref", m.booking_ref], ["Stripe session", s.id],
     ];
-    await sendMail({ to: TEAM_INBOX, replyTo: email, subject: `NEW PAID BOOKING: ${m.service} — ${m.city} — ${(m.schedule || "").slice(0, 10)}`, html: table(rows) });
+    // Itemized lines saved with the booking (falls back to the summary rows if the database is unavailable).
+    let lines: { label: string; amount: number }[] = [];
+    let bookingId: number | null = null;
+    if (hasDb && m.booking_ref) {
+      try {
+        const r = await q<{ id: number; lines: { label: string; amount: number }[] }[]>`select id, lines from bookings where ref = ${m.booking_ref}`;
+        if (r[0]) { lines = r[0].lines || []; bookingId = r[0].id; }
+      } catch (e) { console.error("[webhook] lines lookup failed", e); }
+    }
+    const paid = `$${((s.amount_total || 0) / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })} USD`;
+    const itemized = lines.length
+      ? `<table cellpadding="6" style="border-collapse:collapse;width:100%;font-size:14px;margin:12px 0">${lines.map((l) => `<tr><td style="border-bottom:1px solid #eee">${esc(l.label)}</td><td style="border-bottom:1px solid #eee;text-align:right;white-space:nowrap">$${Number(l.amount).toLocaleString()}</td></tr>`).join("")}<tr><td><b>Total paid</b></td><td style="text-align:right"><b>${paid}</b></td></tr></table>`
+      : "";
+    const adminLink = bookingId && process.env.ADMIN_GATE_PATH ? `<p><a href="${ORIGIN}/admin/bookings/${bookingId}" style="background:#ccba56;color:#000;padding:10px 18px;text-decoration:none;display:inline-block">Open in admin portal</a></p>` : "";
+    await sendMail({
+      to: TEAM_INBOX,
+      replyTo: email,
+      subject: `NEW PAID BOOKING: ${m.service} — ${m.city} — ${(m.schedule || "").slice(0, 10)} — ${paid}`,
+      html: emailWrap("New paid booking", `${itemized}${table(rows)}${adminLink}`),
+    });
     if (email)
       await sendMail({
         to: email,
         replyTo: SITE.email,
-        subject: `Your MacroSnaps booking is confirmed — ${(m.schedule || "").slice(0, 10)}`,
-        html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#2f2e2e"><p>Hi ${esc(m.customer_name)},</p><p>Thank you for booking MacroSnaps. Your date is reserved and we will confirm your photographer/videographer by email before the shoot.</p>${table(rows.slice(0, 10))}<p>Questions? Reply to this email or call ${SITE.phone}.</p><p>— The MacroSnaps team</p></div>`,
+        subject: `Booking confirmed: ${m.service} on ${(m.schedule || "").slice(0, 10)} (ref ${m.booking_ref})`,
+        html: emailWrap(
+          "Your booking is confirmed",
+          `<p>Hi ${esc((m.customer_name || "").split(" ")[0] || "there")},</p><p>Thank you for booking MacroSnaps. Your payment was received and your date is reserved. We'll email you your photographer/videographer's details before the shoot.</p>${itemized}${table(rows.slice(3, 10))}<p><b>Booking reference:</b> ${esc(m.booking_ref)}</p><p>Need to change something? Just reply to this email or call ${esc(SITE.phone)}.</p><p>— The MacroSnaps team</p>`,
+        ),
       });
   }
   // Refunds made directly in the Stripe dashboard stay in sync with the admin portal.
