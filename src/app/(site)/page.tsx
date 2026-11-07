@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { IMG, photoPicker, byTags, bannerSafe } from "@/lib/images";
+
+const ORIGINAL_CONFERENCE_HERO = "https://static.wixstatic.com/media/b8cb3c_af143925a50c4d24a9cdd29895d94165~mv2.jpg";
 import { HeroSlideshow } from "@/components/Motion";
 import AskBox from "@/components/AskBox";
 import WhyUs from "@/components/WhyUs";
@@ -43,18 +45,21 @@ export default async function Home() {
   const siteHero = await getSetting("home_hero");
   const faqs = (await getSetting("home_faqs")) ?? HOME_FAQS;
   const pick = photoPicker();
+  // The homepage uses only the original photos from the old site (newer Drive photos appear on the portfolio and service pages).
+  const orig = (l: string[]) => l.filter((x) => !x.includes(".blob.vercel-storage.com/"));
+  const tags = (...t: string[]) => orig(byTags(...t));
   const hero = pick.use(IMG.hero);
   const heroSlides = [
     { src: hero, alt: "Wedding couple photographed by MacroSnaps", pos: "center 22%" },
-    { src: pick.use(IMG.conferenceHero), alt: "Conference audience photographed by MacroSnaps" },
-    { src: pick.one(bannerSafe(byTags("indian"))), alt: "Indian wedding couple photographed by MacroSnaps" },
-    { src: pick.one(bannerSafe(byTags("conference")).slice(1)), alt: "Panel discussion at a conference photographed by MacroSnaps" },
-    { src: pick.one(bannerSafe(byTags("courthouse"))), alt: "Couple at the US Capitol photographed by MacroSnaps" },
+    { src: pick.use(ORIGINAL_CONFERENCE_HERO), alt: "Conference audience photographed by MacroSnaps" },
+    { src: pick.one(bannerSafe(tags("indian"))), alt: "Indian wedding couple photographed by MacroSnaps" },
+    { src: pick.one(bannerSafe(tags("conference")).slice(1)), alt: "Panel discussion at a conference photographed by MacroSnaps" },
+    { src: pick.one(bannerSafe(tags("courthouse"))), alt: "Couple at the US Capitol photographed by MacroSnaps" },
   ];
   const about = pick.use(IMG.about);
-  const banner = pick.one(bannerSafe(byTags("conference")).slice(3));
-  const pillarImg = PILLARS.map((p) => (p.image ? p.image : p.film ? `https://i.ytimg.com/vi/${p.film}/hqdefault.jpg` : pick.one(byTags(...(p.tags ?? [])).slice(1), byTags(...(p.tags ?? [])))));
-  const gallery = pick.many(16, IMG.portfolio, IMG.wedding, IMG.conference, IMG.event);
+  const banner = pick.one(bannerSafe(tags("conference")).slice(3));
+  const pillarImg = PILLARS.map((p) => (p.image ? p.image : p.film ? `https://i.ytimg.com/vi/${p.film}/hqdefault.jpg` : pick.one(tags(...(p.tags ?? [])).slice(1), tags(...(p.tags ?? [])))));
+  const gallery = pick.many(16, orig(IMG.portfolio), orig(IMG.wedding), orig(IMG.conference), orig(IMG.event));
   const recentEvents = EVENTS.filter((e) => e.image).slice(0, 8);
   return (
     <>
