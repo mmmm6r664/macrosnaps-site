@@ -35,13 +35,15 @@ export async function attachCheckout(ref: string, sessionId: string) {
   try { await q`update bookings set stripe_session_id = ${sessionId}, updated_at = now() where ref = ${ref}`; } catch (e) { console.error(e); }
 }
 
-export async function markPaid(ref: string | undefined, sessionId: string, paymentIntent: string | null, amountCents: number) {
-  if (!hasDb) return;
+/** Marks a booking paid. Returns true the first time, false if it was already paid (Stripe retries), null if unknown. */
+export async function markPaid(ref: string | undefined, sessionId: string, paymentIntent: string | null, amountCents: number): Promise<boolean | null> {
+  if (!hasDb) return null;
   try {
     const sql = await db();
-    await sql`update bookings set status = 'paid', stripe_payment_intent = ${paymentIntent}, total_cents = ${amountCents}, updated_at = now()
-      where (ref = ${ref ?? ""} or stripe_session_id = ${sessionId}) and status in ('pending_payment', 'requested')`;
-  } catch (e) { console.error("[db] markPaid", e); }
+    const r = await sql`update bookings set status = 'paid', stripe_payment_intent = ${paymentIntent}, total_cents = ${amountCents}, updated_at = now()
+      where (ref = ${ref ?? ""} or stripe_session_id = ${sessionId}) and status in ('pending_payment', 'requested') returning id`;
+    return r.length > 0;
+  } catch (e) { console.error("[db] markPaid", e); return null; }
 }
 
 export async function saveInquiry(kind: "contact" | "application", name: string, email: string, phone: string | undefined, data: Record<string, unknown>): Promise<boolean> {

@@ -5,8 +5,10 @@ import { hasDb, q } from "@/lib/db";
 import { createLoginToken, currentClient, endClientSession, logLinkSent, normEmail, requireClient, safeNext, tooManyLinks, validEmail } from "@/lib/clientAuth";
 import { orderFor } from "@/lib/clientData";
 import { sendMail } from "@/lib/mail";
-import { emailWrap, ORIGIN, notifyAdmins } from "@/lib/notify";
-import { esc } from "@/lib/mail";
+import { notifyAdmins } from "@/lib/notify";
+import { ORIGIN } from "@/lib/emailTemplate";
+import { signInLink, reviewRequest, lowRatingAlert } from "@/lib/emails";
+
 import { getSetting } from "@/lib/settings";
 import { SITE } from "@/lib/site";
 
@@ -22,11 +24,9 @@ export async function requestLink(_: LinkState, fd: FormData): Promise<LinkState
   const token = await createLoginToken(email, safeNext(fd.get("next")));
   await logLinkSent(email);
   const url = `${ORIGIN}/account/verify?token=${token}`;
-  const r = await sendMail({
-    to: email,
-    subject: "Your MacroSnaps sign-in link",
-    html: emailWrap("Sign in to MacroSnaps", `<p>Click the button to sign in and see your bookings, order status and galleries. The link works once and expires in 20 minutes.</p><p><a href="${esc(url)}" style="background:#ccba56;color:#000;padding:12px 22px;text-decoration:none;display:inline-block;font-weight:bold">Sign in</a></p><p style="color:#888;font-size:13px">If you didn't ask for this, you can ignore this email.</p>`),
-  });
+  const m = signInLink(url);
+  const r = await sendMail({ to: email, subject: m.subject, html: m.html });
+
   if (!r.ok) return { error: "We couldn't send the email right now. Please try again in a few minutes or call us." };
   return { ok: true };
 }
@@ -63,16 +63,16 @@ export async function sendFeedback(_: FeedbackState, fd: FormData): Promise<Feed
   const review = (await getSetting("google_review_url")) || "";
   const name = c.first_name || "there";
   if (rating >= 4 && review) {
-    await sendMail({
-      to: c.email,
-      subject: "Thank you! Would you share your experience on Google?",
-      html: emailWrap("Thank you for the kind words", `<p>Hi ${esc(name)},</p><p>We're so glad you loved working with MacroSnaps. Reviews help other people find us. Would you take a minute to share your experience on Google?</p><p><a href="${esc(review)}" style="background:#ccba56;color:#000;padding:12px 22px;text-decoration:none;display:inline-block;font-weight:bold">Leave a Google review</a></p><p>Thank you!<br>— The MacroSnaps team</p>`),
-    });
+    const m = reviewRequest(name, review);
+    await sendMail({ to: c.email, subject: m.subject, html: m.html });
+
     await q`update feedback set review_invited_at = now() where booking_id = ${order.id}`;
   }
   await notifyAdmins(`${"★".repeat(rating)}${"☆".repeat(5 - rating)} feedback from ${c.first_name} ${c.last_name}`.trim(), `${order.service_name} (${order.ref})${comment ? `: ${comment.slice(0, 300)}` : ""}`, `/admin/bookings/${order.id}`);
-  if (rating <= 3)
-    await sendMail({ to: SITE.email, replyTo: c.email, subject: `Follow up: ${rating}-star feedback on ${order.ref}`, html: emailWrap("Client feedback needs follow-up", `<p><b>${rating}/5</b> from ${esc(c.first_name)} ${esc(c.last_name)} (${esc(c.email)}) for ${esc(order.service_name)} · ${esc(order.ref)}</p><p>${esc(comment) || "(no comment)"}</p>`) });
+  if (rating <= 3) {
+    const m = lowRatingAlert(rating, `${c.first_name} ${c.last_name}`.trim(), c.email, order.service_name, order.ref, comment);
+    await sendMail({ to: SITE.email, replyTo: c.email, subject: m.subject, html: m.html });
+  }
   revalidatePath(`/account/orders/${ref}`);
   return { ok: true, reviewUrl: rating >= 4 && review ? review : undefined };
 }

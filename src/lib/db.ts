@@ -245,6 +245,7 @@ create table if not exists galleries (
   published_at timestamptz,
   created_at timestamptz not null default now()
 );
+alter table galleries add column if not exists feedback_asked_at timestamptz;
 create table if not exists gallery_photos (
   id serial primary key,
   gallery_id int not null references galleries(id) on delete cascade,
@@ -256,6 +257,15 @@ create table if not exists gallery_photos (
   created_at timestamptz not null default now()
 );
 create index if not exists gallery_photos_gallery on gallery_photos(gallery_id, sort);
+-- Email automations: abandoned-booking reminders, subscriber welcome series, review requests.
+-- Columns are added with a "done" default so existing rows never get emailed, then new rows start at 0.
+alter table bookings add column if not exists reminders_sent int not null default 3;
+alter table bookings alter column reminders_sent set default 0;
+alter table bookings add column if not exists last_reminder_at timestamptz;
+alter table bookings add column if not exists reminders_stopped boolean not null default false;
+alter table subscribers add column if not exists nurture_step int not null default 3;
+alter table subscribers alter column nurture_step set default 0;
+alter table subscribers add column if not exists nurture_at timestamptz;
 create table if not exists feedback (
   id serial primary key,
   booking_id int unique not null references bookings(id) on delete cascade,

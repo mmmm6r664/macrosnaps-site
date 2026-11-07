@@ -5,15 +5,14 @@ import { del } from "@vercel/blob";
 import { requireUser } from "@/lib/auth";
 import { audit, q } from "@/lib/db";
 import { ensureGallery, isStage, STAGES } from "@/lib/clientData";
-import { sendMail, esc } from "@/lib/mail";
-import { emailWrap, ORIGIN } from "@/lib/notify";
+import { sendMail } from "@/lib/mail";
+import { ORIGIN } from "@/lib/emailTemplate";
+import { stageUpdate, galleryReady } from "@/lib/emails";
 import { sendSms } from "@/lib/sms";
 
 export type DeliveryState = { ok?: string; error?: string } | undefined;
 type Row = { ref: string; email: string; customer_name: string; phone: string | null; service_name: string };
 const bookingRow = async (id: number) => (await q<Row[]>`select ref, email, customer_name, phone, service_name from bookings where id = ${id}`)[0];
-const firstName = (n: string) => n.split(" ")[0] || "there";
-const button = (url: string, label: string) => `<p><a href="${esc(url)}" style="background:#ccba56;color:#000;padding:12px 22px;text-decoration:none;display:inline-block;font-weight:bold">${esc(label)}</a></p>`;
 const isBlobUrl = (u: string) => { try { const x = new URL(u); return x.protocol === "https:" && x.hostname.endsWith(".public.blob.vercel-storage.com"); } catch { return false; } };
 
 export async function setStage(_: DeliveryState, fd: FormData): Promise<DeliveryState> {
@@ -29,7 +28,8 @@ export async function setStage(_: DeliveryState, fd: FormData): Promise<Delivery
   if (fd.get("notify") === "on") {
     const s = STAGES.find((x) => x.id === stage)!;
     const url = `${ORIGIN}/account/orders/${b.ref}`;
-    const r = await sendMail({ to: b.email, subject: `Update on your MacroSnaps order: ${s.label}`, html: emailWrap(`Your order: ${s.label}`, `<p>Hi ${esc(firstName(b.customer_name))},</p><p>${esc(s.client)}</p><p>Booking: ${esc(b.service_name)} · ref ${esc(b.ref)}</p>${button(url, "Track your order")}<p>— The MacroSnaps team</p>`) });
+    const m = stageUpdate(b.customer_name, s.label, s.client, b.service_name, b.ref, url);
+    const r = await sendMail({ to: b.email, subject: m.subject, html: m.html });
     note = r.ok ? " Client emailed." : " (Email not sent: email isn't set up yet.)";
   }
   revalidatePath(`/admin/bookings/${id}`);
@@ -88,11 +88,10 @@ export async function publishGallery(_: DeliveryState, fd: FormData): Promise<De
   await q`update bookings set stage = 'gallery_ready', stage_updated_at = now(), updated_at = now() where id = ${id}`;
   await audit(u.id, "gallery_published", b.ref);
   const url = `${ORIGIN}/account/orders/${b.ref}#gallery`;
-  const r = await sendMail({
-    to: b.email,
-    subject: "Your MacroSnaps gallery is ready!",
-    html: emailWrap("Your gallery is ready", `<p>Hi ${esc(firstName(b.customer_name))},</p><p>Great news: your photos from your ${esc(b.service_name.toLowerCase())} are ready to view and download in your client portal.</p>${button(url, "View your gallery")}<p>Sign in with this email address (${esc(b.email)}).</p><p>We'd love to hear how we did. You can leave feedback right in the portal.</p><p>— The MacroSnaps team</p>`),
-  });
+  const previews = (await q<{ url: string }[]>`select url from gallery_photos where gallery_id = ${gid} order by sort, id limit 3`).map((x) => x.url);
+  const m = galleryReady(b.customer_name, b.service_name, url, b.email, previews);
+  const r = await sendMail({ to: b.email, subject: m.subject, html: m.html });
+
   if (b.phone && fd.get("sms") === "on") await sendSms(b.phone, `MacroSnaps: your gallery is ready! View and download it here: ${url}`).catch(() => null);
   revalidatePath(`/admin/bookings/${id}`);
   return { ok: r.ok ? "Gallery published and the client was emailed." : "Gallery published. (Email not sent: email isn't set up yet.)" };
