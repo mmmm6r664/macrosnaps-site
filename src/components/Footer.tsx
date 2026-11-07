@@ -77,7 +77,7 @@ export default function Footer() {
             <Image key={b.logo} src={b.logo} alt={b.name} width={130} height={56} className="h-12 w-auto" />
           ))}
           <a href={SITE.reviews.sulekha} target="_blank" rel="noopener" aria-label="MacroSnaps on Sulekha: rated 5 stars" className="flex h-12 items-center rounded bg-white px-3 transition hover:opacity-90">
-            <Image src="/badges/sulekha.png" alt="Sulekha" width={756} height={204} className="h-8 w-auto" />
+            <Image src="/badges/sulekha.png" alt="Sulekha" width={732} height={180} className="h-7 w-auto" />
           </a>
         </div>
 

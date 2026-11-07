@@ -849,5 +849,158 @@
 "alt": "Large audience at a conference general session",
 "orient": "L",
 "banner": true
+},
+{
+"src": "https://static.wixstatic.com/media/b8cb3c_97089b48723e4abea2458db228df5275~mv2.png",
+"tags": [
+"conference"
+],
+"alt": "Speaker presenting to a conference audience",
+"orient": "L"
+},
+{
+"src": "https://static.wixstatic.com/media/b8cb3c_f524bb1e66da477599d0552961961f5e~mv2.png",
+"tags": [
+"corporate",
+"event"
+],
+"alt": "Guests networking at a corporate reception",
+"orient": "P"
+},
+{
+"src": "https://static.wixstatic.com/media/b8cb3c_bf90f739421c46e9945b96d5e2f84026~mv2.png",
+"tags": [
+"graduation",
+"portrait"
+],
+"alt": "Graduate in cap and gown outdoors",
+"orient": "L"
+},
+{
+"src": "https://static.wixstatic.com/media/b8cb3c_a93a09e4ba734465a76b0305de52aacd~mv2.png",
+"tags": [
+"graduation",
+"portrait"
+],
+"alt": "Graduation portrait in front of a campus building",
+"orient": "L"
+},
+{
+"src": "https://static.wixstatic.com/media/b8cb3c_d53ed6f54c924bffa006791d847ea854~mv2.png",
+"tags": [
+"newborn",
+"family"
+],
+"alt": "Parents holding their newborn baby",
+"orient": "L"
+},
+{
+"src": "https://static.wixstatic.com/media/b8cb3c_d055554c4f5f44ffb856d35623046f27~mv2.png",
+"tags": [
+"newborn",
+"family"
+],
+"alt": "Family portrait with a newborn at home",
+"orient": "L"
+},
+{
+"src": "https://static.wixstatic.com/media/b8cb3c_041cecb8dabe4e4cafb4824f78815c23~mv2.png",
+"tags": [
+"family",
+"newborn"
+],
+"alt": "Parents playing with their baby at home",
+"orient": "L"
+},
+{
+"src": "https://static.wixstatic.com/media/b8cb3c_ec639a4dd54949bea6602186f7a2ed97~mv2.png",
+"tags": [
+"party",
+"family"
+],
+"alt": "Children celebrating at a birthday party",
+"orient": "L"
+},
+{
+"src": "https://static.wixstatic.com/media/b8cb3c_bcdc960f54bc476da303c6c4dc9f5e77~mv2.png",
+"tags": [
+"retouching"
+],
+"alt": "Retouched family photo shown on a tablet",
+"orient": "L"
+},
+{
+"src": "https://static.wixstatic.com/media/b8cb3c_0141475406dc4d6e880ae15d5a30eb4f~mv2.png",
+"tags": [
+"retouching"
+],
+"alt": "Finished retouched print",
+"orient": "P"
+},
+{
+"src": "https://static.wixstatic.com/media/b8cb3c_7f968e8ac005493e81f89b10d22a95d8~mv2.png",
+"tags": [
+"retouching"
+],
+"alt": "Camera and tablet with an edited city photo",
+"orient": "P"
+},
+{
+"src": "https://static.wixstatic.com/media/d5bdc3_a1e6fcf59e7e4ddabe456dda23b4ac4f~mv2.png",
+"tags": [
+"retouching"
+],
+"alt": "Portrait being retouched on a laptop",
+"orient": "L"
+},
+{
+"src": "https://static.wixstatic.com/media/d5bdc3_7f0c92c5f2d540c0ace70373efda01d7~mv2.png",
+"tags": [
+"retouching"
+],
+"alt": "Before and after portrait retouching",
+"orient": "L"
+},
+{
+"src": "https://static.wixstatic.com/media/d5bdc3_0c921fb25b01461b9658990a2f7c220c~mv2.png",
+"tags": [
+"retouching"
+],
+"alt": "Headshot being edited on a laptop",
+"orient": "L"
+},
+{
+"src": "https://static.wixstatic.com/media/d5bdc3_4306cb83fc054ebcb8c477ad6bb72784~mv2.png",
+"tags": [
+"product",
+"studio"
+],
+"alt": "Product photo of a wooden chair",
+"orient": "P"
+},
+{
+"src": "https://static.wixstatic.com/media/d5bdc3_ec162e719f9c4d4583fc6a3b06329164~mv2.png",
+"tags": [
+"studio",
+"product"
+],
+"alt": "Studio product photography lighting setup",
+"orient": "P"
+},
+{
+"src": "https://static.wixstatic.com/media/d5bdc3_d801325a043044b0bb6d8efe32d51ed8~mv2.png",
+"tags": [
+"product"
+],
+"alt": "Product photo of running shoes",
+"orient": "L"
+},
+{
+"src": "https://static.wixstatic.com/media/d5bdc3_220f8abfc25442aebf16f59e26ddda6c~mv2.png",
+"tags": [
+"product"
+],
+"alt": "Product photo of a cosmetic jar with wooden lid",
+"orient": "L"
 }
 ]
