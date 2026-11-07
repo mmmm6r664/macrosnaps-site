@@ -207,6 +207,63 @@ create table if not exists recovery_codes (
   code_hash text not null,
   used_at timestamptz
 );
+
+-- Client portal: customer accounts (email link, Google or Facebook sign-in), order tracking, galleries, feedback.
+create table if not exists clients (
+  id serial primary key,
+  email text unique not null,
+  first_name text not null default '',
+  last_name text not null default '',
+  phone text,
+  google_sub text unique,
+  facebook_id text unique,
+  created_at timestamptz not null default now(),
+  last_login_at timestamptz
+);
+create table if not exists client_sessions (
+  token_hash text primary key,
+  client_id int not null references clients(id) on delete cascade,
+  expires_at timestamptz not null,
+  created_at timestamptz not null default now()
+);
+create table if not exists client_login_tokens (
+  token_hash text primary key,
+  email text not null,
+  next_path text,
+  expires_at timestamptz not null,
+  used_at timestamptz
+);
+alter table bookings add column if not exists stage text not null default 'booked';
+alter table bookings add column if not exists stage_updated_at timestamptz;
+create table if not exists galleries (
+  id serial primary key,
+  booking_id int unique not null references bookings(id) on delete cascade,
+  title text not null default '',
+  message text not null default '',
+  download_url text,
+  status text not null default 'draft',              -- draft | published
+  published_at timestamptz,
+  created_at timestamptz not null default now()
+);
+create table if not exists gallery_photos (
+  id serial primary key,
+  gallery_id int not null references galleries(id) on delete cascade,
+  url text not null,
+  pathname text,
+  file_name text not null default '',
+  size_bytes bigint,
+  sort int not null default 0,
+  created_at timestamptz not null default now()
+);
+create index if not exists gallery_photos_gallery on gallery_photos(gallery_id, sort);
+create table if not exists feedback (
+  id serial primary key,
+  booking_id int unique not null references bookings(id) on delete cascade,
+  rating int not null,
+  comment text not null default '',
+  review_invited_at timestamptz,
+  created_at timestamptz not null default now()
+);
 `;
 
 /** The SQL client, with tables created on first use. */

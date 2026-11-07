@@ -42,3 +42,11 @@ export async function saveFaqs(_: S, f: FormData): Promise<S> {
   await save("home_faqs", faqs, u.id);
   return { ok: `Saved ${faqs.length} FAQs. The website updates within a minute.` };
 }
+
+export async function saveReviewUrl(_: S, f: FormData): Promise<S> {
+  const u = await requireUser();
+  const url = String(f.get("url") ?? "").trim().slice(0, 500);
+  if (url && !/^https:\/\/\S+$/.test(url)) return { error: "Paste the full link starting with https://" };
+  await save("google_review_url", url || null, u.id);
+  return { ok: url ? "Saved. Clients who give 4 or 5 stars will be invited to review you there." : "Removed. Review invitations are off." };
+}

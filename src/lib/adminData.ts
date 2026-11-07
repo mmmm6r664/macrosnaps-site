@@ -6,7 +6,7 @@ export type Booking = {
   venue_address: string | null; customer_name: string; email: string; phone: string | null; company: string | null; notes: string | null;
   schedule: { date: string; start: string; end: string; venue?: string; extraCrew?: number }[]; lines: { label: string; amount: number }[];
   total_cents: number; amount_refunded_cents: number; signature: string | null; terms_version: string | null; signed_at: Date | null; signer_ip: string | null;
-  stripe_session_id: string | null; stripe_payment_intent: string | null; internal_notes: string; first_date: Date | null; created_at: Date; updated_at: Date;
+  stripe_session_id: string | null; stripe_payment_intent: string | null; internal_notes: string; first_date: Date | null; created_at: Date; updated_at: Date; stage?: string;
 };
 
 export const BOOKING_STATUSES = ["requested", "pending_payment", "paid", "confirmed", "completed", "cancelled", "partially_refunded", "refunded"] as const;

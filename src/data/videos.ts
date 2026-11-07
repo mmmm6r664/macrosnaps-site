@@ -35,7 +35,7 @@ export const VIDEOS: Video[] = [
   { id: "o9jiTxwsw_s", title: "God's Remnant Assembly Event Highlights", tags: ["event", "community"] },
   { id: "bDIaCiIBAWM", title: "Jersey Jazz City Festival, Hudson County", tags: ["event", "community"] },
   { id: "M1SpJUiJDjE", title: "Jersey Jazz Festival Highlights 2024", tags: ["event", "community"] },
-  { id: "i8zddmkqUM4", title: "Jersey 5K Race Highlights", tags: ["event", "community"] },
+  { id: "i8zddmkqUM4", title: "Race to Finish: Jersey 5K Race Highlights", tags: ["event", "community"] },
   { id: "Fr2pu7pnXis", title: "AP Space: Chelsea's Contemporary Art Hub", tags: ["commercial"] },
   { id: "0Tuwx0k_TZg", title: "Exploring The Islamic Seminary of America", tags: ["commercial", "community"] },
   { id: "sEPh6gEZVYM", title: "Agyro Restaurant Advertisement, Brooklyn", tags: ["commercial", "restaurant"] },

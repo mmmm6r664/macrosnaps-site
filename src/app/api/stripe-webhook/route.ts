@@ -55,7 +55,7 @@ export async function POST(req: Request) {
         subject: `Booking confirmed: ${m.service} on ${(m.schedule || "").slice(0, 10)} (ref ${m.booking_ref})`,
         html: emailWrap(
           "Your booking is confirmed",
-          `<p>Hi ${esc((m.customer_name || "").split(" ")[0] || "there")},</p><p>Thank you for booking MacroSnaps. Your payment was received and your date is reserved. We'll email you your photographer/videographer's details before the shoot.</p>${itemized}${table(rows.slice(3, 10))}<p><b>Booking reference:</b> ${esc(m.booking_ref)}</p><p>Need to change something? Just reply to this email or call ${esc(SITE.phone)}.</p><p>— The MacroSnaps team</p>`,
+          `<p>Hi ${esc((m.customer_name || "").split(" ")[0] || "there")},</p><p>Thank you for booking MacroSnaps. Your payment was received and your date is reserved. We'll email you your photographer/videographer's details before the shoot.</p>${itemized}${table(rows.slice(3, 10))}<p><b>Booking reference:</b> ${esc(m.booking_ref)}</p><p><a href="${ORIGIN}/account" style="background:#ccba56;color:#000;padding:12px 22px;text-decoration:none;display:inline-block;font-weight:bold">Track your order</a></p><p style="font-size:13px;color:#666">Sign in to your client portal with this email address to see your order status and, after the shoot, your gallery.</p><p>Need to change something? Just reply to this email or call ${esc(SITE.phone)}.</p><p>— The MacroSnaps team</p>`,
         ),
       });
   }

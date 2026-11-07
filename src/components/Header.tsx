@@ -97,6 +97,8 @@ export default function Header() {
             <a href={`mailto:${SITE.email}`} className="flex items-center gap-2 hover:text-gold"><IconMail className="h-4 w-4 text-gold" />{SITE.email}</a>
             <span className="h-4 w-px bg-white/20" aria-hidden />
             <a href={SITE.phoneHref} className="flex items-center gap-2 hover:text-gold"><IconPhone className="h-4 w-4 text-gold" />{SITE.phone}</a>
+            <span className="h-4 w-px bg-white/20" aria-hidden />
+            <Link href="/account" className="flex items-center gap-2 hover:text-gold"><svg viewBox="0 0 24 24" className="h-4 w-4 text-gold" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></svg>My Account</Link>
             <Link href="/book" className="btn-gold ml-2 !py-2 !px-5 font-sans">Book Now</Link>
           </div>
           <nav aria-label="Main" className="flex items-center justify-end gap-1 border-t [&>a:last-child]:pr-0 border-white/10 pt-3 font-nav text-[17px] font-medium tracking-wide">
@@ -172,6 +174,7 @@ export default function Header() {
                   <Link key={item.label} href={item.href!} className="block border-b border-white/10 py-3 font-nav text-xl text-gold">{item.label}</Link>
                 ),
               )}
+              <Link href="/account" className="block border-b border-white/10 py-3 font-nav text-xl text-gold">My Account</Link>
               <div className="mt-6 space-y-2 text-sm">
                 <a href={`mailto:${SITE.email}`} className="block">{SITE.email}</a>
                 <a href={SITE.phoneHref} className="block">{SITE.phone}</a>

@@ -7,11 +7,11 @@ const nextConfig: NextConfig = {
   async headers() {
     const csp = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline'",
+      `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://static.wixstatic.com https://i.ytimg.com https://images.unsplash.com https://www.macrohype.com https://macrohype.com https://my.matterport.com https://*.matterport.com",
+      "img-src 'self' data: blob: https://static.wixstatic.com https://i.ytimg.com https://images.unsplash.com https://www.macrohype.com https://macrohype.com https://my.matterport.com https://*.matterport.com https://*.public.blob.vercel-storage.com",
       "font-src 'self' data:",
-      "connect-src 'self' https://www.googleapis.com",
+      "connect-src 'self' https://www.googleapis.com https://vercel.com https://*.blob.vercel-storage.com",
       "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://my.matterport.com",
       "media-src 'self' https://static.wixstatic.com",
       "object-src 'none'",

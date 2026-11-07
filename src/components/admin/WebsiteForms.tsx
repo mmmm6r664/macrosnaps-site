@@ -1,7 +1,7 @@
 "use client";
 import { noReset } from "./noReset";
 import { useActionState, useState } from "react";
-import { saveAnnouncement, saveHero, saveFaqs, type S } from "@/app/admin/(panel)/website/actions";
+import { saveAnnouncement, saveHero, saveFaqs, saveReviewUrl, type S } from "@/app/admin/(panel)/website/actions";
 import { inputCls, labelCls, btnPrimary, btnGhost } from "./ui";
 
 const Msg = ({ s }: { s: S }) => (s ? <p role="status" className={`rounded px-3 py-2 text-sm ${s.error ? "bg-red-50 text-red-800" : "bg-emerald-50 text-emerald-800"}`}>{s.error ?? s.ok}</p> : null);
@@ -55,6 +55,21 @@ export function FaqsForm({ v, custom }: { v: { q: string; a: string }[]; custom:
         <button disabled={pending} className={btnPrimary}>{pending ? "Saving…" : "Save FAQs"}</button>
         {custom && <button name="reset" value="1" disabled={pending} className={btnGhost}>Restore original FAQs</button>}
       </div>
+    </form>
+  );
+}
+
+export function ReviewUrlForm({ v }: { v: string }) {
+  const [s, act, pending] = useActionState<S, FormData>(saveReviewUrl, undefined);
+  return (
+    <form onSubmit={noReset(act)} className="space-y-3">
+      <div>
+        <label className={labelCls} htmlFor="rv-url">Google review link</label>
+        <input id="rv-url" name="url" type="url" defaultValue={v} className={inputCls} placeholder="https://g.page/r/…/review" />
+        <p className="mt-1 text-xs text-black/50">In your Google Business Profile, click &ldquo;Ask for reviews&rdquo; and copy the link. Clients who rate you 4 or 5 stars in their portal get an email asking for a Google review. Lower ratings come to you privately instead.</p>
+      </div>
+      <Msg s={s} />
+      <button disabled={pending} className={btnPrimary}>{pending ? "Saving…" : "Save link"}</button>
     </form>
   );
 }

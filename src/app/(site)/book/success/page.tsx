@@ -31,7 +31,11 @@ export default async function Success({ searchParams }: { searchParams: Promise<
         </dl>
       )}
       <p className="mt-8 text-sm">Questions? Call <a href={SITE.phoneHref} className="underline">{SITE.phone}</a> or email <a href={`mailto:${SITE.email}`} className="underline">{SITE.email}</a>.</p>
-      <Link href="/" className="btn-dark mt-8">Back to home</Link>
+      <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <Link href="/account" className="btn-gold">Track your order</Link>
+        <Link href="/" className="btn-dark">Back to home</Link>
+      </div>
+      <p className="mt-3 text-xs text-muted">Sign in with the email you booked with to see your order status and, later, your gallery.</p>
     </section>
   );
 }

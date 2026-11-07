@@ -23,7 +23,7 @@ const durationH = durationHours;
 const SLOTS = Array.from({ length: 48 }, (_, i) => `${String(Math.floor(i / 2)).padStart(2, "0")}:${i % 2 ? "30" : "00"}`);
 const fmtTime = (t: string) => { if (!t) return ""; const [h, m] = t.split(":").map(Number); return `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`; };
 
-export default function BookingForm({ services, cities, addons = [], paused = {}, initial }: { services: Svc[]; cities: CityOpt[]; addons?: Addon[]; paused?: Record<string, string>; initial: { service?: string; package?: string; city?: string; cancelled?: boolean } }) {
+export default function BookingForm({ services, cities, addons = [], paused = {}, initial, me }: { me?: { firstName: string; lastName: string; email: string; phone: string }; services: Svc[]; cities: CityOpt[]; addons?: Addon[]; paused?: Record<string, string>; initial: { service?: string; package?: string; city?: string; cancelled?: boolean } }) {
   const rates = RATES;
   const [addCompanion, setAddCompanion] = useState(false);
   const [premiumEdit, setPremiumEdit] = useState(false);
@@ -344,10 +344,10 @@ export default function BookingForm({ services, cities, addons = [], paused = {}
 
         <fieldset className="grid gap-5 sm:grid-cols-2">
           <legend className="mb-4 font-serif text-2xl sm:col-span-2">4. Your details</legend>
-          <div><label className={label} htmlFor="name-first">First name *</label><input id="name-first" name="firstName" required maxLength={60} className={field} autoComplete="given-name" /></div>
-          <div><label className={label} htmlFor="name-last">Last name *</label><input id="name-last" name="lastName" required maxLength={60} className={field} autoComplete="family-name" /></div>
-          <div><label className={label} htmlFor="email">Email *</label><input id="email" name="email" type="email" required className={field} autoComplete="email" /></div>
-          <div><label className={label} htmlFor="phone">Phone *</label><input id="phone" name="phone" type="tel" required className={field} autoComplete="tel" /></div>
+          <div><label className={label} htmlFor="name-first">First name *</label><input id="name-first" name="firstName" defaultValue={me?.firstName} required maxLength={60} className={field} autoComplete="given-name" /></div>
+          <div><label className={label} htmlFor="name-last">Last name *</label><input id="name-last" name="lastName" defaultValue={me?.lastName} required maxLength={60} className={field} autoComplete="family-name" /></div>
+          <div><label className={label} htmlFor="email">Email *</label><input id="email" name="email" type="email" defaultValue={me?.email} required className={field} autoComplete="email" /></div>
+          <div><label className={label} htmlFor="phone">Phone *</label><input id="phone" name="phone" type="tel" defaultValue={me?.phone} required className={field} autoComplete="tel" /></div>
           <div><label className={label} htmlFor="company">Company (optional)</label><input id="company" name="company" className={field} autoComplete="organization" /></div>
           <div className="sm:col-span-2"><label className={label} htmlFor="notes">Notes for your crew</label><textarea id="notes" name="notes" rows={3} maxLength={480} className={field} placeholder="Agenda, key people or moments, dress code, parking…" /></div>
         </fieldset>

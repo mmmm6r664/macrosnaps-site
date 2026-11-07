@@ -12,6 +12,7 @@ export const DEFAULTS = {
   announcement: { enabled: false, text: "", link: "", linkText: "" } as Announcement,
   home_hero: { headline: "America's Premier Event and Wedding Photography and Videography Company" } as HomeHero,
   home_faqs: null as Faq[] | null, // null = use the FAQs written in the code
+  google_review_url: "" as string, // where 4–5 star clients are invited to review us
 };
 export type SettingKey = keyof typeof DEFAULTS;
 

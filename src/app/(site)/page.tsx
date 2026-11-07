@@ -137,7 +137,7 @@ export default async function Home() {
         <div className="mx-auto max-w-7xl">
           <p className="eyebrow !text-gold text-center">From our YouTube channel</p>
           <h2 className="mb-10 mt-3 text-center font-serif text-3xl md:text-4xl">Conference, event & wedding films</h2>
-          <VideoGrid videos={[VIDEOS[0], VIDEOS[4], VIDEOS[37], VIDEOS[2], VIDEOS[38], VIDEOS[26]]} />
+          <VideoGrid videos={["nanbTWYjc0k", "lQuiII7QpXw", "i8zddmkqUM4", "JcftQW3TBC8", "XdBbgepSxGE", "mE9Jr3ipr1M"].map((id) => VIDEOS.find((v) => v.id === id)!).filter(Boolean)} />
           <div className="mt-10 text-center"><a href="https://www.youtube.com/channel/UCYoC7JGFcAQiSxOqKSmIzEw" target="_blank" rel="noopener" className="btn-outline">Watch all {VIDEOS.length} videos on YouTube</a></div>
         </div>
       </section>

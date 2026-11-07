@@ -5,6 +5,8 @@ import { getBooking, staffUsers, BOOKING_STATUSES } from "@/lib/adminData";
 import { PageHead, Card, Badge, money, fmtDate, Notice } from "@/components/admin/ui";
 import { BookingEditForm, RefundForm } from "@/components/admin/BookingForms";
 import { stripe } from "@/lib/stripe";
+import { STAGES, galleryFor, feedbackFor } from "@/lib/clientData";
+import { StageForm, GalleryManager } from "@/components/admin/DeliveryPanel";
 
 export const metadata = { title: "Booking" };
 
@@ -18,6 +20,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
   if (!manager && !b.crew.some((c) => c.id === u.id)) redirect("/admin");
   const staff = manager ? await staffUsers() : [];
   const left = b.total_cents - b.amount_refunded_cents;
+  const [{ gallery, photos }, fb] = manager ? await Promise.all([galleryFor(b.id), feedbackFor(b.id)]) : [{ gallery: null, photos: [] }, null];
   return (
     <>
       <PageHead title={`${b.ref} · ${b.customer_name}`} sub={`${b.service_name}${b.addon ? ` + ${b.addon}` : ""} · ${b.city ?? ""}`} actions={<Badge status={b.status} />} />
@@ -52,6 +55,17 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
             </Card>
           )}
           {manager && (
+            <Card title="Client gallery">
+              <GalleryManager id={b.id} gallery={gallery} photos={photos.map(({ id, url, file_name }) => ({ id, url, file_name }))} blobReady={!!process.env.BLOB_READ_WRITE_TOKEN} hasPhone={!!b.phone} />
+            </Card>
+          )}
+          {manager && fb && (
+            <Card title="Client feedback">
+              <p className="text-lg"><span className="text-[#a8963b]">{"★".repeat(fb.rating)}</span><span className="text-black/15">{"★".repeat(5 - fb.rating)}</span> <span className="text-sm text-black/50">{fmtDate(fb.created_at, true)}{fb.review_invited_at ? " · Google review requested" : ""}</span></p>
+              {fb.comment && <p className="mt-2 whitespace-pre-wrap text-sm">{fb.comment}</p>}
+            </Card>
+          )}
+          {manager && (
             <Card title="Signed agreement">
               {b.signature ? (
                 <p className="text-sm">Signed by <span className="font-script text-xl">{b.signature}</span> on {fmtDate(b.signed_at, true)} · Terms version {b.terms_version} · IP {b.signer_ip || "—"} · <Link className="underline" href="/terms" target="_blank">View terms</Link></p>
@@ -63,6 +77,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
           {manager ? (
             <>
               <Link href={`/admin/photographers?booking=${b.id}`} className="block rounded-lg bg-[#ccba56] px-4 py-3 text-center text-sm font-semibold text-black hover:bg-[#bfae4c]">Find crew &amp; offer this shoot →</Link>
+              <Card title="Order tracking"><StageForm id={b.id} stage={b.stage ?? "booked"} stages={STAGES.map(({ id, label }) => ({ id, label }))} /></Card>
               <Card title="Manage"><BookingEditForm id={b.id} status={b.status} statuses={BOOKING_STATUSES} notes={b.internal_notes} crew={b.crew.map((c) => c.id)} staff={staff} /></Card>
               <Card title="Payment">
                 <p className="text-sm">{b.stripe_payment_intent ? <>Paid by card through Stripe. <a className="underline" target="_blank" rel="noopener" href={`https://dashboard.stripe.com/payments/${b.stripe_payment_intent}`}>Open in Stripe ↗</a></> : b.status === "requested" ? "Booking request: not paid online." : "No card payment recorded yet."}</p>
