@@ -4,7 +4,7 @@ import { Resend } from "resend";
 import { db, q } from "@/lib/db";
 import { SITE } from "@/lib/site";
 
-const FROM = process.env.NEWSLETTER_FROM || process.env.MAIL_FROM || "MacroSnaps <news@macrosnaps.com>";
+const FROM = process.env.NEWSLETTER_FROM || process.env.MAIL_FROM || "MacroSnaps <info@e.macrosnaps.com>";
 const ORIGIN = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : SITE.url);
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
