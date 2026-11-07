@@ -4,11 +4,12 @@ import { TERMS_VERSION } from "@/lib/terms";
 import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { createPortal } from "react-dom";
+import type { Addon } from "@/lib/addons";
 import { RATES, quoteHourly, billedHours as billed, durationHours, earliestStart, isTooSoon, MIN_NOTICE_HOURS, type Kind } from "@/lib/pricing";
 
 type Pkg = { id: string; name: string; price: number; priceNote?: string; features: string[]; hours?: number };
 type Svc = { slug: string; name: string; kind: string; group: string; packages: Pkg[] };
-type CityOpt = { slug: string; label: string };
+type CityOpt = { slug: string; label: string; state?: string };
 type Session = { key: number; date: string; start: string; end: string; venue: string; extraCrew: number };
 
 const GROUPS: Record<string, string> = { corporate: "Conferences & Corporate", wedding: "Weddings & Engagements", business: "Business & Commercial", personal: "Portraits & Family", post: "Editing" };
@@ -19,9 +20,10 @@ const fromMin = (n: number) => { const x = ((n % 1440) + 1440) % 1440; return `$
 const durationH = durationHours;
 const fmtTime = (t: string) => { if (!t) return ""; const [h, m] = t.split(":").map(Number); return `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`; };
 
-export default function BookingForm({ services, cities, initial }: { services: Svc[]; cities: CityOpt[]; initial: { service?: string; package?: string; city?: string; cancelled?: boolean } }) {
+export default function BookingForm({ services, cities, addons = [], initial }: { services: Svc[]; cities: CityOpt[]; addons?: Addon[]; initial: { service?: string; package?: string; city?: string; cancelled?: boolean } }) {
   const rates = RATES;
   const [addCompanion, setAddCompanion] = useState(false);
+  const [chosenAddons, setChosenAddons] = useState<string[]>([]);
   const [serviceSlug, setServiceSlug] = useState(services.find((s) => s.slug === initial.service)?.slug ?? services[0].slug);
   const service = services.find((s) => s.slug === serviceSlug)!;
   const hourly = service.packages.every((p) => p.hours) && (service.kind === "photo" || service.kind === "video");
@@ -51,7 +53,12 @@ export default function BookingForm({ services, cities, initial }: { services: S
   const kind = service.kind as Kind;
   const quote = hourly ? quoteHourly(kind, sessions, addCompanion) : null;
   const sessionPrice = (s: Session) => (hourly ? quoteHourly(kind, [s], addCompanion).total : pkg.price);
-  const total = quote ? quote.total : pkg.price * sessions.length;
+  // Extra add-ons: shown only for matching services (and, for 3D tours, cities in the tour states). Prices are recomputed server-side.
+  const cityState = cities.find((c) => c.label.toLowerCase() === location.trim().toLowerCase())?.state;
+  const visibleAddons = addons.filter((a) => a.services.includes(serviceSlug) && (!a.states || (!!cityState && a.states.includes(cityState))));
+  const activeAddons = visibleAddons.filter((a) => chosenAddons.includes(a.id));
+  const addonLines = activeAddons.map((a) => ({ label: `${a.title} add-on: ${a.packageName}`, amount: a.price }));
+  const total = (quote ? quote.total : pkg.price * sessions.length) + addonLines.reduce((a, l) => a + l.amount, 0);
   const other = kind === "photo" ? "Videography" : "Photography";
   const otherRate = kind === "photo" ? rates.video : rates.photo;
   const shiftEnd = (s: Session, delta: number) => {
@@ -99,7 +106,7 @@ export default function BookingForm({ services, cities, initial }: { services: S
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...f, service: service.slug, package: pkg.id, location, citySlug, agree: true, signature: signature.trim(), termsVersion: TERMS_VERSION, sessions: sessions.map(({ date, start, end, venue, extraCrew }) => ({ date, start, end, venue, extraCrew })), addCompanion: hourly && addCompanion }),
+        body: JSON.stringify({ ...f, service: service.slug, package: pkg.id, location, citySlug, agree: true, signature: signature.trim(), termsVersion: TERMS_VERSION, sessions: sessions.map(({ date, start, end, venue, extraCrew }) => ({ date, start, end, venue, extraCrew })), addCompanion: hourly && addCompanion, addons: activeAddons.map((a) => a.id) }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Something went wrong");
@@ -231,6 +238,24 @@ export default function BookingForm({ services, cities, initial }: { services: S
           <div className="sm:col-span-2"><label className={label} htmlFor="address">Venue name & address *</label><input id="address" name="address" required className={field} placeholder="e.g. Moscone Center, 747 Howard St" /></div>
         </fieldset>
 
+        {visibleAddons.length > 0 && (
+          <div className="space-y-3">
+            <p className="font-serif text-xl">Popular add-ons</p>
+            {visibleAddons.map((a) => {
+              const on = chosenAddons.includes(a.id);
+              return (
+                <label key={a.id} className={`flex cursor-pointer gap-4 border-2 p-5 transition ${on ? "border-gold-dark bg-gold/10" : "border-dashed border-gold bg-white hover:bg-gold/5"}`}>
+                  <input type="checkbox" checked={on} onChange={(e) => setChosenAddons((l) => (e.target.checked ? [...l, a.id] : l.filter((x) => x !== a.id)))} className="mt-1 h-5 w-5 accent-[#a8963b]" />
+                  <span>
+                    <span className="block font-serif text-xl">Add a {a.title.toLowerCase()}: {a.packageName} (${a.price.toLocaleString()})</span>
+                    <span className="mt-1 block text-sm text-muted">{a.blurb}</span>
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        )}
+
         <fieldset className="grid gap-5 sm:grid-cols-2">
           <legend className="mb-4 font-serif text-2xl sm:col-span-2">4. Your details</legend>
           <div><label className={label} htmlFor="name">Full name *</label><input id="name" name="name" required className={field} autoComplete="name" /></div>
@@ -247,7 +272,7 @@ export default function BookingForm({ services, cities, initial }: { services: S
           <p className="mt-4 font-semibold">{service.name}</p>
           {!hourly && <p className="text-sm text-muted">{pkg.name}</p>}
           {quote && sessions.every((x) => x.date && x.start && x.end) ? (
-            <ul className="mt-3 space-y-1.5 text-sm">{quote.lines.map((l, i) => <li key={i} className="flex justify-between gap-3"><span className="text-muted">{l.label}</span><span>${l.amount.toLocaleString()}</span></li>)}</ul>
+            <ul className="mt-3 space-y-1.5 text-sm">{[...quote.lines, ...addonLines].map((l, i) => <li key={i} className="flex justify-between gap-3"><span className="text-muted">{l.label}</span><span>${l.amount.toLocaleString()}</span></li>)}</ul>
           ) : (
           <ul className="mt-3 space-y-1.5 text-sm">
             {sessions.map((s, i) => (
@@ -256,6 +281,7 @@ export default function BookingForm({ services, cities, initial }: { services: S
                 <span>${sessionPrice(s).toLocaleString()}</span>
               </li>
             ))}
+            {addonLines.map((l) => <li key={l.label} className="flex justify-between gap-3"><span className="text-muted">{l.label}</span><span>${l.amount.toLocaleString()}</span></li>)}
           </ul>
           )}
           {!hourly && <ul className="mt-3 space-y-1 text-xs text-muted">{pkg.features.map((f) => <li key={f}>• {f}</li>)}</ul>}
