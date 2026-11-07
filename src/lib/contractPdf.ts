@@ -40,6 +40,18 @@ async function logo(pdf: PDFDocument): Promise<PDFImage | null> {
   } catch { return null; }
 }
 
+/** Accepts only a well-formed PNG of sane size (a malformed image can hang the PDF encoder). */
+export function validSignaturePng(dataUrl: string | null): boolean {
+  if (!dataUrl?.startsWith("data:image/png;base64,")) return false;
+  const b = Buffer.from(dataUrl.slice(22), "base64");
+  if (b.length < 60 || b.length > 300_000) return false;
+  const magic = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+  if (!magic.every((v, i) => b[i] === v) || b.toString("ascii", 12, 16) !== "IHDR") return false;
+  const w = b.readUInt32BE(16), h = b.readUInt32BE(20);
+  if (!w || !h || w > 4000 || h > 2000 || b.toString("ascii", b.length - 8, b.length - 4) !== "IEND") return false;
+  return true;
+}
+
 export async function buildContractPdf(c: ContractPdfInput): Promise<Uint8Array> {
   const pdf = await PDFDocument.create();
   pdf.setTitle(`${c.title} - ${c.signerName}`);
@@ -116,7 +128,7 @@ export async function buildContractPdf(c: ContractPdfInput): Promise<Uint8Array>
     page.drawText(label, { x, y: yy - 11, size: 11, font: bold, color: INK }); yy -= 20;
     page.drawText("Sign:", { x, y: yy - 46, size: 12, font: reg, color: INK });
     const sx = x + 38, sw = colW - 38;
-    if (kind === "image" && c.signaturePng?.startsWith("data:image/png;base64,")) {
+    if (kind === "image" && validSignaturePng(c.signaturePng)) {
       const img = await pdf.embedPng(Buffer.from(c.signaturePng.split(",")[1], "base64"));
       const s = Math.min(sw / img.width, 50 / img.height);
       page.drawImage(img, { x: sx, y: yy - 50, width: img.width * s, height: img.height * s });
