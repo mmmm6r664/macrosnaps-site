@@ -48,7 +48,8 @@ export async function setupOwner(_: FormState, f: FormData): Promise<FormState> 
     return { error: "That setup code isn't right." };
   }
   const email = str(f, "email").toLowerCase();
-  const name = str(f, "name", 80);
+  const name = [f.get("firstName"), f.get("lastName")].map((v) => String(v ?? "").trim().slice(0, 60)).filter(Boolean).join(" ");
+  if (!String(f.get("firstName") ?? "").trim() || !String(f.get("lastName") ?? "").trim()) return { error: "Enter both first and last name." };
   const password = String(f.get("password") ?? "");
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !name) return { error: "Enter your name and email." };
   const p = passwordProblem(password);

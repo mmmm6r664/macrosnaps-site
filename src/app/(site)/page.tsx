@@ -1,4 +1,3 @@
-import Logo from "@/components/Logo";
 import Image from "next/image";
 import Link from "next/link";
 import { IMG, photoPicker, byTags, bannerSafe } from "@/lib/images";
@@ -64,7 +63,7 @@ export default async function Home() {
         <HeroSlideshow slides={heroSlides} />
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/45 via-black/35 to-black/75" />
         <div className="w-full max-w-4xl px-4 text-center">
-          <Logo size={130} className="mx-auto" />
+          <p className="font-script text-5xl md:text-7xl">MacroSnaps</p>
           <h1 className="mt-5 flex items-center justify-center gap-4 text-xs font-semibold uppercase tracking-[.25em] md:text-sm">
             <span className="hidden h-px w-12 bg-white/70 sm:block" />{siteHero.headline}<span className="hidden h-px w-12 bg-white/70 sm:block" />
           </h1>

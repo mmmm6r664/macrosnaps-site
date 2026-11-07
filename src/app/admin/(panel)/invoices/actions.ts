@@ -12,7 +12,8 @@ const clip = (v: FormDataEntryValue | null, n = 200) => String(v ?? "").trim().s
 export async function createInvoice(_: S, f: FormData): Promise<S> {
   const u = await requireUser();
   if (!stripe) return { error: "Stripe isn't connected yet." };
-  const name = clip(f.get("name"), 120);
+  const name = [f.get("firstName"), f.get("lastName")].map((v) => String(v ?? "").trim().slice(0, 60)).filter(Boolean).join(" ");
+  if (!String(f.get("firstName") ?? "").trim() || !String(f.get("lastName") ?? "").trim()) return { error: "Enter both first and last name." };
   const email = clip(f.get("email")).toLowerCase();
   if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { error: "Enter the customer's name and a valid email." };
   const days = Math.min(90, Math.max(0, Number(f.get("days")) || 7));

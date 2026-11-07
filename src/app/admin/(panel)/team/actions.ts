@@ -8,7 +8,8 @@ export type S = { error?: string; ok?: string } | undefined;
 export async function addMember(_: S, f: FormData): Promise<S> {
   const u = await requireUser();
   const email = String(f.get("email") ?? "").trim().toLowerCase().slice(0, 200);
-  const name = String(f.get("name") ?? "").trim().slice(0, 80);
+  const name = [f.get("firstName"), f.get("lastName")].map((v) => String(v ?? "").trim().slice(0, 60)).filter(Boolean).join(" ");
+  if (!String(f.get("firstName") ?? "").trim() || !String(f.get("lastName") ?? "").trim()) return { error: "Enter both first and last name." };
   const role = String(f.get("role") ?? "staff") as Role;
   const password = String(f.get("password") ?? "");
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !name) return { error: "Enter a name and a valid email." };

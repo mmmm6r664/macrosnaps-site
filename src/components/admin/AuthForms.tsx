@@ -26,7 +26,8 @@ export function SetupForm() {
     <form onSubmit={noReset(act)} className="space-y-4">
       <Err s={s} />
       <div><label className={labelCls} htmlFor="code">Setup code</label><input id="code" name="code" required autoComplete="off" className={inputCls} /></div>
-      <div><label className={labelCls} htmlFor="name">Your name</label><input id="name" name="name" required className={inputCls} /></div>
+      <div><label className={labelCls} htmlFor="setup-first">First name *</label><input id="setup-first" name="firstName" required maxLength={60} className={inputCls} autoComplete="given-name" /></div>
+          <div><label className={labelCls} htmlFor="setup-last">Last name *</label><input id="setup-last" name="lastName" required maxLength={60} className={inputCls} autoComplete="family-name" /></div>
       <div><label className={labelCls} htmlFor="email">Email</label><input id="email" name="email" type="email" autoComplete="username" required className={inputCls} /></div>
       <div><label className={labelCls} htmlFor="password">Password</label><input id="password" name="password" type="password" autoComplete="new-password" minLength={10} required className={inputCls} /><p className="mt-1 text-xs text-black/50">At least 10 characters, with letters and a number.</p></div>
       <button disabled={pending} className={`${btnPrimary} w-full`}>{pending ? "Creating…" : "Create owner account"}</button>

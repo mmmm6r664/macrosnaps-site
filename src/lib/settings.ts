@@ -10,7 +10,7 @@ export type Faq = { q: string; a: string };
 
 export const DEFAULTS = {
   announcement: { enabled: false, text: "", link: "", linkText: "" } as Announcement,
-  home_hero: { headline: "Global Event, Conference & Wedding Photography & Videography" } as HomeHero,
+  home_hero: { headline: "America's Premier Event and Wedding Photography and Videography Company" } as HomeHero,
   home_faqs: null as Faq[] | null, // null = use the FAQs written in the code
 };
 export type SettingKey = keyof typeof DEFAULTS;

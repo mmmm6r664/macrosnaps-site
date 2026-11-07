@@ -36,7 +36,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: `Bookings need at least ${MIN_NOTICE_HOURS} hours' notice. For a sooner date, please call 877-622-4973.` }, { status: 400 });
 
   const email = s(b.email);
-  const required = { name: s(b.name), email, phone: s(b.phone, 40), location: s(b.location), address: s(b.address, 400) };
+  const fullName = [s(b.firstName, 60), s(b.lastName, 60)].filter(Boolean).join(" ") || s(b.name);
+  const required = { name: fullName, lastName: s(b.lastName, 60) || "-", email, phone: s(b.phone, 40), location: s(b.location), address: s(b.address, 400) };
   if (Object.values(required).some((v) => !v) || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
     return NextResponse.json({ error: "Please complete all required fields" }, { status: 400 });
   const signature = s(b.signature, 100);

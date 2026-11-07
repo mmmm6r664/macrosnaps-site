@@ -10,7 +10,8 @@ export function AddMemberForm({ owner }: { owner: boolean }) {
   const [s, act, pending] = useActionState(addMember, undefined);
   return (
     <form onSubmit={noReset(act)} className="grid gap-3 sm:grid-cols-2">
-      <div><label className={labelCls} htmlFor="m-name">Name</label><input id="m-name" name="name" required className={inputCls} /></div>
+      <div><label className={labelCls} htmlFor="m-first">First name *</label><input id="m-first" name="firstName" required maxLength={60} className={inputCls} /></div>
+          <div><label className={labelCls} htmlFor="m-last">Last name *</label><input id="m-last" name="lastName" required maxLength={60} className={inputCls} /></div>
       <div><label className={labelCls} htmlFor="m-email">Email</label><input id="m-email" name="email" type="email" required className={inputCls} /></div>
       <div><label className={labelCls} htmlFor="m-role">Role</label>
         <select id="m-role" name="role" className={inputCls}><option value="staff">Staff (photographer / videographer: sees only assigned shoots)</option>{owner && <option value="admin">Admin (sees and manages everything)</option>}</select></div>

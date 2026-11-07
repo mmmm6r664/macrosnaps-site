@@ -9,6 +9,8 @@ export async function POST(req: Request) {
   const b = await req.json().catch(() => null);
   if (!b) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   if (b.website) return NextResponse.json({ ok: true }); // honeypot
+  if (!b.name) b.name = [s(b.firstName, 60), s(b.lastName, 60)].filter(Boolean).join(" ");
+  if (!s(b.firstName) && !b.name) b.name = "";
   const email = s(b.email);
   const need = [b.name, b.phone, b.city, b.radius, b.role, b.experience, b.status, b.hours, b.portfolio, b.camera, b.lenses];
   if (need.some((v) => !s(v)) || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return NextResponse.json({ error: "Please complete all required fields" }, { status: 400 });
@@ -29,7 +31,7 @@ export async function POST(req: Request) {
     replyTo: email,
     subject: `Careers application: ${s(b.name, 80)} — ${s(b.role, 40)} — ${s(b.city, 60)}`,
     html: table([
-      ["Name", s(b.name)], ["Email", email], ["Phone", s(b.phone, 40)], ["City", s(b.city)], ["Work radius", s(b.radius)], ["Role", s(b.role)],
+      ["First name", s(b.firstName, 60)], ["Last name", s(b.lastName, 60)], ["Email", email], ["Phone", s(b.phone, 40)], ["City", s(b.city)], ["Work radius", s(b.radius)], ["Role", s(b.role)],
       ["Experience", EXPERIENCE.find((x) => x.id === s(b.experience))?.label], ["Work status", s(b.status, 80)], ["Working hours", s(b.hours, 80)], ["Portfolio", s(b.portfolio, 300)], ["Shoot types", shoots],
       ["Primary camera", cam ? `${cam.brand} ${cam.model} (${cam.year})` : `Other: ${s(b.otherModel, 120)} (${s(b.otherYear)}, ${s(b.otherValue)})`],
       ["Secondary cameras", s(b.secondary, 2000)], ["Lens kit", s(b.lenses, 3000)], ["Lighting kit", s(b.lighting, 3000)], ["Notes", s(b.notes, 2000)], ["Disability self-ID (voluntary, not used for decisions)", s(b.disability, 80) || "Not answered"],

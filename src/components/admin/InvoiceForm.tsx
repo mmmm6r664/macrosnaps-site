@@ -19,8 +19,9 @@ export default function InvoiceForm() {
   const total = lines.reduce((a, l) => a + (Number(l.qty) || 0) * (Number(l.price) || 0), 0);
   return (
     <form onSubmit={noReset(act)} className="space-y-6">
-      <div className="grid gap-3 sm:grid-cols-3">
-        <div><label className={labelCls} htmlFor="i-name">Customer name *</label><input id="i-name" name="name" required className={inputCls} /></div>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div><label className={labelCls} htmlFor="i-first">First name *</label><input id="i-first" name="firstName" required maxLength={60} className={inputCls} autoComplete="given-name" /></div>
+          <div><label className={labelCls} htmlFor="i-last">Last name *</label><input id="i-last" name="lastName" required maxLength={60} className={inputCls} autoComplete="family-name" /></div>
         <div><label className={labelCls} htmlFor="i-email">Customer email *</label><input id="i-email" name="email" type="email" required className={inputCls} /></div>
         <div><label className={labelCls} htmlFor="i-phone">Phone</label><input id="i-phone" name="phone" className={inputCls} /></div>
       </div>
