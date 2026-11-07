@@ -109,7 +109,7 @@ export default async function Home() {
         <div className="marble flex flex-col justify-center px-6 py-16 md:px-14">
           <h2 className="font-serif text-4xl">About Us</h2>
           <div className="prose-ms mt-6 text-justify text-[17px]">
-            <p>MacroSnaps is America's premier event and wedding photography and videography company covering conferences, corporate events, weddings and celebrations. We have photographed and filmed more than 750 corporate events and conferences and over 2,200 weddings and private events.</p>
+            <p>MacroSnaps is America&apos;s premier event and wedding photography and videography company covering conferences, corporate events, weddings and celebrations. We have photographed and filmed more than 750 corporate events and conferences and over 2,200 weddings and private events.</p>
             <p>MacroSnaps is part of MacroHype LLC, a digital media and marketing company based out of <Link href="/photographers/new-york-city-ny">New York City</Link> and <Link href="/photographers/washington-dc">Washington, DC</Link>, working with businesses for more than 13 years.</p>
             <p>We provide our award-winning photography and videography services across all 50 states, Washington, DC, Ontario and Quebec with our own photographers and videographers, so you deal with one company from booking to delivery. We are insured through State Farm and we publish our prices, so every client pays the same rate.</p>
             <p>Let us help create long-lasting memories for you. Hire us today for your conference, corporate event, wedding or any other occasion.</p>
