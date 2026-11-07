@@ -1,3 +1,4 @@
+import Logo from "@/components/Logo";
 import { redirect } from "next/navigation";
 import { SetupForm } from "@/components/admin/AuthForms";
 import { db, hasDb, q } from "@/lib/db";
@@ -11,7 +12,7 @@ export default async function Setup() {
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-sm rounded-lg border border-black/10 bg-white p-8 shadow-sm">
-        <p className="font-script text-4xl">MacroSnaps</p>
+        <Logo size={56} onLight />
         <h1 className="mb-2 mt-1 text-sm font-semibold uppercase tracking-[.2em] text-black/50">Create the owner account</h1>
         <p className="mb-6 text-sm text-black/60">This page works once, with the setup code you were given.</p>
         <SetupForm />

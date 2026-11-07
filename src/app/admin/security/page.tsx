@@ -1,3 +1,4 @@
+import Logo from "@/components/Logo";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { currentUser, isManager } from "@/lib/auth";
@@ -12,7 +13,7 @@ export default async function AdminSecurity() {
   if (!isManager(u)) redirect("/staff/security");
   return (
     <div className="mx-auto max-w-5xl p-4 md:p-8">
-      <p className="mb-4 font-script text-3xl">MacroSnaps</p>
+      <Logo size={48} onLight className="mb-4" />
       <SecurityPage u={u} manager />
       {u.totp_enabled && <Link href="/admin" className="mt-6 inline-block text-sm underline">← Back to admin</Link>}
     </div>

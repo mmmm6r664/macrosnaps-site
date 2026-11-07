@@ -8,7 +8,7 @@ import { SITE } from "@/lib/site";
 export const ORIGIN = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : SITE.url);
 
 export const emailWrap = (title: string, html: string) =>
-  `<div style="font-family:Arial,sans-serif;font-size:15px;color:#2f2e2e;max-width:600px"><div style="background:#000;color:#ccba56;font-family:Georgia,serif;font-style:italic;font-size:26px;padding:16px 20px">MacroSnaps</div><div style="padding:20px"><h2 style="font-family:Georgia,serif;font-weight:400;margin:0 0 12px">${esc(title)}</h2>${html}<p style="color:#888;font-size:12px;margin-top:28px">MacroSnaps · ${esc(SITE.phone)} · ${esc(SITE.email)}</p></div></div>`;
+  `<div style="font-family:Arial,sans-serif;font-size:15px;color:#2f2e2e;max-width:600px"><div style="background:#000;color:#ccba56;font-family:Georgia,serif;font-style:italic;font-size:26px;padding:16px 20px"><img src="https://static.wixstatic.com/media/1f3625_e1b0968a0a4344fa92e40a800af6d464~mv2.png/v1/fit/w_240,h_160,q_90/logo.png" alt="MacroSnaps" width="120" style="display:inline-block;height:auto;border:0"></div><div style="padding:20px"><h2 style="font-family:Georgia,serif;font-weight:400;margin:0 0 12px">${esc(title)}</h2>${html}<p style="color:#888;font-size:12px;margin-top:28px">MacroSnaps · ${esc(SITE.phone)} · ${esc(SITE.email)}</p></div></div>`;
 
 export const textToHtml = (t: string) => t.split(/\n{2,}/).map((p) => `<p style="margin:0 0 12px;line-height:1.6">${esc(p).replace(/\n/g, "<br>")}</p>`).join("");
 

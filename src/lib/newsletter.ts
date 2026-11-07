@@ -34,7 +34,7 @@ export function emailHtml(subject: string, preheader: string, body: string, unsu
 <span style="display:none;max-height:0;overflow:hidden">${esc(preheader)}</span>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:24px 12px">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#fff">
-<tr><td style="background:#000;padding:22px;text-align:center;font-family:Georgia,serif;font-style:italic;font-size:30px;color:#ccba56">MacroSnaps</td></tr>
+<tr><td style="background:#000;padding:22px;text-align:center;font-family:Georgia,serif;font-style:italic;font-size:30px;color:#ccba56"><img src="https://static.wixstatic.com/media/1f3625_e1b0968a0a4344fa92e40a800af6d464~mv2.png/v1/fit/w_240,h_160,q_90/logo.png" alt="MacroSnaps" width="120" style="display:inline-block;height:auto;border:0"></td></tr>
 <tr><td style="padding:28px 32px">${renderBody(body)}</td></tr>
 <tr><td style="padding:20px 32px;background:#111;color:#aaa;font-size:12px;line-height:1.6;text-align:center">
 MacroSnaps · part of MacroHype LLC · ${esc(SITE.phone)} · <a href="${ORIGIN}" style="color:#ccba56">macrosnaps.com</a><br>

@@ -1,3 +1,4 @@
+import Logo from "@/components/Logo";
 import Link from "next/link";
 import { requireUser, isManager } from "@/lib/auth";
 import { hasDb } from "@/lib/db";
@@ -13,7 +14,7 @@ export default async function Panel({ children }: { children: React.ReactNode })
     <div className="lg:grid lg:min-h-screen lg:grid-cols-[230px_1fr]">
       <aside className="border-b border-black/10 bg-[#111] text-white lg:border-b-0 lg:border-r">
         <div className="flex items-center justify-between px-5 py-4 lg:block">
-          <Link href="/admin" className="font-script text-3xl text-[#ccba56]">MacroSnaps</Link>
+          <Link href="/admin" aria-label="Admin home"><Logo size={56} /></Link>
           <p className="hidden text-[11px] uppercase tracking-[.25em] text-white/40 lg:block">Admin</p>
         </div>
         <AdminNav manager={isManager(u)} />

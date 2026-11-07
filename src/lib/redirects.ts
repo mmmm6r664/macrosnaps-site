@@ -11,6 +11,10 @@ const PRODUCT: Record<string, string> = {
 };
 
 export const redirects: R[] = [
+  // Old Wix blog: every post and blog page goes to the homepage (specific post redirects listed below take priority).
+  r("/blog", "/"),
+  r("/blog/:path*", "/"),
+  r("/blogs/:path*", "/"),
   r("/favicon.ico", "https://static.wixstatic.com/media/1f3625_e1b0968a0a4344fa92e40a800af6d464~mv2.png/v1/fit/w_64,h_64,q_90,enc_auto/favicon.png"),
   r("/new-york-city-photographers", "/photographers/new-york-city-ny"),
   r("/newyorkheadshots", "/photographers/new-york-city-ny"),
@@ -31,4 +35,5 @@ export const redirects: R[] = [
   r("/product-page/headshot-photography", "https://macroheadshots.com/"),
   r("/product-page/boudoir", "/book"),
   ...Object.entries(PRODUCT).map(([from, to]) => r(`/product-page/${from}`, `/book?service=${to}`)),
+  r("/post/:slug*", "/"),
 ];

@@ -1,3 +1,4 @@
+import Logo from "@/components/Logo";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { requireStaff } from "@/lib/auth";
@@ -23,7 +24,7 @@ export default async function Portal({ children }: { children: React.ReactNode }
   return (
     <div className="lg:grid lg:min-h-screen lg:grid-cols-[230px_1fr]">
       <aside className="border-b border-black/10 bg-[#111] text-white lg:border-b-0">
-        <div className="px-5 py-4"><Link href="/staff" className="font-script text-3xl text-[#ccba56]">MacroSnaps</Link><p className="text-[11px] uppercase tracking-[.25em] text-white/40">Staff portal</p></div>
+        <div className="px-5 py-4"><Link href="/staff" aria-label="Staff home"><Logo size={56} /></Link><p className="text-[11px] uppercase tracking-[.25em] text-white/40">Staff portal</p></div>
         <StaffNav badges={{ "/staff/offers": offers, "/staff": unread }} />
         <div className="border-t border-white/10 px-5 py-4 text-xs text-white/60">
           <p className="truncate font-semibold text-white">{u.name}</p><p className="truncate">{u.email}</p>
