@@ -1,0 +1,81 @@
+// Admin portal authentication: hashed passwords, server-side sessions in Postgres, httpOnly cookie.
+import "server-only";
+import { createHash, randomBytes, timingSafeEqual } from "crypto";
+import bcrypt from "bcryptjs";
+import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { db, q } from "@/lib/db";
+
+export type Role = "owner" | "admin" | "staff";
+export type User = { id: number; email: string; name: string; role: Role; active: boolean };
+
+const COOKIE = "ms_admin";
+const DAYS = 14;
+const sha = (s: string) => createHash("sha256").update(s).digest("hex");
+
+export const hashPassword = (pw: string) => bcrypt.hash(pw, 12);
+export const verifyPassword = (pw: string, hash: string) => bcrypt.compare(pw, hash);
+
+/** Passwords: at least 10 characters with a letter and a number. */
+export const passwordProblem = (pw: string) =>
+  pw.length < 10 ? "Use at least 10 characters." : !/[A-Za-z]/.test(pw) || !/\d/.test(pw) ? "Use letters and at least one number." : pw.length > 200 ? "Too long." : null;
+
+export async function createSession(userId: number) {
+  const sql = await db();
+  const token = randomBytes(32).toString("base64url");
+  const expires = new Date(Date.now() + DAYS * 864e5);
+  await sql`insert into sessions (token_hash, user_id, expires_at) values (${sha(token)}, ${userId}, ${expires})`;
+  await sql`delete from sessions where expires_at < now()`;
+  (await cookies()).set(COOKIE, token, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", expires });
+}
+
+export async function destroySession() {
+  const jar = await cookies();
+  const token = jar.get(COOKIE)?.value;
+  if (token) await q`delete from sessions where token_hash = ${sha(token)}`;
+  jar.delete(COOKIE);
+}
+
+export async function currentUser(): Promise<User | null> {
+  const token = (await cookies()).get(COOKIE)?.value;
+  if (!token || token.length > 100) return null;
+  const sql = await db();
+  const rows = await sql<User[]>`
+    select u.id, u.email, u.name, u.role, u.active from sessions s join users u on u.id = s.user_id
+    where s.token_hash = ${sha(token)} and s.expires_at > now() and u.active`;
+  return rows[0] ?? null;
+}
+
+/** Use at the top of every admin page and action. Staff can only reach pages that allow "staff". */
+export async function requireUser(roles: Role[] = ["owner", "admin"]): Promise<User> {
+  const u = await currentUser();
+  if (!u) redirect("/admin/login");
+  if (!roles.includes(u.role)) redirect("/admin");
+  return u;
+}
+
+export const isManager = (u: User) => u.role === "owner" || u.role === "admin";
+
+export async function clientIp() {
+  return ((await headers()).get("x-forwarded-for") ?? "").split(",")[0].trim().slice(0, 45);
+}
+
+/** At most 8 failed sign-ins per email and per IP in 15 minutes. */
+export async function tooManyAttempts(email: string, ip: string) {
+  const sql = await db();
+  const [r] = await sql<{ n: number }[]>`
+    select count(*)::int as n from audit_log
+    where action = 'login_failed' and created_at > now() - interval '15 minutes' and (detail = ${email} or detail = ${"ip:" + ip})`;
+  return r.n >= 8;
+}
+
+export function setupCodeMatches(code: string) {
+  const want = process.env.ADMIN_SETUP_CODE || "";
+  if (!want || !code) return false;
+  const a = Buffer.from(sha(code)), b = Buffer.from(sha(want));
+  return timingSafeEqual(a, b);
+}
+
+let dummy: string | undefined;
+/** A real bcrypt hash used when an email doesn't exist, so response time doesn't reveal which emails are valid. */
+export const dummyHash = () => (dummy ??= bcrypt.hashSync(randomBytes(16).toString("hex"), 12));

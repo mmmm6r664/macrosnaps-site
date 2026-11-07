@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { sendMail, table, TEAM_INBOX } from "@/lib/mail";
+import { saveInquiry } from "@/lib/records";
 
 export async function POST(req: Request) {
   const b = await req.json().catch(() => null);
@@ -9,6 +10,10 @@ export async function POST(req: Request) {
   if (!b.firstName || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !b.message) {
     return NextResponse.json({ error: "Please fill in your name, a valid email and a message" }, { status: 400 });
   }
+  const clip = (v: unknown, n = 300) => String(v ?? "").trim().slice(0, n);
+  const saved = await saveInquiry("contact", `${clip(b.firstName, 60)} ${clip(b.lastName, 60)}`.trim(), email, clip(b.phone, 40) || undefined, {
+    company: clip(b.company), date: clip(b.date), subject: clip(b.subject, 120), message: clip(b.message, 5000), page: clip(b.page),
+  });
   const r = await sendMail({
     to: TEAM_INBOX,
     replyTo: email,
@@ -24,6 +29,6 @@ export async function POST(req: Request) {
       ["Sent from page", b.page],
     ]),
   });
-  if (!r.ok) return NextResponse.json({ error: "We couldn't send your message right now" }, { status: 502 });
+  if (!r.ok && !saved) return NextResponse.json({ error: "We couldn't send your message right now" }, { status: 502 });
   return NextResponse.json({ ok: true });
 }

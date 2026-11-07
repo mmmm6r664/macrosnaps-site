@@ -6,6 +6,7 @@ import { getCity, cityLabel } from "@/lib/geo";
 import { SITE } from "@/lib/site";
 import { sendMail, table, TEAM_INBOX } from "@/lib/mail";
 import { TERMS_VERSION } from "@/lib/terms";
+import { newRef, saveBooking, attachCheckout } from "@/lib/records";
 
 const s = (v: unknown, max = 300) => String(v ?? "").trim().slice(0, max);
 const isDate = (d: string) => /^\d{4}-\d{2}-\d{2}$/.test(d) && new Date(`${d}T23:59:59`) >= new Date();
@@ -66,10 +67,18 @@ export async function POST(req: Request) {
     terms_signer_ip: signerIp,
   };
 
+  const ref = newRef();
+  details.booking_ref = ref;
+  const saved = await saveBooking({
+    ref, status: stripe ? "pending_payment" : "requested", service: service.slug, serviceName: service.name, package: details.package, addon: details.addon || undefined,
+    city: location, citySlug: city?.slug, venueAddress: required.address, customerName: required.name, email, phone: required.phone, company: details.company || undefined,
+    notes: details.notes || undefined, schedule: sessions, lines, totalCents: total * 100, signature, termsVersion: TERMS_VERSION, signedAt, signerIp,
+  });
+
   if (!stripe) {
     // Payments not configured yet: send the booking as a request so nothing is lost.
-    const r = await sendMail({ to: TEAM_INBOX, replyTo: email, subject: `Booking request (unpaid): ${service.name} — ${location} — ${sessions[0].date}`, html: table([["Email", email], ...Object.entries(details), ...lines.map((l) => [l.label, `$${l.amount}`] as [string, string])]) });
-    if (!r.ok) return NextResponse.json({ error: "Online booking is temporarily unavailable — please call 877-622-4973" }, { status: 503 });
+    const r = await sendMail({ to: TEAM_INBOX, replyTo: email, subject: `Booking request (unpaid) ${ref}: ${service.name} — ${location} — ${sessions[0].date}`, html: table([["Email", email], ...Object.entries(details), ...lines.map((l) => [l.label, `$${l.amount}`] as [string, string])]) });
+    if (!r.ok && !saved) return NextResponse.json({ error: "Online booking is temporarily unavailable — please call 877-622-4973" }, { status: 503 });
     return NextResponse.json({ requested: true });
   }
 
@@ -88,5 +97,6 @@ export async function POST(req: Request) {
     success_url: `${origin}/book/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/book?service=${service.slug}${city ? `&city=${city.slug}` : ""}&cancelled=1`,
   });
+  await attachCheckout(ref, session.id);
   return NextResponse.json({ url: session.url });
 }

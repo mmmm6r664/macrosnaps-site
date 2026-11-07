@@ -1,0 +1,146 @@
+// Postgres access for the admin portal (Neon on Vercel; any Postgres locally).
+// Vercel's Neon integration sets DATABASE_URL (and POSTGRES_URL); either works.
+import "server-only";
+import postgres from "postgres";
+
+const URL = process.env.DATABASE_URL || process.env.POSTGRES_URL || "";
+export const hasDb = !!URL;
+
+type Sql = ReturnType<typeof postgres>;
+const g = globalThis as unknown as { __msSql?: Sql; __msMigrated?: Promise<void> };
+
+function client(): Sql {
+  if (!URL) throw new Error("DATABASE_URL is not set");
+  if (!g.__msSql) {
+    const local = /localhost|127\.0\.0\.1/.test(URL);
+    g.__msSql = postgres(URL, { ssl: local ? false : "require", max: 5, idle_timeout: 20, prepare: false, onnotice: () => {} });
+  }
+  return g.__msSql;
+}
+
+const SCHEMA = `
+create table if not exists users (
+  id serial primary key,
+  email text unique not null,
+  name text not null default '',
+  password_hash text not null,
+  role text not null default 'staff',          -- owner | admin | staff
+  active boolean not null default true,
+  created_at timestamptz not null default now()
+);
+create table if not exists sessions (
+  token_hash text primary key,
+  user_id int not null references users(id) on delete cascade,
+  expires_at timestamptz not null,
+  created_at timestamptz not null default now()
+);
+create table if not exists bookings (
+  id serial primary key,
+  ref text unique not null,
+  status text not null default 'pending_payment', -- pending_payment | requested | paid | confirmed | completed | cancelled | refunded | partially_refunded
+  service text not null,
+  service_name text not null,
+  package text,
+  addon text,
+  city text,
+  city_slug text,
+  venue_address text,
+  customer_name text not null,
+  email text not null,
+  phone text,
+  company text,
+  notes text,
+  schedule jsonb not null default '[]',
+  lines jsonb not null default '[]',
+  total_cents int not null default 0,
+  amount_refunded_cents int not null default 0,
+  signature text,
+  terms_version text,
+  signed_at timestamptz,
+  signer_ip text,
+  stripe_session_id text,
+  stripe_payment_intent text,
+  internal_notes text not null default '',
+  first_date date,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists bookings_first_date on bookings(first_date);
+create index if not exists bookings_status on bookings(status);
+create table if not exists crew_assignments (
+  booking_id int not null references bookings(id) on delete cascade,
+  user_id int not null references users(id) on delete cascade,
+  primary key (booking_id, user_id)
+);
+create table if not exists inquiries (
+  id serial primary key,
+  kind text not null,                            -- contact | application
+  name text not null default '',
+  email text not null default '',
+  phone text,
+  data jsonb not null default '{}',
+  status text not null default 'new',            -- new | in_progress | done | rejected
+  notes text not null default '',
+  created_at timestamptz not null default now()
+);
+create table if not exists subscribers (
+  id serial primary key,
+  email text unique not null,
+  name text not null default '',
+  status text not null default 'subscribed',     -- subscribed | unsubscribed
+  token text not null,
+  source text,
+  created_at timestamptz not null default now()
+);
+create table if not exists newsletters (
+  id serial primary key,
+  subject text not null,
+  preheader text not null default '',
+  body text not null default '',
+  status text not null default 'draft',          -- draft | scheduled | sending | sent | failed
+  scheduled_at timestamptz,
+  sent_at timestamptz,
+  sent_count int not null default 0,
+  error text,
+  created_by int references users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create table if not exists settings (
+  key text primary key,
+  value jsonb not null,
+  updated_at timestamptz not null default now(),
+  updated_by int references users(id) on delete set null
+);
+create table if not exists audit_log (
+  id serial primary key,
+  user_id int references users(id) on delete set null,
+  action text not null,
+  detail text not null default '',
+  created_at timestamptz not null default now()
+);
+`;
+
+/** The SQL client, with tables created on first use. */
+export async function db(): Promise<Sql> {
+  const sql = client();
+  if (!g.__msMigrated) g.__msMigrated = sql.begin(async (tx) => { await tx`select pg_advisory_xact_lock(7290431)`; await tx.unsafe(SCHEMA); }).then(() => undefined).catch((e) => { g.__msMigrated = undefined; throw e; });
+  await g.__msMigrated;
+  return sql;
+}
+
+/** Runs a DB write that must never break the public site (e.g. saving a copy of a form). */
+export async function safeWrite(fn: (sql: Sql) => Promise<unknown>) {
+  if (!hasDb) return;
+  try { await fn(await db()); } catch (e) { console.error("[db] write failed", e); }
+}
+
+export async function audit(userId: number | null, action: string, detail = "") {
+  await safeWrite((sql) => sql`insert into audit_log (user_id, action, detail) values (${userId}, ${action}, ${detail.slice(0, 2000)})`);
+}
+
+/** Tagged-template shortcut: `await q<Row[]>\`select …\`` (runs on the migrated client). */
+export function q<T = Record<string, unknown>[]>(strings: TemplateStringsArray, ...values: unknown[]): Promise<T> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return db().then((sql) => (sql as any)(strings, ...values) as Promise<T>);
+}

@@ -3,6 +3,8 @@ import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { sendMail, table, TEAM_INBOX, esc } from "@/lib/mail";
 import { SITE } from "@/lib/site";
+import { markPaid } from "@/lib/records";
+import { db, hasDb } from "@/lib/db";
 
 export async function POST(req: Request) {
   if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) return NextResponse.json({ error: "Not configured" }, { status: 503 });
@@ -18,11 +20,12 @@ export async function POST(req: Request) {
     const s = event.data.object as Stripe.Checkout.Session;
     const m = s.metadata || {};
     const email = s.customer_details?.email || s.customer_email || "";
+    await markPaid(m.booking_ref, s.id, typeof s.payment_intent === "string" ? s.payment_intent : s.payment_intent?.id ?? null, s.amount_total || 0);
     const rows: [string, unknown][] = [
       ["Service", m.service], ["Package", m.package], ["Paid", `$${((s.amount_total || 0) / 100).toFixed(2)}`],
       ["Schedule", m.schedule], ["Add-on", m.addon], ["City", m.city], ["Venue / address", m.venue_address],
       ["Name", m.customer_name], ["Email", email], ["Phone", m.customer_phone], ["Company", m.company], ["Notes", m.notes],
-      ["Stripe session", s.id],
+      ["Booking ref", m.booking_ref], ["Stripe session", s.id],
     ];
     await sendMail({ to: TEAM_INBOX, replyTo: email, subject: `NEW PAID BOOKING: ${m.service} — ${m.city} — ${(m.schedule || "").slice(0, 10)}`, html: table(rows) });
     if (email)
@@ -32,6 +35,17 @@ export async function POST(req: Request) {
         subject: `Your MacroSnaps booking is confirmed — ${(m.schedule || "").slice(0, 10)}`,
         html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#2f2e2e"><p>Hi ${esc(m.customer_name)},</p><p>Thank you for booking MacroSnaps. Your date is reserved and we will confirm your photographer/videographer by email before the shoot.</p>${table(rows.slice(0, 10))}<p>Questions? Reply to this email or call ${SITE.phone}.</p><p>— The MacroSnaps team</p></div>`,
       });
+  }
+  // Refunds made directly in the Stripe dashboard stay in sync with the admin portal.
+  if (event.type === "charge.refunded" && hasDb) {
+    const ch = event.data.object as Stripe.Charge;
+    const pi = typeof ch.payment_intent === "string" ? ch.payment_intent : ch.payment_intent?.id;
+    if (pi) {
+      const sql = await db();
+      await sql`update bookings set amount_refunded_cents = ${ch.amount_refunded},
+        status = case when ${ch.amount_refunded} >= total_cents then 'refunded' else 'partially_refunded' end, updated_at = now()
+        where stripe_payment_intent = ${pi}`;
+    }
   }
   return NextResponse.json({ received: true });
 }

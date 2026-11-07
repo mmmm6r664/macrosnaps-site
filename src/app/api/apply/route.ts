@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { CAMERAS, EXPERIENCE, NOT_ELIGIBLE, checkEligibility } from "@/lib/careers";
 import { sendMail, table, TEAM_INBOX } from "@/lib/mail";
+import { saveInquiry } from "@/lib/records";
 
 const s = (v: unknown, max = 300) => String(v ?? "").trim().slice(0, max);
 
@@ -17,6 +18,12 @@ export async function POST(req: Request) {
 
   const cam = CAMERAS.find((c) => c.id === s(b.camera));
   const shoots = Array.isArray(b.shootTypes) ? b.shootTypes.map((x: unknown) => s(x, 60)).join(", ") : "";
+  // The voluntary disability answer is deliberately NOT stored with the application.
+  const saved = await saveInquiry("application", s(b.name, 120), email, s(b.phone, 40), {
+    city: s(b.city), radius: s(b.radius), role: s(b.role), experience: EXPERIENCE.find((x) => x.id === s(b.experience))?.label, workStatus: s(b.status, 80), hours: s(b.hours, 80),
+    portfolio: s(b.portfolio, 300), shootTypes: shoots, camera: cam ? `${cam.brand} ${cam.model} (${cam.year})` : `Other: ${s(b.otherModel, 120)} (${s(b.otherYear)}, ${s(b.otherValue)})`,
+    secondary: s(b.secondary, 2000), lenses: s(b.lenses, 3000), lighting: s(b.lighting, 3000), notes: s(b.notes, 2000),
+  });
   const r = await sendMail({
     to: TEAM_INBOX,
     replyTo: email,
@@ -28,6 +35,6 @@ export async function POST(req: Request) {
       ["Secondary cameras", s(b.secondary, 2000)], ["Lens kit", s(b.lenses, 3000)], ["Lighting kit", s(b.lighting, 3000)], ["Notes", s(b.notes, 2000)], ["Disability self-ID (voluntary, not used for decisions)", s(b.disability, 80) || "Not answered"],
     ]),
   });
-  if (!r.ok) return NextResponse.json({ error: "We couldn't submit your application right now — please email info@macrosnaps.com" }, { status: 502 });
+  if (!r.ok && !saved) return NextResponse.json({ error: "We couldn't submit your application right now — please email info@macrosnaps.com" }, { status: 502 });
   return NextResponse.json({ ok: true });
 }

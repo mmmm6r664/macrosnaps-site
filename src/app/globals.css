@@ -4,7 +4,7 @@
   --font-raleway: "Raleway Variable", Arial, sans-serif;
   --font-garamond: "EB Garamond Variable", Georgia, serif;
   --font-script: "Dancing Script", cursive;
-  --font-nav: "Courgette", cursive;
+  --font-nav: "Raleway Variable", "Helvetica Neue", Arial, sans-serif;
   --gold: #ccba56;
   --gold-dark: #a8963b;
   --ink: #2f2e2e;
@@ -21,7 +21,7 @@
   --font-sans: var(--font-raleway);
   --font-serif: var(--font-garamond);
   --font-script: "Dancing Script", cursive;
-  --font-nav: "Courgette", cursive;
+  --font-nav: "Raleway Variable", "Helvetica Neue", Arial, sans-serif;
 }
 
 html { scroll-behavior: smooth; }

@@ -35,6 +35,13 @@ export default function Investors() {
       <PageHero image={IMG.conferenceHero} eyebrow="Investor Relations" title="Investor Relations" subtitle="MacroSnaps is a photography and videography company with its own crews across North America and a model built on published pricing, volume and shared infrastructure." />
       <Stats />
 
+      <section className="bg-black px-4 py-14 text-center text-white md:px-6" data-reveal>
+        <p className="eyebrow !text-gold">Current funding round</p>
+        <h2 className="mx-auto mt-3 max-w-3xl font-serif text-3xl md:text-5xl">MacroSnaps is raising <span className="text-gold">$1 million</span> at a <span className="text-gold">$12.5 million</span> valuation</h2>
+        <p className="mx-auto mt-5 max-w-2xl text-white/75">The round will fund expansion of our photographer and videographer network, our corporate and conference sales team, and the technology behind online booking and delivery. Interested investors can contact us below for more information.</p>
+        <a href="#contact" className="btn-gold mt-8 inline-block">Contact investor relations</a>
+      </section>
+
       <section className="mx-auto grid max-w-7xl gap-12 px-4 py-14 md:px-6 lg:grid-cols-5" data-reveal>
         <div className="prose-ms text-[17px] lg:col-span-3">
           <h2 className="mb-5 font-serif text-3xl">Company overview</h2>

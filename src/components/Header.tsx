@@ -99,7 +99,7 @@ export default function Header() {
             <a href={SITE.phoneHref} className="flex items-center gap-2 hover:text-gold"><IconPhone className="h-4 w-4 text-gold" />{SITE.phone}</a>
             <Link href="/book" className="btn-gold ml-2 !py-2 !px-5 font-sans">Book Now</Link>
           </div>
-          <nav aria-label="Main" className="flex items-center justify-end gap-1 border-t [&>a:last-child]:pr-0 border-white/10 pt-3 font-nav text-[15px]">
+          <nav aria-label="Main" className="flex items-center justify-end gap-1 border-t [&>a:last-child]:pr-0 border-white/10 pt-3 font-nav text-[17px] font-medium tracking-wide">
             {NAV.map((item) =>
               item.mega || item.solutions ? (
                 <div key={item.label} className="group relative">
@@ -143,14 +143,14 @@ export default function Header() {
               {NAV.map((item) =>
                 item.solutions ? (
                   <details key={item.label} className="border-b border-white/10">
-                    <summary className="flex items-center justify-between py-3 font-nav text-lg text-gold">{item.label}<IconChevron className="h-4 w-4" /></summary>
+                    <summary className="flex items-center justify-between py-3 font-nav text-xl text-gold">{item.label}<IconChevron className="h-4 w-4" /></summary>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-2 pb-4 pl-1 text-sm">
                       {VERTICALS.map((v) => <Link key={v.slug} href={`/${v.kind === "industry" ? "industries" : "solutions"}/${v.slug}`}>{v.name}</Link>)}
                     </div>
                   </details>
                 ) : item.mega ? (
                   <details key={item.label} className="border-b border-white/10">
-                    <summary className="flex items-center justify-between py-3 font-nav text-lg text-gold">{item.label}<IconChevron className="h-4 w-4" /></summary>
+                    <summary className="flex items-center justify-between py-3 font-nav text-xl text-gold">{item.label}<IconChevron className="h-4 w-4" /></summary>
                     <div className="space-y-3 pb-4">
                       <CitySearch />
                       <div className="grid grid-cols-2 gap-x-4 gap-y-2 pl-1 text-sm">
@@ -161,7 +161,7 @@ export default function Header() {
                   </details>
                 ) : item.children || item.extra ? (
                   <details key={item.label} className="border-b border-white/10">
-                    <summary className="flex items-center justify-between py-3 font-nav text-lg text-gold">{item.label}<IconChevron className="h-4 w-4" /></summary>
+                    <summary className="flex items-center justify-between py-3 font-nav text-xl text-gold">{item.label}<IconChevron className="h-4 w-4" /></summary>
                     <div className="pb-3">
                       {item.href && <Link href={item.href} className="block py-2 pl-3 text-sm">All {item.label}</Link>}
                       {item.children?.map(([slug, label]) => <Link key={slug} href={hrefOf(slug)} className="block py-2 pl-3 text-sm">{label}</Link>)}
@@ -169,7 +169,7 @@ export default function Header() {
                     </div>
                   </details>
                 ) : (
-                  <Link key={item.label} href={item.href!} className="block border-b border-white/10 py-3 font-nav text-lg text-gold">{item.label}</Link>
+                  <Link key={item.label} href={item.href!} className="block border-b border-white/10 py-3 font-nav text-xl text-gold">{item.label}</Link>
                 ),
               )}
               <div className="mt-6 space-y-2 text-sm">

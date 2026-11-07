@@ -7,6 +7,7 @@ import { VERTICALS } from "@/data/verticals";
 import { REVIEW_BADGES } from "@/lib/clients";
 import { usRegions, caRegions } from "@/lib/geo";
 import { SOCIALS } from "./SocialRail";
+import NewsletterSignup from "./NewsletterSignup";
 
 const TOP = [
   ["new-york-city-ny", "New York City"], ["washington-dc", "Washington, DC"], ["los-angeles-ca", "Los Angeles"],
@@ -63,6 +64,12 @@ export default function Footer() {
               <Link key={r.slug} href={`/photographers/${r.slug}`} className="hover:text-gold">{r.name}</Link>
             ))}
           </div>
+        </div>
+
+        <div className="mt-10 flex flex-col items-center gap-3 border-t border-white/10 pt-8 text-center">
+          <h2 className="font-serif text-2xl text-white">Get photo tips, offers and event ideas</h2>
+          <p className="text-sm text-white/60">Our newsletter, a few times a year. Unsubscribe anytime.</p>
+          <NewsletterSignup />
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-8 px-4 py-4">
