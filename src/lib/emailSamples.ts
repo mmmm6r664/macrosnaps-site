@@ -25,5 +25,8 @@ export const SAMPLES: { key: string; group: string; when: string; build: () => E
   { key: "n2", group: "Welcome series (new subscribers)", when: "2 days later", build: () => E.nurture2("Sara", unsub) },
   { key: "n3", group: "Welcome series (new subscribers)", when: "3 days after that", build: () => E.nurture3("Sara", unsub) },
   { key: "accepted", group: "Photographer network", when: "You approve an application (with the contract)", build: () => E.photographerAccepted("Juan Perez", `${ORIGIN}/sign/sample`, `${ORIGIN}/staff/login`) },
+  { key: "c-send", group: "Photographer network", when: "You send a contract from admin → Contracts", build: () => E.contractToSign("Juan Perez", "Rehman Siddiq", "Contractor Photographer & Videographer Agreement", `${ORIGIN}/sign/sample`, "MS-C7") },
+  { key: "c-signed", group: "Photographer network", when: "Photographer signs (to them, signed PDF attached)", build: () => E.contractSignedSigner("Juan Perez", "Contractor Photographer & Videographer Agreement", "2026-11-07.2", "MS-C7", "juan@example.com", "Rehman Siddiq") },
+  { key: "c-team", group: "Photographer network", when: "Photographer signs (to info@macrosnaps.com, signed PDF attached)", build: () => E.contractSignedTeam("Juan Perez", "Contractor Photographer & Videographer Agreement", "2026-11-07.2", "MS-C7", "juan@example.com", "Rehman Siddiq") },
   { key: "news", group: "Newsletters", when: "When you send a newsletter", build: () => ({ subject: "Sample newsletter", html: emailHtml("Fall wedding season is here", "Tips and dates", "# Planning a fall wedding?\n\nOctober and November Saturdays are booking fast. Here are three tips for golden-hour portraits.\n\n[[Book your date|https://www.macrosnaps.com/book]]", unsub) }) },
 ];

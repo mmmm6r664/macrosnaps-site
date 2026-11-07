@@ -314,6 +314,49 @@ export function photographerAccepted(name: string, signUrl: string | null, setup
   };
 }
 
+/* ---------- contracts (e-signature) ---------- */
+export function contractToSign(name: string, companySigner: string, docTitle: string, url: string, docId: string): Email {
+  return {
+    subject: `Please sign: MacroSnaps ${docTitle}`,
+    html: layout({
+      title: "Your contract is ready to sign",
+      preheader: `${companySigner} sent you the MacroSnaps ${docTitle}.`,
+      body:
+        p(`Hi ${first(name)},`) +
+        p(`${esc(companySigner)} has signed and sent you our <b>${esc(docTitle)}</b>. Please review it and sign online. It takes about two minutes and works on your phone.`) +
+        button("Review & sign", url) +
+        callout("After you sign, you'll both receive the signed PDF by email.") +
+        small("This link is private to you. Please don't forward it. If you have questions about the agreement, just reply to this email."),
+      footerNote: `Document ID ${esc(docId)}`,
+    }),
+  };
+}
+
+const contractInfo = (docTitle: string, version: string, docId: string, signer: string, email: string, company: string) =>
+  details([["Document", `${docTitle} (v${version})`], ["Document ID", docId], ["Signed by", `${signer} <${email}>`], ["Countersigned by", `${company}, MacroSnaps`]]);
+
+export function contractSignedSigner(name: string, docTitle: string, version: string, docId: string, email: string, company: string): Email {
+  return {
+    subject: `Signed: MacroSnaps ${docTitle}`,
+    html: layout({
+      title: "You're all signed",
+      preheader: "Your signed contract is attached.",
+      body: p(`Hi ${first(name)},`) + p("Thank you! Your signed agreement is attached as a PDF for your records.") + contractInfo(docTitle, version, docId, name, email, company) + p("Next, set up your staff portal (if you haven't yet) so we can start sending you shoot offers.") + button("Open my staff portal", `${ORIGIN}/staff`) + small("Keep this email. You can also ask us for a copy at any time."),
+    }),
+  };
+}
+
+export function contractSignedTeam(name: string, docTitle: string, version: string, docId: string, email: string, company: string): Email {
+  return {
+    subject: `Contract signed: ${name} (${docId})`,
+    html: layout({
+      title: "Contract signed ✍️",
+      signoff: false,
+      body: p(`<b>${esc(name)}</b> signed the ${esc(docTitle)}. The signed PDF with the audit certificate is attached and saved in the admin portal.`) + contractInfo(docTitle, version, docId, name, email, company) + button("Open contracts", `${ORIGIN}/admin/contracts`),
+    }),
+  };
+}
+
 /* ---------- generic (contact forms, staff, admin alerts, newsletters) ---------- */
 export const generic = (title: string, bodyHtml: string, opts: { preheader?: string; unsubUrl?: string; footerNote?: string; signoff?: boolean } = {}) => layout({ title, body: bodyHtml, ...opts });
 export { details as detailsTable };

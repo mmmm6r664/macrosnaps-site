@@ -3,7 +3,8 @@ import "server-only";
 import { createHash, randomBytes } from "crypto";
 import { q, audit } from "@/lib/db";
 import { sendMail } from "@/lib/mail";
-import { ORIGIN, layout, p, small, button, callout, details, esc } from "@/lib/emailTemplate";
+import { ORIGIN } from "@/lib/emailTemplate";
+import { contractToSign, contractSignedSigner, contractSignedTeam } from "@/lib/emails";
 import { buildContractPdf } from "@/lib/contractPdf";
 import { CONTRACT, CONTRACT_VERSION, CONTRACT_TITLE, CONTRACT_INTRO } from "@/data/contractorAgreement";
 import { SITE } from "@/lib/site";
@@ -35,21 +36,9 @@ export async function sendContract(o: { name: string; email: string; userId?: nu
   const url = signUrl(token);
   let emailed = false;
   if (o.email_it !== false) {
-    const r = await sendMail({
-      to: o.email,
-      subject: `Please sign: MacroSnaps ${DOC_TITLE}`,
-      html: layout({
-        title: "Your contract is ready to sign",
-        preheader: `${o.companySigner} sent you the MacroSnaps ${DOC_TITLE}.`,
-        body:
-          p(`Hi ${esc(o.name.split(" ")[0])},`) +
-          p(`Welcome to the MacroSnaps team! ${esc(o.companySigner)} has signed and sent you our <b>${DOC_TITLE}</b>. Please review it and sign online. It takes about two minutes and works on your phone.`) +
-          button("Review & sign", url) +
-          callout(`After you sign, you'll both receive the signed PDF by email.`) +
-          small("This link is private to you. Please don't forward it. If you have questions about the agreement, just reply to this email."),
-        footerNote: `Document ID MS-C${id}`,
-      }),
-    });
+    const m = contractToSign(o.name, o.companySigner, DOC_TITLE, url, `MS-C${id}`);
+    const r = await sendMail({ to: o.email, subject: m.subject, html: m.html });
+
     emailed = r.ok;
   }
   await audit(o.by, "contract_sent", `MS-C${id} to ${o.email}`);
@@ -88,20 +77,11 @@ export async function signContract(token: string, s: { name: string; phone: stri
   await audit(uid, "contract_signed", `MS-C${c.id} by ${c.signer_email}`);
 
   const filename = `MacroSnaps-Contractor-Agreement-${c.signer_name.replace(/[^\w]+/g, "-")}-MS-C${c.id}.pdf`;
-  const info = details([["Document", `${c.doc_title} (v${c.doc_version})`], ["Document ID", `MS-C${c.id}`], ["Signed by", `${s.name} <${c.signer_email}>`], ["Countersigned by", `${c.company_signer}, MacroSnaps`]]);
-  await sendMail({
-    to: c.signer_email,
-    subject: `Signed: MacroSnaps ${c.doc_title}`,
-    html: layout({ title: "You're all signed", preheader: "Your signed contract is attached.", body: p(`Hi ${esc(s.name.split(" ")[0])},`) + p("Thank you! Your signed agreement is attached as a PDF for your records.") + info + small("Keep this email. You can also ask us for a copy at any time.") }),
-    attachments: [{ filename, content: buf }],
-  });
-  await sendMail({
-    to: SITE.email,
-    replyTo: c.signer_email,
-    subject: `Contract signed: ${c.signer_name} (MS-C${c.id})`,
-    html: layout({ title: "Contract signed ✍️", signoff: false, body: p(`<b>${esc(c.signer_name)}</b> signed the ${esc(c.doc_title)}. The signed PDF with the audit certificate is attached and saved in the admin portal.`) + info + button("Open contracts", `${ORIGIN}/admin/contracts`) }),
-    attachments: [{ filename, content: buf }],
-  });
+  const args = [c.doc_title, c.doc_version, `MS-C${c.id}`, c.signer_email, c.company_signer] as const;
+  const toSigner = contractSignedSigner(s.name, args[0], args[1], args[2], args[3], args[4]);
+  await sendMail({ to: c.signer_email, subject: toSigner.subject, html: toSigner.html, attachments: [{ filename, content: buf }] });
+  const toTeam = contractSignedTeam(s.name, args[0], args[1], args[2], args[3], args[4]);
+  await sendMail({ to: SITE.email, replyTo: c.signer_email, subject: toTeam.subject, html: toTeam.html, attachments: [{ filename, content: buf }] });
   await notifyAdmins(`${c.signer_name} signed the contractor agreement`, `MS-C${c.id}`, "/admin/contracts").catch(() => null);
   return { ok: true as const, id: c.id };
 }
