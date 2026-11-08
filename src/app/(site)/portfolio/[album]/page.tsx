@@ -14,7 +14,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ album: string }> }): Promise<Metadata> {
   const a = albumBySlug((await params).album);
   if (!a) return {};
-  const desc = `${a.eventType} photographed by MacroSnaps: ${a.photoCount} photos delivered. See the highlights and browse the full gallery.`;
+  const desc = `${a.eventType} photographed by MacroSnaps: ${a.photoCount} photos delivered. ${a.folderId ? "See the highlights and browse the full gallery." : "See a selection of our favorites."}`;
   return { title: `${a.displayTitle}: ${a.eventType} Photography`, description: desc, alternates: { canonical: `/portfolio/${a.slug}` }, openGraph: { images: a.cover ? [a.cover] : undefined } };
 }
 
@@ -31,11 +31,12 @@ export default async function AlbumPage({ params }: { params: Promise<{ album: s
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <PageHero image={a.cover ?? a.photos[0].src} eyebrow={a.eventType} title={a.displayTitle} subtitle={`${a.photoCount} photos delivered to our client. Here are a few favorites, and the full gallery below.`} />
+      <PageHero image={a.cover ?? a.photos[0].src} eyebrow={a.eventType} title={a.displayTitle} subtitle={`${a.photoCount} photos delivered to our client. ${a.folderId ? "Here are a few favorites, and the full gallery below." : "Here are some of our favorites."}`} />
       <section className="mx-auto max-w-7xl px-4 py-12 md:px-6">
         <nav className="mb-6 text-sm text-muted"><Link href="/portfolio" className="hover:text-ink">Portfolio</Link> / <Link href="/portfolio#galleries" className="hover:text-ink">{a.group}</Link></nav>
         <Gallery images={a.photos.map((p) => p.src)} alt={a.displayTitle} />
       </section>
+      {a.folderId && (
       <section className="bg-marble px-4 py-12 md:px-6">
         <div className="mx-auto max-w-7xl">
           <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
@@ -48,6 +49,7 @@ export default async function AlbumPage({ params }: { params: Promise<{ album: s
           <iframe title={`${a.displayTitle}: full gallery`} src={driveEmbedUrl(a.folderId)} loading="lazy" className="h-[75vh] w-full border border-black/10 bg-white" />
         </div>
       </section>
+      )}
       {more.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 py-12 md:px-6">
           <h2 className="mb-6 font-serif text-3xl">More {a.group.toLowerCase()}</h2>
