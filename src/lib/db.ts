@@ -326,6 +326,7 @@ insert into ticket_messages (ticket_id, author, author_name, body, created_at)
 insert into ticket_messages (ticket_id, author, author_name, body, created_at)
   select t.id, 'team', 'MacroSnaps', s.reply, s.replied_at from support_tickets s join tickets t on t.legacy_id = s.id
   where s.reply is not null and (select count(*) from ticket_messages m where m.ticket_id = t.id) = 1;
+update contracts set doc_sections = (doc_sections #>> '{}')::jsonb where jsonb_typeof(doc_sections) = 'string';
 create table if not exists email_log (
   id serial primary key,
   to_addr text not null, subject text not null default '', html text, reply_to text, attachments text[] not null default '{}',

@@ -1,7 +1,7 @@
 // E-signature workflow: send a contract by secure link → signer views & signs → PDF with audit trail saved and emailed to both sides.
 import "server-only";
 import { createHash, randomBytes } from "crypto";
-import { q, audit } from "@/lib/db";
+import { q, db, audit } from "@/lib/db";
 import { sendMail } from "@/lib/mail";
 import { ORIGIN } from "@/lib/emailTemplate";
 import { contractToSign, contractSignedSigner, contractSignedTeam } from "@/lib/emails";
@@ -30,7 +30,7 @@ export async function sendContract(o: { name: string; email: string; userId?: nu
   await q`update contracts set status = 'voided' where lower(signer_email) = ${o.email.toLowerCase()} and status in ('sent','viewed')`;
   const rows = await q<{ id: number }[]>`
     insert into contracts (user_id, inquiry_id, signer_name, signer_email, doc_title, doc_version, doc_sections, company_signer, token_hash, doc_sha256, created_by)
-    values (${o.userId ?? null}, ${o.inquiryId ?? null}, ${o.name}, ${o.email.toLowerCase()}, ${DOC_TITLE}, ${CONTRACT_VERSION}, ${JSON.stringify(sections)}::jsonb, ${o.companySigner}, ${sha(token)}, ${docSha}, ${o.by})
+    values (${o.userId ?? null}, ${o.inquiryId ?? null}, ${o.name}, ${o.email.toLowerCase()}, ${DOC_TITLE}, ${CONTRACT_VERSION}, ${(await db()).json(sections)}, ${o.companySigner}, ${sha(token)}, ${docSha}, ${o.by})
     returning id`;
   const id = rows[0].id;
   const url = signUrl(token);
@@ -86,10 +86,19 @@ export async function signContract(token: string, s: { name: string; phone: stri
   return { ok: true as const, id: c.id };
 }
 
+/** Older rows stored the sections as a JSON string inside jsonb; always hand back an array. */
+function normalize(c: ContractRow | null) {
+  if (c && typeof c.doc_sections === "string") {
+    try { c.doc_sections = JSON.parse(c.doc_sections); } catch { c.doc_sections = []; }
+  }
+  if (c && !Array.isArray(c.doc_sections)) c.doc_sections = [];
+  return c;
+}
+
 async function getContract(token: string) {
   if (!token || token.length > 100) return null;
-  return (await q<ContractRow[]>`select id, user_id, inquiry_id, signer_name, signer_email, doc_title, doc_version, doc_sections, company_signer, company_signed_at, status, sent_at,
-    viewed_at, viewed_ip, signed_at, signed_name, signed_ip, signed_ua, signature_png, pdf_sha256, doc_sha256 from contracts where token_hash = ${sha(token)}`)[0] ?? null;
+  return normalize((await q<ContractRow[]>`select id, user_id, inquiry_id, signer_name, signer_email, doc_title, doc_version, doc_sections, company_signer, company_signed_at, status, sent_at,
+    viewed_at, viewed_ip, signed_at, signed_name, signed_ip, signed_ua, signature_png, pdf_sha256, doc_sha256 from contracts where token_hash = ${sha(token)}`)[0] ?? null);
 }
 export { getContract };
 
