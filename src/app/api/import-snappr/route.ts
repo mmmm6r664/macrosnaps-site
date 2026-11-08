@@ -78,7 +78,37 @@ export async function GET(req: Request) {
     }
     return new NextResponse(await sheetFor(rows, n), { headers: { "content-type": "text/plain" } });
   }
+  if (sp.has("picks")) {
+    const rows = await q<{ job_id: string; meta: string; picks: unknown }[]>`select job_id, meta, picks from snappr_jobs where picks is not null order by created_at`;
+    return NextResponse.json(rows.map((r) => [r.job_id, r.meta, typeof r.picks === "string" ? JSON.parse(r.picks) : r.picks]));
+  }
   if (!process.env.BLOB_READ_WRITE_TOKEN) return NextResponse.json({ error: "Blob not connected" }, { status: 503 });
+  if (sp.has("imp")) {
+    // imp=job:k,k,k;job2:k,k  (k = position on that shoot's contact sheet row)
+    const res: Record<string, string> = {};
+    await Promise.all((sp.get("imp") ?? "").split(";").filter(Boolean).slice(0, 8).map(async (part) => {
+      const [job, ks] = part.split(":");
+      const [r] = await q<{ photos: unknown }[]>`select photos from snappr_jobs where job_id = ${job}`;
+      if (!r) { res[job] = "unknown"; return; }
+      const n = Math.min(12, Number(sp.get("n")) || 8);
+      const sel = spread(parse(r), n);
+      const chosen = (ks ?? "").split(",").filter(Boolean).map(Number).filter((k) => sel[k]).map((k) => sel[k].p);
+      const good: Photo[] = [];
+      await Promise.all(chosen.map(async ([id, o]) => {
+        try {
+          for (const w of [2000, 800]) {
+            const f = await fetch(src(id, w));
+            if (!f.ok || !(f.headers.get("content-type") ?? "").startsWith("image/")) throw new Error(String(f.status));
+            await put(`portfolio/snappr-${id}-${w}.jpg`, Buffer.from(await f.arrayBuffer()), { access: "public", contentType: "image/jpeg", addRandomSuffix: false });
+          }
+          good.push([id, o]);
+        } catch { /* skipped */ }
+      }));
+      await q`update snappr_jobs set picks = ${JSON.stringify(good)}::jsonb where job_id = ${job}`;
+      res[job.slice(0, 8)] = `${good.length}/${chosen.length}`;
+    }));
+    return NextResponse.json(res);
+  }
   const job = sp.get("import") ?? "";
   const [r] = await q<{ photos: unknown }[]>`select photos from snappr_jobs where job_id = ${job}`;
   if (!r) return NextResponse.json({ error: "unknown job" }, { status: 404 });

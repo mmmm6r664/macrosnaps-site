@@ -330,6 +330,7 @@ update contracts set doc_sections = (doc_sections #>> '{}')::jsonb where jsonb_t
 create table if not exists snappr_jobs (
   job_id text primary key, meta text not null default '', photos jsonb not null default '[]', created_at timestamptz not null default now()
 );
+alter table snappr_jobs add column if not exists picks jsonb;
 create table if not exists email_log (
   id serial primary key,
   to_addr text not null, subject text not null default '', html text, reply_to text, attachments text[] not null default '{}',
