@@ -32,7 +32,7 @@ async function sheetFor(rows: { label: string; items: { id: string; i: number }[
     for (let k = 0; k < row.items.length; k++) {
       const it = row.items[k];
       const buf = Buffer.from(await (await fetch(src(it.id, 300))).arrayBuffer());
-      tiles.push({ input: await sharp(buf).resize(cw, ch, { fit: "contain", background: "#111" }).toBuffer(), left: (k % cols) * cw, top: (r + Math.floor(k / cols)) * ch });
+      tiles.push({ input: await sharp(buf).rotate().resize(cw, ch, { fit: "contain", background: "#111" }).toBuffer(), left: (k % cols) * cw, top: (r + Math.floor(k / cols)) * ch });
     }
     r += Math.ceil(row.items.length / cols);
   }
@@ -94,12 +94,18 @@ export async function GET(req: Request) {
       const sel = spread(parse(r), n);
       const chosen = (ks ?? "").split(",").filter(Boolean).map(Number).filter((k) => sel[k]).map((k) => sel[k].p);
       const good: Photo[] = [];
-      await Promise.all(chosen.map(async ([id, o]) => {
+      await Promise.all(chosen.map(async ([id, o0]) => {
+        let o = o0;
         try {
           for (const w of [2000, 800]) {
             const f = await fetch(src(id, w));
             if (!f.ok || !(f.headers.get("content-type") ?? "").startsWith("image/")) throw new Error(String(f.status));
-            await put(`portfolio/snappr-${id}-${w}.jpg`, Buffer.from(await f.arrayBuffer()), { access: "public", contentType: "image/jpeg", addRandomSuffix: false });
+            const sharp = (await import("sharp")).default;
+            const img = sharp(Buffer.from(await f.arrayBuffer())).rotate();
+            const meta = await img.metadata();
+            const body = await img.jpeg({ quality: 85, mozjpeg: true }).toBuffer();
+            await put(`portfolio/snappr-${id}-${w}.jpg`, body, { access: "public", contentType: "image/jpeg", addRandomSuffix: false });
+            if (w === 2000) o = (meta.autoOrient?.height ?? meta.height ?? 0) > (meta.autoOrient?.width ?? meta.width ?? 0) ? "P" : "L";
           }
           good.push([id, o]);
         } catch { /* skipped */ }
