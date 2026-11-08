@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ album: st
   const a = albumBySlug((await params).album);
   if (!a) return {};
   const desc = a.folderId ? `${a.eventType} photographed by MacroSnaps: ${a.photoCount} photos delivered. See the highlights and browse the full gallery.` : `${a.eventType} photographed by MacroSnaps. See a selection of our favorite photos.`;
-  return { title: `${a.displayTitle}: ${a.eventType} Photography`, description: desc, alternates: { canonical: `/portfolio/${a.slug}` }, openGraph: { images: a.cover ? [a.cover] : undefined } };
+  return { title: /photo/i.test(a.eventType) ? a.displayTitle : `${a.displayTitle}: ${a.eventType} Photography`, description: desc, alternates: { canonical: `/portfolio/${a.slug}` }, openGraph: { images: a.cover ? [a.cover] : undefined } };
 }
 
 export default async function AlbumPage({ params }: { params: Promise<{ album: string }> }) {
