@@ -1,49 +1,102 @@
-// One-time import of MacroSnaps' own industrial shoot (delivered via Snappr, used with permission) into Blob storage.
-// ?sheet=N returns a numbered contact sheet (base64 JPEG) for choosing photos; ?part=N copies 10 photos in two sizes.
-// Only the fixed list of photo IDs below can be fetched, so the route is harmless if called by anyone else. Safe to remove after use.
+// One-time import of MacroSnaps' past shoots delivered through Snappr (used with permission) into our own Blob storage.
+//   POST ?k=KEY          the browser sends one shoot's photo list {job, meta, photos:[[id,"L"|"P"],...]} (CORS from app.snappr.com)
+//   GET  ?k=KEY&jobs=1   list stored shoots
+//   GET  ?k=KEY&sheet=job1,job2,...&n=8   numbered contact sheet (base64 JPEG) of n evenly spaced photos per shoot
+//   GET  ?k=KEY&import=job&pick=0,3,5     copy the chosen photos (index into that shoot's list) in two sizes
+//   GET  ?sheet=N (no key)                the first shoot's contact sheet (kept for compatibility)
+// Safe to remove after use.
 import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
+import { q } from "@/lib/db";
 import IDS from "@/data/snapprImport.json";
+import { importKey } from "@/lib/snapprKey";
 
 export const maxDuration = 300;
-const LIST = IDS as [string, string][];
 const src = (id: string, w: number) => `https://img.snappr.com/unsafe/fit-in/${w}x0/${id}`;
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const CORS = { "access-control-allow-origin": "https://app.snappr.com", "access-control-allow-methods": "POST, OPTIONS", "access-control-allow-headers": "content-type" };
+const ok = (k: string | null) => !!k && k === importKey();
 
-async function sheet(n: number) {
+type Photo = [string, string];
+const spread = (list: Photo[], n: number) => {
+  if (list.length <= n) return list.map((p, i) => ({ p, i }));
+  return Array.from({ length: n }, (_, k) => { const i = Math.round((k * (list.length - 1)) / (n - 1)); return { p: list[i], i }; });
+};
+
+async function sheetFor(rows: { label: string; items: { id: string; i: number }[] }[], cols: number) {
   const sharp = (await import("sharp")).default;
-  const per = 30, cols = 6, cw = 300, ch = 200;
-  const items = LIST.slice(n * per, n * per + per);
-  const tiles = await Promise.all(items.map(async ([id], k) => {
-    const buf = Buffer.from(await (await fetch(src(id, 400))).arrayBuffer());
-    const img = await sharp(buf).resize(cw, ch, { fit: "contain", background: "#111" }).toBuffer();
-    const label = Buffer.from(`<svg width="40" height="22"><rect width="40" height="22" fill="#ff0"/><text x="4" y="17" font-size="16" font-family="Arial" font-weight="bold">${n * per + k}</text></svg>`);
-    return { input: await sharp(img).composite([{ input: label, top: 0, left: 0 }]).toBuffer(), left: (k % cols) * cw, top: Math.floor(k / cols) * ch };
-  }));
-  const rows = Math.ceil(items.length / cols);
-  const out = await sharp({ create: { width: cols * cw, height: rows * ch, channels: 3, background: "#111" } }).composite(tiles).jpeg({ quality: 70 }).toBuffer();
+  const cw = 225, ch = 150;
+  const tiles: { input: Buffer; left: number; top: number }[] = [];
+  let r = 0;
+  for (const row of rows) {
+    for (let k = 0; k < row.items.length; k++) {
+      const it = row.items[k];
+      const buf = Buffer.from(await (await fetch(src(it.id, 300))).arrayBuffer());
+      tiles.push({ input: await sharp(buf).resize(cw, ch, { fit: "contain", background: "#111" }).toBuffer(), left: (k % cols) * cw, top: (r + Math.floor(k / cols)) * ch });
+    }
+    r += Math.ceil(row.items.length / cols);
+  }
+  const out = await sharp({ create: { width: cols * cw, height: Math.max(1, r) * ch, channels: 3, background: "#111" } }).composite(tiles).jpeg({ quality: 68 }).toBuffer();
   return out.toString("base64");
+}
+
+export async function OPTIONS() { return new NextResponse(null, { status: 204, headers: CORS }); }
+
+export async function POST(req: Request) {
+  const u = new URL(req.url);
+  if (!ok(u.searchParams.get("k"))) return NextResponse.json({ error: "no" }, { status: 403, headers: CORS });
+  const b = JSON.parse(await req.text()) as { job: string; meta: string; photos: Photo[] };
+  if (!UUID.test(b.job)) return NextResponse.json({ error: "bad job" }, { status: 400, headers: CORS });
+  const photos = (b.photos ?? []).filter((p) => Array.isArray(p) && UUID.test(p[0])).map((p) => [p[0], p[1] === "P" ? "P" : "L"]).slice(0, 3000);
+  await q`insert into snappr_jobs (job_id, meta, photos) values (${b.job}, ${String(b.meta ?? "").slice(0, 300)}, ${JSON.stringify(photos)}::jsonb)
+    on conflict (job_id) do update set meta = excluded.meta, photos = excluded.photos`;
+  return NextResponse.json({ ok: true, n: photos.length }, { headers: CORS });
 }
 
 export async function GET(req: Request) {
   const sp = new URL(req.url).searchParams;
-  if (sp.has("sheet")) return new NextResponse(await sheet(Number(sp.get("sheet")) || 0), { headers: { "content-type": "text/plain" } });
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return NextResponse.json({ error: "Blob not connected" }, { status: 503 });
-  const only = (sp.get("ids") ?? "").split(",").filter(Boolean);
-  const part = Number(sp.get("part") ?? 0);
-  const pool = only.length ? LIST.filter(([id]) => only.includes(id)) : LIST.slice(part * 10, part * 10 + 10);
-  const out: { id: string; large?: string; small?: string; error?: string }[] = [];
-  for (const [id] of pool.slice(0, 12)) {
-    try {
-      const r: Record<string, string> = {};
-      for (const [k, w] of [["large", 2000], ["small", 800]] as const) {
-        const res = await fetch(src(id, w));
-        const type = res.headers.get("content-type") ?? "";
-        if (!res.ok || !type.startsWith("image/")) throw new Error(`fetch ${res.status} ${type}`);
-        const b = await put(`portfolio/snappr-${id}-${w}.jpg`, Buffer.from(await res.arrayBuffer()), { access: "public", contentType: "image/jpeg", addRandomSuffix: false });
-        r[k] = b.url;
-      }
-      out.push({ id, large: r.large, small: r.small });
-    } catch (e) { out.push({ id, error: String(e).slice(0, 200) }); }
+  if (!sp.get("k")) {
+    if (!sp.has("sheet")) return NextResponse.json({ error: "no" }, { status: 403 });
+    const n = Number(sp.get("sheet")) || 0;
+    const items = (IDS as Photo[]).slice(n * 30, n * 30 + 30).map(([id], k) => ({ id, i: n * 30 + k }));
+    return new NextResponse(await sheetFor([{ label: "", items }], 6), { headers: { "content-type": "text/plain" } });
   }
+  if (!ok(sp.get("k"))) return NextResponse.json({ error: "no" }, { status: 403 });
+  const parse = (r: { photos: unknown }) => (typeof r.photos === "string" ? JSON.parse(r.photos) : r.photos) as Photo[];
+  if (sp.has("jobs")) {
+    const rows = await q<{ job_id: string; meta: string; photos: unknown }[]>`select job_id, meta, photos from snappr_jobs order by created_at`;
+    return NextResponse.json(rows.map((r) => [r.job_id, r.meta, parse(r).length, parse(r).filter((p) => p[1] === "L").length]));
+  }
+  if (sp.has("sheet")) {
+    const jobs = (sp.get("sheet") ?? "").split(",").filter((j) => UUID.test(j)).slice(0, 8);
+    const n = Math.min(12, Number(sp.get("n")) || 8);
+    const rows = [];
+    for (const j of jobs) {
+      const [r] = await q<{ photos: unknown }[]>`select photos from snappr_jobs where job_id = ${j}`;
+      if (!r) continue;
+      rows.push({ label: j, items: spread(parse(r), n).map(({ p, i }) => ({ id: p[0], i })) });
+    }
+    return new NextResponse(await sheetFor(rows, n), { headers: { "content-type": "text/plain" } });
+  }
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return NextResponse.json({ error: "Blob not connected" }, { status: 503 });
+  const job = sp.get("import") ?? "";
+  const [r] = await q<{ photos: unknown }[]>`select photos from snappr_jobs where job_id = ${job}`;
+  if (!r) return NextResponse.json({ error: "unknown job" }, { status: 404 });
+  const list = parse(r);
+  const n = Math.min(12, Number(sp.get("n")) || 8);
+  const idx = new Set(spread(list, n).map((x) => x.i));
+  const pick = (sp.get("pick") ?? "").split(",").filter(Boolean).map(Number).filter((i) => idx.has(i)).slice(0, 12);
+  const out: { id: string; o: string; error?: string }[] = [];
+  await Promise.all(pick.map(async (i) => {
+    const [id, o] = list[i];
+    try {
+      for (const w of [2000, 800]) {
+        const res = await fetch(src(id, w));
+        if (!res.ok || !(res.headers.get("content-type") ?? "").startsWith("image/")) throw new Error(`fetch ${res.status}`);
+        await put(`portfolio/snappr-${id}-${w}.jpg`, Buffer.from(await res.arrayBuffer()), { access: "public", contentType: "image/jpeg", addRandomSuffix: false });
+      }
+      out.push({ id, o });
+    } catch (e) { out.push({ id, o, error: String(e).slice(0, 100) }); }
+  }));
   return NextResponse.json({ out });
 }
