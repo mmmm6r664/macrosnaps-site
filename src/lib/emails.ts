@@ -546,3 +546,80 @@ export function ticketTeam(kind: "new" | "reply", t: TicketMail & { email: strin
     }),
   };
 }
+
+/* ---------- crew: shoot assignment confirmation ---------- */
+export type CrewAssignment = {
+  name: string;            // photographer's full name
+  type: string;            // e.g. "Conference Photography"
+  dates: string;           // e.g. "Friday & Saturday"
+  sessions: { day: string; time: string }[]; // e.g. { day: "Friday 16th October", time: "3:00 PM – 5:00 PM (2 hours)" }
+  location: string;        // multi-line: venue, street, city
+  pay: string;             // e.g. "$350"
+  scope: string[];         // scope-of-work bullets
+  city?: string;           // used in the subject, e.g. "New York, NY"
+};
+
+const bullets = (items: string[]) =>
+  `<ul style="margin:0 0 18px;padding-left:22px;font:16px/1.65 Helvetica,Arial,sans-serif;color:#333">${items.map((i) => `<li style="margin:0 0 8px">${i}</li>`).join("")}</ul>`;
+const head = (t: string) => `<p style="margin:22px 0 10px;font:700 17px/1.4 Helvetica,Arial,sans-serif;color:#111">${esc(t)}</p>`;
+
+/** Default scope bullets for common shoot types (edit per assignment). */
+export const DEFAULT_SCOPE: Record<string, string[]> = {
+  conference: [
+    "Capture speakers on stage, keynote presentations, panel discussions, and other important conference sessions.",
+    "Take candid and posed photographs of attendees, networking moments, and group interactions.",
+    "Capture event branding, signage, sponsor displays, and venue details.",
+    "Make sure to photograph individual speakers and important moments during each session.",
+    "Focus on storytelling through photography, capturing the energy, professionalism, and atmosphere of the event.",
+    "Ensure consistent photography coverage across all days.",
+  ],
+};
+
+/** Sent to a photographer/videographer when a shoot is assigned to them. */
+export function crewAssignment(a: CrewAssignment): Email {
+  const firstName = first(a.name);
+  const plain = (s: string) => esc(s);
+  return {
+    subject: `[CONFIRMED] ${a.type} – ${a.dates}${a.city ? ` – ${a.city}` : ""}`,
+    html: layout({
+      title: `Your ${a.type} assignment is confirmed`,
+      preheader: `${a.dates}${a.city ? ` in ${a.city}` : ""} · Compensation ${a.pay}`,
+      body:
+        p(`Hi ${firstName},`) +
+        p("As discussed, here are the details of your upcoming assignment:") +
+        p(`<b>Type:</b> ${plain(a.type)}<br><b>Dates:</b> ${plain(a.dates)}`) +
+        head("Schedule:") +
+        bullets(a.sessions.map((s) => `<b>${plain(s.day)}:</b> ${plain(s.time)}`)) +
+        p(`<b>Location:</b><br>${plain(a.location).replace(/\n/g, "<br>")}`) +
+        p(`<b>Compensation:</b> ${plain(a.pay)}`) +
+        head("Scope of Work") +
+        bullets(a.scope.map(plain)) +
+        head("Technical Shooting Guidelines") +
+        bullets([
+          "Shoot in <b>RAW format</b>.",
+          "Never drop shutter speed below <b>1/60</b>.",
+          "Keep ISO no higher than <b>2500 indoors</b> and <b>500 outdoors</b>.",
+          "Keep the aperture as low as possible, ideally between <b>f/2 – f/3</b>, whenever appropriate.",
+          "Do <b>not use direct flash</b> — only use flash with a <b>white reflector</b> or bounce it off the ceiling for softer lighting.",
+        ]) +
+        head("Deliverables") +
+        bullets([
+          "Shoot in <b>RAW format</b>.",
+          "Only <b>unedited RAW files</b> are required.",
+          "Send unedited RAW files via <b>Google Drive or Dropbox within 24 hours</b> after each shoot.",
+          "Retain all RAW files for at least <b>30 days</b> in case they are needed.",
+        ]) +
+        head("As per the contract") +
+        bullets([
+          `Always introduce yourself as <b>${firstName} from MacroSnaps</b>.`,
+          "Represent <b>MacroSnaps exclusively</b> — do not engage the client directly for future work or represent other companies.",
+          "All photographs are the <b>intellectual property of MacroSnaps</b>. Delete all files after 30 days unless instructed otherwise.",
+          "Do not share any photos directly with the client — all communication and delivery must go through <b>MacroSnaps</b>.",
+          "Please provide your <b>CashApp, PayPal, or Venmo ID</b> for payment after the assignment.",
+        ]) +
+        p("<b>Important:</b><br>Please do not ask the client directly for tips. A feedback and tipping link will be sent after delivery. Any tip received will be forwarded to you in full without deductions.") +
+        p(`<b>Performance Note:</b><br>Let us know if you have any questions. We look forward to your excellent coverage of this ${plain(a.type.replace(/\s*photography\s*$/i, "").toLowerCase() || "shoot")}. Our top-performing contractors typically receive <b>5–10 shoots per week</b>, so please always give your best. After each session, we send the client a <b>satisfaction survey</b>, and their feedback determines how many future assignments you receive.`) +
+        p("Thank you,<br><b>Team MacroSnaps</b>"),
+    }),
+  };
+}
