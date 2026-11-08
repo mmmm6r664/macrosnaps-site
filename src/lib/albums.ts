@@ -66,7 +66,11 @@ const FEATURED_SLUGS = [
   "ibm-event-november-2025",
   "family-session-washington-december-2021",
   "indian-engagement-session-july-2025",
-  "restaurant-chef-photos-new-york-may-2022",
+  "food-photography-new-york-may-2022",
+  "wedding-middleburg-september-2021",
+  "food-photography-annandale-july-2021-2",
+  "engagement-session-great-falls-june-2021",
+  "food-photography-warwick-august-2025",
   "bat-mitzvah-april-2025",
   "manufacturing-plant-team-photos-february-2024",
 ];
