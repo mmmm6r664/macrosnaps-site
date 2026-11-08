@@ -38,5 +38,8 @@ export async function POST(req: Request) {
     ]),
   });
   if (!r.ok && !saved) return NextResponse.json({ error: "We couldn't submit your application right now — please email info@macrosnaps.com" }, { status: 502 });
+  const { applicationReceived } = await import("@/lib/emails");
+  const ack = applicationReceived(s(b.name, 120), s(b.role, 40));
+  await sendMail({ to: email, subject: ack.subject, html: ack.html }).catch(() => null);
   return NextResponse.json({ ok: true });
 }

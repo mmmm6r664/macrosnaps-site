@@ -7,7 +7,7 @@ import { markPaid } from "@/lib/records";
 import { db, hasDb, q } from "@/lib/db";
 import { ORIGIN } from "@/lib/emailTemplate";
 import { bookingConfirmed, teamNewBooking } from "@/lib/emails";
-import { onCheckoutExpired } from "@/lib/automations";
+import { onCheckoutExpired, when } from "@/lib/automations";
 
 export async function POST(req: Request) {
   if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) return NextResponse.json({ error: "Not configured" }, { status: 503 });
@@ -31,15 +31,16 @@ export async function POST(req: Request) {
     // Itemized lines saved with the booking.
     let lines: { label: string; amount: number }[] = [];
     let bookingId: number | null = null;
+    let pretty = "";
     if (hasDb && m.booking_ref) {
       try {
-        const r = await q<{ id: number; lines: { label: string; amount: number }[] }[]>`select id, lines from bookings where ref = ${m.booking_ref}`;
-        if (r[0]) { lines = r[0].lines || []; bookingId = r[0].id; }
+        const r = await q<{ id: number; lines: { label: string; amount: number }[]; schedule: { date: string; start: string; end: string }[] }[]>`select id, lines, schedule from bookings where ref = ${m.booking_ref}`;
+        if (r[0]) { lines = r[0].lines || []; bookingId = r[0].id; if (r[0].schedule?.length) pretty = when(r[0].schedule); }
       } catch (e) { console.error("[webhook] lines lookup failed", e); }
     }
     const total = `$${((s.amount_total || 0) / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })} USD`;
     const info = {
-      firstName: m.customer_name || "", service: m.service || "Your booking", ref: m.booking_ref || "", schedule: m.schedule || "",
+      firstName: m.customer_name || "", service: m.service || "Your booking", ref: m.booking_ref || "", schedule: pretty || m.schedule || "",
       city: m.city, venue: m.venue_address, lines: lines.length ? lines : [{ label: m.service || "Booking", amount: (s.amount_total || 0) / 100 }],
       total, phone: m.customer_phone, email, company: m.company, notes: m.notes,
     };

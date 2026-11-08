@@ -20,7 +20,7 @@ export const stopUrl = (ref: string) => `${ORIGIN}/api/reminders/stop?ref=${enco
 
 type Pending = { id: number; ref: string; email: string; customer_name: string; service_name: string; schedule: { date: string; start: string; end: string }[]; city: string | null; lines: { label: string; amount: number }[]; total_cents: number; reminders_sent: number };
 const t12 = (t: string) => { const [h, m] = t.split(":").map(Number); return `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`; };
-const when = (s: Pending["schedule"]) => s.map((x) => `${new Date(`${x.date}T12:00:00Z`).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" })}${x.start ? `, ${t12(x.start)}–${t12(x.end)}` : ""}`).join("; ");
+export const when = (s: Pending["schedule"]) => s.map((x) => `${new Date(`${x.date}T12:00:00Z`).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" })}${x.start ? `, ${t12(x.start)}–${t12(x.end)}` : ""}`).join("; ");
 
 /** Sends abandoned-booking reminder n (1–3) and records it. Skips if the person has since paid for any booking. */
 export async function sendReminder(b: Pending, n: 1 | 2 | 3) {

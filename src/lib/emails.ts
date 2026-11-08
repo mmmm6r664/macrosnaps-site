@@ -16,7 +16,7 @@ const PORTAL = `${ORIGIN}/account`;
 /* ---------- bookings ---------- */
 export function bookingConfirmed(b: BookingInfo): Email {
   return {
-    subject: `You're booked! ${b.service} on ${b.schedule.slice(0, 40)} (ref ${b.ref})`,
+    subject: `You're booked! ${b.service} on ${b.schedule.split(";")[0]}${b.schedule.includes(";") ? " +more" : ""} (ref ${b.ref})`,
     html: layout({
       title: "You're booked!",
       preheader: `Your ${b.service.toLowerCase()} is confirmed. Here are your details and what happens next.`,
@@ -43,7 +43,7 @@ export function bookingConfirmed(b: BookingInfo): Email {
 
 export function teamNewBooking(b: BookingInfo, adminUrl?: string): Email {
   return {
-    subject: `NEW PAID BOOKING: ${b.service} · ${b.city ?? ""} · ${b.schedule.slice(0, 24)} · ${b.total}`,
+    subject: `NEW PAID BOOKING ${b.ref}: ${b.service} · ${b.city ?? ""} · ${b.schedule.split(";")[0]} · ${b.total}`,
     html: layout({
       title: "New paid booking 🎉",
       preheader: `${b.firstName} booked ${b.service} for ${b.total}.`,
@@ -444,6 +444,45 @@ export function crewDriveTeam(kind: "received" | "overdue", c: { name: string; e
         details([["Order", c.ref], ["Service", c.service], ["Client", c.client], ["Crew", `${c.name} <${c.email}>`], ...(c.link ? [["Drive link", c.link] as [string, string]] : [])]) +
         (c.link ? button("Open the Drive folder", c.link) : "") +
         button("Open the booking", c.adminUrl),
+    }),
+  };
+}
+
+/* ---------- form confirmations ---------- */
+/** Auto-reply to someone who used the contact form. */
+export function contactReceived(name: string, subject: string, message: string): Email {
+  return {
+    subject: "We received your message | MacroSnaps",
+    html: layout({
+      title: "Thanks for reaching out!",
+      preheader: "We'll reply within one business day.",
+      body:
+        p(`Hi ${first(name)},`) +
+        p("Thank you for contacting MacroSnaps. We've received your message and a member of our team will get back to you <b>within one business day</b>, usually much sooner.") +
+        details([["Subject", subject || "General inquiry"]]) +
+        `<div style="margin:0 0 22px;padding:14px 18px;border-left:3px solid #ccba56;background:#faf8f2;font:15px/1.6 Arial,sans-serif;color:#333">${esc(message).replace(/\n/g, "<br>")}</div>` +
+        p("Ready to lock in your date? You can see prices and book online in a few minutes.") +
+        button("See prices & book online", `${ORIGIN}/book`),
+    }),
+  };
+}
+
+/** Confirmation to a careers applicant. */
+export function applicationReceived(name: string, role: string): Email {
+  return {
+    subject: "We received your application | MacroSnaps",
+    html: layout({
+      title: "Thanks for applying!",
+      preheader: "Our team reviews every application. Here's what happens next.",
+      body:
+        p(`Hi ${first(name)},`) +
+        p(`Thank you for applying to join MacroSnaps as a ${esc((role || "photographer").toLowerCase())}. We've received your application and portfolio.`) +
+        steps([
+          ["We review your work", "Our team looks at every portfolio and your gear and experience."],
+          ["We get in touch", "If it's a fit, we'll email you with next steps, including your contractor agreement and crew portal access."],
+        ]) +
+        p("There's nothing else you need to do right now. Questions? Just reply to this email."),
+      footerNote: "You're receiving this because you applied to join the MacroSnaps team.",
     }),
   };
 }

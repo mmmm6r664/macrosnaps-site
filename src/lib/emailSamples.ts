@@ -4,7 +4,7 @@ import * as E from "./emails";
 import { ORIGIN } from "./emailTemplate";
 import { emailHtml } from "./newsletter";
 
-const lines = [{ label: "Nov 20: Photography, 4 hrs", amount: 550 }, { label: "Nov 20: Premium editing, 4 photographer-hrs", amount: 200 }];
+const lines = [{ label: "Nov 20: Photography, 4 hrs", amount: 550 }, { label: "Premium editing", amount: 200 }];
 const booking: E.BookingInfo = { firstName: "Sara Khan", service: "Wedding Photography", ref: "MS-SAMPLE1", schedule: "Fri, Nov 20, 2:00 PM–6:00 PM", city: "Dallas, TX", venue: "The Adolphus", lines, total: "$750.00 USD", email: "sara@example.com", phone: "555-111-2222", notes: "Please capture the grandparents." };
 const ab = { firstName: "Sara", service: "Wedding Photography", schedule: "Fri, Nov 20, 2:00 PM–6:00 PM", city: "Dallas, TX", lines, total: "$750 USD", resumeUrl: `${ORIGIN}/book`, stopUrl: `${ORIGIN}/` };
 const unsub = `${ORIGIN}/unsubscribe`;
@@ -54,6 +54,8 @@ export const SAMPLES: { key: string; group: string; when: string; build: () => E
   { key: "c-send", group: "Photographer network", when: "You send a contract from admin → Contracts", build: () => E.contractToSign("Juan Perez", "Rehman Siddiq", "Contractor Photographer & Videographer Agreement", `${ORIGIN}/sign/sample`, "MS-C7") },
   { key: "c-signed", group: "Photographer network", when: "Photographer signs (to them, signed PDF attached)", build: () => E.contractSignedSigner("Juan Perez", "Contractor Photographer & Videographer Agreement", "2026-11-07.2", "MS-C7", "juan@example.com", "Rehman Siddiq") },
   { key: "c-team", group: "Photographer network", when: "Photographer signs (to info@macrosnaps.com, signed PDF attached)", build: () => E.contractSignedTeam("Juan Perez", "Contractor Photographer & Videographer Agreement", "2026-11-07.2", "MS-C7", "juan@example.com", "Rehman Siddiq") },
+  { key: "contact-ack", group: "Website forms", when: "Someone sends the contact form (to them)", build: () => E.contactReceived("Monica Jones", "Wedding Photography", "Our ceremony and reception will be at Historic Oakland Manor. Are you available?") },
+  { key: "apply-ack", group: "Website forms", when: "Someone applies on the Careers page (to them)", build: () => E.applicationReceived("Juan Perez", "Photographer") },
   { key: "t-open", group: "Support tickets", when: "Someone opens a support ticket (to them)", build: () => E.ticketOpened({ no: "MS-T1001", name: "Sara Khan", subject: "Can we add an extra hour?", category: "Change or cancel a booking", orderRef: "MS-24817", url: `${ORIGIN}/support` }, "Hi! Our reception is running late. Can we add one more hour of photography on the day?") },
   { key: "t-team", group: "Support tickets", when: "New ticket, or the customer replies (to info@macrosnaps.com)", build: () => E.ticketTeam("new", { no: "MS-T1001", name: "Sara Khan", subject: "Can we add an extra hour?", category: "Change or cancel a booking", orderRef: "MS-24817", url: `${ORIGIN}/admin/support`, email: "sara@example.com", source: "client", phone: "555-201-3344" }, "Hi! Our reception is running late. Can we add one more hour of photography on the day?") },
   { key: "t-reply", group: "Support tickets", when: "You reply to a ticket (to them)", build: () => E.ticketUpdated({ no: "MS-T1001", name: "Sara Khan", subject: "Can we add an extra hour?", category: "Change or cancel a booking", url: `${ORIGIN}/support` }, "in_progress", "Absolutely! We've added an hour to your booking. You'll receive an updated invoice shortly.") },

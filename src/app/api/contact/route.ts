@@ -30,5 +30,8 @@ export async function POST(req: Request) {
     ]),
   });
   if (!r.ok && !saved) return NextResponse.json({ error: "We couldn't send your message right now" }, { status: 502 });
+  const { contactReceived } = await import("@/lib/emails");
+  const ack = contactReceived(clip(b.firstName, 60), clip(b.subject, 120), clip(b.message, 5000));
+  await sendMail({ to: email, subject: ack.subject, html: ack.html }).catch(() => null);
   return NextResponse.json({ ok: true });
 }
