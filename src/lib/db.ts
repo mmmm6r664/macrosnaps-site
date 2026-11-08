@@ -289,6 +289,10 @@ alter table bookings add column if not exists reminders_stopped boolean not null
 alter table subscribers add column if not exists nurture_step int not null default 3;
 alter table subscribers alter column nurture_step set default 0;
 alter table crew_assignments add column if not exists drive_link text;
+alter table payouts alter column user_id drop not null;
+alter table payouts add column if not exists payee_name text;
+alter table payouts add column if not exists payee_email text;
+alter table payouts add column if not exists emailed_at timestamptz;
 alter table crew_assignments add column if not exists drive_link_at timestamptz;
 alter table crew_assignments add column if not exists drive_asked_at timestamptz;
 alter table crew_assignments add column if not exists drive_reminded_at timestamptz;

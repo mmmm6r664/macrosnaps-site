@@ -159,3 +159,33 @@ export async function sendWelcome(_: S, f: FormData): Promise<S> {
   revalidatePath("/admin/photographers");
   return sent ? { ok: `Welcome email sent to ${m.email}.${f.get("offline") === "on" ? " Contract recorded as signed outside the portal." : ""}` } : { error: "The email couldn't be sent. Please try again." };
 }
+
+export type AssignS = { error?: string; ok?: string; preview?: { to: string; subject: string; html: string } } | undefined;
+
+/** Preview or send the "[CONFIRMED] …" assignment email to a photographer/videographer. */
+export async function sendAssignment(_: AssignS, f: FormData): Promise<AssignS> {
+  const u = await requireUser();
+  const { crewAssignment } = await import("@/lib/emails");
+  const g = (k: string) => String(f.get(k) ?? "").trim();
+  let name = g("name"), email = g("email").toLowerCase();
+  const member = Number(f.get("member") || 0);
+  if (member) {
+    const [m] = await q<{ name: string; email: string }[]>`select name, email from users where id = ${member}`;
+    if (m) { name = name || m.name; email = email || m.email; }
+  }
+  if (!name || !/^\S+@\S+\.\S+$/.test(email)) return { error: "Choose a team member or enter a name and email." };
+  const sessions = g("sessions").split("\n").map((l) => l.trim()).filter(Boolean).map((l) => {
+    const i = l.indexOf("|");
+    return i > 0 ? { day: l.slice(0, i).trim(), time: l.slice(i + 1).trim() } : { day: l, time: "" };
+  });
+  const a = {
+    name, type: g("type") || "Event Photography", dates: g("dates"), city: g("city") || undefined, sessions,
+    location: g("location"), pay: g("pay"), scope: g("scope").split("\n").map((l) => l.replace(/^[•\-*]\s*/, "").trim()).filter(Boolean),
+  };
+  if (!a.dates || !sessions.length || !a.location || !a.pay) return { error: "Fill in dates, schedule, location and compensation." };
+  const m = crewAssignment(a);
+  if (f.get("mode") !== "send") return { preview: { to: `${name} <${email}>`, subject: m.subject, html: m.html } };
+  const sent = await sendMail({ to: email, subject: m.subject, html: m.html });
+  await audit(u.id, "crew_assignment_email", `${email}: ${m.subject}`);
+  return sent.ok ? { ok: `Sent to ${name} (${email}).` } : { error: "The email couldn't be sent. Check the email log for details." };
+}

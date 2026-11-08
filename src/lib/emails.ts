@@ -622,3 +622,23 @@ export function crewAssignment(a: CrewAssignment): Email {
     }),
   };
 }
+
+/* ---------- crew: payment sent ---------- */
+/** Confirmation to a photographer/videographer that they've been paid. */
+export function payoutSent(o: { name: string; amount: string; method: string | null; date: string; note?: string; portal?: boolean }): Email {
+  const when = new Date(`${o.date}T12:00:00`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  return {
+    subject: `Payment sent: ${o.amount}${o.note ? ` for ${o.note}` : ""}`,
+    html: layout({
+      title: "Your payment has been sent",
+      preheader: `We sent you ${o.amount}${o.method ? ` via ${o.method}` : ""} on ${when}.`,
+      body:
+        p(`Hi ${first(o.name)},`) +
+        p(`Thank you for your work with MacroSnaps. We've sent your payment${o.note ? ` for <b>${esc(o.note)}</b>` : ""}.`) +
+        details([["Amount", o.amount], ["Method", o.method], ["Date sent", when], ["For", o.note]]) +
+        p(`Please allow a little time for it to show in your ${esc(o.method || "account")}. If anything looks wrong, just reply to this email.`) +
+        (o.portal ? small("You can see all your payments anytime in your crew portal under Payments.") : "") +
+        p("We look forward to working with you again."),
+    }),
+  };
+}
