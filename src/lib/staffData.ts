@@ -26,7 +26,7 @@ export async function myShoots(userId: number) {
 }
 
 export async function myPayouts(userId: number) {
-  return q<{ id: number; amount_cents: number; paid_on: Date; method: string | null; note: string }[]>`select id, amount_cents, paid_on, method, note from payouts where user_id = ${userId} order by paid_on desc, id desc`;
+  return q<{ id: number; amount_cents: number; paid_on: string; method: string | null; note: string }[]>`select id, amount_cents, paid_on::text as paid_on, method, note from payouts where user_id = ${userId} order by paid_on desc, id desc`;
 }
 
 export async function myNotifications(userId: number, limit = 20) {

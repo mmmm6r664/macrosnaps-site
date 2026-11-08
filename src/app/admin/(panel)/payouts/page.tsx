@@ -14,8 +14,8 @@ export default async function Payouts({ searchParams }: { searchParams: Promise<
   const year = Number((await searchParams).year) || new Date().getFullYear();
   const staff = await q<{ id: number; name: string; payout_method: string | null; payout_handle: string | null }[]>`
     select u.id, u.name, p.payout_method, p.payout_handle from users u left join staff_profiles p on p.user_id = u.id where u.role = 'staff' order by u.name`;
-  const recent = await q<{ id: number; name: string; amount_cents: number; paid_on: Date; method: string | null; note: string; booking_id: number | null; emailed: boolean }[]>`
-    select p.id, coalesce(u.name, p.payee_name, '') as name, p.amount_cents, p.paid_on, p.method, p.note, p.booking_id, (p.emailed_at is not null) as emailed from payouts p left join users u on u.id = p.user_id
+  const recent = await q<{ id: number; name: string; amount_cents: number; paid_on: string; method: string | null; note: string; booking_id: number | null; emailed: boolean }[]>`
+    select p.id, coalesce(u.name, p.payee_name, '') as name, p.amount_cents, p.paid_on::text as paid_on, p.method, p.note, p.booking_id, (p.emailed_at is not null) as emailed from payouts p left join users u on u.id = p.user_id
     where extract(year from p.paid_on) = ${year} order by p.paid_on desc, p.id desc limit 200`;
   const totals = await q<{ user_id: string; name: string; email: string; total: number; tax_legal_name: string | null; tax_business_name: string | null; tax_address: string | null; tin_type: string | null; tin_last4: string | null; w9_signed_at: Date | null }[]>`
     select coalesce(u.id::text, 'e:' || lower(p.payee_email)) as user_id, max(coalesce(u.name, p.payee_name, '')) as name, max(coalesce(u.email, p.payee_email, '')) as email, sum(p.amount_cents)::int as total,

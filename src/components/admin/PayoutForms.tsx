@@ -6,15 +6,18 @@ import { inputCls, labelCls, btnPrimary } from "./ui";
 
 const Msg = ({ s }: { s: S }) => (s ? <p role="status" className={`rounded px-3 py-2 text-sm ${s.error ? "bg-red-50 text-red-800" : "bg-emerald-50 text-emerald-800"}`}>{s.error ?? s.ok}</p> : null);
 
+/** Cash App handles start with $, Venmo handles with @. */
+export const methodFor = (h: string) => (/(^|\s)\$\w/.test(h) || /cash\s*app/i.test(h) ? "Cash App" : /(^|\s)@\w/.test(h) || /venmo/i.test(h) ? "Venmo" : /paypal/i.test(h) ? "PayPal" : "");
+
 export function AddPayoutForm({ staff }: { staff: { id: number; name: string; payout: string }[] }) {
   const [s, act, pending] = useActionState<S, FormData>(addPayout, undefined);
   return (
     <form onSubmit={noReset(act)} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
-      <div className="xl:col-span-2"><label className={labelCls} htmlFor="po-u">Paid to</label><select id="po-u" name="user_id" className={inputCls}><option value="">Choose…</option>{staff.map((x) => <option key={x.id} value={x.id}>{x.name}{x.payout ? ` (${x.payout})` : ""}</option>)}</select></div>
+      <div className="xl:col-span-2"><label className={labelCls} htmlFor="po-u">Paid to</label><select id="po-u" name="user_id" className={inputCls} onChange={(e) => { const h = staff.find((x) => String(x.id) === e.target.value)?.payout ?? ""; const m = methodFor(h); const sel = document.getElementById("po-m") as HTMLSelectElement | null; if (m && sel) sel.value = m; }}><option value="">Choose…</option>{staff.map((x) => <option key={x.id} value={x.id}>{x.name}{x.payout ? ` (${x.payout})` : ""}</option>)}</select></div>
       <div><label className={labelCls} htmlFor="po-pn">…or name</label><input id="po-pn" name="payee_name" className={inputCls} /></div>
       <div><label className={labelCls} htmlFor="po-pe">…and email</label><input id="po-pe" name="payee_email" type="email" className={inputCls} /></div>
       <div><label className={labelCls} htmlFor="po-a">Amount $</label><input id="po-a" name="amount" inputMode="decimal" className={inputCls} /></div>
-      <div><label className={labelCls} htmlFor="po-d">Date paid</label><input id="po-d" name="paid_on" type="date" defaultValue={new Date().toISOString().slice(0, 10)} className={inputCls} /></div>
+      <div><label className={labelCls} htmlFor="po-d">Date paid</label><input id="po-d" name="paid_on" type="date" defaultValue={new Date().toLocaleDateString("en-CA", { timeZone: "America/New_York" })} className={inputCls} /></div>
       <div><label className={labelCls} htmlFor="po-m">Method</label><select id="po-m" name="method" className={inputCls}>{["Venmo", "PayPal", "Cash App", "Zelle", "Check", "Bank transfer", "Other"].map((m) => <option key={m}>{m}</option>)}</select></div>
       <div><label className={labelCls} htmlFor="po-b">Booking # (optional)</label><input id="po-b" name="booking_id" inputMode="numeric" className={inputCls} /></div>
       <div className="xl:col-span-2"><label className={labelCls} htmlFor="po-n">Note (shown in the email)</label><input id="po-n" name="note" placeholder="e.g. Smith wedding, 6 hours" className={inputCls} /></div>
