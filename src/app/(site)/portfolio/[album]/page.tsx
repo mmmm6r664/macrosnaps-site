@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ALBUMS, albumBySlug, CATEGORIES, driveEmbedUrl, driveFolderUrl } from "@/lib/albums";
+import { ALBUMS, albumBySlug, CATEGORIES, driveEmbedUrl, driveFolderUrl, embedsFor } from "@/lib/albums";
 import { Gallery, CtaBand } from "@/components/blocks";
 import { SITE } from "@/lib/site";
 import { PageHero } from "@/components/blocks";
@@ -38,15 +38,20 @@ export default async function AlbumPage({ params }: { params: Promise<{ album: s
       </section>
       {a.folderId && (
       <section className="bg-marble px-4 py-12 md:px-6">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h2 className="font-serif text-3xl">The full gallery</h2>
-              <p className="text-sm text-muted">Every photo from this {a.category === "conference" || a.category === "corporate" ? "event" : "celebration"}, as delivered ({a.photoCount} photos).</p>
-            </div>
-            <a href={driveFolderUrl(a.folderId)} target="_blank" rel="noopener noreferrer" className="btn-outline !py-2.5">Open in Google Drive ↗</a>
+        <div className="mx-auto max-w-7xl space-y-12">
+          <div>
+            <h2 className="font-serif text-3xl">The full gallery</h2>
+            <p className="text-sm text-muted">Every photo from this {a.category === "conference" || a.category === "corporate" ? "event" : "celebration"}, as delivered ({a.photoCount} photos).</p>
           </div>
-          <iframe title={`${a.displayTitle}: full gallery`} src={driveEmbedUrl(a.folderId)} loading="lazy" className="h-[75vh] w-full border border-black/10 bg-white" />
+          {embedsFor(a.folderId).map((e) => (
+            <div key={e.id}>
+              <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+                {e.label ? <h3 className="font-serif text-2xl">{e.label}</h3> : <span />}
+                <a href={driveFolderUrl(e.id)} target="_blank" rel="noopener noreferrer" className="btn-outline !py-2.5">Open {e.label || "gallery"} in Google Drive ↗</a>
+              </div>
+              <iframe title={`${a.displayTitle}${e.label ? `: ${e.label}` : ": full gallery"}`} src={driveEmbedUrl(e.id)} loading="lazy" className="h-[75vh] w-full border border-black/10 bg-white" />
+            </div>
+          ))}
         </div>
       </section>
       )}

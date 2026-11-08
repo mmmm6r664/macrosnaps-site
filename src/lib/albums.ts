@@ -3,6 +3,7 @@
 // the full album is embedded from Drive.
 import albums from "@/data/albums.json";
 import hosted from "@/data/drivePhotos.json";
+import subfolders from "@/data/albumSubfolders.json";
 
 type Hosted = Record<string, { large: string; small: string }>;
 const H = hosted as Hosted;
@@ -70,3 +71,12 @@ const FEATURED_SLUGS = [
   "manufacturing-plant-team-photos-february-2024",
 ];
 export const FEATURED: Album[] = FEATURED_SLUGS.map((s) => albumBySlug(s)).filter((a): a is Album => !!a);
+
+/** Drive galleries to embed for an album: multi-day albums show each day separately. */
+const SUBS = subfolders as unknown as Record<string, { replace: boolean; parts: [string, string][] }>;
+export function embedsFor(folderId: string): { id: string; label: string }[] {
+  const s = SUBS[folderId];
+  if (!s) return [{ id: folderId, label: "" }];
+  const parts = s.parts.map(([id, label]) => ({ id, label }));
+  return s.replace ? parts : [{ id: folderId, label: parts.some((p) => p.label.startsWith("Day")) ? "More photos" : "" }, ...parts];
+}
