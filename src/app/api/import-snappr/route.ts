@@ -53,6 +53,13 @@ export async function POST(req: Request) {
   return NextResponse.json({ ok: true, n: photos.length }, { headers: CORS });
 }
 
+/** "@12" means the 13th stored shoot (in the order they were collected). */
+async function resolveJob(j: string) {
+  if (!j.startsWith("@")) return j;
+  const r = await q<{ job_id: string }[]>`select job_id from snappr_jobs order by created_at offset ${Number(j.slice(1)) || 0} limit 1`;
+  return r[0]?.job_id ?? "";
+}
+
 export async function GET(req: Request) {
   const sp = new URL(req.url).searchParams;
   if (!sp.get("k")) {
@@ -68,7 +75,7 @@ export async function GET(req: Request) {
     return NextResponse.json(rows.map((r) => [r.job_id, r.meta, parse(r).length, parse(r).filter((p) => p[1] === "L").length]));
   }
   if (sp.has("sheet")) {
-    const jobs = (sp.get("sheet") ?? "").split(",").filter((j) => UUID.test(j)).slice(0, 8);
+    const jobs = (await Promise.all((sp.get("sheet") ?? "").split(",").slice(0, 8).map(resolveJob))).filter((j) => UUID.test(j));
     const n = Math.min(12, Number(sp.get("n")) || 8);
     const rows = [];
     for (const j of jobs) {
@@ -89,7 +96,8 @@ export async function GET(req: Request) {
     // imp=job:k,k,k;job2:k,k  (k = position on that shoot's contact sheet row)
     const res: Record<string, string> = {};
     await Promise.all((sp.get("imp") ?? "").split(";").filter(Boolean).slice(0, 8).map(async (part) => {
-      const [job, ks] = part.split(":");
+      const [ref, ks] = part.split(":");
+      const job = await resolveJob(ref);
       const [r] = await q<{ photos: unknown }[]>`select photos from snappr_jobs where job_id = ${job}`;
       if (!r) { res[job] = "unknown"; return; }
       const n = Math.min(12, Number(sp.get("n")) || 8);
