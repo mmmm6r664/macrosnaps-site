@@ -80,7 +80,9 @@ export async function GET(req: Request) {
   }
   if (sp.has("picks")) {
     const rows = await q<{ job_id: string; meta: string; picks: unknown }[]>`select job_id, meta, picks from snappr_jobs where picks is not null order by created_at`;
-    return NextResponse.json(rows.map((r) => [r.job_id, r.meta, typeof r.picks === "string" ? JSON.parse(r.picks) : r.picks]));
+    const body = JSON.stringify(rows.map((r) => [r.job_id, r.meta, typeof r.picks === "string" ? JSON.parse(r.picks) : r.picks]));
+    // pad=1 makes the response large enough that the fetch tool saves it to a file instead of inlining it.
+    return new NextResponse(sp.has("pad") ? body + " ".repeat(200_000) : body, { headers: { "content-type": "application/json" } });
   }
   if (!process.env.BLOB_READ_WRITE_TOKEN) return NextResponse.json({ error: "Blob not connected" }, { status: 503 });
   if (sp.has("imp")) {
