@@ -40,7 +40,8 @@ export const ALBUMS: Album[] = (albums as Raw[])
     const photos = a.picks.filter((p) => H[p.id]).map((p) => ({ ...p, src: H[p.id].large }));
     return { ...a, slug, photos, cover: (photos.find((p) => p.banner) ?? photos[0])?.src, group: CATEGORIES[a.category]?.label ?? "Events" };
   })
-  .filter((a) => a.photos.length)
+  // Albums with only one or two usable photos are too thin to show.
+  .filter((a) => a.photos.length >= 3)
   .sort((x, y) => (y.date ?? "").localeCompare(x.date ?? ""));
 
 export const albumBySlug = (slug: string) => ALBUMS.find((a) => a.slug === slug);
