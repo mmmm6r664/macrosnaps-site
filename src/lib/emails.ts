@@ -618,8 +618,7 @@ export function crewAssignment(a: CrewAssignment): Email {
           "Please provide your <b>CashApp, PayPal, or Venmo ID</b> for payment after the assignment.",
         ]) +
         p("<b>Important:</b><br>Please do not ask the client directly for tips. A feedback and tipping link will be sent after delivery. Any tip received will be forwarded to you in full without deductions.") +
-        p(`<b>Performance Note:</b><br>Let us know if you have any questions. We look forward to your excellent coverage of this ${plain(a.type.replace(/\s*photography\s*$/i, "").toLowerCase() || "shoot")}. Our top-performing contractors typically receive <b>5–10 shoots per week</b>, so please always give your best. After each session, we send the client a <b>satisfaction survey</b>, and their feedback determines how many future assignments you receive.`) +
-        p("Thank you,<br><b>Team MacroSnaps</b>"),
+        p(`<b>Performance Note:</b><br>Let us know if you have any questions. We look forward to your excellent coverage of this ${plain(a.type.replace(/\s*photography\s*$/i, "").toLowerCase() || "shoot")}. Our top-performing contractors typically receive <b>5–10 shoots per week</b>, so please always give your best. After each session, we send the client a <b>satisfaction survey</b>, and their feedback determines how many future assignments you receive.`),
     }),
   };
 }
