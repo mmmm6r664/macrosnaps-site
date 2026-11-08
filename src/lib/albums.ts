@@ -47,19 +47,25 @@ export const albumBySlug = (slug: string) => ALBUMS.find((a) => a.slug === slug)
 export const driveFolderUrl = (id: string) => `https://drive.google.com/drive/folders/${id}`;
 export const driveEmbedUrl = (id: string) => `https://drive.google.com/embeddedfolderview?id=${id}#grid`;
 
-/** Hand-picked standout galleries shown first on the Portfolio page (matched by title; missing ones are skipped). */
-const FEATURED_TITLES = [
-  "FIX Trading Conference · October 2026",
-  "Garden Wedding · October 2026",
-  "Quality Trust Gala 2025",
-  "Nikkah Ceremony · October 2024",
-  "Healthcare Conference · October 2026",
-  "Waterfront Wedding · August 2026",
-  "Haldi Ceremony · November 2025",
-  "IBM Event · November 2025",
-  "Indian Engagement Session · July 2025",
-  "Bat Mitzvah · April 2025",
-  "Manufacturing Plant Team Photos · February 2024",
-  "Newborn Session · Hoboken · March 2022",
+/** Hand-picked standout galleries shown first on the Portfolio page (by slug; missing ones are skipped). */
+const FEATURED_SLUGS = [
+  "fix-trading-conference-october-2026",
+  "garden-wedding-october-2026",
+  "maternity-session-jersey-city-february-2022",
+  "quality-trust-gala-2025",
+  "nikkah-ceremony-october-2024",
+  "graduation-portraits-new-york-may-2022-2",
+  "healthcare-conference-october-2026",
+  "engagement-session-warwick-september-2022",
+  "waterfront-wedding-august-2026",
+  "portrait-session-alexandria-december-2021",
+  "haldi-ceremony-november-2025",
+  "newborn-session-hoboken-march-2022",
+  "ibm-event-november-2025",
+  "family-session-washington-december-2021",
+  "indian-engagement-session-july-2025",
+  "restaurant-chef-photos-new-york-may-2022",
+  "bat-mitzvah-april-2025",
+  "manufacturing-plant-team-photos-february-2024",
 ];
-export const FEATURED: Album[] = FEATURED_TITLES.map((t) => ALBUMS.find((a) => a.displayTitle === t)).filter((a): a is Album => !!a);
+export const FEATURED: Album[] = FEATURED_SLUGS.map((s) => albumBySlug(s)).filter((a): a is Album => !!a);
