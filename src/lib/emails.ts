@@ -314,6 +314,35 @@ export function photographerAccepted(name: string, signUrl: string | null, setup
   };
 }
 
+/** Sent when a new photographer/videographer is fully onboarded (contract on file). */
+export function photographerWelcome(name: string, portalUrl: string, firstLogin: boolean): Email {
+  return {
+    subject: "Welcome to MacroSnaps! 🎉",
+    html: layout({
+      title: "Welcome to MacroSnaps!",
+      preheader: "Your contractor agreement is on file. Here's how working with us works.",
+      hero: IMG.conferenceHero,
+      body:
+        p(`Hi ${first(name)},`) +
+        p("Welcome to MacroSnaps! We're thrilled to have you on the team. Your contractor agreement is on file, so you're all set to start receiving shoots.") +
+        h2("How it works") +
+        steps([
+          [firstLogin ? "Set up your crew portal" : "Complete your crew portal", "Add your payout method (Venmo, PayPal or Cash App), W-9 details, the shoot types you do and how far you'll travel. This is how we match you with shoots."],
+          ["Accept shoot offers", "We'll send shoot offers in your area by email and in your portal. Accept the ones that fit your schedule. All the details you need are in the portal."],
+          ["Shoot as MacroSnaps", "On a MacroSnaps shoot you represent MacroSnaps only. Please share only MacroSnaps materials and contact details with clients."],
+          ["Deliver within 24 hours", "After each shoot, upload all original RAW files and the edited .JPG files to Google Drive. We'll email you a link to send it to us. Everything is due within 24 hours of the event."],
+          ["Get paid", "Payment is released once all edited and RAW files are delivered. You can track it under Payments in your portal."],
+        ]) +
+        button(firstLogin ? "Set up my crew portal" : "Open my crew portal", portalUrl) +
+        (firstLogin ? small("The setup link works for 7 days. After that, use \u201cForgot password\u201d on the sign-in page.") : "") +
+        divider() +
+        p("Questions about a shoot, payments or anything else? Open a support ticket in your portal or just reply to this email. We're happy to help.") +
+        p("We're excited to work with you!"),
+      footerNote: "You're receiving this because you joined the MacroSnaps team.",
+    }),
+  };
+}
+
 /* ---------- contracts (e-signature) ---------- */
 export function contractToSign(name: string, companySigner: string, docTitle: string, url: string, docId: string): Email {
   return {

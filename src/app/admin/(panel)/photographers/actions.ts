@@ -139,3 +139,23 @@ export async function requestFiles(_: S, f: FormData): Promise<S> {
   revalidatePath("/admin/photographers");
   return r.emailed ? { ok: `Sent to ${email}. Files are due by ${r.due}. They'll get a reminder 6 hours before, and you'll be emailed when the link arrives (or if it's late).` } : { ok: `Created, but the email couldn't be sent. Send them this link: ${r.url}` };
 }
+
+/** Welcome email for a team member who is fully onboarded. Optionally records a contract signed outside the portal. */
+export async function sendWelcome(_: S, f: FormData): Promise<S> {
+  const u = await requireUser();
+  const id = Number(f.get("user"));
+  const [m] = await q<{ id: number; email: string; name: string; role: string }[]>`select id, email, name, role from users where id = ${id} and active and role = 'staff'`;
+  if (!m) return { error: "Choose a team member." };
+  if (f.get("offline") === "on") {
+    await q`update staff_profiles set contract_version = coalesce(contract_version, 'Signed outside the portal'), contract_signed_at = coalesce(contract_signed_at, now()) where user_id = ${id}`;
+    await q`update contracts set status = 'voided' where lower(signer_email) = ${m.email.toLowerCase()} and status in ('sent', 'viewed')`;
+  }
+  const loggedIn = (await q`select 1 from sessions where user_id = ${id} limit 1`).length > 0 || (await q`select 1 from audit_log where user_id = ${id} and action = 'login' limit 1`.catch(() => [])).length > 0;
+  const url = loggedIn ? `${ORIGIN}/staff` : `${ORIGIN}/staff/set-password?t=${await createPasswordToken(id, "set")}`;
+  const { photographerWelcome } = await import("@/lib/emails");
+  const msg = photographerWelcome(m.name, url, !loggedIn);
+  const sent = (await sendMail({ to: m.email, subject: msg.subject, html: msg.html })).ok;
+  await audit(u.id, "staff_welcome", m.email);
+  revalidatePath("/admin/photographers");
+  return sent ? { ok: `Welcome email sent to ${m.email}.${f.get("offline") === "on" ? " Contract recorded as signed outside the portal." : ""}` } : { error: "The email couldn't be sent. Please try again." };
+}
