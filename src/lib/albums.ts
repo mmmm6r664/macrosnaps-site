@@ -7,7 +7,7 @@ import hosted from "@/data/drivePhotos.json";
 type Hosted = Record<string, { large: string; small: string }>;
 const H = hosted as Hosted;
 type Pick = { id: string; tags: string[]; alt: string; banner?: boolean };
-type Raw = { folderId: string; displayTitle: string; category: string; eventType: string; photoCount: number; date?: string; picks: Pick[] };
+type Raw = { source?: string; folderId: string; displayTitle: string; category: string; eventType: string; photoCount: number; date?: string; picks: Pick[] };
 
 export const CATEGORIES: Record<string, { label: string; service: string; serviceName: string }> = {
   wedding: { label: "Weddings", service: "/wedding-photography", serviceName: "wedding photography" },
@@ -20,6 +20,11 @@ export const CATEGORIES: Record<string, { label: string; service: string; servic
   family: { label: "Family & baby", service: "/family-photography", serviceName: "family photography" },
   baby: { label: "Family & baby", service: "/gender-reveal-baby-shower-photography", serviceName: "baby shower photography" },
   headshots: { label: "Headshots", service: "https://macroheadshots.com/", serviceName: "headshot photography" },
+  newborn: { label: "Family & baby", service: "/newborn-photography", serviceName: "newborn photography" },
+  maternity: { label: "Family & baby", service: "/maternity-photography", serviceName: "maternity photography" },
+  graduation: { label: "Graduations", service: "/graduation-photography", serviceName: "graduation photography" },
+  food: { label: "Food & commercial", service: "/food-photography", serviceName: "food photography" },
+  commercial: { label: "Food & commercial", service: "/commercial-photography", serviceName: "commercial photography" },
 };
 
 const slugify = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[^\w\s-]/g, "").replace(/[\s_·]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "").slice(0, 70);
