@@ -2,7 +2,7 @@
 import { useActionState, useState } from "react";
 import { invoiceEmailAction, type PreviewS } from "@/app/admin/(panel)/invoices/actions";
 import { noReset } from "./noReset";
-import { btnGold, btnGhost } from "./ui";
+import { btnGold, btnGhost, previewDoc, PREVIEW_SANDBOX } from "./ui";
 
 /** Copy-to-clipboard for the pay link, plus a ready-to-text message. */
 export function CopyLink({ url, text }: { url: string; text: string }) {
@@ -43,7 +43,7 @@ export function InvoiceEmail({ id, draft }: { id: string; draft: boolean }) {
         <div className="mt-4">
           <p className="text-sm"><b>From:</b> MacroSnaps &lt;info@e.macrosnaps.com&gt;<br /><b>To:</b> {s.to}<br /><b>Subject:</b> {s.subject}</p>
           {draft && <p className="mt-1 text-xs text-black/50">Preview of a draft: the invoice number and pay link are filled in when it&apos;s finalized.</p>}
-          <iframe title="Invoice email preview" srcDoc={s.html} sandbox="" className="mt-2 h-[760px] w-full rounded border border-black/10" />
+          <iframe title="Invoice email preview" srcDoc={previewDoc(s.html)} sandbox={PREVIEW_SANDBOX} className="mt-2 h-[760px] w-full rounded border border-black/10" />
         </div>
       )}
     </form>

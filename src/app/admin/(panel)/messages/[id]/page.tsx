@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { q } from "@/lib/db";
-import { PageHead, Card, Badge, fmtDate, btnGhost } from "@/components/admin/ui";
+import { PageHead, Card, Badge, fmtDate, btnGhost, previewDoc, PREVIEW_SANDBOX } from "@/components/admin/ui";
 
 export const metadata = { title: "Sent email" };
 
@@ -25,7 +25,7 @@ export default async function SentEmail({ params }: { params: Promise<{ id: stri
       </Card>
       <div className="mt-5 overflow-hidden rounded-lg border border-black/10 bg-[#eeeae0]">
         {m.html
-          ? <iframe title="Email preview" sandbox="" srcDoc={m.html} className="h-[1200px] w-full border-0" />
+          ? <iframe title="Email preview" sandbox={PREVIEW_SANDBOX} srcDoc={previewDoc(m.html)} className="h-[1200px] w-full border-0" />
           : <p className="p-6 text-sm text-black/60">The copy of this email is no longer stored (emails older than 180 days keep only the summary above).</p>}
       </div>
     </>

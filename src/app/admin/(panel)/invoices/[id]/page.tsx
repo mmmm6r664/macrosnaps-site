@@ -8,9 +8,9 @@ import { invoiceAction } from "../actions";
 
 export const metadata = { title: "Invoice" };
 
-export default async function InvoicePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ created?: string }> }) {
+export default async function InvoicePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ created?: string; "draft-preview"?: string }> }) {
   await requireUser();
-  const { id } = await params; const { created } = await searchParams;
+  const { id } = await params; const sp = await searchParams; const created = sp.created;
   if (!stripe || !/^in_[A-Za-z0-9]+$/.test(id)) notFound();
   const inv = await stripe.invoices.retrieve(id).catch(() => null);
   if (!inv) notFound();
@@ -22,6 +22,7 @@ export default async function InvoicePage({ params, searchParams }: { params: Pr
   return (
     <>
       <PageHead title={`Invoice ${inv.number ?? "(draft)"}`} sub={`${inv.customer_name ?? ""} · ${inv.customer_email ?? ""}`} actions={<Link href="/admin/invoices" className={btnGhost}>← All invoices</Link>} />
+      {sp["draft-preview"] && inv.status === "draft" && <Notice>You clicked the pay button in a draft preview. The real pay page exists once the invoice is finalized; in the client&apos;s email this button opens it.</Notice>}
       {created === "draft" && <Notice tone="green">Draft saved. Nothing has been sent.</Notice>}
       {created === "sent" && <Notice tone="green">Invoice finalized and emailed from MacroSnaps.</Notice>}
       <div className="grid gap-6 lg:grid-cols-2">

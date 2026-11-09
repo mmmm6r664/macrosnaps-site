@@ -2,7 +2,7 @@
 import { useActionState } from "react";
 import { sendAssignment, type AssignS } from "@/app/admin/(panel)/photographers/actions";
 import { noReset } from "./noReset";
-import { inputCls, labelCls, btnGold, btnGhost } from "./ui";
+import { inputCls, labelCls, btnGold, btnGhost, previewDoc, PREVIEW_SANDBOX } from "./ui";
 
 type Member = { id: number; name: string; email: string };
 
@@ -39,7 +39,7 @@ export default function SendAssignment({ team, defaultScope }: { team: Member[];
       {s?.preview && (
         <div className="mt-4">
           <p className="text-sm"><b>To:</b> {s.preview.to}<br /><b>Subject:</b> {s.preview.subject}</p>
-          <iframe title="Email preview" srcDoc={s.preview.html} className="mt-2 h-[700px] w-full rounded border border-black/10" sandbox="" />
+          <iframe title="Email preview" srcDoc={previewDoc(s.preview.html)} className="mt-2 h-[700px] w-full rounded border border-black/10" sandbox={PREVIEW_SANDBOX} />
         </div>
       )}
     </details>

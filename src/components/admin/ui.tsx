@@ -86,3 +86,8 @@ export function Pager({ base, page, more }: { base: string; page: number; more: 
 export const money = (cents: number) => `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: cents % 100 ? 2 : 0, maximumFractionDigits: 2 })}`;
 export const fmtDate = (d: Date | string | null | undefined, time = false) =>
   d ? new Date(typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d) ? `${d}T12:00:00Z` : d).toLocaleString("en-US", { timeZone: "America/New_York", month: "short", day: "numeric", year: "numeric", ...(time ? { hour: "numeric", minute: "2-digit" } : {}) }) : "—";
+
+/** Email HTML for a preview iframe: every link opens in a new tab (pages like Stripe refuse to load inside a frame). */
+export const previewDoc = (html: string) => (/<head[^>]*>/i.test(html) ? html.replace(/<head([^>]*)>/i, '<head$1><base target="_blank">') : `<base target="_blank">${html}`);
+/** Sandbox for email previews: no scripts, but links may open in a new tab. */
+export const PREVIEW_SANDBOX = "allow-popups allow-popups-to-escape-sandbox";

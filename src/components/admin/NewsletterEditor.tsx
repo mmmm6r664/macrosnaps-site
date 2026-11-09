@@ -2,7 +2,7 @@
 import { noReset } from "./noReset";
 import { useActionState, useState } from "react";
 import { saveNewsletter, type S } from "@/app/admin/(panel)/newsletters/actions";
-import { inputCls, labelCls, btnPrimary, btnGhost, btnGold } from "./ui";
+import { inputCls, labelCls, btnPrimary, btnGhost, btnGold, previewDoc, PREVIEW_SANDBOX } from "./ui";
 
 export default function NewsletterEditor({ n, previewHtml, subscribers, locked }: { n: { id: number; subject: string; preheader: string; body: string; status: string; scheduled_at: string | null }; previewHtml: string; subscribers: number; locked: boolean }) {
   const [s, act, pending] = useActionState<S, FormData>(saveNewsletter, undefined);
@@ -20,7 +20,7 @@ export default function NewsletterEditor({ n, previewHtml, subscribers, locked }
           <textarea name="body" defaultValue={n.body} disabled={locked} rows={22} className={`${inputCls} font-mono text-sm`} placeholder={"# Spring wedding dates are filling up\n\nHi there,\n\nWe have a few **Saturday** dates left in May and June.\n\n![Wedding couple](https://…/photo.jpg)\n\n[[Book your date|https://macrosnaps.com/book]]"} />
           <p className="mt-2 text-xs leading-relaxed text-black/55">Formatting (leave a blank line between blocks): <code># Big heading</code> · <code>## Section heading</code> · <code>**bold**</code> · <code>[link text](https://…)</code> · <code>![caption](https://image)</code> full-width photo · <code>- bullet</code> · <code>&gt; quote</code> · <code>---</code> divider · <code>[[Button text|https://…]]</code> · <code>{"{{"}Title | text | https://image | https://link{"}}"}</code> feature card (2 per row)</p>
         </div>
-        {tab === "preview" && <iframe title="Preview" srcDoc={previewHtml} sandbox="" className="h-[640px] w-full rounded border border-black/10 bg-[#f3f1ec]" />}
+        {tab === "preview" && <iframe title="Preview" srcDoc={previewDoc(previewHtml)} sandbox={PREVIEW_SANDBOX} className="h-[640px] w-full rounded border border-black/10 bg-[#f3f1ec]" />}
       </div>
       <div className="space-y-4">
         <div className="rounded-lg border border-black/10 bg-white p-5 text-sm">

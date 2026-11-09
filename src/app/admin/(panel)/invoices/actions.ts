@@ -42,7 +42,7 @@ export async function invoiceEmailAction(_: PreviewS, f: FormData): Promise<Prev
   try {
     let inv = await stripe.invoices.retrieve(id);
     if (f.get("mode") !== "send") {
-      const m = await mailFor(inv.status === "draft" ? { ...inv, number: inv.number ?? "(number assigned when sent)", hosted_invoice_url: inv.hosted_invoice_url ?? "#pay-link" } as Stripe.Invoice : inv);
+      const m = await mailFor(inv.status === "draft" ? { ...inv, number: inv.number ?? "(number assigned when sent)", hosted_invoice_url: inv.hosted_invoice_url ?? `${SITE.url}/admin/invoices/${id}?draft-preview=1` } as Stripe.Invoice : inv);
       return { html: m.html, subject: m.subject, to: inv.customer_email ?? "" };
     }
     if (inv.status === "draft") inv = await stripe.invoices.finalizeInvoice(id);

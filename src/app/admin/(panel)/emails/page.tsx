@@ -1,5 +1,5 @@
 import { requireUser } from "@/lib/auth";
-import { PageHead, Card } from "@/components/admin/ui";
+import { PageHead, Card, previewDoc, PREVIEW_SANDBOX } from "@/components/admin/ui";
 import { SAMPLES } from "@/lib/emailSamples";
 import { SendTestButton } from "@/components/admin/EmailTests";
 
@@ -25,7 +25,7 @@ export default async function EmailsPage() {
                     </div>
                     <SendTestButton k={s.key} label="Send me a test" />
                   </div>
-                  <iframe title={m.subject} srcDoc={m.html} sandbox="" className="h-[520px] w-full bg-[#ede9df]" loading="lazy" />
+                  <iframe title={m.subject} srcDoc={previewDoc(m.html)} sandbox={PREVIEW_SANDBOX} className="h-[520px] w-full bg-[#ede9df]" loading="lazy" />
                 </div>
               );
             })}
