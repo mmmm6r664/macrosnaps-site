@@ -13,7 +13,7 @@ function Act({ id, op, label, danger }: { id: string; op: string; label: string;
 
 export default async function Invoices({ searchParams }: { searchParams: Promise<{ after?: string; created?: string }> }) {
   await requireUser();
-  const head = <PageHead title="Invoices" sub="Custom invoices sent through Stripe." actions={<Link href="/admin/invoices/new" className={btnGold}>New invoice</Link>} />;
+  const head = <PageHead title="Invoices" sub="Custom invoices. Emails come from MacroSnaps; Stripe hosts the secure pay page." actions={<Link href="/admin/invoices/new" className={btnGold}>New invoice</Link>} />;
   if (!stripe) return (<>{head}<Notice>Stripe isn&apos;t connected yet. Add STRIPE_SECRET_KEY in Vercel to create and send invoices.</Notice></>);
   const { after, created } = await searchParams;
   let list: Stripe.ApiList<Stripe.Invoice>;
@@ -22,12 +22,12 @@ export default async function Invoices({ searchParams }: { searchParams: Promise
   return (
     <>
       {head}
-      {created && <Notice tone="green">{created === "sent" ? "Invoice created and emailed to the customer." : "Draft saved. Send it when you're ready."}</Notice>}
+      {created && <Notice tone="green">{created === "sent" ? "Invoice created and emailed from MacroSnaps." : "Draft saved. Send it when you're ready."}</Notice>}
       {list.data.length ? (
         <Table head={["Number", "Customer", "Amount", "Due", "Status", ""]}>
           {list.data.map((i) => (
             <tr key={i.id} className="align-top">
-              <td className="px-4 py-3">{i.number ?? "Draft"}<div className="text-xs text-black/50">{fmtDate(new Date(i.created * 1000))}</div></td>
+              <td className="px-4 py-3"><Link href={`/admin/invoices/${i.id}`} className="underline">{i.number ?? "Draft"}</Link><div className="text-xs text-black/50">{fmtDate(new Date(i.created * 1000))}</div></td>
               <td className="px-4 py-3">{i.customer_name || "—"}<div className="text-xs text-black/50">{i.customer_email}</div></td>
               <td className="whitespace-nowrap px-4 py-3 font-semibold">{money(i.total)}{i.amount_paid > 0 && i.status !== "paid" && <div className="text-xs text-black/50">Paid {money(i.amount_paid)}</div>}</td>
               <td className="whitespace-nowrap px-4 py-3">{i.due_date ? fmtDate(new Date(i.due_date * 1000)) : "—"}</td>
@@ -36,7 +36,7 @@ export default async function Invoices({ searchParams }: { searchParams: Promise
                 <div className="flex flex-col items-end gap-1">
                   {i.hosted_invoice_url && <a className="text-xs underline" href={i.hosted_invoice_url} target="_blank" rel="noopener">View / pay link ↗</a>}
                   {i.invoice_pdf && <a className="text-xs underline" href={i.invoice_pdf} target="_blank" rel="noopener">PDF ↗</a>}
-                  {(i.status === "draft" || i.status === "open") && <Act id={i.id!} op="send" label={i.status === "draft" ? "Finalize & send" : "Resend"} />}
+                  {(i.status === "draft" || i.status === "open") && <Act id={i.id!} op="send" label={i.status === "draft" ? "Finalize & email" : "Resend email"} />}
                   {i.status === "open" && <Act id={i.id!} op="paid" label="Mark paid (cash/check)" />}
                   {i.status === "open" && <Act id={i.id!} op="void" label="Void" danger />}
                   {i.status === "draft" && <Act id={i.id!} op="delete" label="Delete draft" danger />}
