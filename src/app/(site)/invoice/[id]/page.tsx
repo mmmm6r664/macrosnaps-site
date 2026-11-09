@@ -29,7 +29,7 @@ export default async function InvoicePage({ params, searchParams }: { params: Pr
 
         <div className="mt-8 border border-black/10 bg-white">
           <dl className="grid grid-cols-1 gap-x-8 gap-y-3 border-b border-black/10 p-6 text-sm sm:grid-cols-2">
-            <div><dt className="text-xs uppercase tracking-[0.15em] text-muted">Billed to</dt><dd className="mt-1">{inv.customer_name}<br />{inv.customer_email}</dd></div>
+            <div><dt className="text-xs uppercase tracking-[0.15em] text-muted">Billed to</dt><dd className="mt-1">{inv.customer_name}{inv.customer_address?.line1 && (<><br />{inv.customer_address.line1}{inv.customer_address.line2 ? `, ${inv.customer_address.line2}` : ""}<br />{[inv.customer_address.city, [inv.customer_address.state, inv.customer_address.postal_code].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</>)}{inv.custom_fields?.map((c) => <span key={c.name} className="block">{c.name}: {c.value}</span>)}<br />{inv.customer_email}</dd></div>
             <div><dt className="text-xs uppercase tracking-[0.15em] text-muted">From</dt><dd className="mt-1">{SITE.name}, part of {SITE.parent}<br />{SITE.email} · {SITE.phone}</dd></div>
             <div><dt className="text-xs uppercase tracking-[0.15em] text-muted">Invoice date</dt><dd className="mt-1">{day(inv.created)}</dd></div>
             <div><dt className="text-xs uppercase tracking-[0.15em] text-muted">{paid ? "Status" : "Due date"}</dt><dd className={`mt-1 ${overdue ? "font-semibold text-red-700" : ""}`}>{paid ? "Paid" : voided ? "Cancelled" : inv.due_date ? `${day(inv.due_date)}${overdue ? " (overdue)" : ""}` : "On receipt"}</dd></div>

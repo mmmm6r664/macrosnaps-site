@@ -16,7 +16,7 @@ export default async function InvoicePage({ params, searchParams }: { params: Pr
   const inv = await stripe.invoices.retrieve(id).catch(() => null);
   if (!inv) notFound();
   const lines = (await stripe.invoices.listLineItems(id, { limit: 50 })).data.slice().reverse();
-  const first = (inv.customer_name || "").split(" ")[0] || "there";
+  const first = (inv.metadata?.contact_name || inv.customer_name || "").split(" ")[0] || "there";
   const due = inv.due_date ? new Date(inv.due_date * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" }) : "";
   const link = inv.hosted_invoice_url ? invoiceLink(inv.id!) : "";
   const sms = link ? `Hi ${first}, this is MacroSnaps. Here's your invoice ${inv.number} for ${money(inv.amount_due)}${due ? ` (due ${due})` : ""}. You can view and pay it securely here: ${link}` : "";
@@ -33,6 +33,7 @@ export default async function InvoicePage({ params, searchParams }: { params: Pr
           <dl className="mt-3 grid grid-cols-[110px_1fr] gap-y-1 text-sm">
             <dt className="text-black/50">Amount</dt><dd className="font-semibold">{money(inv.amount_due)}</dd>
             <dt className="text-black/50">Due</dt><dd>{inv.due_date ? new Date(inv.due_date * 1000).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" }) : "—"}</dd>
+            <dt className="text-black/50">Bill to</dt><dd>{inv.customer_name}{inv.custom_fields?.map((c) => <span key={c.name} className="block text-black/60">{c.name}: {c.value}</span>)}{inv.customer_address?.line1 && <span className="block text-black/60">{[inv.customer_address.line1, inv.customer_address.line2, [inv.customer_address.city, inv.customer_address.state, inv.customer_address.postal_code].filter(Boolean).join(", ")].filter(Boolean).join(" · ")}</span>}</dd>
             <dt className="text-black/50">Note</dt><dd>{inv.description || "—"}</dd>
             <dt className="text-black/50">Emailed</dt><dd>{emailed ? fmtDate(new Date(emailed)) : "Not yet"}</dd>
           </dl>

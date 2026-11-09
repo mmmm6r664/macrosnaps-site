@@ -14,7 +14,8 @@ import { invoiceLink } from "@/lib/invoiceLink";
 async function mailFor(inv: Stripe.Invoice) {
   const lines = (await stripe!.invoices.listLineItems(inv.id!, { limit: 50 })).data.slice().reverse().map((l) => ({ label: l.description ?? "Item", amount: l.amount / 100 }));
   return invoiceEmail({
-    name: inv.customer_name || inv.customer_email || "there", number: inv.number ?? "Draft", total: inv.amount_due / 100,
+    name: inv.metadata?.contact_name || inv.customer_name || inv.customer_email || "there",
+    billTo: inv.customer_address?.line1 ? [inv.customer_name, inv.customer_address.line1, inv.customer_address.line2, [inv.customer_address.city, [inv.customer_address.state, inv.customer_address.postal_code].filter(Boolean).join(" ")].filter(Boolean).join(", ")].filter(Boolean).join("\n") : null, number: inv.number ?? "Draft", total: inv.amount_due / 100,
     due: inv.due_date ? new Date(inv.due_date * 1000) : null, memo: inv.description, lines,
     payUrl: inv.hosted_invoice_url ? invoiceLink(inv.id!) : SITE.url, pdfUrl: inv.invoice_pdf,
   });
@@ -73,11 +74,20 @@ export async function createInvoice(_: S, f: FormData): Promise<S> {
   const send = f.get("send") === "1";
   let invoiceId: string;
   try {
+    const company = clip(f.get("company"), 200);
+    const line1 = clip(f.get("line1"), 200);
+    const address = line1 ? { line1, line2: clip(f.get("line2"), 200) || undefined, city: clip(f.get("city"), 100) || undefined, state: clip(f.get("state"), 60) || undefined, postal_code: clip(f.get("zip"), 20) || undefined, country: "US" } : undefined;
+    const billName = company || name;
+    // The invoice copies the customer's name and address when it's finalized, so keep them current.
     const existing = await stripe.customers.list({ email, limit: 1 });
-    const customer = existing.data[0] ?? (await stripe.customers.create({ email, name, phone: clip(f.get("phone"), 40) || undefined }));
+    const customer = existing.data[0]
+      ? await stripe.customers.update(existing.data[0].id, { name: billName, ...(address ? { address } : {}), ...(clip(f.get("phone"), 40) ? { phone: clip(f.get("phone"), 40) } : {}) })
+      : await stripe.customers.create({ email, name: billName, address, phone: clip(f.get("phone"), 40) || undefined });
     const inv = await stripe.invoices.create({
       customer: customer.id, collection_method: "send_invoice", days_until_due: days, auto_advance: false,
-      description: clip(f.get("memo"), 500) || undefined, footer: `${SITE.name} · ${SITE.phone} · ${SITE.email}`, metadata: { created_by: u.email, source: "admin" },
+      description: clip(f.get("memo"), 500) || undefined, footer: `${SITE.name} · ${SITE.phone} · ${SITE.email}`,
+      custom_fields: company ? [{ name: "Attn", value: name.slice(0, 140) }] : undefined,
+      metadata: { created_by: u.email, source: "admin", contact_name: name },
     });
     for (const x of items) {
       await stripe.invoiceItems.create({ customer: customer.id, invoice: inv.id, currency: "usd", amount: x.q * x.c, description: x.q > 1 ? `${x.d} (${x.q} × $${(x.c / 100).toFixed(2)})` : x.d });

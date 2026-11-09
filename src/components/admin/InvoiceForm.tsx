@@ -24,6 +24,11 @@ export default function InvoiceForm() {
           <div><label className={labelCls} htmlFor="i-last">Last name *</label><input id="i-last" name="lastName" required maxLength={60} className={inputCls} autoComplete="family-name" /></div>
         <div><label className={labelCls} htmlFor="i-email">Customer email *</label><input id="i-email" name="email" type="email" required className={inputCls} /></div>
         <div><label className={labelCls} htmlFor="i-phone">Phone</label><input id="i-phone" name="phone" className={inputCls} /></div>
+        <div className="sm:col-span-2"><label className={labelCls} htmlFor="i-company">Bill to company (optional; shown as the invoice name, with “Attn:” the person above)</label><input id="i-company" name="company" maxLength={200} className={inputCls} autoComplete="organization" /></div>
+        <div className="sm:col-span-2"><label className={labelCls} htmlFor="i-a1">Billing address</label><input id="i-a1" name="line1" placeholder="Street address" maxLength={200} className={inputCls} autoComplete="address-line1" /></div>
+        <div className="sm:col-span-2"><input id="i-a2" name="line2" placeholder="Suite / floor (optional)" aria-label="Address line 2" maxLength={200} className={inputCls} autoComplete="address-line2" /></div>
+        <div><label className={labelCls} htmlFor="i-city">City</label><input id="i-city" name="city" maxLength={100} className={inputCls} autoComplete="address-level2" /></div>
+        <div className="grid grid-cols-2 gap-3"><div><label className={labelCls} htmlFor="i-state">State</label><input id="i-state" name="state" maxLength={60} className={inputCls} autoComplete="address-level1" /></div><div><label className={labelCls} htmlFor="i-zip">ZIP</label><input id="i-zip" name="zip" maxLength={20} className={inputCls} autoComplete="postal-code" /></div></div>
       </div>
       <div>
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
