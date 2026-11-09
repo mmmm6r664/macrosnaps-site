@@ -12,7 +12,7 @@ import { invoiceLink } from "@/lib/invoiceLink";
 
 /** Build our own invoice email from a finalized Stripe invoice. */
 async function mailFor(inv: Stripe.Invoice) {
-  const lines = (await stripe!.invoices.listLineItems(inv.id!, { limit: 50 })).data.map((l) => ({ label: l.description ?? "Item", amount: l.amount / 100 }));
+  const lines = (await stripe!.invoices.listLineItems(inv.id!, { limit: 50 })).data.slice().reverse().map((l) => ({ label: l.description ?? "Item", amount: l.amount / 100 }));
   return invoiceEmail({
     name: inv.customer_name || inv.customer_email || "there", number: inv.number ?? "Draft", total: inv.amount_due / 100,
     due: inv.due_date ? new Date(inv.due_date * 1000) : null, memo: inv.description, lines,

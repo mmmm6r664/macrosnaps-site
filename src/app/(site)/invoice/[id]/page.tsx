@@ -16,7 +16,7 @@ export default async function InvoicePage({ params, searchParams }: { params: Pr
   if (!stripe || !verifyInvoiceKey(id, k)) notFound();
   const inv = await stripe.invoices.retrieve(id).catch(() => null);
   if (!inv || inv.status === "draft") notFound();
-  const lines = (await stripe.invoices.listLineItems(id, { limit: 50 })).data;
+  const lines = (await stripe.invoices.listLineItems(id, { limit: 50 })).data.slice().reverse();
   const paid = inv.status === "paid";
   const voided = inv.status === "void" || inv.status === "uncollectible";
   const overdue = !paid && !voided && inv.due_date && inv.due_date * 1000 < Date.now() - 86_400_000;

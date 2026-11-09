@@ -15,7 +15,7 @@ export default async function InvoicePage({ params, searchParams }: { params: Pr
   if (!stripe || !/^in_[A-Za-z0-9]+$/.test(id)) notFound();
   const inv = await stripe.invoices.retrieve(id).catch(() => null);
   if (!inv) notFound();
-  const lines = (await stripe.invoices.listLineItems(id, { limit: 50 })).data;
+  const lines = (await stripe.invoices.listLineItems(id, { limit: 50 })).data.slice().reverse();
   const first = (inv.customer_name || "").split(" ")[0] || "there";
   const due = inv.due_date ? new Date(inv.due_date * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" }) : "";
   const link = inv.hosted_invoice_url ? invoiceLink(inv.id!) : "";
