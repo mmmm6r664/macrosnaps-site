@@ -8,6 +8,7 @@ import { SITE } from "@/lib/site";
 import type Stripe from "stripe";
 import { invoiceEmail } from "@/lib/emails";
 import { sendMail } from "@/lib/mail";
+import { invoiceLink } from "@/lib/invoiceLink";
 
 /** Build our own invoice email from a finalized Stripe invoice. */
 async function mailFor(inv: Stripe.Invoice) {
@@ -15,7 +16,7 @@ async function mailFor(inv: Stripe.Invoice) {
   return invoiceEmail({
     name: inv.customer_name || inv.customer_email || "there", number: inv.number ?? "Draft", total: inv.amount_due / 100,
     due: inv.due_date ? new Date(inv.due_date * 1000) : null, memo: inv.description, lines,
-    payUrl: inv.hosted_invoice_url ?? SITE.url, pdfUrl: inv.invoice_pdf,
+    payUrl: inv.hosted_invoice_url ? invoiceLink(inv.id!) : SITE.url, pdfUrl: inv.invoice_pdf,
   });
 }
 

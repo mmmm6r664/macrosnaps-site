@@ -110,7 +110,7 @@ export function AskBand() {
   useEffect(() => {
     document.querySelectorAll("[data-askband]").forEach((el) => { if (el !== ref.current) el.remove(); });
   }, [path]);
-  if (path === "/" || path.startsWith("/book")) return null;
+  if (path === "/" || path.startsWith("/book") || path.startsWith("/invoice")) return null;
   return (
     <section ref={ref} data-askband="" className="marble border-t border-black/5 px-4 py-16 md:px-6" data-reveal>
       <div className="mx-auto max-w-3xl text-center">

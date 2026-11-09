@@ -5,6 +5,7 @@ import { stripe } from "@/lib/stripe";
 import { PageHead, Notice, Badge, money, fmtDate, btnGhost } from "@/components/admin/ui";
 import { CopyLink, InvoiceEmail } from "@/components/admin/InvoiceTools";
 import { invoiceAction } from "../actions";
+import { invoiceLink } from "@/lib/invoiceLink";
 
 export const metadata = { title: "Invoice" };
 
@@ -17,7 +18,8 @@ export default async function InvoicePage({ params, searchParams }: { params: Pr
   const lines = (await stripe.invoices.listLineItems(id, { limit: 50 })).data;
   const first = (inv.customer_name || "").split(" ")[0] || "there";
   const due = inv.due_date ? new Date(inv.due_date * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" }) : "";
-  const sms = inv.hosted_invoice_url ? `Hi ${first}, this is MacroSnaps. Here's your invoice ${inv.number} for ${money(inv.amount_due)}${due ? ` (due ${due})` : ""}. You can view and pay it securely here: ${inv.hosted_invoice_url}` : "";
+  const link = inv.hosted_invoice_url ? invoiceLink(inv.id!) : "";
+  const sms = link ? `Hi ${first}, this is MacroSnaps. Here's your invoice ${inv.number} for ${money(inv.amount_due)}${due ? ` (due ${due})` : ""}. You can view and pay it securely here: ${link}` : "";
   const emailed = inv.metadata?.emailed_by_macrosnaps;
   return (
     <>
@@ -40,9 +42,9 @@ export default async function InvoicePage({ params, searchParams }: { params: Pr
           {inv.invoice_pdf && <a href={inv.invoice_pdf} target="_blank" rel="noopener" className="mt-3 inline-block text-sm underline">Download PDF ↗</a>}
         </section>
         <section className="rounded-lg border border-black/10 bg-white p-5">
-          <h2 className="font-semibold">Pay link (web)</h2>
+          <h2 className="font-semibold">Client link (MacroSnaps invoice page)</h2>
           {inv.hosted_invoice_url ? (
-            <div className="mt-3"><CopyLink url={inv.hosted_invoice_url} text={sms} /></div>
+            <div className="mt-3"><CopyLink url={link} text={sms} /><p className="mt-3 text-xs text-black/50">Opens your MacroSnaps invoice page; the Pay button there goes to Stripe&apos;s secure checkout. <a className="underline" href={inv.hosted_invoice_url} target="_blank" rel="noopener">Stripe page ↗</a></p></div>
           ) : (
             <div className="mt-3 space-y-2 text-sm">
               <p className="text-black/60">A draft has no pay link yet. Finalizing creates the link without emailing anyone; the invoice can&apos;t be edited after that.</p>
