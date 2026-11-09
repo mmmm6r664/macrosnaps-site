@@ -104,9 +104,15 @@ export default function AskBox({ variant = "light", title = "Tell us what you ne
 /** Site-wide band above the footer (hidden on the homepage, which has the box in its hero). */
 export function AskBand() {
   const path = usePathname();
+  const ref = useRef<HTMLElement>(null);
+  // Safety net: if a stale copy of this band is left in the page (e.g. an old tab after a site update,
+  // or a browser feature that rewrote the page), remove every copy except the live one.
+  useEffect(() => {
+    document.querySelectorAll("[data-askband]").forEach((el) => { if (el !== ref.current) el.remove(); });
+  }, [path]);
   if (path === "/" || path.startsWith("/book")) return null;
   return (
-    <section className="marble border-t border-black/5 px-4 py-16 md:px-6" data-reveal>
+    <section ref={ref} data-askband="" className="marble border-t border-black/5 px-4 py-16 md:px-6" data-reveal>
       <div className="mx-auto max-w-3xl text-center">
         <p className="eyebrow mb-2">Find the right crew</p>
         <AskBox title="Ask MacroSnaps what you need" />
