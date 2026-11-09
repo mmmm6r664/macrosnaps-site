@@ -5837,62 +5837,6 @@
 ]
 },
 {
-"source": "snappr:a1918768-b4c6-4d36-8f7e-935bb1f563b7",
-"folderId": "",
-"displayTitle": "Party \u00b7 Paterson \u00b7 September 2022",
-"category": "party",
-"eventType": "Party in Paterson",
-"photoCount": 5,
-"date": "2022-09",
-"picks": [
-{
-"id": "snappr-72dfb5a9-e1c1-482c-862f-72b11da021ae",
-"tags": [
-"party",
-"event"
-],
-"alt": "Guests celebrating at a private party in Paterson",
-"banner": true
-},
-{
-"id": "snappr-69a7dedb-ed93-4c1a-ad53-a52b76004792",
-"tags": [
-"party",
-"event"
-],
-"alt": "Guests celebrating at a private party in Paterson",
-"banner": true
-},
-{
-"id": "snappr-85b3520a-6941-4eba-a802-3f52c8df67d5",
-"tags": [
-"party",
-"event"
-],
-"alt": "Guests celebrating at a private party in Paterson",
-"banner": true
-},
-{
-"id": "snappr-c50f8dd1-6232-41a8-9b94-7175c03cfff7",
-"tags": [
-"party",
-"event"
-],
-"alt": "Guests celebrating at a private party in Paterson",
-"banner": true
-},
-{
-"id": "snappr-cf93ce97-51ad-4abd-b124-12784ba82ded",
-"tags": [
-"party",
-"event"
-],
-"alt": "Guests celebrating at a private party in Paterson",
-"banner": true
-}
-]
-},
-{
 "source": "snappr:6e0478f2-78cd-4fc3-9031-1bc0b15f7cbe",
 "folderId": "",
 "displayTitle": "Party \u00b7 Wood-Ridge \u00b7 September 2022",
