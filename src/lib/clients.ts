@@ -18,6 +18,14 @@ export const CLIENTS: { name: string; logo: string }[] = [
   ["Deloitte", "8573c3000e3e4730beb1a29d64d9d52b"],
 ].map(([name, id]) => ({ name, logo: b(id) }));
 
+/** Logos hosted on our own site (public/logos), shown first along with the biggest names. */
+const LOCAL: { name: string; logo: string }[] = [
+  { name: "DoorDash", logo: "/logos/doordash.png" },
+  { name: "FIX Trading Community", logo: "/logos/fix-trading-community.png" },
+  { name: "German American Chamber of Commerce (GACC West)", logo: "/logos/gacc-ahk.png" },
+];
+const LEAD = ["DoorDash", "PwC", "Deloitte", "IEEE", "Department of Justice", "FIX Trading Community", "Steelcase", "German American Chamber of Commerce (GACC West)", "Infopro Digital"];
+
 const f = (id: string) => `https://static.wixstatic.com/media/1f3625_${id}~mv2.png`;
 export const REVIEW_BADGES = [
   { name: "5-star reviews", logo: f("2abdfb8b02fb428d945575e13b4adb80") },
@@ -39,7 +47,9 @@ export const ALL_CLIENTS = (() => {
   // Only event / conference clients — MacroHype's marketing clients are deliberately excluded.
   const EVENT_CLIENTS = new Set(["CDAO", "DevGlobal", "National Technology Security Coalition (NTSC)"]);
   const extra = (coverage.clients as { name: string; logo: string }[]).filter((c) => EVENT_CLIENTS.has(c.name));
-  for (const c of [...CLIENTS, ...extra]) {
+  const all = [...LOCAL, ...CLIENTS, ...extra];
+  const lead = LEAD.map((n) => all.find((c) => c.name === n)).filter((c): c is { name: string; logo: string } => !!c);
+  for (const c of [...lead, ...all]) {
     const k = c.name.toLowerCase().replace(/[^a-z0-9]/g, "");
     if (seen.has(k)) continue;
     seen.add(k);

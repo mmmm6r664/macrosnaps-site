@@ -104,7 +104,7 @@ export function Faqs({ faqs, withSchema = true }: { faqs: { q: string; a: string
 }
 
 export function ClientLogos({ title = "We Have Worked With" }: { title?: string }) {
-  const logos = CLIENTS.slice(0, 40);
+  const logos = CLIENTS.slice(0, 60);
   const row = [...logos, ...logos];
   return (
     <section className="overflow-hidden bg-white py-14">
