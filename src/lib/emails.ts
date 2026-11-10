@@ -664,3 +664,40 @@ export function invoiceEmail(i: InvoiceMail): Email {
     }),
   };
 }
+
+/* ---------- invoices: paid ---------- */
+export type PaidInvoice = { name: string; billTo?: string | null; number: string; amount: number; paidAt: Date; method?: string | null; memo?: string | null; viewUrl: string; receiptUrl?: string | null; adminUrl?: string };
+const usdAmt = (n: number) => `$${n.toLocaleString("en-US", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 })}`;
+const paidDay = (d: Date) => d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "America/New_York" });
+
+/** To the client: thank-you + receipt, sent by MacroSnaps. */
+export function invoiceReceipt(i: PaidInvoice): Email {
+  return {
+    subject: `Payment received: ${usdAmt(i.amount)} for invoice ${i.number}`,
+    html: layout({
+      title: "Payment received. Thank you!",
+      preheader: `We received your payment of ${usdAmt(i.amount)} for invoice ${i.number}.`,
+      body:
+        p(`Hi ${first(i.name)},`) +
+        p(`Thank you! We've received your payment${i.memo ? ` for <b>${esc(i.memo)}</b>` : ""}.`) +
+        details([["Invoice", i.number], ["Billed to", i.billTo ?? null], ["Amount paid", usdAmt(i.amount)], ["Paid on", paidDay(i.paidAt)], ["Payment method", i.method ?? null]]) +
+        button("View paid invoice", i.viewUrl) +
+        small(i.receiptUrl ? `<a href="${esc(i.receiptUrl)}">Download your receipt</a> for your records.` : "Keep this email for your records.") +
+        p("We look forward to working with you."),
+    }),
+  };
+}
+
+/** To the team: an invoice was paid. */
+export function invoicePaidTeam(i: PaidInvoice): Email {
+  return {
+    subject: `INVOICE PAID ${i.number}: ${usdAmt(i.amount)} from ${i.billTo?.split("\n")[0] || i.name}`,
+    html: layout({
+      title: `Invoice ${i.number} was paid`,
+      preheader: `${usdAmt(i.amount)} received${i.method ? ` by ${i.method}` : ""}.`,
+      body:
+        details([["Invoice", i.number], ["Amount", usdAmt(i.amount)], ["Paid on", paidDay(i.paidAt)], ["Method", i.method ?? null], ["Client", i.name], ["Billed to", i.billTo ?? null], ["For", i.memo ?? null]]) +
+        (i.adminUrl ? button("Open in admin", i.adminUrl) : ""),
+    }),
+  };
+}

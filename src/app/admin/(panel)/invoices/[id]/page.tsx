@@ -4,7 +4,7 @@ import { requireUser } from "@/lib/auth";
 import { stripe } from "@/lib/stripe";
 import { PageHead, Notice, Badge, money, fmtDate, btnGhost } from "@/components/admin/ui";
 import { CopyLink, InvoiceEmail } from "@/components/admin/InvoiceTools";
-import { invoiceAction } from "../actions";
+import { invoiceAction, invoicePaidAction } from "../actions";
 import { invoiceLink } from "@/lib/invoiceLink";
 
 export const metadata = { title: "Invoice" };
@@ -54,6 +54,19 @@ export default async function InvoicePage({ params, searchParams }: { params: Pr
           )}
         </section>
       </div>
+      {inv.status === "paid" && (
+        <section className="mt-6 rounded-lg border border-emerald-200 bg-emerald-50/50 p-5">
+          <h2 className="font-semibold">Paid {inv.status_transitions?.paid_at ? fmtDate(new Date(inv.status_transitions.paid_at * 1000)) : ""} · {money(inv.amount_paid)}</h2>
+          <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
+            {inv.metadata?.paid_team_notified ? <span>✓ Payment alert emailed to the team</span> : (
+              <form action={invoicePaidAction}><input type="hidden" name="id" value={inv.id} /><input type="hidden" name="which" value="team" /><button className={btnGhost}>Email me the payment alert</button></form>
+            )}
+            {inv.metadata?.paid_client_notified ? <span>✓ Receipt emailed to the client</span> : (
+              <form action={invoicePaidAction}><input type="hidden" name="id" value={inv.id} /><input type="hidden" name="which" value="client" /><button className={btnGhost}>Email the client a receipt</button></form>
+            )}
+          </div>
+        </section>
+      )}
       {(inv.status === "draft" || inv.status === "open") && (
         <section className="mt-6 rounded-lg border border-black/10 bg-white p-5">
           <h2 className="mb-3 font-semibold">Email the invoice from MacroSnaps</h2>

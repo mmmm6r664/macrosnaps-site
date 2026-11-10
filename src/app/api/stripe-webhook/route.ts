@@ -8,6 +8,7 @@ import { db, hasDb, q } from "@/lib/db";
 import { ORIGIN } from "@/lib/emailTemplate";
 import { bookingConfirmed, teamNewBooking } from "@/lib/emails";
 import { onCheckoutExpired, when } from "@/lib/automations";
+import { notifyInvoicePaid } from "@/lib/invoicePaid";
 
 export async function POST(req: Request) {
   if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) return NextResponse.json({ error: "Not configured" }, { status: 503 });
@@ -50,6 +51,11 @@ export async function POST(req: Request) {
       const c = bookingConfirmed(info);
       await sendMail({ to: email, replyTo: SITE.email, subject: c.subject, html: c.html });
     }
+  }
+  // Custom invoices (admin → Invoices): tell the team and send the client a receipt from MacroSnaps.
+  if (event.type === "invoice.paid") {
+    const inv = event.data.object as Stripe.Invoice;
+    if (inv.metadata?.source === "admin") await notifyInvoicePaid(inv.id!).catch((e) => console.error("[webhook] invoice paid", e));
   }
   // Customer left the payment page without paying → first abandoned-booking reminder.
   if (event.type === "checkout.session.expired") await onCheckoutExpired((event.data.object as Stripe.Checkout.Session).id).catch((e) => console.error("[webhook] expired", e));

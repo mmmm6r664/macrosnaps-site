@@ -123,3 +123,15 @@ export async function invoiceAction(f: FormData) {
   await audit(u.id, `invoice_${op}`, id);
   revalidatePath("/admin/invoices"); revalidatePath(`/admin/invoices/${id}`);
 }
+
+/** Paid invoice: send the team alert and/or the client receipt by hand (e.g. for payments made before the webhook handled invoices). */
+export async function invoicePaidAction(f: FormData) {
+  const u = await requireUser();
+  const id = String(f.get("id") ?? "");
+  if (!/^in_[A-Za-z0-9]+$/.test(id)) return;
+  const which = String(f.get("which") ?? "");
+  const { notifyInvoicePaid } = await import("@/lib/invoicePaid");
+  const r = await notifyInvoicePaid(id, { team: which === "team", client: which === "client" });
+  await audit(u.id, "invoice_paid_notice", `${id} team=${r.team} client=${r.client}`);
+  revalidatePath(`/admin/invoices/${id}`);
+}
