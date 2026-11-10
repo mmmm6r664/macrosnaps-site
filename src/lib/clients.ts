@@ -23,8 +23,13 @@ const LOCAL: { name: string; logo: string }[] = [
   { name: "DoorDash", logo: "/logos/doordash.png" },
   { name: "FIX Trading Community", logo: "/logos/fix-trading-community.png" },
   { name: "German American Chamber of Commerce (GACC West)", logo: "/logos/gacc-ahk.png" },
+  { name: "City of Alexandria", logo: "/logos/city-of-alexandria.png" },
+  { name: "Bergen County, NJ", logo: "/logos/bergen-county.png" },
+  { name: "City of Hoboken", logo: "/logos/city-of-hoboken.png" },
+  { name: "Quality Trust for Individuals with Disabilities", logo: "/logos/quality-trust.png" },
+  { name: "Pulse", logo: "/logos/pulse.png" },
 ];
-const LEAD = ["DoorDash", "PwC", "Deloitte", "IEEE", "Department of Justice", "FIX Trading Community", "Steelcase", "German American Chamber of Commerce (GACC West)", "Infopro Digital"];
+const LEAD = ["DoorDash", "PwC", "Deloitte", "IEEE", "Department of Justice", "FIX Trading Community", "Steelcase", "German American Chamber of Commerce (GACC West)", "City of Alexandria", "Bergen County, NJ", "Infopro Digital", "City of Hoboken", "Quality Trust for Individuals with Disabilities"];
 
 const f = (id: string) => `https://static.wixstatic.com/media/1f3625_${id}~mv2.png`;
 export const REVIEW_BADGES = [
@@ -45,7 +50,7 @@ export const ALL_CLIENTS = (() => {
   const seen = new Set<string>();
   const out: { name: string; logo: string }[] = [];
   // Only event / conference clients — MacroHype's marketing clients are deliberately excluded.
-  const EVENT_CLIENTS = new Set(["CDAO", "DevGlobal", "National Technology Security Coalition (NTSC)"]);
+  const EVENT_CLIENTS = new Set<string>([]); // CDAO is shown via Corinium; NTSC and Dev Global are already in CLIENTS
   const extra = (coverage.clients as { name: string; logo: string }[]).filter((c) => EVENT_CLIENTS.has(c.name));
   const all = [...LOCAL, ...CLIENTS, ...extra];
   const lead = LEAD.map((n) => all.find((c) => c.name === n)).filter((c): c is { name: string; logo: string } => !!c);
