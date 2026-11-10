@@ -43,11 +43,6 @@ export default function Footer() {
                 <strong className="text-white">{o.name}</strong><br />{o.street}<br />{o.city}, {o.region} {o.zip}
               </address>
             ))}
-            <div className="mt-5 flex flex-wrap gap-3 text-xs">
-              <a href={SITE.reviews.thumbtack} target="_blank" rel="noopener" className="underline hover:text-gold">Thumbtack</a>
-              <a href={SITE.reviews.weddingwire} target="_blank" rel="noopener" className="underline hover:text-gold">WeddingWire</a>
-              <a href={SITE.reviews.theknot} target="_blank" rel="noopener" className="underline hover:text-gold">The Knot</a>
-            </div>
           </div>
         </div>
 
@@ -73,9 +68,13 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-8 px-4 py-4">
-          {REVIEW_BADGES.map((b) => (
-            <Image key={b.logo} src={b.logo} alt={b.name} width={130} height={56} className="h-12 w-auto" />
-          ))}
+          {REVIEW_BADGES.map((b) => {
+            const href = /thumbtack/i.test(b.name) ? SITE.reviews.thumbtack : /weddingwire/i.test(b.name) ? SITE.reviews.weddingwire : /knot/i.test(b.name) ? SITE.reviews.theknot : null;
+            const img = <Image src={b.logo} alt={b.name} width={130} height={56} className="h-12 w-auto" />;
+            return href ? (
+              <a key={b.logo} href={href} target="_blank" rel="noopener" aria-label={`MacroSnaps on ${b.name.split(" ")[0] === "The" ? "The Knot" : b.name.split(" ")[0]}: read our reviews`} className="transition hover:opacity-80">{img}</a>
+            ) : <span key={b.logo}>{img}</span>;
+          })}
           <a href={SITE.reviews.sulekha} target="_blank" rel="noopener" aria-label="MacroSnaps on Sulekha: rated 5 stars" className="flex h-12 items-center rounded bg-white px-3 transition hover:opacity-90">
             <Image src="/badges/sulekha.png" alt="Sulekha" width={732} height={180} className="h-7 w-auto" />
           </a>
