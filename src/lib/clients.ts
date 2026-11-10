@@ -31,6 +31,11 @@ const LOCAL: { name: string; logo: string }[] = [
   { name: "Digital Business Networks Alliance (DBNAlliance)", logo: "/logos/dbnalliance.png" },
   { name: "IMPACTability", logo: "/logos/impactability.png" },
   { name: "Vervaunt", logo: "/logos/vervaunt.png" },
+  { name: "NECANN", logo: "/logos/necann.png" },
+  { name: "RE•WORK AI in Finance Summit", logo: "/logos/rework.png" },
+  { name: "Women of Work", logo: "/logos/women-of-work.png" },
+  { name: "InnerSource Commons", logo: "/logos/innersource-commons.png" },
+  { name: "ICMC", logo: "/logos/icmc.png" },
 ];
 const LEAD = ["DoorDash", "PwC", "Deloitte", "IEEE", "Department of Justice", "FIX Trading Community", "Steelcase", "German American Chamber of Commerce (GACC West)", "City of Alexandria", "Bergen County, NJ", "Infopro Digital", "City of Hoboken", "Quality Trust for Individuals with Disabilities"];
 
