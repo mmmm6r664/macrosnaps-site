@@ -28,6 +28,9 @@ const LOCAL: { name: string; logo: string }[] = [
   { name: "City of Hoboken", logo: "/logos/city-of-hoboken.png" },
   { name: "Quality Trust for Individuals with Disabilities", logo: "/logos/quality-trust.png" },
   { name: "Pulse", logo: "/logos/pulse.png" },
+  { name: "Digital Business Networks Alliance (DBNAlliance)", logo: "/logos/dbnalliance.png" },
+  { name: "IMPACTability", logo: "/logos/impactability.png" },
+  { name: "Vervaunt", logo: "/logos/vervaunt.png" },
 ];
 const LEAD = ["DoorDash", "PwC", "Deloitte", "IEEE", "Department of Justice", "FIX Trading Community", "Steelcase", "German American Chamber of Commerce (GACC West)", "City of Alexandria", "Bergen County, NJ", "Infopro Digital", "City of Hoboken", "Quality Trust for Individuals with Disabilities"];
 
