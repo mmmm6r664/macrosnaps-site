@@ -189,3 +189,22 @@ export async function sendAssignment(_: AssignS, f: FormData): Promise<AssignS> 
   await audit(u.id, "crew_assignment_email", `${email}: ${m.subject}`);
   return sent.ok ? { ok: `Sent to ${name} (${email}).` } : { error: "The email couldn't be sent. Check the email log for details." };
 }
+
+/** Correct a team member's phone number everywhere it's stored (profile, application, contracts). */
+export async function updatePhone(_: S, f: FormData): Promise<S> {
+  const u = await requireUser();
+  const id = Number(f.get("member")) || 0;
+  const raw = String(f.get("phone") ?? "").trim();
+  const digits = raw.replace(/\D/g, "");
+  if (!id) return { error: "Choose a team member." };
+  if (digits.length < 10 || digits.length > 15) return { error: "Enter a valid phone number." };
+  const phone = digits.length === 10 ? `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}` : digits.length === 11 && digits[0] === "1" ? `${digits.slice(1, 4)}-${digits.slice(4, 7)}-${digits.slice(7)}` : raw;
+  const [m] = await q<{ name: string; email: string }[]>`select name, email from users where id = ${id}`;
+  if (!m) return { error: "That team member wasn't found." };
+  await q`insert into staff_profiles (user_id, phone) values (${id}, ${phone}) on conflict (user_id) do update set phone = excluded.phone, updated_at = now()`;
+  await q`update inquiries set phone = ${phone} where lower(email) = lower(${m.email})`.catch(() => {});
+  await q`update contracts set signer_phone = ${phone} where lower(signer_email) = lower(${m.email})`.catch(() => {});
+  await audit(u.id, "staff_phone_update", `${m.email} → ${phone}`);
+  revalidatePath("/admin/photographers");
+  return { ok: `${m.name}'s phone is now ${phone}.` };
+}

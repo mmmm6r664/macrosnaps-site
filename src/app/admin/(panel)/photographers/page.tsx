@@ -9,6 +9,7 @@ import AddPhotographer from "@/components/admin/AddPhotographer";
 import RequestFiles from "@/components/admin/RequestFiles";
 import WelcomeMember from "@/components/admin/WelcomeMember";
 import SendAssignment from "@/components/admin/SendAssignment";
+import UpdatePhone from "@/components/admin/UpdatePhone";
 import { DEFAULT_SCOPE } from "@/lib/emails";
 import { q } from "@/lib/db";
 import { listFileRequests } from "@/lib/crewDelivery";
@@ -32,6 +33,7 @@ export default async function Photographers({ searchParams }: { searchParams: Pr
       <AddPhotographer />
       <SendAssignment defaultScope={DEFAULT_SCOPE.conference} team={await q<{ id: number; name: string; email: string }[]>`select id, name, email from users where role = 'staff' and active order by name limit 300`.catch(() => [])} />
       <WelcomeMember team={await q<{ id: number; name: string; email: string; signed: boolean }[]>`select u.id, u.name, u.email, (p.contract_signed_at is not null) as signed from users u left join staff_profiles p on p.user_id = u.id where u.role = 'staff' and u.active order by u.created_at desc limit 200`.catch(() => [])} />
+      <UpdatePhone team={await q<{ id: number; name: string; email: string; phone: string | null }[]>`select u.id, u.name, u.email, p.phone from users u left join staff_profiles p on p.user_id = u.id where u.role = 'staff' and u.active order by u.name limit 300`.catch(() => [])} />
       <RequestFiles rows={(await listFileRequests().catch(() => [])).map((r) => ({ id: r.id, name: r.name, email: r.email, shoot: r.shoot, shoot_date: r.shoot_date, link: r.drive_link,
         due: new Date(r.due_at).toLocaleString("en-US", { timeZone: "America/New_York", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) }))} />
       {!smsReady() && <Notice>Text messaging isn&apos;t connected yet (Twilio). Email and portal notifications still work.</Notice>}
