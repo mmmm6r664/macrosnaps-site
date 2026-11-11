@@ -4,7 +4,9 @@ import { createHash, randomBytes } from "crypto";
 import { q, db, audit } from "@/lib/db";
 import { sendMail } from "@/lib/mail";
 import { ORIGIN } from "@/lib/emailTemplate";
-import { contractToSign, contractSignedSigner, contractSignedTeam } from "@/lib/emails";
+import { contractToSign, contractSignedSigner, contractSignedTeam, photographerWelcome } from "@/lib/emails";
+import { hashPassword, createPasswordToken } from "@/lib/auth";
+import { resolveCity } from "@/lib/geo";
 import { buildContractPdf } from "@/lib/contractPdf";
 import { CONTRACT, CONTRACT_VERSION, CONTRACT_TITLE, CONTRACT_INTRO } from "@/data/contractorAgreement";
 import { SITE } from "@/lib/site";
@@ -45,6 +47,21 @@ export async function sendContract(o: { name: string; email: string; userId?: nu
   return { id, url, emailed };
 }
 
+/** Creates a staff login + profile for a contractor who signed without a portal account. Returns the new user id. */
+async function addSignerToTeam(o: { name: string; email: string; phone: string; address: string; inquiryId: number | null }) {
+  const app = o.inquiryId ? (await q<{ data: Record<string, string> }[]>`select data from inquiries where id = ${o.inquiryId} and kind = 'application'`)[0]?.data ?? null : null;
+  const cityText = app?.city || (o.address.match(/([A-Za-z .'-]+),\s*([A-Za-z]{2})\b/)?.slice(1, 3).map((x) => x.trim()).join(", ") ?? "");
+  const city = cityText ? resolveCity(cityText) : undefined;
+  const roles = /both/i.test(app?.role ?? "") ? ["Photographer", "Videographer"] : [/video/i.test(app?.role ?? "") ? "Videographer" : "Photographer"];
+  const sql = await db();
+  return sql.begin(async (tx) => {
+    const [nu] = await tx<{ id: number }[]>`insert into users (email, name, password_hash, role) values (${o.email.toLowerCase()}, ${o.name}, ${await hashPassword(randomBytes(24).toString("hex"))}, 'staff') returning id`;
+    await tx`insert into staff_profiles (user_id, phone, city, lat, lng, roles, application_id) values (${nu.id}, ${o.phone || null}, ${city ? `${city.name}, ${city.state}` : cityText}, ${city?.lat ?? null}, ${city?.lng ?? null}, ${roles}, ${app ? o.inquiryId : null})`;
+    if (app) await tx`update inquiries set status = 'done', notes = notes || ${`\nAdded to the team after signing the contractor agreement on ${new Date().toISOString().slice(0, 10)}`} where id = ${o.inquiryId}`;
+    return nu.id;
+  });
+}
+
 /** Records the first view (for the audit trail). */
 export async function markViewed(id: number, ip: string) {
   const r = await q<{ id: number }[]>`update contracts set status = 'viewed', viewed_at = now(), viewed_ip = ${ip} where id = ${id} and status = 'sent' returning id`;
@@ -71,9 +88,20 @@ export async function signContract(token: string, s: { name: string; phone: stri
       signature_png = ${s.signaturePng}, consent = true, pdf = ${buf}, pdf_sha256 = ${sha(pdf)}
     where id = ${c.id} and status in ('sent','viewed') returning id`;
   if (!done.length) return { error: "This contract is already signed." };
-  // Link to the staff profile if this person has a portal account.
-  const uid = c.user_id ?? (await q<{ id: number }[]>`select id from users where lower(email) = ${c.signer_email}`)[0]?.id ?? null;
-  if (uid) await q`update staff_profiles set contract_version = ${c.doc_version}, contract_signature = ${s.name}, contract_signed_at = ${signedAt}, contract_ip = ${s.ip} where user_id = ${uid}`;
+  // Link to the staff profile, adding the contractor to the team first if they don't have a portal account yet.
+  const found = c.user_id ?? (await q<{ id: number }[]>`select id from users where lower(email) = ${c.signer_email}`)[0]?.id ?? null;
+  const uid = found ?? (await addSignerToTeam({ name: c.signer_name, email: c.signer_email, phone: s.phone, address: s.address, inquiryId: c.inquiry_id }).catch(() => null));
+  if (uid) {
+    await q`insert into staff_profiles (user_id) values (${uid}) on conflict (user_id) do nothing`;
+    await q`update staff_profiles set contract_version = ${c.doc_version}, contract_signature = ${s.name}, contract_signed_at = ${signedAt}, contract_ip = ${s.ip}, phone = coalesce(phone, ${s.phone || null}) where user_id = ${uid}`;
+    await q`update contracts set user_id = ${uid} where id = ${c.id} and user_id is null`;
+  }
+  if (uid && !found) {
+    const token = await createPasswordToken(uid, "set");
+    const w = photographerWelcome(c.signer_name, `${ORIGIN}/staff/set-password?t=${token}`, true);
+    await sendMail({ to: c.signer_email, subject: w.subject, html: w.html });
+    await audit(null, "staff_add_from_contract", `${c.signer_email} (MS-C${c.id})`);
+  }
   await audit(uid, "contract_signed", `MS-C${c.id} by ${c.signer_email}`);
 
   const filename = `MacroSnaps-Contractor-Agreement-${c.signer_name.replace(/[^\w]+/g, "-")}-MS-C${c.id}.pdf`;

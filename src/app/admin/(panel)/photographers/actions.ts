@@ -114,6 +114,19 @@ export async function addPhotographer(_: S, f: FormData): Promise<S> {
   });
   const token = await createPasswordToken(userId, "set");
   const setupUrl = `${ORIGIN}/staff/set-password?t=${token}`;
+  // Already signed a contractor agreement (sent from Contracts)? Link it instead of sending another.
+  const [signed] = await q<{ id: number; doc_version: string; signed_name: string; signed_at: Date; signed_ip: string; signer_phone: string | null }[]>`
+    select id, doc_version, signed_name, signed_at, signed_ip, signer_phone from contracts where lower(signer_email) = ${email} and status = 'signed' order by signed_at desc limit 1`;
+  if (signed) {
+    await q`update staff_profiles set contract_version = ${signed.doc_version}, contract_signature = ${signed.signed_name}, contract_signed_at = ${signed.signed_at}, contract_ip = ${signed.signed_ip}, phone = coalesce(phone, ${signed.signer_phone}) where user_id = ${userId}`;
+    await q`update contracts set user_id = ${userId} where id = ${signed.id} and user_id is null`;
+    const { photographerWelcome } = await import("@/lib/emails");
+    const w = photographerWelcome(name, setupUrl, true);
+    const ok = (await sendMail({ to: email, subject: w.subject, html: w.html })).ok;
+    await audit(u.id, "staff_add", `${email} (signed MS-C${signed.id})`);
+    revalidatePath("/admin/photographers");
+    return ok ? { ok: `${name} has been added (contract MS-C${signed.id} is on file) and emailed their welcome.` } : { ok: `${name} was added, but the email couldn't be sent. Account setup link: ${setupUrl}` };
+  }
   const contract = f.get("contract") === "on" ? await sendContract({ name, email, userId, companySigner: u.name, by: u.id, email_it: false }) : null;
   const m = photographerAccepted(name, contract?.url ?? null, setupUrl);
   const sent = (await sendMail({ to: email, subject: m.subject, html: m.html })).ok;
