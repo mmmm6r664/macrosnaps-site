@@ -16,6 +16,7 @@ const EXAMPLES = [
   "Real estate photos and a 3D tour for a listing in Arlington, VA",
   "Live stream our keynote in Toronto",
 ];
+const LONGEST = EXAMPLES.reduce((a, b) => (b.length > a.length ? b : a));
 
 type Result = { headline: string; url: string; bookUrl?: string; priceFrom?: number; note?: string; links: { label: string; href: string }[] };
 
@@ -60,20 +61,25 @@ export default function AskBox({ variant = "light", title = "Tell us what you ne
       {title && <p className={`mb-3 font-serif text-2xl md:text-3xl ${dark ? "text-white" : "text-ink"}`}>{title}</p>}
       <form onSubmit={submit} className={`flex items-center gap-2 rounded-[2rem] border p-2 pl-5 shadow-xl transition focus-within:ring-2 focus-within:ring-gold md:pl-6 ${dark ? "border-white/20 bg-white/95" : "border-black/10 bg-white"}`}>
         <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-gold-dark" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-        {/* Textarea so long examples wrap instead of being cut off on phones; Enter still submits. */}
-        <textarea
-          value={q}
-          rows={2}
-          onChange={(e) => setQ(cleanTyped(e.target.value.replace(/\n/g, " ")))}
-          onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); e.currentTarget.form?.requestSubmit(); } }}
-          maxLength={MAX_QUERY}
-          spellCheck={false}
-          enterKeyHint="search"
-          onFocus={() => (focused.current = true)}
-          placeholder={ph}
-          aria-label="Describe the photography or videography you need"
-          className="min-w-0 flex-1 resize-none bg-transparent py-1.5 text-base leading-snug text-ink outline-none placeholder:text-muted md:h-12 md:overflow-hidden md:py-3 md:leading-6"
-        />
+        {/* Textarea so long examples wrap instead of being cut off on phones; Enter still submits.
+            An invisible copy of the text (or of the longest example, while the placeholder types) sits in the same
+            grid cell and sets the height, so the box grows to fit every line without jumping as the example types. */}
+        <div className="grid min-w-0 flex-1 [&>*]:[grid-area:1/1]">
+          <div aria-hidden className="invisible whitespace-pre-wrap break-words py-1.5 text-base leading-snug md:h-12 md:overflow-hidden md:py-3 md:leading-6">{(q || LONGEST) + " "}</div>
+          <textarea
+            value={q}
+            rows={1}
+            onChange={(e) => setQ(cleanTyped(e.target.value.replace(/\n/g, " ")))}
+            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); e.currentTarget.form?.requestSubmit(); } }}
+            maxLength={MAX_QUERY}
+            spellCheck={false}
+            enterKeyHint="search"
+            onFocus={() => (focused.current = true)}
+            placeholder={ph}
+            aria-label="Describe the photography or videography you need"
+            className="min-w-0 resize-none overflow-hidden bg-transparent py-1.5 text-base leading-snug text-ink outline-none placeholder:text-muted md:h-12 md:py-3 md:leading-6"
+          />
+        </div>
         <button disabled={busy} className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gold text-black transition hover:scale-105 hover:bg-[#ddcb67] disabled:opacity-60" aria-label="Find the right service">
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden><path d="M3 20.5 21 12 3 3.5l.01 6.6L15 12 3.01 13.9z" /></svg>
         </button>
