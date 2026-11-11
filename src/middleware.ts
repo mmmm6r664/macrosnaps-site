@@ -32,6 +32,10 @@ export async function middleware(req: NextRequest) {
   }
 
   const path = req.nextUrl.pathname;
+  // The project's vercel.app address serves the same pages; send visitors and search engines to the real domain.
+  if (req.headers.get("host") === "macrosnaps-site.vercel.app" && !path.startsWith("/api/")) {
+    return NextResponse.redirect(new URL(`${path}${req.nextUrl.search}`, "https://www.macrosnaps.com"), 308);
+  }
   const gate = (process.env.ADMIN_GATE_PATH || "").replace(/^\/+|\/+$/g, "");
   const validGate = gate.length >= 16;
   if (validGate && path === `/${gate}`) {
