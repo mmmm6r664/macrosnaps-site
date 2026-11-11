@@ -75,6 +75,15 @@ export const fmtPop = (n: number) =>
   n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")} million` : n >= 10_000 ? `${Math.round(n / 1000)},000` : n.toLocaleString("en-US");
 
 /** Deterministic pick so each city gets a stable but different variant. */
+/** First variant that fits in `max` characters; never cuts a title mid-word. */
+export function fitTitle(max: number, ...variants: string[]) {
+  const ok = variants.find((v) => v.length <= max);
+  if (ok) return ok;
+  const last = variants[variants.length - 1];
+  const cut = last.slice(0, max + 1);
+  return cut.slice(0, cut.lastIndexOf(" ") > 0 ? cut.lastIndexOf(" ") : max).replace(/[\s|,·–-]+$/, "");
+}
+
 export function pick<T>(arr: T[], seed: number, salt = 0): T {
   const x = Math.abs(Math.sin(seed * 9301 + salt * 49297) * 233280);
   return arr[Math.floor(x) % arr.length];

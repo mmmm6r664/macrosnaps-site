@@ -4,7 +4,7 @@
 // 13+ years, own crews (US + Ontario & Quebec), State Farm $1M/$2M,
 // retouched gallery in about a week, highlight videos in 2–4 weeks, same published price for everyone.
 import { EVENT_TYPES, type EventType } from "@/data/eventTypes";
-import { City, Region, LocalInfo, cityLabel, citiesIn, fmtPop, getCity, getLocal, pick, topCities } from "./geo";
+import { City, Region, LocalInfo, cityLabel, citiesIn, fmtPop, getCity, getLocal, pick, topCities, fitTitle } from "./geo";
 import { RATES, hourPrice } from "./pricing";
 import { listText } from "./content";
 
@@ -66,7 +66,7 @@ export function eventCosts(e: EventType) {
 }
 
 /** First variant that fits the length limit (variants are ordered most to least descriptive). */
-const fit = (max: number, ...variants: string[]) => variants.find((v) => v.length <= max) ?? variants[variants.length - 1].slice(0, max);
+const fit = fitTitle;
 
 function sizePhrase(c: City) {
   if (c.slug === "washington-dc") return "the nation's capital";

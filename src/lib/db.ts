@@ -362,6 +362,14 @@ create table if not exists assignments (
   created_at timestamptz not null default now()
 );
 create index if not exists assignments_email on assignments(lower(email));
+create table if not exists page_versions (
+  url text primary key,
+  grp text not null default '',
+  hash text not null,
+  changed_at timestamptz,
+  checked_at timestamptz not null default now()
+);
+create index if not exists page_versions_grp on page_versions(grp);
 alter table subscribers add column if not exists nurture_at timestamptz;
 create table if not exists feedback (
   id serial primary key,

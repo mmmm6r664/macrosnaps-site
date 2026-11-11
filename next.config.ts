@@ -4,6 +4,8 @@ import { redirects } from "./src/lib/redirects";
 const nextConfig: NextConfig = {
   images: { loader: "custom", loaderFile: "./src/lib/image-loader.ts" },
   async redirects() { return redirects; },
+  // The sitemap index lives in a route handler; serve it at the standard address.
+  async rewrites() { return { beforeFiles: [{ source: "/sitemap.xml", destination: "/sitemap-index.xml" }], afterFiles: [], fallback: [] }; },
   async headers() {
     const csp = [
       "default-src 'self'",

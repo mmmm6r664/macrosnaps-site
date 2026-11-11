@@ -85,7 +85,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const url = `/${p.service}/${p.place}`;
   const c = "city" in d && d.city ? cityContent(d.t, d.city) : regionContent(d.t, (d as { region: Region }).region);
   return {
-    title: { absolute: `${c.metaTitle} | MacroSnaps`.length <= 70 ? `${c.metaTitle} | MacroSnaps` : c.metaTitle },
+    title: { absolute: !c.metaTitle.includes("MacroSnaps") && `${c.metaTitle} | MacroSnaps`.length <= 70 ? `${c.metaTitle} | MacroSnaps` : c.metaTitle },
     description: c.metaDescription,
     alternates: { canonical: url },
     openGraph: { title: c.metaTitle, description: c.metaDescription, url, images: [imagesFor(d.t)[0]] },

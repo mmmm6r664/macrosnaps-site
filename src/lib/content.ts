@@ -1,4 +1,4 @@
-import { City, LocalInfo, Region, cityLabel, fmtPop, getLocal, pick, citiesIn } from "./geo";
+import { City, LocalInfo, Region, cityLabel, fmtPop, getLocal, pick, citiesIn, fitTitle } from "./geo";
 import { HUBS, Service, Faq, getService, SERVICES } from "./services";
 import { IMG } from "./images";
 
@@ -89,10 +89,10 @@ export function cityContent(t: LocalTarget, c: City): CityContent {
   const priceFrom = prices.length ? Math.min(...prices) : null;
 
   const h1 = `${pro} in ${label}`;
-  const metaTitle = pick(
-    [`${pro} in ${label} | Book Online`, `${label} ${pro} | ${name}`, `${pro} ${c.name}, ${c.state} | ${name} Packages`],
-    seed,
-  ).slice(0, 65);
+  // Pick a title style per city, then fall back to shorter forms so no title is cut off mid-word.
+  const styles = [`${pro} in ${label} | Book Online`, `${label} ${pro} | ${name}`, `${pro} ${c.name}, ${c.state} | ${name} Packages`];
+  const first = pick(styles, seed);
+  const metaTitle = fitTitle(65, first, ...styles.filter((x) => x !== first), `${pro} in ${label} | MacroSnaps`, `${pro} in ${label}`, `${pro} ${c.name}, ${c.state}`, `${pro} ${c.name}`);
   const metaDescription =
     `Hire a professional ${pro.toLowerCase()} in ${label}. MacroSnaps' own crews cover ${topicDesc(topic, t)} in ${c.name}` +
     (priceFrom ? `. Packages from $${priceFrom}, book & pay online.` : `. Request a quote today.`);
@@ -259,7 +259,7 @@ export function regionContent(t: LocalTarget, r: Region) {
   const priceFrom = prices.length ? Math.min(...prices) : null;
   const what = r.country === "canada" ? (["YT", "NT", "NU"].includes(r.code) ? "territory" : "province") : r.code === "DC" ? "district" : "state";
   return {
-    metaTitle: `${plural(pro)} in ${r.name} | ${name} Across ${r.name}`.slice(0, 65),
+    metaTitle: fitTitle(65, `${plural(pro)} in ${r.name} | ${name} Across ${r.name}`, `${plural(pro)} in ${r.name} | MacroSnaps`, `${plural(pro)} in ${r.name}`, `${pro} ${r.name}`),
     metaDescription: `Professional ${name.toLowerCase()} across ${r.name}: ${listText(top)} and ${Math.max(list.length - top.length, 0)} more cities. MacroSnaps' own crews${priceFrom ? `, packages from $${priceFrom}` : ""}.`,
     h1: `${plural(pro)} in ${r.name}`,
     intro: [
