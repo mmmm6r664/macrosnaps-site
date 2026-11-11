@@ -25,6 +25,16 @@ export async function myShoots(userId: number) {
     from crew_assignments c join bookings b on b.id = c.booking_id where c.user_id = ${userId} and b.status not in ('cancelled', 'refunded') order by b.first_date desc nulls last limit 200`;
 }
 
+export type Assigned = { id: number; type: string; dates: string; city: string | null; pay: string; sessions: { day: string; time: string }[]; location: string; scope: string[]; shoot_date: string | null; delivered: boolean };
+/** Shoots assigned by email from the admin (not website bookings). */
+export async function myAssignments(userId: number, email: string) {
+  return q<Assigned[]>`
+    select a.id, a.type, a.dates, a.city, a.pay, a.sessions, a.location, a.scope, a.shoot_date::text as shoot_date, (fr.drive_link is not null) as delivered
+    from assignments a left join file_requests fr on fr.id = a.file_request_id
+    where a.user_id = ${userId} or (a.user_id is null and lower(a.email) = ${email.toLowerCase()})
+    order by a.shoot_date desc nulls last, a.id desc limit 200`;
+}
+
 export async function myPayouts(userId: number) {
   return q<{ id: number; amount_cents: number; paid_on: string; method: string | null; note: string }[]>`select id, amount_cents, paid_on::text as paid_on, method, note from payouts where user_id = ${userId} order by paid_on desc, id desc`;
 }

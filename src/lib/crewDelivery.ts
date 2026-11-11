@@ -22,7 +22,17 @@ export const verifyDeliver = (b: number, u: number, t: string) => verifyRef(`${b
 export function zoneFor(city: string | null) {
   const c = city ? resolveCity(city) : undefined;
   const lng = c?.lng;
-  if (lng === undefined) return "America/New_York";
+  if (lng === undefined) {
+    // Smaller towns aren't in the city list: go by the state (or province) after the comma.
+    const st = (city ?? "").split(",").pop()?.trim().toUpperCase().slice(0, 2) ?? "";
+    if (["CA", "WA", "OR", "NV", "BC"].includes(st)) return "America/Los_Angeles";
+    if (["AZ"].includes(st)) return "America/Phoenix";
+    if (["CO", "UT", "NM", "MT", "WY", "ID", "AB"].includes(st)) return "America/Denver";
+    if (["TX", "IL", "MN", "WI", "IA", "MO", "AR", "LA", "MS", "AL", "OK", "KS", "NE", "SD", "ND", "TN", "MB", "SK"].includes(st)) return "America/Chicago";
+    if (st === "AK") return "America/Anchorage";
+    if (st === "HI") return "Pacific/Honolulu";
+    return "America/New_York";
+  }
   if (lng > -87) return "America/New_York";
   if (lng > -101) return "America/Chicago";
   if (lng > -115) return "America/Denver";
@@ -88,8 +98,9 @@ export async function runCrewDelivery(now = new Date()) {
       out.overdue++;
     }
   }
+  const asg = await runAssignments(now);
   const extra = await runFileRequests(now);
-  return { ...out, requestReminders: extra.reminded, requestsOverdue: extra.overdue };
+  return { ...out, assignmentsAsked: asg, requestReminders: extra.reminded, requestsOverdue: extra.overdue };
 }
 
 /** Saves the link a crew member sent and tells the team. Returns false for a bad link or token. */
@@ -123,7 +134,7 @@ export const requestUrl = (id: number) => `${ORIGIN}/deliver?r=${id}&t=${signRef
 const tzName = "America/New_York";
 
 /** Creates a request and emails it right away. Due 24 hours from now unless dueAt is given. */
-export async function createFileRequest(o: { name: string; email: string; shoot: string; shootDate: string; by: number; dueAt?: Date }) {
+export async function createFileRequest(o: { name: string; email: string; shoot: string; shootDate: string; by: number | null; dueAt?: Date }) {
   const due = o.dueAt ?? new Date(Date.now() + 24 * HOUR);
   const [r] = await q<{ id: number }[]>`insert into file_requests (name, email, shoot, shoot_date, due_at, created_by) values (${o.name}, ${o.email}, ${o.shoot}, ${o.shootDate}, ${due}, ${o.by}) returning id`;
   const m = crewDriveRequest({ name: o.name, service: o.shoot, ref: `your ${o.shootDate} shoot`, folder: `${o.shootDate} - ${o.shoot}`, client: "", when: o.shootDate, venue: "", deadline: fmt(due, tzName), url: requestUrl(r.id) });
@@ -175,4 +186,33 @@ export async function saveRequestLink(id: number, token: string, link: string) {
 export async function listFileRequests() {
   return q<{ id: number; name: string; email: string; shoot: string; shoot_date: string; due_at: Date; drive_link: string | null; drive_link_at: Date | null; created_at: Date }[]>`
     select id, name, email, shoot, shoot_date, due_at, drive_link, drive_link_at, created_at from file_requests order by id desc limit 50`;
+}
+
+/* ---------- shoots assigned by email from the admin (not tied to a website booking) ---------- */
+/** When an assigned shoot ends: the last time in the schedule line (e.g. "9:00 AM – 6:00 PM") on the shoot date, in the city's time zone. */
+export function assignmentEnd(date: string, timeText: string, city: string) {
+  const times = [...timeText.matchAll(/(\d{1,2})(?::(\d{2}))?\s*([ap])\.?m\.?/gi)].map((m) => {
+    const h = (Number(m[1]) % 12) + (m[3].toLowerCase() === "p" ? 12 : 0);
+    return `${String(h).padStart(2, "0")}:${m[2] ?? "00"}`;
+  });
+  const tz = zoneFor(city || null);
+  const end = zoned(date, times.length ? times[times.length - 1] : "23:00", tz);
+  if (times.length >= 2 && times[times.length - 1] < times[0]) end.setTime(end.getTime() + 24 * HOUR);
+  return end;
+}
+
+/** About an hour after an assigned shoot ends, send the Drive-link request (with the usual reminder and overdue alert). */
+async function runAssignments(now: Date) {
+  let asked = 0;
+  const rows = await q<{ id: number; name: string; email: string; type: string; dates: string; ends_at: Date; created_by: number | null }[]>`
+    select id, name, email, type, dates, ends_at, created_by from assignments
+    where drive_asked_at is null and ends_at is not null and ends_at <= ${new Date(now.getTime() - HOUR)} and ends_at > ${new Date(now.getTime() - 4 * 24 * HOUR)}`;
+  for (const r of rows) {
+    const claimed = await q`update assignments set drive_asked_at = now() where id = ${r.id} and drive_asked_at is null returning id`;
+    if (!claimed.length) continue;
+    const fr = await createFileRequest({ name: r.name, email: r.email, shoot: r.type, shootDate: r.dates, by: r.created_by, dueAt: new Date(new Date(r.ends_at).getTime() + 24 * HOUR) });
+    await q`update assignments set file_request_id = ${fr.id} where id = ${r.id}`;
+    if (fr.emailed) asked++;
+  }
+  return asked;
 }

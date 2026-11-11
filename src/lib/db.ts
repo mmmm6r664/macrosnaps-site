@@ -350,6 +350,18 @@ create table if not exists file_requests (
   created_by int references users(id) on delete set null,
   created_at timestamptz not null default now()
 );
+create table if not exists assignments (
+  id serial primary key,
+  user_id int references users(id) on delete set null,
+  name text not null, email text not null,
+  type text not null default '', dates text not null default '', city text, pay text not null default '',
+  sessions jsonb not null default '[]', location text not null default '', scope text[] not null default '{}',
+  shoot_date date, ends_at timestamptz, emailed boolean not null default false,
+  file_request_id int references file_requests(id) on delete set null, drive_asked_at timestamptz,
+  created_by int references users(id) on delete set null,
+  created_at timestamptz not null default now()
+);
+create index if not exists assignments_email on assignments(lower(email));
 alter table subscribers add column if not exists nurture_at timestamptz;
 create table if not exists feedback (
   id serial primary key,

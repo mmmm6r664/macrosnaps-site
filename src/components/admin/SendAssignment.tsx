@@ -12,7 +12,7 @@ export default function SendAssignment({ team, defaultScope }: { team: Member[];
   return (
     <details className="mb-4 rounded-lg border border-black/10 bg-white p-4" open={!!s}>
       <summary className="cursor-pointer text-sm font-semibold">+ Send shoot assignment (confirmation email to a photographer)</summary>
-      <p className="mt-2 text-sm text-black/60">Fill in the shoot, press <b>Preview</b> to see exactly what they&apos;ll get, then <b>Send</b>.</p>
+      <p className="mt-2 text-sm text-black/60">Fill in the shoot, press <b>Preview</b> to see exactly what they&apos;ll get, then <b>Send</b>. The shoot is also added to their portal under My shoots, and they&apos;re asked for their Google Drive link about an hour after it ends.</p>
       <form onSubmit={noReset(act)} className="mt-4 grid gap-3 sm:grid-cols-2">
         <div className="sm:col-span-2 grid gap-3 sm:grid-cols-3">
           <div><label className={labelCls} htmlFor="sa-m">Team member</label>
@@ -22,6 +22,7 @@ export default function SendAssignment({ team, defaultScope }: { team: Member[];
         </div>
         <div><label className={labelCls} htmlFor="sa-t">Type</label><input id="sa-t" name="type" defaultValue="Conference Photography" className={inputCls} /></div>
         <div><label className={labelCls} htmlFor="sa-d">Dates</label><input id="sa-d" name="dates" placeholder="Friday & Saturday, Oct 16–17" className={inputCls} /></div>
+        <div><label className={labelCls} htmlFor="sa-sd">Shoot date (last day, if several)</label><input id="sa-sd" name="shootDate" type="date" required className={inputCls} /></div>
         <div><label className={labelCls} htmlFor="sa-c">City (for the subject line)</label><input id="sa-c" name="city" placeholder="New York, NY" className={inputCls} /></div>
         <div><label className={labelCls} htmlFor="sa-p">Compensation</label><input id="sa-p" name="pay" placeholder="$350" className={inputCls} /></div>
         <div><label className={labelCls} htmlFor="sa-s">Schedule (one line per day: Day | Time)</label>
@@ -33,6 +34,7 @@ export default function SendAssignment({ team, defaultScope }: { team: Member[];
         <div className="flex gap-2 sm:col-span-2">
           <button name="mode" value="preview" disabled={pending} className={btnGhost}>{pending ? "Working…" : "Preview"}</button>
           <button name="mode" value="send" disabled={pending || !s?.preview} title={s?.preview ? "" : "Preview first"} className={btnGold}>Send</button>
+          <button name="mode" value="save" disabled={pending || !s?.preview} title="Adds it to their portal without emailing them (e.g. they already got the email)" className={btnGhost}>Save to portal only</button>
         </div>
         {(s?.error || s?.ok) && <p role="status" className={`rounded px-3 py-2 text-sm sm:col-span-2 ${s.error ? "bg-red-50 text-red-800" : "bg-emerald-50 text-emerald-800"}`}>{s.error ?? s.ok}</p>}
       </form>

@@ -10,6 +10,7 @@ import { requireUser, hashPassword, createPasswordToken } from "@/lib/auth";
 import { resolveCity } from "@/lib/geo";
 import { allPeople, parseRadius } from "@/lib/network";
 import { emailPerson, textPerson, notifyUser, ORIGIN } from "@/lib/notify";
+import { assignmentEnd } from "@/lib/crewDelivery";
 
 export type S = { error?: string; ok?: string } | undefined;
 
@@ -196,11 +197,23 @@ export async function sendAssignment(_: AssignS, f: FormData): Promise<AssignS> 
     location: g("location"), pay: g("pay"), scope: g("scope").split("\n").map((l) => l.replace(/^[•\-*]\s*/, "").trim()).filter(Boolean),
   };
   if (!a.dates || !sessions.length || !a.location || !a.pay) return { error: "Fill in dates, schedule, location and compensation." };
+  const shootDate = g("shootDate");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(shootDate)) return { error: "Choose the shoot date (the last day, if it runs several days)." };
   const m = crewAssignment(a);
-  if (f.get("mode") !== "send") return { preview: { to: `${name} <${email}>`, subject: m.subject, html: m.html } };
-  const sent = await sendMail({ to: email, subject: m.subject, html: m.html });
-  await audit(u.id, "crew_assignment_email", `${email}: ${m.subject}`);
-  return sent.ok ? { ok: `Sent to ${name} (${email}).` } : { error: "The email couldn't be sent. Check the email log for details." };
+  const mode = String(f.get("mode"));
+  if (mode !== "send" && mode !== "save") return { preview: { to: `${name} <${email}>`, subject: m.subject, html: m.html } };
+  const sent = mode === "send" ? (await sendMail({ to: email, subject: m.subject, html: m.html })).ok : false;
+  if (mode === "send" && !sent) return { error: "The email couldn't be sent. Check the email log for details." };
+  // Save it so it shows in their portal under My shoots, and so we ask for the Drive link after the shoot.
+  const userId = member || (await q<{ id: number }[]>`select id from users where lower(email) = ${email} and role = 'staff'`)[0]?.id || null;
+  const endsAt = assignmentEnd(shootDate, sessions[sessions.length - 1]?.time ?? "", a.city ?? "");
+  await q`insert into assignments (user_id, name, email, type, dates, city, pay, sessions, location, scope, shoot_date, ends_at, emailed, created_by)
+    values (${userId}, ${name}, ${email}, ${a.type}, ${a.dates}, ${a.city ?? null}, ${a.pay}, ${(await db()).json(sessions)}, ${a.location}, ${a.scope}, ${shootDate}, ${endsAt}, ${sent}, ${u.id})`;
+  if (userId) await notifyUser(userId, `Shoot confirmed: ${a.type}`, `${a.dates}${a.city ? ` · ${a.city}` : ""}`, "/staff/shoots").catch(() => null);
+  await audit(u.id, mode === "send" ? "crew_assignment_email" : "crew_assignment_saved", `${email}: ${m.subject}`);
+  revalidatePath("/admin/photographers");
+  const where = userId ? " It's in their portal under My shoots." : " They aren't on the team yet, so it won't show in a portal.";
+  return { ok: `${mode === "send" ? `Sent to ${name} (${email}).` : `Saved for ${name} without emailing.`}${where} We'll ask for their Google Drive link about an hour after the shoot ends.` };
 }
 
 /** Correct a team member's phone number everywhere it's stored (profile, application, contracts). */
