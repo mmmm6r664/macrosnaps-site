@@ -11,13 +11,13 @@ export default async function SecurityPage({ u, manager }: { u: User; manager: b
     <>
       <PageHead title="Security" sub={`${u.name} · ${u.email}`} />
       {manager && !u.totp_enabled && <Notice>Owner and admin accounts must use two-factor authentication. Set it up to continue to the admin portal.</Notice>}
-      <div className="grid gap-5 xl:grid-cols-2">
+      <div className="grid min-w-0 gap-5 xl:grid-cols-2 [&>*]:min-w-0">
         <Card title="Two-factor authentication">
           <SetupPanel enabled={u.totp_enabled} manager={manager} />
           {u.totp_enabled && <p className="mt-3 text-xs text-black/50">{left} unused recovery code{left === 1 ? "" : "s"} left.</p>}
         </Card>
         <Card title="Where you're signed in">
-          <ul className="mb-4 divide-y divide-black/5 text-sm">{sessions.map((x, i) => <li key={i} className="py-2">{fmtDate(x.created_at, true)} · {x.ip || "unknown IP"}<div className="truncate text-xs text-black/50">{x.user_agent}</div></li>)}</ul>
+          <ul className="mb-4 divide-y divide-black/5 text-sm">{sessions.map((x, i) => <li key={i} className="py-2">{fmtDate(x.created_at, true)} · {x.ip || "unknown IP"}<div className="break-all text-xs text-black/50">{x.user_agent}</div></li>)}</ul>
           <SignOutOthers />
         </Card>
       </div>

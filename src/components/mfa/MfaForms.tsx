@@ -62,7 +62,7 @@ function Scan({ setup, act, pending, s }: { setup: M; act: (f: FormData) => void
       <p className="text-sm">1. In your authenticator app, add an account and scan this code:</p>
       {/* eslint-disable-next-line @next/next/no-img-element -- generated QR data URL */}
       <img src={setup!.qr} alt="QR code for your authenticator app" width={220} height={220} className="rounded border border-black/10" />
-      <p className="text-xs text-black/60">Can&apos;t scan? Enter this key: <span className="font-mono">{setup!.secret}</span></p>
+      <p className="text-xs text-black/60">Can&apos;t scan? Enter this key: <span className="break-all font-mono">{setup!.secret}</span></p>
       <div><label className={labelCls} htmlFor="setup-code">2. Enter the 6-digit code it shows</label><input id="setup-code" name="code" inputMode="numeric" autoComplete="one-time-code" required maxLength={7} className={`${inputCls} max-w-[200px] text-center font-mono text-xl tracking-[.3em]`} /></div>
       <Msg s={s} />
       <button disabled={pending} className={btnPrimary}>{pending ? "Checking…" : "Turn on"}</button>
