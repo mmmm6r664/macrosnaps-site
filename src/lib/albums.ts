@@ -61,7 +61,6 @@ const FEATURED_SLUGS = [
   "waterfront-wedding-august-2026",
   "portrait-session-alexandria-december-2021",
   "haldi-ceremony-november-2025",
-  "newborn-session-hoboken-march-2022",
   "ibm-event-november-2025",
   "family-session-washington-december-2021",
   "indian-engagement-session-july-2025",

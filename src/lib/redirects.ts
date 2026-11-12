@@ -36,6 +36,13 @@ export const redirects: R[] = [
   // Legacy pages found in Search Console (indexed or with impressions before launch).
   r("/areas-served", "/locations"),
   r("/portfolio/garden-wedding-october-2026", "/portfolio"),
+  r("/portfolio/newborn-session-wyckoff-march-2022", "/portfolio"),
+  r("/portfolio/newborn-session-hoboken-march-2022", "/portfolio"),
+  r("/portfolio/newborn-session-woodbridge-township-march-2022", "/portfolio"),
+  r("/portfolio/newborn-session-florham-park-february-2022", "/portfolio"),
+  r("/portfolio/newborn-session-monroe-february-2022", "/portfolio"),
+  r("/portfolio/newborn-session-new-york-january-2022", "/portfolio"),
+  r("/portfolio/newborn-session-washington-november-2021", "/portfolio"),
   r("/cookies-policy", "/privacy"),
   r("/groupon-redemption", "/book"),
   r("/product-page/3d-matterport-real-estate-virtual-tour", "/virtualtours"),
