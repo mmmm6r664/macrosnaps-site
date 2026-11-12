@@ -646,7 +646,7 @@ export function payoutSent(o: { name: string; amount: string; method: string | n
 /* ---------- client: invoice (sent by MacroSnaps; Stripe only hosts the payment page) ---------- */
 export type InvoiceMail = { name: string; billTo?: string | null; number: string; total: number; due: Date | null; memo?: string | null; lines: { label: string; amount: number }[]; payUrl: string; pdfUrl?: string | null; paid?: boolean };
 export function invoiceEmail(i: InvoiceMail): Email {
-  const due = i.due ? i.due.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" }) : null;
+  const due = i.due ? i.due.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "America/New_York" }) : null;
   const total = `$${i.total.toLocaleString("en-US", { minimumFractionDigits: i.total % 1 ? 2 : 0 })}`;
   return {
     subject: `Invoice ${i.number} from MacroSnaps: ${total}${due ? `, due ${due}` : ""}`,
