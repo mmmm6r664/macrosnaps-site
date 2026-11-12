@@ -35,6 +35,7 @@ export const redirects: R[] = [
   r("/product-page/boudoir", "/book"),
   // Legacy pages found in Search Console (indexed or with impressions before launch).
   r("/areas-served", "/locations"),
+  r("/portfolio/garden-wedding-october-2026", "/portfolio"),
   r("/cookies-policy", "/privacy"),
   r("/groupon-redemption", "/book"),
   r("/product-page/3d-matterport-real-estate-virtual-tour", "/virtualtours"),

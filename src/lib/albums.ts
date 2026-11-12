@@ -52,7 +52,6 @@ export const driveEmbedUrl = (id: string) => `https://drive.google.com/embeddedf
 /** Hand-picked standout galleries shown first on the Portfolio page (by slug; missing ones are skipped). */
 const FEATURED_SLUGS = [
   "fix-trading-conference-october-2026",
-  "garden-wedding-october-2026",
   "maternity-session-jersey-city-february-2022",
   "quality-trust-gala-2025",
   "nikkah-ceremony-october-2024",
