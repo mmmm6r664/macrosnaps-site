@@ -52,10 +52,14 @@ export async function POST(req: Request) {
       await sendMail({ to: email, replyTo: SITE.email, subject: c.subject, html: c.html });
     }
   }
-  // Custom invoices (admin → Invoices): tell the team and send the client a receipt from MacroSnaps.
+  // Every paid invoice alerts the team. Invoices made in admin → Invoices also get a MacroSnaps receipt for the
+  // client; invoices made elsewhere in Stripe keep Stripe's own receipt, so only the team alert goes out.
   if (event.type === "invoice.paid") {
     const inv = event.data.object as Stripe.Invoice;
-    if (inv.metadata?.source === "admin") await notifyInvoicePaid(inv.id!).catch((e) => console.error("[webhook] invoice paid", e));
+    if ((inv.amount_paid ?? 0) > 0) {
+      const opts = inv.metadata?.source === "admin" ? { team: true, client: true } : { team: true, client: false };
+      await notifyInvoicePaid(inv.id!, opts).catch((e) => console.error("[webhook] invoice paid", e));
+    }
   }
   // Customer left the payment page without paying → first abandoned-booking reminder.
   if (event.type === "checkout.session.expired") await onCheckoutExpired((event.data.object as Stripe.Checkout.Session).id).catch((e) => console.error("[webhook] expired", e));
