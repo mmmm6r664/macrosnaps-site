@@ -64,7 +64,9 @@ export async function createInvoice(_: S, f: FormData): Promise<S> {
   if (!String(f.get("firstName") ?? "").trim() || !String(f.get("lastName") ?? "").trim()) return { error: "Enter both first and last name." };
   const email = clip(f.get("email")).toLowerCase();
   if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { error: "Enter the customer's name and a valid email." };
-  const days = Math.min(90, Math.max(0, Number(f.get("days")) || 7));
+  const rawDays = String(f.get("days") ?? "").trim();
+  // 0 = due today (an empty field means the usual 7 days).
+  const days = Math.min(90, Math.max(0, rawDays === "" || !Number.isFinite(Number(rawDays)) ? 7 : Math.round(Number(rawDays))));
   const descs = f.getAll("desc").map((v) => clip(v, 250));
   const qtys = f.getAll("qty").map((v) => Number(v));
   const prices = f.getAll("price").map((v) => Number(String(v).replace(/[$,]/g, "")));
