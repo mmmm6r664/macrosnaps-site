@@ -1,3 +1,4 @@
+import { AsyncLocalStorage } from "node:async_hooks";
 // Admin portal authentication: hashed passwords, server-side sessions in Postgres, httpOnly cookie.
 import "server-only";
 import { createHash, randomBytes, timingSafeEqual } from "crypto";
@@ -56,7 +57,12 @@ export async function destroySession() {
   jar.delete(COOKIE);
 }
 
+/** Lets the CRM connector (/api/mcp) run admin actions as a chosen admin user, for that request only. */
+export const actingAs = new AsyncLocalStorage<User>();
+
 export async function currentUser(): Promise<User | null> {
+  const acting = actingAs.getStore();
+  if (acting) return acting;
   const token = (await cookies()).get(COOKIE)?.value;
   if (!token || token.length > 100) return null;
   const sql = await db();
