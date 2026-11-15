@@ -417,6 +417,16 @@ alter table orders add column if not exists location text;
 alter table orders add column if not exists event_date text;
 alter table orders add column if not exists notes text;
 create index if not exists orders_client on orders(client_id);
+create table if not exists newsletter_events (
+  id bigserial primary key,
+  newsletter_id int not null references newsletters(id) on delete cascade,
+  subscriber_id int references subscribers(id) on delete set null,
+  kind text not null,          -- open | click
+  url text,
+  ua text,
+  created_at timestamptz not null default now()
+);
+create index if not exists newsletter_events_nl on newsletter_events(newsletter_id, kind);
 create index if not exists orders_email on orders(lower(email));
 create index if not exists orders_created on orders(created_at desc);
 alter table subscribers add column if not exists nurture_at timestamptz;

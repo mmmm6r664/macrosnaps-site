@@ -31,7 +31,7 @@ export default async function Clients({ searchParams }: { searchParams: Promise<
   const base = `/admin/clients?${new URLSearchParams({ ...(q ? { q } : {}), ...(sort !== "recent" ? { sort } : {}) })}`;
   return (
     <>
-      <PageHead title="Clients" sub={`${t.n.toLocaleString()} contacts (${t.wix.toLocaleString()} from Wix) · ${money(t.spent)} paid on past orders. Team members are not listed here.`} />
+      <PageHead actions={<form action="/api/admin/clients/export" method="get"><button className={btnGhost}>Export CSV</button></form>} title="Clients" sub={`${t.n.toLocaleString()} contacts (${t.wix.toLocaleString()} from Wix) · ${money(t.spent)} paid on past orders. Team members are not listed here.`} />
       <form className="mb-4 flex flex-wrap gap-2">
         <input name="q" defaultValue={q} placeholder="Search name, email, phone or company" className={`${inputCls} max-w-xs`} />
         <select name="sort" defaultValue={sort} className={`${inputCls} w-auto`}><option value="recent">Recent activity</option><option value="spent">Most spent</option><option value="name">Name</option></select>

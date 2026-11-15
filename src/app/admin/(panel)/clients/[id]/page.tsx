@@ -2,12 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { PageHead, Card, Table, Badge, Empty, fmtDate, money, btnGhost } from "@/components/admin/ui";
+import { PageHead, Card, Table, Badge, Empty, Notice, fmtDate, money, btnGhost, btnPrimary, inputCls, labelCls } from "@/components/admin/ui";
+import ConfirmButton from "@/components/admin/ConfirmButton";
+import { updateClient, deleteClient } from "../actions";
 
 type Client = { id: number; email: string | null; first_name: string; last_name: string; phone: string | null; company: string | null; address: string | null; source: string | null; labels: string[] | null; notes: string | null; created_at: Date; last_activity_at: Date | null; last_login_at: Date | null };
 type Order = { company: string | null; event: string | null; location: string | null; event_date: string | null; notes: string | null; id: number; number: string | null; created_at: Date; payment_status: string | null; fulfillment_status: string | null; total_cents: number; paid_cents: number; balance_cents: number; items: { name: string; qty: number }[]; channel: string | null };
 
-export default async function ClientPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ClientPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ saved?: string; err?: string }> }) {
+  const sp = await searchParams;
   await requireUser();
   const id = Number((await params).id);
   if (!Number.isInteger(id)) notFound();
@@ -26,7 +29,10 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
   const Row = ({ k, v }: { k: string; v: React.ReactNode }) => <div className="flex gap-3 py-1.5 text-sm"><dt className="w-28 shrink-0 text-black/55">{k}</dt><dd className="min-w-0 break-words">{v || "—"}</dd></div>;
   return (
     <>
-      <PageHead title={name} sub={`${orders.length} past order${orders.length === 1 ? "" : "s"} · ${money(paid)} paid${owed ? ` · ${money(owed)} unpaid` : ""}`} actions={<Link href="/admin/clients" className={btnGhost}>← All clients</Link>} />
+      <PageHead title={name} sub={`${orders.length} past order${orders.length === 1 ? "" : "s"} · ${money(paid)} paid${owed ? ` · ${money(owed)} unpaid` : ""}`} actions={<div className="flex flex-wrap gap-2"><Link href={`/admin/invoices/new?client=${c.id}`} className={btnGhost}>New invoice</Link><a href={`/api/admin/clients/${c.id}`} className={btnGhost}>Download info (CSV)</a><Link href="/admin/clients" className={btnGhost}>← All clients</Link></div>} />
+      {sp.saved && <Notice tone="green">Saved.</Notice>}
+      {sp.err === "email" && <Notice tone="red">That email address doesn&apos;t look right.</Notice>}
+      {sp.err === "dupe" && <Notice tone="red">Another contact already has that email.</Notice>}
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] [&>*]:min-w-0">
         <Card title="Contact">
           <dl>
@@ -41,6 +47,28 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
             <Row k="Portal login" v={c.last_login_at ? fmtDate(c.last_login_at) : "Never"} />
           </dl>
           {c.notes ? <p className="mt-3 whitespace-pre-wrap text-sm text-black/70">{c.notes}</p> : null}
+          <details className="mt-5 border-t border-black/10 pt-4">
+            <summary className="cursor-pointer text-sm font-semibold">Edit contact</summary>
+            <form action={updateClient} className="mt-3 space-y-3">
+              <input type="hidden" name="id" value={c.id} />
+              <div className="grid grid-cols-2 gap-3">
+                <div><label className={labelCls} htmlFor="c-first">First name</label><input id="c-first" name="first_name" defaultValue={c.first_name} className={inputCls} /></div>
+                <div><label className={labelCls} htmlFor="c-last">Last name</label><input id="c-last" name="last_name" defaultValue={c.last_name} className={inputCls} /></div>
+              </div>
+              <div><label className={labelCls} htmlFor="c-email">Email</label><input id="c-email" name="email" type="email" defaultValue={c.email ?? ""} className={inputCls} /></div>
+              <div><label className={labelCls} htmlFor="c-phone">Phone</label><input id="c-phone" name="phone" defaultValue={c.phone ?? ""} className={inputCls} /></div>
+              <div><label className={labelCls} htmlFor="c-company">Company</label><input id="c-company" name="company" defaultValue={c.company ?? ""} className={inputCls} /></div>
+              <div><label className={labelCls} htmlFor="c-address">Address</label><input id="c-address" name="address" defaultValue={c.address ?? ""} className={inputCls} /></div>
+              <div><label className={labelCls} htmlFor="c-labels">Labels (comma separated)</label><input id="c-labels" name="labels" defaultValue={c.labels?.join(", ") ?? ""} className={inputCls} /></div>
+              <div><label className={labelCls} htmlFor="c-notes">Notes</label><textarea id="c-notes" name="notes" rows={3} defaultValue={c.notes ?? ""} className={inputCls} /></div>
+              <button className={btnPrimary}>Save</button>
+            </form>
+            <form action={deleteClient} className="mt-4 rounded border border-red-200 bg-red-50/50 p-3">
+              <input type="hidden" name="id" value={c.id} />
+              {orders.length > 0 && <label className="mb-2 flex items-center gap-2 text-xs"><input type="checkbox" name="orders" /> Also delete their {orders.length} past order{orders.length === 1 ? "" : "s"}</label>}
+              <ConfirmButton message="Delete this contact? This can't be undone." className="text-sm font-semibold text-red-700 underline">Delete contact</ConfirmButton>
+            </form>
+          </details>
         </Card>
         <div className="space-y-6">
           <Card title="Past orders">
@@ -48,7 +76,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
               <Table head={["Order", "Date", "Event / details", "Total", "Payment", ""]}>
                 {orders.map((o) => (
                   <tr key={o.id}>
-                    <td className="px-4 py-3">#{o.number ?? o.id}</td>
+                    <td className="px-4 py-3"><Link className="underline" href={`/admin/orders/${o.id}`}>#{o.number ?? o.id}</Link></td>
                     <td className="whitespace-nowrap px-4 py-3">{fmtDate(o.created_at)}</td>
                     <td className="px-4 py-3">
                       {o.event ? <div className="font-medium">{o.event}</div> : null}

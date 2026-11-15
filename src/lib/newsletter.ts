@@ -4,6 +4,7 @@ import { Resend } from "resend";
 import { db, q } from "@/lib/db";
 import { SITE } from "@/lib/site";
 import { LOGO } from "@/lib/emailTemplate";
+import { addTracking } from "@/lib/nlTrack";
 
 const FROM = process.env.NEWSLETTER_FROM || process.env.MAIL_FROM || "MacroSnaps <info@e.macrosnaps.com>";
 const ORIGIN = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : SITE.url);
@@ -79,7 +80,7 @@ export function emailHtml(subject: string, preheader: string, body: string, unsu
     <p style="margin:0 0 12px">${social}</p>
     <p style="margin:0 0 6px;font:12px/1.6 ${SANS};color:#9a9a9a">America's premier event &amp; wedding photography and videography company</p>
     <p style="margin:0;font:12px/1.6 ${SANS};color:#777">${esc(SITE.phone)} &middot; ${esc(SITE.email)} &middot; <a href="${ORIGIN}" style="color:${GOLD};text-decoration:none">macrosnaps.com</a></p>
-    <p style="margin:12px 0 0;font:11px/1.6 ${SANS};color:#777">You're receiving this because you subscribed on macrosnaps.com. <a href="${unsubUrl}" style="color:#9a9a9a">Unsubscribe</a></p>
+    <p style="margin:12px 0 0;font:11px/1.6 ${SANS};color:#777">You're receiving this because you subscribed or worked with MacroSnaps. <a href="${unsubUrl}" style="color:#9a9a9a">Unsubscribe</a></p>
   </td></tr>
 </table></td></tr></table></body></html>`;
 }
@@ -108,7 +109,7 @@ export async function sendNewsletter(id: number): Promise<{ ok: boolean; sent: n
       const chunk = subs.slice(i, i + 100);
       const { error } = await resend.batch.send(chunk.map((s) => ({
         from: FROM, to: s.email, replyTo: SITE.email, subject: n.subject,
-        html: emailHtml(n.subject, n.preheader, n.body, unsubUrl(s.token)),
+        html: addTracking(emailHtml(n.subject, n.preheader, n.body, unsubUrl(s.token)), id, s.token),
         headers: listUnsubscribe(s.token),
       })));
       if (error) throw new Error(error.message);

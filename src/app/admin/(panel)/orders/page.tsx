@@ -25,7 +25,7 @@ export default async function Orders({ searchParams }: { searchParams: Promise<{
   const base = `/admin/orders?${new URLSearchParams({ ...(q ? { q } : {}), ...(pay ? { pay } : {}) })}`;
   return (
     <>
-      <PageHead title="Past orders" sub={`${t.n.toLocaleString()} orders from the old Wix site${t.first ? ` since ${fmtDate(t.first)}` : ""} · ${money(t.paid)} paid${t.owed ? ` · ${money(t.owed)} still unpaid` : ""}. New work is under Bookings and Invoices.`} />
+      <PageHead actions={<form action="/api/admin/orders/export" method="get"><button className={btnGhost}>Export CSV</button></form>} title="Past orders" sub={`${t.n.toLocaleString()} orders from the old Wix site${t.first ? ` since ${fmtDate(t.first)}` : ""} · ${money(t.paid)} paid${t.owed ? ` · ${money(t.owed)} still unpaid` : ""}. New work is under Bookings and Invoices.`} />
       <form className="mb-4 flex flex-wrap gap-2">
         <input name="q" defaultValue={q} placeholder="Search name, company, event, venue, order #" className={`${inputCls} max-w-xs`} />
         <select name="pay" defaultValue={pay} className={`${inputCls} w-auto`}><option value="">All payments</option>{statuses.map((s) => <option key={s.payment_status} value={s.payment_status}>{s.payment_status.replace(/_/g, " ").toLowerCase()} ({s.n})</option>)}</select>
@@ -35,7 +35,7 @@ export default async function Orders({ searchParams }: { searchParams: Promise<{
         <Table head={["Order", "Date", "Client", "Event / details", "Total", "Paid", "Payment"]}>
           {rows.slice(0, SIZE).map((r) => (
             <tr key={r.id}>
-              <td className="whitespace-nowrap px-4 py-3">#{r.number ?? r.id}{r.channel === "WIX_INVOICES" ? <div className="text-xs text-black/50">Invoice</div> : null}</td>
+              <td className="whitespace-nowrap px-4 py-3"><Link className="underline" href={`/admin/orders/${r.id}`}>#{r.number ?? r.id}</Link>{r.channel === "WIX_INVOICES" ? <div className="text-xs text-black/50">Invoice</div> : null}</td>
               <td className="whitespace-nowrap px-4 py-3">{fmtDate(r.created_at)}</td>
               <td className="px-4 py-3">{r.client_id ? <Link className="underline-offset-2 hover:underline" href={`/admin/clients/${r.client_id}`}>{r.name || r.email}</Link> : r.name || r.email || "—"}{r.name && r.email ? <div className="break-all text-xs text-black/50">{r.email}</div> : null}</td>
               <td className="max-w-md px-4 py-3">

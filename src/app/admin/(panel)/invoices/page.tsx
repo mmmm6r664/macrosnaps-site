@@ -38,6 +38,7 @@ export default async function Invoices({ searchParams }: { searchParams: Promise
                   {i.invoice_pdf && <a className="text-xs underline" href={i.invoice_pdf} target="_blank" rel="noopener">PDF ↗</a>}
                   {(i.status === "draft" || i.status === "open") && <Act id={i.id!} op="send" label={i.status === "draft" ? "Finalize & email" : "Resend email"} />}
                   {i.status === "open" && <Act id={i.id!} op="paid" label="Mark paid (cash/check)" />}
+                  {(i.status === "open" || i.status === "draft") && <a className="text-xs underline" href={`/admin/invoices/new?from=${i.id}`}>Edit (corrected copy)</a>}
                   {i.status === "open" && <Act id={i.id!} op="void" label="Void" danger />}
                   {i.status === "draft" && <Act id={i.id!} op="delete" label="Delete draft" danger />}
                 </div>
