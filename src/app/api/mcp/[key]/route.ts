@@ -332,6 +332,40 @@ const TOOLS: Tool[] = [
     },
   },
   {
+    name: "import_signed_contract",
+    description: "Store an already-signed contractor agreement PDF (e.g. from Adobe Sign) on the contractor's profile. Adds the contractor quietly if they're not on the team. Skips duplicates by external_id. Sends NO email.",
+    inputSchema: obj({
+      name: S("Contractor name"), email: S(""), phone: S(""), title: S("Agreement title"), role: S("Photographer or Videographer"),
+      signed_at: S("ISO date/time signed"), external_id: S("e.g. gmail message id"), pdf_base64: S("The signed PDF, base64"),
+    }, ["name", "email", "signed_at", "external_id", "pdf_base64"]),
+    run: async (a) => {
+      const { hashPassword } = await import("@/lib/auth");
+      const { randomBytes, createHash } = await import("crypto");
+      const email = str(a.email, 200).trim().toLowerCase();
+      const name = str(a.name, 100).trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !name) return { error: "Need name and email" };
+      const pdf = Buffer.from(str(a.pdf_base64, 12_000_000), "base64");
+      if (pdf.length < 100 || pdf.subarray(0, 4).toString() !== "%PDF") return { error: "Not a PDF" };
+      const signedAt = new Date(str(a.signed_at, 40));
+      if (Number.isNaN(signedAt.getTime())) return { error: "Bad signed_at" };
+      const tokenHash = createHash("sha256").update(`external:${str(a.external_id, 200)}`).digest("hex");
+      if ((await q`select 1 from contracts where token_hash = ${tokenHash}`).length) return { ok: true, skipped: "already imported" };
+      const role = /video/i.test(str(a.role, 40) + str(a.title, 200)) ? "Videographer" : "Photographer";
+      let [u] = await q<{ id: number; name: string }[]>`select id, name from users where lower(email) = ${email}`;
+      let created = false;
+      if (!u) {
+        [u] = await q<{ id: number; name: string }[]>`insert into users (email, name, password_hash, role) values (${email}, ${name}, ${await hashPassword(randomBytes(24).toString("hex"))}, 'staff') returning id, name`;
+        await q`insert into staff_profiles (user_id, phone, roles) values (${u.id}, ${str(a.phone, 40) || null}, ${[role]}) on conflict do nothing`;
+        created = true;
+      }
+      await q`update staff_profiles set contract_signed_at = coalesce(contract_signed_at, ${signedAt}), contract_version = coalesce(contract_version, 'external:Adobe Sign'), contract_signature = coalesce(contract_signature, ${name}) where user_id = ${u.id}`;
+      const [c] = await q<{ id: number }[]>`insert into contracts (user_id, signer_name, signer_email, signer_phone, doc_title, doc_version, doc_sections, company_signer, company_signed_at, token_hash, status, sent_at, signed_at, signed_name, consent, pdf, pdf_sha256)
+        values (${u.id}, ${name}, ${email}, ${str(a.phone, 40) || null}, ${str(a.title, 200) || "Contractor Agreement"}, 'external:Adobe Sign', ${JSON.stringify([])}::jsonb, 'MacroHype LLC', ${signedAt}, ${tokenHash}, 'signed', ${signedAt}, ${signedAt}, ${name}, true, ${pdf}, ${createHash("sha256").update(pdf).digest("hex")})
+        returning id`;
+      return { ok: true, contract_id: c.id, user: u.name, created };
+    },
+  },
+  {
     name: "fix_team_city",
     description: "Re-resolve the city of team members whose city text matches (e.g. fix 'Washington, UT' to 'Washington, DC'). Sends nothing.",
     inputSchema: obj({ from: S("Current city text, e.g. Washington, UT"), to: S("Correct city, e.g. Washington, DC") }, ["from", "to"]),
