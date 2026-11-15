@@ -125,6 +125,8 @@ export async function sendNewsletter(id: number): Promise<{ ok: boolean; sent: n
     -- Photographers and videographers (team accounts and applicants) never get client newsletters.
     and not exists (select 1 from users u where u.role = 'staff' and (lower(u.email) = lower(s.email) or lower(s.email) = any(u.alt_emails)))
     and not exists (select 1 from inquiries i where i.kind = 'application' and lower(i.email) = lower(s.email))
+    -- Our own inboxes, and The Knot / WeddingWire / Sulekha relay addresses (those platforms forbid marketing through their relays).
+    and lower(s.email) !~ '(@(macrohype|macrosnaps)\\.com$|^(rehmansiddiq|macrohype)@|@member\\.theknot\\.com$|@reply\\.weddingwire\\.com$|sulekha)'
     order by id`;
   const resend = new Resend(key);
   let sent = 0;

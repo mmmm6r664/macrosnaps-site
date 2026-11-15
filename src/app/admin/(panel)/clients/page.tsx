@@ -24,10 +24,10 @@ export default async function Clients({ searchParams }: { searchParams: Promise<
         (select coalesce(sum(o.paid_cents), 0)::int from orders o where o.client_id = c.id) as paid_cents,
         (select count(*)::int from bookings b where c.email is not null and lower(b.email) = c.email) as bookings
       from clients c
-      where not exists (select 1 from users u where lower(u.email) = c.email or c.email = any(u.alt_emails)) and c.email !~ '@(macrohype|macrosnaps)\\.com$' and c.email not in ('rehmansiddiq@gmail.com', 'macrohype@gmail.com')
+      where not exists (select 1 from users u where lower(u.email) = c.email or c.email = any(u.alt_emails)) and c.email !~ '@(macrohype|macrosnaps)\\.com$' and c.email !~ '^(rehmansiddiq|macrohype)@'
       ${like ? sql`and (c.first_name || ' ' || c.last_name ilike ${like} or c.email ilike ${like} or c.phone ilike ${like} or c.company ilike ${like})` : sql``}
     ) c order by ${order} limit ${SIZE + 1} offset ${(page - 1) * SIZE}`;
-  const [t] = await sql<{ n: number; wix: number; spent: number }[]>`select count(*)::int as n, count(*) filter (where source = 'Wix')::int as wix, (select coalesce(sum(paid_cents),0)::int from orders) as spent from clients c where not exists (select 1 from users u where lower(u.email) = c.email or c.email = any(u.alt_emails)) and c.email !~ '@(macrohype|macrosnaps)\\.com$' and c.email not in ('rehmansiddiq@gmail.com', 'macrohype@gmail.com')`;
+  const [t] = await sql<{ n: number; wix: number; spent: number }[]>`select count(*)::int as n, count(*) filter (where source = 'Wix')::int as wix, (select coalesce(sum(paid_cents),0)::int from orders) as spent from clients c where not exists (select 1 from users u where lower(u.email) = c.email or c.email = any(u.alt_emails)) and c.email !~ '@(macrohype|macrosnaps)\\.com$' and c.email !~ '^(rehmansiddiq|macrohype)@'`;
   const base = `/admin/clients?${new URLSearchParams({ ...(q ? { q } : {}), ...(sort !== "recent" ? { sort } : {}) })}`;
   return (
     <>

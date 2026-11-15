@@ -17,7 +17,7 @@ export async function syncLeadsToClients(onlyEmail?: string) {
         max(at) over (partition by email) as last_at, min(at) over (partition by email) as first_at
       from src
       where email ~ '^[^@\\s]+@[^@\\s]+\\.[a-z]{2,}$' and email not like '%xxxx%'
-        and email !~ '@(macrohype|macrosnaps|e\\.macrosnaps)\\.com$' and email not in ('rehmansiddiq@gmail.com', 'macrohype@gmail.com')
+        and email !~ '@(macrohype|macrosnaps|e\\.macrosnaps)\\.com$' and email !~ '^(rehmansiddiq|macrohype)@'
         and (${e}::text is null or email = ${e})
       order by email, at asc
     )
