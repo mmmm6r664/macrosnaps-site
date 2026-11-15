@@ -30,7 +30,7 @@ export function bookingConfirmed(b: BookingInfo): Email {
         priceTable(b.lines, "Total paid", b.total) +
         h2("What happens next") +
         steps([
-          ["We assign your crew", "You'll get an email with your photographer's or videographer's name and contact details before the shoot."],
+          ["We assign your crew", "An experienced MacroSnaps photographer or videographer is assigned to your event. Our team is your single point of contact throughout."],
           ["Event day", "Your crew arrives about 15 minutes before the start time. To share a shot list or key people, simply reply to this email."],
           ["Delivery", "Edited, retouched photographs are delivered to your private online gallery within about one week; highlight films within two to four weeks."],
         ]) +
@@ -424,7 +424,7 @@ export function crewDriveRequest(c: CrewShoot, reminder = false): Email {
         button("Send the Google Drive link", c.url) +
         steps([
           ["Create one folder", `Name it “${esc(c.folder)}”, with RAW and Edited subfolders.`],
-          ["Share it", "Set sharing to “Anyone with the link can view” (or share it with info@macrosnaps.com)."],
+          ["Share it with us only", "Share the folder with <b>info@macrosnaps.com</b> only. Please do not set it to “Anyone with the link”, and never share files or links with the client: MacroSnaps delivers everything to the client."],
           ["Paste the link", "Use the button above. It only takes a moment and no login is needed."],
         ]) +
         small("Payment for the shoot is released once all edited and RAW files are delivered. Questions? Just reply to this email."),
@@ -435,11 +435,12 @@ export function crewDriveRequest(c: CrewShoot, reminder = false): Email {
 /** Team alert when a crew member sends their link, or when one is overdue. */
 export function crewDriveTeam(kind: "received" | "overdue", c: { name: string; email: string; ref: string; service: string; client: string; link?: string; adminUrl: string }): Email {
   return {
-    subject: kind === "received" ? `Files delivered for ${c.ref} by ${c.name}` : `Overdue: no Google Drive link for ${c.ref} from ${c.name}`,
+    subject: kind === "received" ? `[Internal] Files delivered for ${c.ref} by ${c.name}` : `Overdue: no Google Drive link for ${c.ref} from ${c.name}`,
     html: layout({
       title: kind === "received" ? "Files delivered" : "Files overdue",
       signoff: false,
       body:
+        (kind === "received" ? callout("Internal only: this email shows the crew member's name, email and Drive folder. Please don't forward it to the client; deliver through the client gallery instead.") : "") +
         p(kind === "received" ? `${esc(c.name)} sent the Google Drive link for this shoot.` : `It has been more than 24 hours since the shoot ended and ${esc(c.name)} (${esc(c.email)}) hasn't sent the Google Drive link yet. They've had the request and one reminder.`) +
         details([["Order", c.ref], ["Service", c.service], ["Client", c.client], ["Crew", `${c.name} <${c.email}>`], ...(c.link ? [["Drive link", c.link] as [string, string]] : [])]) +
         (c.link ? button("Open the Drive folder", c.link) : "") +
