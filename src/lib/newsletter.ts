@@ -101,7 +101,7 @@ export async function sendNewsletter(id: number): Promise<{ ok: boolean; sent: n
     update newsletters set status = 'sending', updated_at = now() where id = ${id} and status in ('draft', 'scheduled', 'failed') returning id, subject, preheader, body`;
   if (!claimed.length) return { ok: false, sent: 0, error: "This newsletter is already sending or sent." };
   const n = claimed[0];
-  const subs = await sql<{ email: string; token: string }[]>`select email, token from subscribers where status = 'subscribed' order by id`;
+  const subs = await sql<{ email: string; token: string }[]>`select email, token from subscribers s where status = 'subscribed' and not exists (select 1 from blocklist b where b.kind = 'email' and b.value = lower(s.email)) order by id`;
   const resend = new Resend(key);
   let sent = 0;
   try {

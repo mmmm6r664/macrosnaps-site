@@ -15,6 +15,10 @@ export async function sendSms(to: string, body: string): Promise<{ ok: boolean; 
   if (!smsReady()) return { ok: false, error: "Text messaging isn't connected (Twilio)." };
   const num = toE164(to);
   if (!num) return { ok: false, error: "Invalid phone number" };
+  try {
+    const { q } = await import("./db");
+    if ((await q`select 1 from blocklist where kind = 'phone' and value = ${num}`).length) return { ok: false, error: "This number is on the blocklist" };
+  } catch { /* no db: send */ }
   const sid = process.env.TWILIO_ACCOUNT_SID!;
   const r = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
     method: "POST",

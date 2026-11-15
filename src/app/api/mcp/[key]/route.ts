@@ -449,6 +449,30 @@ const TOOLS: Tool[] = [
     },
   },
   {
+    name: "block_contractor",
+    description: "Blacklist a person: they never get any email or text again (all their emails and phone go on the blocklist), they're deactivated on the team (can't log in, hidden from the directory and offers) and unsubscribed from newsletters.",
+    inputSchema: obj({ email: S("Their email"), reason: S("") }, ["email"]),
+    run: async (a) => {
+      const email = str(a.email, 200).trim().toLowerCase();
+      const reason = str(a.reason, 300);
+      const [u] = await q<{ id: number; name: string; email: string; alt_emails: string[] }[]>`select id, name, email, alt_emails from users where lower(email) = ${email} or ${email} = any(alt_emails) order by id limit 1`;
+      const emails = [...new Set([email, ...(u ? [u.email.toLowerCase(), ...(u.alt_emails ?? [])] : [])])];
+      for (const e of emails) await q`insert into blocklist (value, kind, reason) values (${e}, 'email', ${reason}) on conflict (value) do nothing`;
+      let phone: string | null = null;
+      if (u) {
+        if (u.id && (await q<{ role: string }[]>`select role from users where id = ${u.id}`)[0]?.role !== "staff") return { error: "Only team members (staff) can be blocked here" };
+        await q`update users set active = false, blocked = true where id = ${u.id}`;
+        await q`delete from sessions where user_id = ${u.id}`;
+        const { toE164 } = await import("@/lib/sms");
+        const [p] = await q<{ phone: string | null }[]>`select phone from staff_profiles where user_id = ${u.id}`;
+        phone = toE164(p?.phone);
+        if (phone) await q`insert into blocklist (value, kind, reason) values (${phone}, 'phone', ${reason}) on conflict (value) do nothing`;
+      }
+      await q`update subscribers set status = 'unsubscribed' where lower(email) = any(${emails})`;
+      return { ok: true, user: u?.name ?? null, emails_blocked: emails, phone_blocked: phone };
+    },
+  },
+  {
     name: "fix_team_city",
     description: "Re-resolve the city of team members whose city text matches (e.g. fix 'Washington, UT' to 'Washington, DC'). Sends nothing.",
     inputSchema: obj({ from: S("Current city text, e.g. Washington, UT"), to: S("Correct city, e.g. Washington, DC") }, ["from", "to"]),

@@ -300,6 +300,8 @@ alter table staff_profiles add column if not exists has_car boolean;
 alter table staff_profiles add column if not exists address text;
 alter table staff_profiles add column if not exists travel text;
 alter table staff_profiles add column if not exists headshot_url text;
+create table if not exists blocklist (value text primary key, kind text not null, reason text not null default '', created_at timestamptz not null default now());
+alter table users add column if not exists blocked boolean not null default false;
 create unique index if not exists payouts_ext on payouts (external_id) where external_id is not null;
 alter table crew_assignments add column if not exists drive_link_at timestamptz;
 alter table crew_assignments add column if not exists drive_asked_at timestamptz;
