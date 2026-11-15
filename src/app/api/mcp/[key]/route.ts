@@ -307,7 +307,7 @@ const TOOLS: Tool[] = [
       const s = a.search ? `%${str(a.search, 100)}%` : null;
       return q`select c.id, trim(c.first_name || ' ' || c.last_name) as name, c.email, c.phone, c.company, c.source, c.created_at, c.last_activity_at,
           (select count(*)::int from orders o where o.client_id = c.id) as orders, (select coalesce(sum(paid_cents),0)::int from orders o where o.client_id = c.id) as paid_cents
-        from clients c where (${s}::text is null or c.first_name || ' ' || c.last_name ilike ${s} or c.email ilike ${s} or c.phone ilike ${s} or c.company ilike ${s})
+        from clients c where not exists (select 1 from users u where lower(u.email) = c.email) and (${s}::text is null or c.first_name || ' ' || c.last_name ilike ${s} or c.email ilike ${s} or c.phone ilike ${s} or c.company ilike ${s})
         order by c.last_activity_at desc nulls last, c.id desc limit ${Math.min(200, Number(a.limit) || 30)}`;
     },
   },
