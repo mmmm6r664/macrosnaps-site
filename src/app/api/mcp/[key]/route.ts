@@ -10,6 +10,7 @@ import { replyInquiry, updateInquiry } from "@/app/admin/(panel)/inbox/actions";
 import { createInvoice, invoiceEmailAction, invoiceAction } from "@/app/admin/(panel)/invoices/actions";
 import { addPhotographer, requestFiles, sendAssignment } from "@/app/admin/(panel)/photographers/actions";
 import { sendNew, voidContract } from "@/app/admin/(panel)/contracts/actions";
+import { importContacts, importOrders, type ContactIn, type OrderIn } from "@/lib/crmImport";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -270,6 +271,71 @@ const TOOLS: Tool[] = [
         values ('contact', ${str(a.name, 100).trim() || "Unknown"}, ${email}, ${phone || null},
           ${(await db()).json({ source, subject, message, date: str(a.date, 80), location, service, external_id: ext, page: source })}, 'new', ${at}) returning id`;
       return { ok: true, id: r.id, subject };
+    },
+  },
+  {
+    name: "import_contacts",
+    description: "Bulk add or update CRM contacts from another system (e.g. Wix). Matches by source + external_id, then email; fills blanks only, never overwrites. Up to 500 per call. Sends nothing.",
+    inputSchema: obj({
+      source: S("e.g. Wix"),
+      contacts: { type: "array", items: { type: "object", properties: {
+        external_id: S("Id in the source system"), first_name: S(""), last_name: S(""), email: S(""), phone: S(""), company: S(""), address: S("One-line address"),
+        labels: { type: "array", items: { type: "string" } }, created_at: S("ISO time"), last_activity_at: S("ISO time"), notes: S(""),
+      } } },
+    }, ["source", "contacts"]),
+    run: async (a) => importContacts(str(a.source, 40), Array.isArray(a.contacts) ? (a.contacts as ContactIn[]) : []),
+  },
+  {
+    name: "import_orders",
+    description: "Bulk add or update past orders from another system (e.g. Wix Stores / Wix Invoices). Unique per source + external_id, so re-importing updates. Links each order to its contact (contact_external_id, else email; creates the contact if new). Money in dollars. Up to 500 per call. Sends nothing.",
+    inputSchema: obj({
+      source: S("e.g. Wix"),
+      orders: { type: "array", items: { type: "object", properties: {
+        external_id: S("Order id in the source"), number: S("Order number"), created_at: S("ISO time"), contact_external_id: S(""), name: S("Buyer name"), email: S(""), phone: S(""),
+        status: S(""), payment_status: S(""), fulfillment_status: S(""), channel: S("e.g. WIX_INVOICES, WEB"), currency: S(""),
+        subtotal: N(""), tax: N(""), discount: N(""), total: N(""), paid: N(""), refunded: N(""), balance: N(""),
+        items: { type: "array", items: { type: "object", properties: { name: S(""), qty: N(""), price: N("Unit price, dollars"), options: S("") } } }, notes: S(""),
+      }, required: ["external_id"] } },
+    }, ["source", "orders"]),
+    run: async (a) => importOrders(str(a.source, 40), Array.isArray(a.orders) ? (a.orders as OrderIn[]) : []),
+  },
+  {
+    name: "list_clients", readOnly: true,
+    description: "CRM contacts (clients) with order count and total paid, most recent activity first.",
+    inputSchema: obj({ search: S("Name, email, phone or company (optional)"), limit: N("Max rows, default 30") }),
+    run: async (a) => {
+      const s = a.search ? `%${str(a.search, 100)}%` : null;
+      return q`select c.id, trim(c.first_name || ' ' || c.last_name) as name, c.email, c.phone, c.company, c.source, c.created_at, c.last_activity_at,
+          (select count(*)::int from orders o where o.client_id = c.id) as orders, (select coalesce(sum(paid_cents),0)::int from orders o where o.client_id = c.id) as paid_cents
+        from clients c where (${s}::text is null or c.first_name || ' ' || c.last_name ilike ${s} or c.email ilike ${s} or c.phone ilike ${s} or c.company ilike ${s})
+        order by c.last_activity_at desc nulls last, c.id desc limit ${Math.min(200, Number(a.limit) || 30)}`;
+    },
+  },
+  {
+    name: "get_client", readOnly: true,
+    description: "One contact with their past orders, bookings and inbox messages.",
+    inputSchema: obj({ id: N("Client id") }, ["id"]),
+    run: async (a) => {
+      const [c] = await q<{ id: number; email: string | null }[]>`select * from clients where id = ${Number(a.id)}`;
+      if (!c) return { error: "Not found" };
+      const e = c.email ?? "";
+      const [orders, bookings, inbox] = await Promise.all([
+        q`select id, source, number, created_at, payment_status, fulfillment_status, total_cents, paid_cents, balance_cents, items from orders where client_id = ${c.id} order by created_at desc`,
+        e ? q`select ref, service_name, city, status, total_cents, first_date, created_at from bookings where lower(email) = ${e} order by created_at desc` : [],
+        e ? q`select id, status, data->>'subject' as subject, created_at from inquiries where lower(email) = ${e} order by id desc` : [],
+      ]);
+      return { client: c, orders, bookings, inbox };
+    },
+  },
+  {
+    name: "list_orders", readOnly: true,
+    description: "Past orders imported from earlier systems (Wix), newest first.",
+    inputSchema: obj({ search: S("Name, email, order number or item (optional)"), payment_status: S("e.g. PAID, NOT_PAID (optional)"), limit: N("Max rows, default 30") }),
+    run: async (a) => {
+      const s = a.search ? `%${str(a.search, 100)}%` : null, ps = str(a.payment_status, 30) || null;
+      return q`select id, source, number, client_id, name, email, created_at, payment_status, fulfillment_status, total_cents, paid_cents, balance_cents, items
+        from orders where (${ps}::text is null or payment_status = ${ps}) and (${s}::text is null or name ilike ${s} or email ilike ${s} or number ilike ${s} or items::text ilike ${s})
+        order by created_at desc limit ${Math.min(200, Number(a.limit) || 30)}`;
     },
   },
   {

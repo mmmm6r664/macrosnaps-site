@@ -370,6 +370,50 @@ create table if not exists page_versions (
   checked_at timestamptz not null default now()
 );
 create index if not exists page_versions_grp on page_versions(grp);
+-- CRM contacts: the client-portal table doubles as the contact book (imported from Wix and other sources).
+alter table clients alter column email drop not null;
+alter table clients add column if not exists company text;
+alter table clients add column if not exists address text;
+alter table clients add column if not exists source text;
+alter table clients add column if not exists external_id text;
+alter table clients add column if not exists labels text[];
+alter table clients add column if not exists notes text;
+alter table clients add column if not exists data jsonb;
+alter table clients add column if not exists last_activity_at timestamptz;
+alter table clients add column if not exists updated_at timestamptz;
+create index if not exists clients_ext on clients(source, external_id);
+create index if not exists clients_phone on clients(phone);
+-- Orders from earlier systems (Wix Stores / Wix Invoices); new work lives in bookings and Stripe invoices.
+create table if not exists orders (
+  id serial primary key,
+  source text not null,
+  external_id text not null,
+  number text,
+  client_id int references clients(id) on delete set null,
+  name text not null default '',
+  email text,
+  phone text,
+  status text,
+  payment_status text,
+  fulfillment_status text,
+  channel text,
+  currency text not null default 'USD',
+  subtotal_cents int not null default 0,
+  tax_cents int not null default 0,
+  discount_cents int not null default 0,
+  total_cents int not null default 0,
+  paid_cents int not null default 0,
+  refunded_cents int not null default 0,
+  balance_cents int not null default 0,
+  items jsonb not null default '[]',
+  data jsonb,
+  created_at timestamptz not null default now(),
+  imported_at timestamptz not null default now(),
+  unique (source, external_id)
+);
+create index if not exists orders_client on orders(client_id);
+create index if not exists orders_email on orders(lower(email));
+create index if not exists orders_created on orders(created_at desc);
 alter table subscribers add column if not exists nurture_at timestamptz;
 create table if not exists feedback (
   id serial primary key,

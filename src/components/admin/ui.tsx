@@ -45,7 +45,7 @@ const TONES: Record<string, string> = {
 export const STATUS_TONE: Record<string, keyof typeof TONES> = {
   paid: "green", confirmed: "green", completed: "blue", sent: "green", subscribed: "green", done: "green", succeeded: "green",
   pending_payment: "amber", requested: "amber", new: "amber", scheduled: "blue", draft: "gray", in_progress: "blue", open: "amber", sending: "blue",
-  waiting: "amber", resolved: "green", closed: "gray",
+  waiting: "amber", resolved: "green", closed: "gray", not_paid: "amber", partially_paid: "amber", pending: "amber", fulfilled: "blue", not_fulfilled: "gray", approved: "green", partially_fulfilled: "blue", fully_refunded: "red",
   cancelled: "gray", refunded: "red", partially_refunded: "amber", failed: "red", rejected: "gray", unsubscribed: "gray", void: "gray", uncollectible: "red",
 };
 export function Badge({ status, children }: { status?: string; children?: React.ReactNode }) {
