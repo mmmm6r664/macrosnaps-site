@@ -301,6 +301,31 @@ const TOOLS: Tool[] = [
     run: async (a) => importOrders(str(a.source, 40), Array.isArray(a.orders) ? (a.orders as OrderIn[]) : []),
   },
   {
+    name: "subscribe_clients",
+    description: "Add CRM contacts to the newsletter list (Subscribers). Skips team members, people already on the list (including anyone who unsubscribed) and the excluded emails. Sends nothing.",
+    inputSchema: obj({ source: S("Only contacts from this source, e.g. Wix (optional)"), exclude_emails: { type: "array", items: { type: "string" } } }),
+    run: async (a) => {
+      const src = str(a.source, 40) || null;
+      const ex = (Array.isArray(a.exclude_emails) ? a.exclude_emails : []).map((e) => str(e, 200).trim().toLowerCase()).filter(Boolean);
+      const rows = await q<{ id: number }[]>`insert into subscribers (email, name, token, source)
+        select c.email, trim(c.first_name || ' ' || c.last_name), md5(random()::text || clock_timestamp()::text || c.id::text), 'crm-' || lower(coalesce(c.source, 'portal'))
+        from clients c where c.email is not null and c.email like '%@%.%' and (${src}::text is null or c.source = ${src})
+          and not (c.email = any(${ex}::text[])) and not exists (select 1 from users u where lower(u.email) = c.email)
+        on conflict (email) do nothing returning id`;
+      return { ok: true, added: rows.length };
+    },
+  },
+  {
+    name: "remove_clients",
+    description: "Delete CRM contacts by email (e.g. spam that came in through a form). Contacts with past orders are kept.",
+    inputSchema: obj({ emails: { type: "array", items: { type: "string" } } }, ["emails"]),
+    run: async (a) => {
+      const em = (Array.isArray(a.emails) ? a.emails : []).map((e) => str(e, 200).trim().toLowerCase()).filter(Boolean);
+      const rows = await q<{ email: string }[]>`delete from clients c where c.email = any(${em}::text[]) and not exists (select 1 from orders o where o.client_id = c.id) returning email`;
+      return { ok: true, removed: rows.map((r) => r.email) };
+    },
+  },
+  {
     name: "list_clients", readOnly: true,
     description: "CRM contacts (clients) with order count and total paid, most recent activity first.",
     inputSchema: obj({ search: S("Name, email, phone or company (optional)"), limit: N("Max rows, default 30") }),
