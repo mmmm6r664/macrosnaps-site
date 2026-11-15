@@ -448,6 +448,18 @@ const TOOLS: Tool[] = [
     },
   },
   {
+    name: "reassign_payouts",
+    description: "Move payouts recorded under a payee name (e.g. a Cash App display name) to a team member found by email. Sends nothing.",
+    inputSchema: obj({ payee_name: S("Name the payouts are recorded under"), email: S("Team member's email") }, ["payee_name", "email"]),
+    run: async (a) => {
+      const [m] = await q<{ id: number; name: string; email: string }[]>`select id, name, email from users where lower(email) = ${str(a.email, 200).toLowerCase()}`;
+      if (!m) return { error: "No team member with that email" };
+      const rows = await q<{ id: number }[]>`update payouts set user_id = ${m.id}, payee_name = ${m.name}, payee_email = ${m.email}
+        where user_id is null and lower(payee_name) = ${str(a.payee_name, 120).toLowerCase()} returning id`;
+      return { ok: true, moved: rows.length, to: m.name };
+    },
+  },
+  {
     name: "list_payouts", readOnly: true,
     description: "Payouts recorded to photographers.",
     inputSchema: obj({ limit: N("Max rows, default 30") }),
