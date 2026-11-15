@@ -295,6 +295,7 @@ const TOOLS: Tool[] = [
         status: S(""), payment_status: S(""), fulfillment_status: S(""), channel: S("e.g. WIX_INVOICES, WEB"), currency: S(""),
         subtotal: N(""), tax: N(""), discount: N(""), total: N(""), paid: N(""), refunded: N(""), balance: N(""),
         items: { type: "array", items: { type: "object", properties: { name: S(""), qty: N(""), price: N("Unit price, dollars"), options: S("") } } }, notes: S(""),
+        company: S("Client company"), event: S("Event or conference name"), location: S("Venue / address"), event_date: S("Event date and times as text"),
       }, required: ["external_id"] } },
     }, ["source", "orders"]),
     run: async (a) => importOrders(str(a.source, 40), Array.isArray(a.orders) ? (a.orders as OrderIn[]) : []),
@@ -333,8 +334,8 @@ const TOOLS: Tool[] = [
     inputSchema: obj({ search: S("Name, email, order number or item (optional)"), payment_status: S("e.g. PAID, NOT_PAID (optional)"), limit: N("Max rows, default 30") }),
     run: async (a) => {
       const s = a.search ? `%${str(a.search, 100)}%` : null, ps = str(a.payment_status, 30) || null;
-      return q`select id, source, number, client_id, name, email, created_at, payment_status, fulfillment_status, total_cents, paid_cents, balance_cents, items
-        from orders where (${ps}::text is null or payment_status = ${ps}) and (${s}::text is null or name ilike ${s} or email ilike ${s} or number ilike ${s} or items::text ilike ${s})
+      return q`select id, source, number, client_id, name, email, company, event, location, event_date, notes, created_at, payment_status, fulfillment_status, total_cents, paid_cents, balance_cents, items
+        from orders where (${ps}::text is null or payment_status = ${ps}) and (${s}::text is null or name ilike ${s} or email ilike ${s} or number ilike ${s} or items::text ilike ${s} or company ilike ${s} or event ilike ${s} or location ilike ${s})
         order by created_at desc limit ${Math.min(200, Number(a.limit) || 30)}`;
     },
   },

@@ -411,6 +411,11 @@ create table if not exists orders (
   imported_at timestamptz not null default now(),
   unique (source, external_id)
 );
+alter table orders add column if not exists company text;
+alter table orders add column if not exists event text;
+alter table orders add column if not exists location text;
+alter table orders add column if not exists event_date text;
+alter table orders add column if not exists notes text;
 create index if not exists orders_client on orders(client_id);
 create index if not exists orders_email on orders(lower(email));
 create index if not exists orders_created on orders(created_at desc);

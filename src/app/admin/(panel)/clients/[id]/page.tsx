@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { PageHead, Card, Table, Badge, Empty, fmtDate, money, btnGhost } from "@/components/admin/ui";
 
 type Client = { id: number; email: string | null; first_name: string; last_name: string; phone: string | null; company: string | null; address: string | null; source: string | null; labels: string[] | null; notes: string | null; created_at: Date; last_activity_at: Date | null; last_login_at: Date | null };
-type Order = { id: number; number: string | null; created_at: Date; payment_status: string | null; fulfillment_status: string | null; total_cents: number; paid_cents: number; balance_cents: number; items: { name: string; qty: number }[]; channel: string | null };
+type Order = { company: string | null; event: string | null; location: string | null; event_date: string | null; notes: string | null; id: number; number: string | null; created_at: Date; payment_status: string | null; fulfillment_status: string | null; total_cents: number; paid_cents: number; balance_cents: number; items: { name: string; qty: number }[]; channel: string | null };
 
 export default async function ClientPage({ params }: { params: Promise<{ id: string }> }) {
   await requireUser();
@@ -16,7 +16,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
   if (!c) notFound();
   const e = c.email ?? "";
   const [orders, bookings, inbox] = await Promise.all([
-    sql<Order[]>`select id, number, created_at, payment_status, fulfillment_status, total_cents, paid_cents, balance_cents, items, channel from orders where client_id = ${id} order by created_at desc`,
+    sql<Order[]>`select id, number, company, event, location, event_date, notes, created_at, payment_status, fulfillment_status, total_cents, paid_cents, balance_cents, items, channel from orders where client_id = ${id} order by created_at desc`,
     e ? sql<{ id: number; ref: string; service_name: string; city: string; status: string; total_cents: number; first_date: string | null; created_at: Date }[]>`select id, ref, service_name, city, status, total_cents, first_date::text, created_at from bookings where lower(email) = ${e} order by created_at desc` : Promise.resolve([]),
     e ? sql<{ id: number; status: string; subject: string | null; created_at: Date }[]>`select id, status, data->>'subject' as subject, created_at from inquiries where lower(email) = ${e} order by id desc` : Promise.resolve([]),
   ]);
@@ -45,12 +45,17 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
         <div className="space-y-6">
           <Card title="Past orders">
             {orders.length ? (
-              <Table head={["Order", "Date", "Items", "Total", "Payment", ""]}>
+              <Table head={["Order", "Date", "Event / details", "Total", "Payment", ""]}>
                 {orders.map((o) => (
                   <tr key={o.id}>
                     <td className="px-4 py-3">#{o.number ?? o.id}</td>
                     <td className="whitespace-nowrap px-4 py-3">{fmtDate(o.created_at)}</td>
-                    <td className="px-4 py-3">{o.items.map((i) => `${i.name}${i.qty > 1 ? ` × ${i.qty}` : ""}`).join(", ") || "—"}</td>
+                    <td className="px-4 py-3">
+                      {o.event ? <div className="font-medium">{o.event}</div> : null}
+                      <div className={o.event ? "text-xs text-black/60" : ""}>{o.items.map((i) => `${i.name}${i.qty > 1 ? ` × ${i.qty}` : ""}`).join(", ") || "—"}</div>
+                      {o.location || o.event_date ? <div className="text-xs text-black/50">{[o.location, o.event_date].filter(Boolean).join(" · ")}</div> : null}
+                      {o.notes ? <div className="mt-1 text-xs italic text-black/50">{o.notes}</div> : null}
+                    </td>
                     <td className="px-4 py-3">{money(o.total_cents)}</td>
                     <td className="px-4 py-3"><Badge status={(o.payment_status ?? "").toLowerCase()} /></td>
                     <td className="px-4 py-3 text-xs text-black/50">{o.channel === "WIX_INVOICES" ? "Invoice" : ""}</td>

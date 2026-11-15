@@ -13,6 +13,7 @@ export type OrderIn = {
   status?: string; payment_status?: string; fulfillment_status?: string; channel?: string; currency?: string;
   subtotal?: number; tax?: number; discount?: number; total?: number; paid?: number; refunded?: number; balance?: number;
   items?: { name: string; qty?: number; price?: number; options?: string }[]; notes?: string;
+  company?: string; event?: string; location?: string; event_date?: string;
 };
 
 const s = (v: unknown, n: number) => String(v ?? "").trim().slice(0, n);
@@ -82,19 +83,23 @@ export async function importOrders(source: string, list: OrderIn[]) {
       }
       const items = (Array.isArray(o.items) ? o.items : []).slice(0, 50).map((i) => ({ name: s(i.name, 200), qty: Number(i.qty) || 1, price_cents: cents(i.price), options: s(i.options, 300) || undefined }));
       const [r] = await q<{ inserted: boolean }[]>`insert into orders (source, external_id, number, client_id, name, email, phone, status, payment_status, fulfillment_status, channel, currency,
-          subtotal_cents, tax_cents, discount_cents, total_cents, paid_cents, refunded_cents, balance_cents, items, data, created_at)
+          subtotal_cents, tax_cents, discount_cents, total_cents, paid_cents, refunded_cents, balance_cents, items, data, created_at, company, event, location, event_date, notes)
         values (${src}, ${ext}, ${s(o.number, 40) || null}, ${clientId}, ${s(o.name, 120)}, ${email}, ${s(o.phone, 40) || null}, ${s(o.status, 30) || null},
           ${s(o.payment_status, 30) || null}, ${s(o.fulfillment_status, 30) || null}, ${s(o.channel, 40) || null}, ${s(o.currency, 3) || "USD"},
           ${cents(o.subtotal)}, ${cents(o.tax)}, ${cents(o.discount)}, ${cents(o.total)}, ${cents(o.paid)}, ${cents(o.refunded)}, ${cents(o.balance)},
-          ${sql.json(items)}, ${sql.json({ notes: s(o.notes, 4000) || undefined })}, ${when(o.created_at) ?? new Date()})
+          ${sql.json(items)}, ${sql.json({})}, ${when(o.created_at) ?? new Date()},
+          ${s(o.company, 160) || null}, ${s(o.event, 200) || null}, ${s(o.location, 300) || null}, ${s(o.event_date, 120) || null}, ${s(o.notes, 4000) || null})
         on conflict (source, external_id) do update set
           number = excluded.number, client_id = coalesce(excluded.client_id, orders.client_id), name = excluded.name, email = excluded.email, phone = excluded.phone,
           status = excluded.status, payment_status = excluded.payment_status, fulfillment_status = excluded.fulfillment_status, channel = excluded.channel,
           subtotal_cents = excluded.subtotal_cents, tax_cents = excluded.tax_cents, discount_cents = excluded.discount_cents, total_cents = excluded.total_cents,
           paid_cents = excluded.paid_cents, refunded_cents = excluded.refunded_cents, balance_cents = excluded.balance_cents, items = excluded.items,
-          data = excluded.data, created_at = excluded.created_at, imported_at = now()
+          data = excluded.data, created_at = excluded.created_at, imported_at = now(),
+          company = coalesce(excluded.company, orders.company), event = coalesce(excluded.event, orders.event), location = coalesce(excluded.location, orders.location),
+          event_date = coalesce(excluded.event_date, orders.event_date), notes = coalesce(excluded.notes, orders.notes)
         returning (xmax = 0) as inserted`;
       if (r.inserted) created++; else updated++;
+      if (clientId && o.company) await q`update clients set company = coalesce(company, ${s(o.company, 120)}) where id = ${clientId}`;
       if (clientId) await q`update clients set last_activity_at = greatest(last_activity_at, ${when(o.created_at)}) where id = ${clientId}`;
     } catch (e) { errors.push(`${ext}: ${(e as Error).message}`.slice(0, 200)); }
   }
