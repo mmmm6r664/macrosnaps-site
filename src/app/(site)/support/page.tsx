@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { currentClient } from "@/lib/clientAuth";
-import { CATEGORIES } from "@/lib/tickets";
+import { CLIENT_CATEGORIES } from "@/lib/tickets";
 import { NewTicketForm } from "@/components/support/TicketForms";
 import { SITE } from "@/lib/site";
 
@@ -21,11 +21,10 @@ export default async function SupportPage({ searchParams }: { searchParams: Prom
         <aside className="space-y-6 text-sm">
           <p><span className="eyebrow block">Need it faster?</span>Call <a href={SITE.phoneHref} className="font-semibold">{SITE.phone}</a></p>
           <p><span className="eyebrow block">Track an order</span>{c ? <Link className="underline" href="/account">Go to your client portal</Link> : <><Link className="underline" href="/account/login">Sign in to your client portal</Link> to see your bookings, galleries and requests.</>}</p>
-          <p><span className="eyebrow block">Photographers & videographers</span>Use the Support page in your <Link className="underline" href="/staff">crew portal</Link>, or the form here.</p>
           <p><span className="eyebrow block">Quick answers</span><Link className="underline" href="/faq">Read the FAQ</Link></p>
         </aside>
         <div className="md:col-span-2">
-          <NewTicketForm categories={CATEGORIES} order={(order ?? "").replace(/[^\w-]/g, "").slice(0, 40)} me={c ? { name: `${c.first_name} ${c.last_name}`.trim(), email: c.email, phone: c.phone ?? "" } : null} />
+          <NewTicketForm categories={CLIENT_CATEGORIES} order={(order ?? "").replace(/[^\w-]/g, "").slice(0, 40)} me={c ? { name: `${c.first_name} ${c.last_name}`.trim(), email: c.email, phone: c.phone ?? "" } : null} />
         </div>
       </div>
     </>

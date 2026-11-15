@@ -9,7 +9,12 @@ import { signRef, verifyRef } from "@/lib/automations";
 export const STATUSES = ["open", "in_progress", "waiting", "resolved", "closed"] as const;
 export type Status = (typeof STATUSES)[number];
 export const STATUS_LABEL: Record<string, string> = { open: "Open", in_progress: "In progress", waiting: "Waiting on customer", resolved: "Resolved", closed: "Closed" };
-export const CATEGORIES = ["General question", "Booking or scheduling", "Change or cancel a booking", "Payment or invoice", "My photos or video", "Shoot assignment", "Payout or tax", "Website or account problem", "Other"];
+/** Public /support page: client topics only. */
+export const CLIENT_CATEGORIES = ["General question", "Booking or scheduling", "Change or cancel a booking", "Payment or invoice", "My photos or video", "Website or account problem", "Other"];
+/** Crew portal support page: photographer / videographer topics only. */
+export const STAFF_CATEGORIES = ["Shoot assignment or schedule", "Payout or payment", "W-9 or tax documents", "Contract or agreement", "File delivery", "Portal or account problem", "Other"];
+/** Every topic (admin filters and older tickets). */
+export const CATEGORIES = [...new Set([...CLIENT_CATEGORIES, ...STAFF_CATEGORIES, "Shoot assignment", "Payout or tax"])];
 
 export type Ticket = {
   id: number; source: string; user_id: number | null; client_id: number | null; name: string; email: string; phone: string | null; order_ref: string | null;

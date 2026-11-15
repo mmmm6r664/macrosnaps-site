@@ -74,10 +74,10 @@ export async function openTicket(_: S, f: FormData): Promise<S> {
   const u = await requireStaff();
   const subject = t(f, "subject", 150), body = t(f, "body", 5000);
   if (!subject || !body) return { error: "Add a subject and describe what you need." };
-  const { createTicket, CATEGORIES, ticketNo } = await import("@/lib/tickets");
+  const { createTicket, STAFF_CATEGORIES, ticketNo } = await import("@/lib/tickets");
   const cat = t(f, "category", 60);
   const phone = (await q<{ phone: string | null }[]>`select phone from staff_profiles where user_id = ${u.id}`)[0]?.phone ?? null;
-  const tk = await createTicket({ source: "photographer", userId: u.id, name: u.name, email: u.email, phone, orderRef: t(f, "order", 40).toUpperCase() || null, category: CATEGORIES.includes(cat) ? cat : "General question", subject, body });
+  const tk = await createTicket({ source: "photographer", userId: u.id, name: u.name, email: u.email, phone, orderRef: t(f, "order", 40).toUpperCase() || null, category: STAFF_CATEGORIES.includes(cat) ? cat : "Other", subject, body });
   revalidatePath("/staff/support");
   return { ok: `Sent as ${ticketNo(tk.id)}. We've emailed you a confirmation and will reply by email.` };
 }
