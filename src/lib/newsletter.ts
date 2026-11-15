@@ -19,7 +19,9 @@ const sized = (u: string, t: string) => (u.includes("wixstatic.com/media/") ? `$
 /** Formatting language for the newsletter editor (one block per paragraph, blank line between blocks):
  *  # Big heading · ## Section heading · **bold** · [link text](https://…) · ![caption](https://image) (full-width photo)
  *  - bullet list lines · > quote · --- divider · [[Button text|https://…]]
- *  {{Card title | short text | https://image | https://link}} (cards placed one after another sit side by side, 2 per row) */
+ *  {{Card title | short text | https://image | https://link}} (cards placed one after another sit side by side, 2 per row)
+ *  %%COUPON | CODE | 15% off | Headline | Book by November 30 | https://link%% (gold-on-black coupon ticket)
+ *  @@ caption | https://image | https://link (consecutive @@ lines form a 3-across photo mosaic) */
 export function renderBody(src: string) {
   const inline = (t: string) =>
     esc(t)
@@ -40,6 +42,23 @@ export function renderBody(src: string) {
     else if ((m = b.match(/^\[\[([^|\]]+)\|(https?:\/\/[^\]\s]+)\]\]$/))) out.push(`<p style="margin:26px 0;text-align:center"><a href="${safeUrl(m[2])}" style="background:${GOLD};color:#000;text-decoration:none;padding:17px 34px;font:700 13px ${SANS};letter-spacing:2px;text-transform:uppercase;display:inline-block">${esc(m[1])}</a></p>`);
     else if (b.split("\n").every((l) => /^>\s?/.test(l))) out.push(`<div style="margin:6px 0 24px;padding:6px 0 6px 22px;border-left:3px solid ${GOLD}"><p style="margin:0;font:italic 20px/1.5 ${SERIF};color:${INK}">${inline(b.replace(/^>\s?/gm, ""))}</p></div>`);
     else if (b.split("\n").every((l) => /^[-*]\s+/.test(l))) out.push(`<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 18px">${b.split("\n").map((l) => `<tr><td valign="top" style="padding:0 12px 10px 0;color:${GOLD};font-size:18px;line-height:1.5">&#9670;</td><td style="padding:0 0 10px;font:16px/1.6 ${SANS};color:#333">${inline(l.replace(/^[-*]\s+/, ""))}</td></tr>`).join("")}</table>`);
+    else if ((m = b.match(/^%%COUPON\s*\|([\s\S]+)%%$/))) {
+      const [code = "", value = "", head = "", until = "", url = ORIGIN] = m[1].split("|").map((x) => x.trim());
+      out.push(`<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:14px 0 30px"><tr><td style="background:${INK};padding:10px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:2px dashed ${GOLD}"><tr><td align="center" style="padding:34px 24px 32px">
+<p style="margin:0 0 10px;font:700 11px ${SANS};letter-spacing:4px;text-transform:uppercase;color:${GOLD}">${esc(head || "A gift for you")}</p>
+<p style="margin:0;font:400 54px/1.05 ${SERIF};color:#fff">${esc(value)}</p>
+<p style="margin:18px 0 6px;font:600 11px ${SANS};letter-spacing:3px;text-transform:uppercase;color:#a9a9a9">Use code</p>
+<p style="margin:0 0 18px"><span style="display:inline-block;border:1px solid ${GOLD};background:#000;color:${GOLD};padding:12px 26px;font:700 24px/1 'Courier New',Courier,monospace;letter-spacing:5px">${esc(code)}</span></p>
+<p style="margin:0 0 24px;font:italic 15px ${SERIF};color:#d9d2b5">${esc(until)}</p>
+<a href="${safeUrl(url)}" style="background:${GOLD};color:#000;text-decoration:none;padding:16px 34px;font:700 12px ${SANS};letter-spacing:2px;text-transform:uppercase;display:inline-block">Book with ${esc(code)}</a>
+</td></tr></table></td></tr></table>`);
+    } else if (b.split("\n").every((l) => /^@@/.test(l))) {
+      const tiles = b.split("\n").map((l) => l.replace(/^@@\s*/, "").split("|").map((x) => x.trim()));
+      const rows: string[] = [];
+      for (let k = 0; k < tiles.length; k += 3) rows.push(`<tr>${[0, 1, 2].map((j) => { const t = tiles[k + j]; return t ? `<td valign="top" width="33%" style="padding:3px"><a href="${safeUrl(t[2] || ORIGIN)}" style="text-decoration:none"><img src="${safeUrl(sized(t[1] ?? "", "w_400,h_400,q_80"))}" alt="${esc(t[0] ?? "")}" width="180" height="180" style="display:block;width:100%;height:auto;border:0;object-fit:cover"><p style="margin:6px 0 8px;font:700 10px ${SANS};letter-spacing:2px;text-transform:uppercase;color:${GOLD_DARK};text-align:center">${esc(t[0] ?? "")}</p></a></td>` : `<td width="33%"></td>`; }).join("")}</tr>`);
+      out.push(`<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px -3px 18px;width:calc(100% + 6px)">${rows.join("")}</table>`);
+    }
     else if (/^\{\{.+\}\}$/.test(b)) {
       // Gather consecutive cards into rows of two.
       const cards: string[][] = [];
@@ -101,7 +120,12 @@ export async function sendNewsletter(id: number): Promise<{ ok: boolean; sent: n
     update newsletters set status = 'sending', updated_at = now() where id = ${id} and status in ('draft', 'scheduled', 'failed') returning id, subject, preheader, body`;
   if (!claimed.length) return { ok: false, sent: 0, error: "This newsletter is already sending or sent." };
   const n = claimed[0];
-  const subs = await sql<{ email: string; token: string }[]>`select email, token from subscribers s where status = 'subscribed' and not exists (select 1 from blocklist b where b.kind = 'email' and b.value = lower(s.email)) order by id`;
+  const subs = await sql<{ email: string; token: string }[]>`select email, token from subscribers s where status = 'subscribed'
+    and not exists (select 1 from blocklist b where b.kind = 'email' and b.value = lower(s.email))
+    -- Photographers and videographers (team accounts and applicants) never get client newsletters.
+    and not exists (select 1 from users u where u.role = 'staff' and (lower(u.email) = lower(s.email) or lower(s.email) = any(u.alt_emails)))
+    and not exists (select 1 from inquiries i where i.kind = 'application' and lower(i.email) = lower(s.email))
+    order by id`;
   const resend = new Resend(key);
   let sent = 0;
   try {

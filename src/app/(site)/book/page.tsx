@@ -6,6 +6,7 @@ import { TrustBar } from "@/components/blocks";
 import { addonCatalog } from "@/lib/addons";
 import { currentClient } from "@/lib/clientAuth";
 import Link from "next/link";
+import { findActiveCode, describe } from "@/lib/coupons";
 
 export const metadata: Metadata = {
   title: "Book Now: Photography & Videography Online",
@@ -13,11 +14,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/book" },
 };
 
-type SP = { service?: string; package?: string; city?: string; cancelled?: string };
+type SP = { service?: string; package?: string; city?: string; cancelled?: string; coupon?: string };
 
 export default async function BookPage({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
   const client = await currentClient();
+  const promo = sp.coupon ? await findActiveCode(sp.coupon).catch(() => null) : null;
+  const coupon = promo ? { code: promo.code, label: describe(promo), expires: promo.expiresAt ? new Date(promo.expiresAt * 1000).toLocaleDateString("en-US", { month: "long", day: "numeric", timeZone: "America/New_York" }) : "" } : undefined;
   const me = client ? { firstName: client.first_name, lastName: client.last_name, email: client.email, phone: client.phone ?? "" } : undefined;
   const services = BOOKABLE_SERVICES.map((s) => ({ slug: s.slug, name: s.name, kind: s.kind, group: s.group, packages: s.packages.filter((p) => !p.quoteOnly).map(({ id, name, price, priceNote, features, hours }) => ({ id, name, price, priceNote, features, hours })) }));
   const cityOpts = [...cities].sort((a, b) => b.population - a.population).map((c) => ({ slug: c.slug, label: cityLabel(c), state: c.state }));
@@ -33,7 +36,7 @@ export default async function BookPage({ searchParams }: { searchParams: Promise
           {client ? <>Signed in as <b>{client.email}</b>. Your details are filled in, and this booking will appear in <Link href="/account" className="underline">your account</Link>.</>
             : <>Booked with us before? <Link href="/account/login?next=/account" className="font-semibold underline">Sign in</Link> (email, Google or Facebook) to fill in your details and track your orders and galleries.</>}
         </p>
-        <BookingForm me={me} services={services} cities={cityOpts} addons={addonCatalog()} paused={PAUSED_SERVICES} initial={{ service: sp.service, package: sp.package, city: sp.city, cancelled: sp.cancelled === "1" }} />
+        <BookingForm me={me} services={services} cities={cityOpts} addons={addonCatalog()} paused={PAUSED_SERVICES} initial={{ service: sp.service, package: sp.package, city: sp.city, cancelled: sp.cancelled === "1", coupon }} />
       </div>
     </>
   );

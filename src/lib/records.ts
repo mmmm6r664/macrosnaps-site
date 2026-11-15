@@ -51,6 +51,7 @@ export async function saveInquiry(kind: "contact" | "application", name: string,
   try {
     const sql = await db();
     await sql`insert into inquiries (kind, name, email, phone, data) values (${kind}, ${name.slice(0, 120)}, ${email.slice(0, 200)}, ${phone ?? null}, ${sql.json(JSON.parse(JSON.stringify(data)))})`;
+    if (kind === "contact" && email) await (await import("@/lib/leadSync")).syncLeadsToClients(email).catch((e) => console.error("[db] lead sync", e));
     return true;
   } catch (e) {
     console.error("[db] saveInquiry", e);

@@ -8,6 +8,7 @@ import { sendMail, table, TEAM_INBOX } from "@/lib/mail";
 import { TERMS_VERSION } from "@/lib/terms";
 import { newRef, saveBooking, attachCheckout } from "@/lib/records";
 import { priceAddons } from "@/lib/addons";
+import { findActiveCode } from "@/lib/coupons";
 
 const s = (v: unknown, max = 300) => String(v ?? "").trim().slice(0, max);
 const isDate = (d: string) => /^\d{4}-\d{2}-\d{2}$/.test(d) && new Date(`${d}T23:59:59`) >= new Date();
@@ -92,6 +93,9 @@ export async function POST(req: Request) {
   }
 
   const origin = process.env.NEXT_PUBLIC_SITE_URL || new URL(req.url).origin;
+  // A code from a newsletter link (/book?coupon=CODE) is applied up front; otherwise the client can type one at checkout.
+  const promo = b.coupon ? await findActiveCode(s(b.coupon, 40)).catch(() => null) : null;
+  if (promo) details.coupon = promo.code;
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     customer_email: email,
@@ -102,11 +106,11 @@ export async function POST(req: Request) {
     metadata: details,
     payment_intent_data: { description: `MacroSnaps: ${service.name} — ${location} — ${sessions.map((x) => x.date).join(", ")}`.slice(0, 1000), metadata: details },
     invoice_creation: { enabled: true, invoice_data: { description: `MacroSnaps ${service.name}`, footer: `${SITE.name} · ${SITE.phone} · ${SITE.email}` } },
-    allow_promotion_codes: true,
+    ...(promo ? { discounts: [{ promotion_code: promo.id }] } : { allow_promotion_codes: true }),
     // Unpaid checkout pages expire after an hour; Stripe then notifies us and the first reminder email goes out.
     expires_at: Math.floor(Date.now() / 1000) + 60 * 60,
     success_url: `${origin}/book/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${origin}/book?service=${service.slug}${city ? `&city=${city.slug}` : ""}&cancelled=1`,
+    cancel_url: `${origin}/book?service=${service.slug}${city ? `&city=${city.slug}` : ""}${promo ? `&coupon=${promo.code}` : ""}&cancelled=1`,
   });
   await attachCheckout(ref, session.id);
   return NextResponse.json({ url: session.url });

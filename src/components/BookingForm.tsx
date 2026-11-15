@@ -24,7 +24,7 @@ const durationH = durationHours;
 const SLOTS = Array.from({ length: 48 }, (_, i) => `${String(Math.floor(i / 2)).padStart(2, "0")}:${i % 2 ? "30" : "00"}`);
 const fmtTime = (t: string) => { if (!t) return ""; const [h, m] = t.split(":").map(Number); return `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`; };
 
-export default function BookingForm({ services, cities, addons = [], paused = {}, initial, me }: { me?: { firstName: string; lastName: string; email: string; phone: string }; services: Svc[]; cities: CityOpt[]; addons?: Addon[]; paused?: Record<string, string>; initial: { service?: string; package?: string; city?: string; cancelled?: boolean } }) {
+export default function BookingForm({ services, cities, addons = [], paused = {}, initial, me }: { me?: { firstName: string; lastName: string; email: string; phone: string }; services: Svc[]; cities: CityOpt[]; addons?: Addon[]; paused?: Record<string, string>; initial: { service?: string; package?: string; city?: string; cancelled?: boolean; coupon?: { code: string; label: string; expires: string } } }) {
   const rates = RATES;
   const [addCompanion, setAddCompanion] = useState(false);
   const [premiumEdit, setPremiumEdit] = useState(false);
@@ -143,7 +143,7 @@ export default function BookingForm({ services, cities, addons = [], paused = {}
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...f, service: service.slug, package: pkg.id, location, citySlug, agree: true, signature: signature.trim(), termsVersion: TERMS_VERSION, sessions: sessions.map(({ date, start, end, venue, extraCrew, companionHours }) => ({ date, start, end, venue, extraCrew, companionHours })), addCompanion: hourly && addCompanion, premiumEdit: hourly && kind === "photo" && premiumEdit, colorGrade: hourly && kind === "photo" && colorGrade, addons: activeAddons.map((a) => a.id) }),
+        body: JSON.stringify({ ...f, service: service.slug, package: pkg.id, location, citySlug, agree: true, signature: signature.trim(), termsVersion: TERMS_VERSION, sessions: sessions.map(({ date, start, end, venue, extraCrew, companionHours }) => ({ date, start, end, venue, extraCrew, companionHours })), addCompanion: hourly && addCompanion, premiumEdit: hourly && kind === "photo" && premiumEdit, colorGrade: hourly && kind === "photo" && colorGrade, addons: activeAddons.map((a) => a.id), coupon: initial.coupon?.code }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Something went wrong");
@@ -169,6 +169,7 @@ export default function BookingForm({ services, cities, addons = [], paused = {}
   return (
     <form onSubmit={submit} className="grid gap-10 lg:grid-cols-3">
       <div className="space-y-10 lg:col-span-2">
+        {initial.coupon && <p className="border-2 border-dashed border-gold bg-gold/10 p-4 text-sm"><b>Coupon {initial.coupon.code}: {initial.coupon.label}</b> will be applied automatically at checkout{initial.coupon.expires ? ` (valid until ${initial.coupon.expires})` : ""}.</p>}
         {initial.cancelled && <p className="border border-black/10 bg-marble p-4 text-sm">Payment was cancelled — your booking hasn&apos;t been made. You can try again below.</p>}
 
         <div className="mb-10 border-2 border-gold bg-white p-5 shadow-sm">

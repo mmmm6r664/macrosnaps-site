@@ -270,6 +270,7 @@ const TOOLS: Tool[] = [
       const [r] = await q<{ id: number }[]>`insert into inquiries (kind, name, email, phone, data, status, created_at)
         values ('contact', ${str(a.name, 100).trim() || "Unknown"}, ${email}, ${phone || null},
           ${(await db()).json({ source, subject, message, date: str(a.date, 80), location, service, external_id: ext, page: source })}, 'new', ${at}) returning id`;
+      if (email) await (await import("@/lib/leadSync")).syncLeadsToClients(email).catch(() => 0);
       return { ok: true, id: r.id, subject };
     },
   },
@@ -588,6 +589,96 @@ const TOOLS: Tool[] = [
       const em = (Array.isArray(a.emails) ? a.emails : []).map((e) => str(e, 200).trim().toLowerCase()).filter(Boolean);
       const rows = await q<{ email: string }[]>`delete from clients c where c.email = any(${em}::text[]) and not exists (select 1 from orders o where o.client_id = c.id) returning email`;
       return { ok: true, removed: rows.map((r) => r.email) };
+    },
+  },
+  {
+    name: "create_coupon",
+    description: "Create a discount code in Stripe (applied at online checkout; share /book?coupon=CODE to pre-apply it).",
+    inputSchema: obj({ code: S("e.g. HOLIDAY12"), name: S("Internal name"), percent_off: N("1-90"), amount_off: N("Dollars off, instead of percent"), book_by: S("Last day, YYYY-MM-DD (Eastern)"), max_uses: N(""), new_clients_only: { type: "boolean" }, min_order: N("Dollars") }, ["code"]),
+    run: async (a) => {
+      const { createCoupon } = await import("@/lib/coupons");
+      const by = str(a.book_by, 10);
+      try {
+        return await createCoupon({ code: str(a.code, 30), name: str(a.name, 40), percentOff: Number(a.percent_off) || undefined, amountOffDollars: Number(a.amount_off) || undefined,
+          expiresAt: /^\d{4}-\d{2}-\d{2}$/.test(by) ? new Date(`${by}T23:59:59-05:00`) : null, maxRedemptions: Number(a.max_uses) || null, firstTimeOnly: a.new_clients_only === true, minAmountDollars: Number(a.min_order) || null });
+      } catch (e) { return { error: e instanceof Error ? e.message : "Failed" }; }
+    },
+  },
+  {
+    name: "list_coupons", readOnly: true,
+    description: "All discount codes with uses and expiry.",
+    inputSchema: obj({}),
+    run: async () => (await import("@/lib/coupons")).listCoupons(),
+  },
+  {
+    name: "host_image",
+    description: "Copy an image from a public URL (e.g. a Canva export) into our own storage for newsletters. Returns the permanent URL.",
+    inputSchema: obj({ url: S("https://…"), name: S("file name, e.g. thanksgiving-2026-header") }, ["url", "name"]),
+    run: async (a) => {
+      const { put } = await import("@vercel/blob");
+      const url = str(a.url, 2000);
+      if (!/^https:\/\//.test(url)) return { error: "https URL required" };
+      const res = await fetch(url, { redirect: "follow" });
+      const type = res.headers.get("content-type") ?? "";
+      if (!res.ok || !type.startsWith("image/")) return { error: `fetch ${res.status} ${type}` };
+      const ext = type.includes("png") ? "png" : type.includes("gif") ? "gif" : "jpg";
+      const name = str(a.name, 80).toLowerCase().replace(/[^a-z0-9-]+/g, "-");
+      const b = await put(`newsletter/${name}.${ext}`, Buffer.from(await res.arrayBuffer()), { access: "public", contentType: type, addRandomSuffix: true });
+      return { ok: true, url: b.url };
+    },
+  },
+  {
+    name: "save_newsletter_draft",
+    description: "Create (or update, with id) a newsletter draft. Nothing is sent; the owner reviews and sends it from Admin → Newsletters. Body uses the newsletter formatting language.",
+    inputSchema: obj({ id: N("Existing draft id to update"), subject: S(""), preheader: S(""), body: S(""), scheduled_at: S("Optional ISO time to note as planned send time (not sent automatically unless scheduled in admin)") }, ["subject", "body"]),
+    run: async (a) => {
+      const subject = str(a.subject, 200), pre = str(a.preheader, 250), body = str(a.body, 60000);
+      if (a.id) {
+        const r = await q<{ id: number }[]>`update newsletters set subject = ${subject}, preheader = ${pre}, body = ${body}, updated_at = now() where id = ${Number(a.id)} and status in ('draft', 'failed') returning id`;
+        return r.length ? { ok: true, id: r[0].id } : { error: "Not found or already sent" };
+      }
+      const u = await actor();
+      const [r] = await q<{ id: number }[]>`insert into newsletters (subject, preheader, body, created_by) values (${subject}, ${pre}, ${body}, ${u?.id ?? null}) returning id`;
+      return { ok: true, id: r.id };
+    },
+  },
+  {
+    name: "sync_leads_to_clients",
+    description: "Add every lead (website inquiries, Sulekha, The Knot, WeddingWire, Thumbtack…) and every website booking to the Clients list. Skips our own addresses, team members, applicants and blocked emails. Sends nothing.",
+    inputSchema: obj({}),
+    run: async () => ({ ok: true, upserted: await (await import("@/lib/leadSync")).syncLeadsToClients() }),
+  },
+  {
+    name: "find_internal_clients", readOnly: true,
+    description: "CRM contacts that are really us or our team: MacroHype/MacroSnaps addresses, the owner's personal email, team members (incl. alternate emails), photographer applicants, or contacts whose name matches a team member.",
+    inputSchema: obj({}),
+    run: async () => q`select c.id, c.email, trim(c.first_name || ' ' || c.last_name) as name, c.source,
+        (select count(*)::int from orders o where o.client_id = c.id) as orders,
+        (select count(*)::int from bookings b where lower(b.email) = c.email) as bookings,
+        case when c.email ~ '@(macrohype|macrosnaps|e\.macrosnaps)\.com$' or c.email in ('rehmansiddiq@gmail.com', 'macrohype@gmail.com') then 'internal email'
+             when exists (select 1 from users u where u.role = 'staff' and (lower(u.email) = c.email or c.email = any(u.alt_emails))) then 'team email'
+             when exists (select 1 from users u where u.role <> 'staff' and (lower(u.email) = c.email or c.email = any(u.alt_emails))) then 'admin email'
+             when exists (select 1 from inquiries i where i.kind = 'application' and lower(i.email) = c.email) then 'applicant'
+             else 'name matches team member' end as why
+      from clients c
+      where c.email ~ '@(macrohype|macrosnaps|e\.macrosnaps)\.com$' or c.email in ('rehmansiddiq@gmail.com', 'macrohype@gmail.com')
+        or exists (select 1 from users u where lower(u.email) = c.email or c.email = any(u.alt_emails))
+        or exists (select 1 from inquiries i where i.kind = 'application' and lower(i.email) = c.email)
+        or (length(trim(c.first_name || c.last_name)) > 4 and exists (select 1 from users u where u.role = 'staff' and lower(trim(u.name)) = lower(trim(c.first_name || ' ' || c.last_name))))
+      order by why, c.email`,
+  },
+  {
+    name: "purge_clients",
+    description: "Remove CRM contacts by id (and unsubscribe them from newsletters). Their past orders are detached from the client record, not deleted.",
+    inputSchema: obj({ ids: { type: "array", items: { type: "number" } } }, ["ids"]),
+    run: async (a) => {
+      const ids = (Array.isArray(a.ids) ? a.ids : []).map(Number).filter((n) => n > 0);
+      const rows = await q<{ email: string }[]>`select email from clients where id = any(${ids}::int[])`;
+      const emails = rows.map((r) => r.email);
+      await q`update orders set client_id = null where client_id = any(${ids}::int[])`;
+      await q`delete from clients where id = any(${ids}::int[])`;
+      await q`update subscribers set status = 'unsubscribed' where lower(email) = any(${emails}::text[])`;
+      return { ok: true, removed: emails };
     },
   },
   {
