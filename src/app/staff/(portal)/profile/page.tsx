@@ -12,7 +12,7 @@ export default async function Profile() {
   return (
     <>
       <PageHead title="Profile & payout" sub="We use your area, travel distance and shoot types to offer you the right shoots." />
-      <ProfileForm shootTypes={SHOOT_TYPES} p={{ phone: p?.phone ?? "", city: p?.city ?? "", radius: p?.radius_miles ?? 25, roles: p?.roles ?? [], shoots: p?.shoot_types ?? [], gear: p?.gear ?? "", bio: p?.bio ?? "", portfolio: p?.portfolio ?? "", payout_method: p?.payout_method ?? "", payout_handle: p?.payout_handle ?? "" }} />
+      <ProfileForm shootTypes={SHOOT_TYPES} p={{ phone: p?.phone ?? "", city: p?.city ?? "", radius: p?.radius_miles ?? 25, roles: p?.roles ?? [], shoots: p?.shoot_types ?? [], gear: p?.gear ?? "", bio: p?.bio ?? "", portfolio: p?.portfolio ?? "", payout_method: p?.payout_method ?? "", payout_handle: p?.payout_handle ?? "", smsConsent: !!p?.sms_consent_at }} />
     </>
   );
 }

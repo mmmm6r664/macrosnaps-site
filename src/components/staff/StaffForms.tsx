@@ -6,7 +6,7 @@ import { inputCls, labelCls, btnPrimary } from "@/components/admin/ui";
 
 const Msg = ({ s }: { s: S }) => (s ? <p role="status" className={`rounded px-3 py-2 text-sm ${s.error ? "bg-red-50 text-red-800" : "bg-emerald-50 text-emerald-800"}`}>{s.error ?? s.ok}</p> : null);
 
-type P = { phone: string; city: string; radius: number; roles: string[]; shoots: string[]; gear: string; bio: string; portfolio: string; payout_method: string; payout_handle: string };
+type P = { phone: string; city: string; radius: number; roles: string[]; shoots: string[]; gear: string; bio: string; portfolio: string; payout_method: string; payout_handle: string; smsConsent?: boolean };
 export function ProfileForm({ p, shootTypes }: { p: P; shootTypes: string[] }) {
   const [s, act, pending] = useActionState<S, FormData>(saveProfile, undefined);
   const [method, setMethod] = useState(p.payout_method);
@@ -17,6 +17,7 @@ export function ProfileForm({ p, shootTypes }: { p: P; shootTypes: string[] }) {
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-black/60">Your details</h2>
         <div className="grid gap-3 sm:grid-cols-2">
           <div><label className={labelCls} htmlFor="phone">Mobile phone (for shoot texts)</label><input id="phone" name="phone" defaultValue={p.phone} className={inputCls} /></div>
+          <label className="flex items-start gap-2 text-xs text-black/65 sm:col-span-2"><input type="checkbox" name="smsConsent" defaultChecked={p.smsConsent} className="mt-0.5" /><span>Yes, text me shoot offers, assignments, schedule updates and file-delivery reminders from MacroSnaps (MacroHype LLC). Msg frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help.</span></label>
           <div><label className={labelCls} htmlFor="city">Home base: city, state</label><input id="city" name="city" defaultValue={p.city} placeholder="Arlington, VA" className={inputCls} /></div>
           <div><label className={labelCls} htmlFor="radius">How far will you travel? (miles)</label><input id="radius" name="radius" type="number" min={5} max={500} defaultValue={p.radius} className={inputCls} /></div>
           <div><label className={labelCls} htmlFor="portfolio">Portfolio / Instagram link</label><input id="portfolio" name="portfolio" defaultValue={p.portfolio} className={inputCls} /></div>

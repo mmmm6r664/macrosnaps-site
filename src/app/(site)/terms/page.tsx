@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import TermsList from "@/components/TermsList";
 import { TERMS_VERSION } from "@/lib/terms";
@@ -10,6 +11,8 @@ export default function Terms() {
       <h1 className="mb-2 font-serif text-4xl">Terms and Conditions</h1>
       <p className="mb-10 text-sm text-muted">Version {TERMS_VERSION}. Every client reviews and signs these terms when booking.</p>
       <TermsList />
+      <h2 className="mt-10 font-serif text-2xl">Text messages</h2>
+      <p>Texts are optional and only sent if you opt in. Message frequency varies; message and data rates may apply. Reply STOP to opt out or HELP for help. Full details are in our <Link className="underline" href="/sms">SMS Terms</Link>.</p>
       <h2 className="mt-10 font-serif text-2xl">Contact</h2>
       <p>MacroSnaps, part of MacroHype LLC · 877-622-4973 · info@macrosnaps.com</p>
     </article>

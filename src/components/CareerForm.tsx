@@ -1,4 +1,5 @@
 "use client";
+import SmsConsent from "./SmsConsent";
 import { useState } from "react";
 import { BRANDS, CAMERAS, EXPERIENCE, RADIUS, ROLES, WORK_STATUS, AVAILABILITY, SHOOT_TYPES, DISQUALIFIERS, DISABILITY, NOT_ELIGIBLE, checkEligibility } from "@/lib/careers";
 
@@ -50,6 +51,7 @@ export default function CareerForm() {
           <div><label className={label} htmlFor="name-last">Last name *</label><input id="name-last" name="lastName" required maxLength={60} className={field} autoComplete="family-name" /></div>
         <div><label className={label} htmlFor="email">Email *</label><input id="email" name="email" type="email" required className={field} autoComplete="email" /></div>
         <div><label className={label} htmlFor="phone">Phone *</label><input id="phone" name="phone" type="tel" required className={field} autoComplete="tel" /></div>
+        <SmsConsent audience="crew" />
         <div><label className={label} htmlFor="city">City & state / province *</label><input id="city" name="city" required className={field} placeholder="e.g. Arlington, VA" autoComplete="address-level2" /></div>
         <div><label className={label} htmlFor="radius">Work radius *</label><select id="radius" name="radius" required defaultValue="" className={field}><option value="" disabled>Select how far you&apos;ll travel</option>{RADIUS.map((r) => <option key={r}>{r}</option>)}</select></div>
         <div><label className={label} htmlFor="role">I am a *</label><select id="role" name="role" required defaultValue="" className={field}><option value="" disabled>Select</option>{ROLES.map((r) => <option key={r}>{r}</option>)}</select></div>

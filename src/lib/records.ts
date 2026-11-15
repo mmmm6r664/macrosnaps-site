@@ -9,7 +9,7 @@ export type NewBooking = {
   ref: string; status: "pending_payment" | "requested"; service: string; serviceName: string; package?: string; addon?: string;
   city?: string; citySlug?: string; venueAddress?: string; customerName: string; email: string; phone?: string; company?: string; notes?: string;
   schedule: { date: string; start: string; end: string; venue?: string; extraCrew?: number }[]; lines: { label: string; amount: number }[];
-  totalCents: number; signature?: string; termsVersion?: string; signedAt?: string; signerIp?: string;
+  totalCents: number; signature?: string; termsVersion?: string; signedAt?: string; signerIp?: string; smsConsent?: boolean;
 };
 
 /** Returns true when saved. Never throws, so a database problem can't block a customer's booking. */
@@ -19,10 +19,10 @@ export async function saveBooking(b: NewBooking): Promise<boolean> {
     const sql = await db();
     const first = [...b.schedule].map((s) => s.date).sort()[0] ?? null;
     await sql`insert into bookings (ref, status, service, service_name, package, addon, city, city_slug, venue_address, customer_name, email, phone, company, notes,
-      schedule, lines, total_cents, signature, terms_version, signed_at, signer_ip, first_date)
+      schedule, lines, total_cents, signature, terms_version, signed_at, signer_ip, first_date, sms_consent)
       values (${b.ref}, ${b.status}, ${b.service}, ${b.serviceName}, ${b.package ?? null}, ${b.addon ?? null}, ${b.city ?? null}, ${b.citySlug ?? null}, ${b.venueAddress ?? null},
       ${b.customerName}, ${b.email}, ${b.phone ?? null}, ${b.company ?? null}, ${b.notes ?? null}, ${sql.json(b.schedule)}, ${sql.json(b.lines)}, ${b.totalCents},
-      ${b.signature ?? null}, ${b.termsVersion ?? null}, ${b.signedAt ?? null}, ${b.signerIp ?? null}, ${first})`;
+      ${b.signature ?? null}, ${b.termsVersion ?? null}, ${b.signedAt ?? null}, ${b.signerIp ?? null}, ${first}, ${b.smsConsent === true})`;
     return true;
   } catch (e) {
     console.error("[db] saveBooking", e);

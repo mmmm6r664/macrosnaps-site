@@ -28,7 +28,7 @@ export async function saveProfile(_: S, f: FormData): Promise<S> {
   const radius = Math.min(500, Math.max(5, Number(f.get("radius")) || 25));
   await q`update staff_profiles set phone = ${t(f, "phone", 40)}, city = ${c ? `${c.name}, ${c.state}` : cityText}, lat = ${c?.lat ?? null}, lng = ${c?.lng ?? null},
     radius_miles = ${radius}, roles = ${roles}, shoot_types = ${shoots}, gear = ${t(f, "gear", 4000)}, bio = ${t(f, "bio", 2000)}, portfolio = ${t(f, "portfolio", 300)},
-    payout_method = ${method || null}, payout_handle = ${t(f, "payout_handle", 120) || null}, updated_at = now() where user_id = ${u.id}`;
+    payout_method = ${method || null}, payout_handle = ${t(f, "payout_handle", 120) || null}, sms_consent_at = case when ${f.get("smsConsent") === "on"} then coalesce(sms_consent_at, now()) else null end, updated_at = now() where user_id = ${u.id}`;
   await audit(u.id, "staff_profile_save");
   revalidatePath("/staff", "layout");
   return { ok: c || !cityText ? "Saved." : "Saved. We couldn't match your city to our map; use \"City, ST\" (e.g. Arlington, VA) so you get offers near you." };

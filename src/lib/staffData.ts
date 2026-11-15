@@ -4,12 +4,12 @@ import { q } from "@/lib/db";
 export type Profile = {
   user_id: number; phone: string | null; city: string | null; radius_miles: number; roles: string[]; shoot_types: string[]; gear: string; bio: string; portfolio: string | null;
   payout_method: string | null; payout_handle: string | null; tax_legal_name: string | null; tax_business_name: string | null; tax_classification: string | null; tax_address: string | null;
-  tin_type: string | null; tin_last4: string | null; w9_signed_at: Date | null; contract_version: string | null; contract_signed_at: Date | null; contract_signature: string | null;
+  tin_type: string | null; tin_last4: string | null; w9_signed_at: Date | null; contract_version: string | null; contract_signed_at: Date | null; contract_signature: string | null; sms_consent_at?: Date | null;
 };
 
 export async function getProfile(userId: number): Promise<Profile | null> {
   const [p] = await q<Profile[]>`select user_id, phone, city, radius_miles, roles, shoot_types, gear, bio, portfolio, payout_method, payout_handle, tax_legal_name, tax_business_name,
-    tax_classification, tax_address, tin_type, tin_last4, w9_signed_at, contract_version, contract_signed_at, contract_signature from staff_profiles where user_id = ${userId}`;
+    tax_classification, tax_address, tin_type, tin_last4, w9_signed_at, contract_version, contract_signed_at, contract_signature, sms_consent_at from staff_profiles where user_id = ${userId}`;
   return p ?? null;
 }
 

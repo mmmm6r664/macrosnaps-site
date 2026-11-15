@@ -91,6 +91,7 @@ export default function Footer() {
             <Link href="/locations" className="hover:text-gold">All Locations</Link>
             <Link href="/terms" className="hover:text-gold">Terms &amp; Conditions</Link>
             <Link href="/privacy" className="hover:text-gold">Privacy</Link>
+            <Link href="/sms" className="hover:text-gold">SMS Terms</Link>
             <Link href="/privacy#cookies" className="hover:text-gold">Cookies</Link>
             <Link href="/legal" className="hover:text-gold">Legal</Link>
           </div>

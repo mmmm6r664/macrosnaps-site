@@ -80,7 +80,7 @@ export async function POST(req: Request) {
   details.booking_ref = ref;
   const saved = await saveBooking({
     ref, status: stripe ? "pending_payment" : "requested", service: service.slug, serviceName: service.name, package: details.package, addon: details.addon || undefined,
-    city: location, citySlug: city?.slug, venueAddress: required.address, customerName: required.name, email, phone: required.phone, company: details.company || undefined,
+    city: location, citySlug: city?.slug, venueAddress: required.address, customerName: required.name, email, phone: required.phone, smsConsent: b.smsConsent === true || b.smsConsent === "on", company: details.company || undefined,
     notes: details.notes || undefined, schedule: sessions, lines, totalCents: total * 100, signature, termsVersion: TERMS_VERSION, signedAt, signerIp,
   });
 

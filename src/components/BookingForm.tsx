@@ -1,4 +1,5 @@
 "use client";
+import SmsConsent from "./SmsConsent";
 import { cleanTyped, MAX_QUERY } from "@/lib/safeInput";
 import TermsList from "@/components/TermsList";
 import { TERMS_VERSION } from "@/lib/terms";
@@ -348,6 +349,7 @@ export default function BookingForm({ services, cities, addons = [], paused = {}
           <div><label className={label} htmlFor="name-last">Last name *</label><input id="name-last" name="lastName" defaultValue={me?.lastName} required maxLength={60} className={field} autoComplete="family-name" /></div>
           <div><label className={label} htmlFor="email">Email *</label><input id="email" name="email" type="email" defaultValue={me?.email} required className={field} autoComplete="email" /></div>
           <div><label className={label} htmlFor="phone">Phone *</label><input id="phone" name="phone" type="tel" defaultValue={me?.phone} required className={field} autoComplete="tel" /></div>
+          <SmsConsent className="sm:col-span-2" />
           <div><label className={label} htmlFor="company">Company (optional)</label><input id="company" name="company" className={field} autoComplete="organization" /></div>
           <div className="sm:col-span-2"><label className={label} htmlFor="notes">Notes for your crew</label><textarea id="notes" name="notes" rows={3} maxLength={480} className={field} placeholder="Agenda, key people or moments, dress code, parking…" /></div>
         </fieldset>
