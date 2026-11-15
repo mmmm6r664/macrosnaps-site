@@ -301,6 +301,37 @@ const TOOLS: Tool[] = [
     run: async (a) => importOrders(str(a.source, 40), Array.isArray(a.orders) ? (a.orders as OrderIn[]) : []),
   },
   {
+    name: "import_contractors",
+    description: "Quietly add contractors who already signed an agreement elsewhere (Adobe Sign, email) to the team, with city and roles. Sends NO email; they can use 'Forgot password' or get a welcome later. Skips anyone already on the team.",
+    inputSchema: obj({
+      contractors: { type: "array", items: { type: "object", properties: {
+        name: S("Full name"), email: S(""), phone: S(""), city: S("City, ST"), roles: { type: "array", items: { type: "string" } }, signed_on: S("Date the agreement was signed (YYYY-MM-DD)"), source: S("e.g. Adobe Sign"),
+      }, required: ["name", "email"] } },
+    }, ["contractors"]),
+    run: async (a) => {
+      const { hashPassword } = await import("@/lib/auth");
+      const { resolveCity } = await import("@/lib/geo");
+      const { randomBytes } = await import("crypto");
+      const list = (Array.isArray(a.contractors) ? a.contractors : []).slice(0, 300) as Json[];
+      const out = { added: [] as string[], skipped: [] as string[] };
+      for (const c of list) {
+        const email = str(c.email, 200).trim().toLowerCase();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { out.skipped.push(`${str(c.name, 80)} (no email)`); continue; }
+        if ((await q`select 1 from users where lower(email) = ${email}`).length) { out.skipped.push(`${email} (already on team)`); continue; }
+        const cityText = str(c.city, 80).trim();
+        const city = cityText ? resolveCity(cityText) : undefined;
+        const roles = (Array.isArray(c.roles) ? c.roles : ["Photographer"]).map((r) => str(r, 20)).filter((r) => ["Photographer", "Videographer"].includes(r));
+        const signed = c.signed_on && !Number.isNaN(Date.parse(str(c.signed_on, 20))) ? new Date(str(c.signed_on, 20)) : null;
+        const [u] = await q<{ id: number }[]>`insert into users (email, name, password_hash, role) values (${email}, ${str(c.name, 100).trim()}, ${await hashPassword(randomBytes(24).toString("hex"))}, 'staff') returning id`;
+        await q`insert into staff_profiles (user_id, phone, city, lat, lng, roles, contract_version, contract_signature, contract_signed_at)
+          values (${u.id}, ${str(c.phone, 40) || null}, ${city ? `${city.name}, ${city.state}` : cityText || null}, ${city?.lat ?? null}, ${city?.lng ?? null}, ${roles.length ? roles : ["Photographer"]},
+            ${signed ? `external:${str(c.source, 40) || "signed elsewhere"}` : null}, ${signed ? str(c.name, 100) : null}, ${signed})`;
+        out.added.push(email);
+      }
+      return out;
+    },
+  },
+  {
     name: "subscribe_clients",
     description: "Add CRM contacts to the newsletter list (Subscribers). Skips team members, people already on the list (including anyone who unsubscribed) and the excluded emails. Sends nothing.",
     inputSchema: obj({ source: S("Only contacts from this source, e.g. Wix (optional)"), exclude_emails: { type: "array", items: { type: "string" } } }),
