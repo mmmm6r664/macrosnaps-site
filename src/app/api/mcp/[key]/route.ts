@@ -258,7 +258,11 @@ const TOOLS: Tool[] = [
       const at = a.received_at && !Number.isNaN(Date.parse(str(a.received_at, 40))) ? new Date(str(a.received_at, 40)) : new Date();
       const dupe = await q<{ id: number }[]>`select id from inquiries where kind = 'contact' and data->>'source' = ${source}
         and ((${ext}::text is not null and data->>'external_id' = ${ext}) or (${email} <> '' and lower(email) = ${email} and abs(extract(epoch from created_at - ${at})) < 259200)) limit 1`;
-      if (dupe[0]) return { ok: true, duplicate: true, id: dupe[0].id };
+      if (dupe[0]) {
+        // Same lead seen again: refresh contact details that are now known (e.g. a relay PIN or an unmasked email).
+        if (ext) await q`update inquiries set phone = coalesce(nullif(${phone}, ''), phone), email = case when ${email} <> '' and email like '%xxxx%' then ${email} else email end where id = ${dupe[0].id}`;
+        return { ok: true, duplicate: true, id: dupe[0].id };
+      }
       const service = str(a.service, 120).trim(), location = str(a.location, 120).trim();
       const subject = `${source}: ${[service || "Photography request", location && `in ${location}`].filter(Boolean).join(" ")}`;
       const message = [`Lead from ${source}.`, service && `Looking for: ${service}`, location && `Location: ${location}`, a.date && `Date: ${str(a.date, 80)}`, a.message && str(a.message, 4000)].filter(Boolean).join("\n");
