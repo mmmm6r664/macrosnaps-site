@@ -417,6 +417,22 @@ alter table orders add column if not exists location text;
 alter table orders add column if not exists event_date text;
 alter table orders add column if not exists notes text;
 create index if not exists orders_client on orders(client_id);
+create table if not exists site_visits (
+  id bigserial primary key,
+  vid text not null,              -- anonymous visitor id (hash of IP + browser, rotates daily)
+  sid text not null,              -- browser session id
+  path text not null,
+  ref_host text,
+  source text not null default 'direct',
+  medium text not null default 'direct', -- organic | social | paid | referral | email | direct
+  campaign text,
+  country text, region text, city text,
+  device text, browser text,
+  duration_ms int not null default 0,
+  created_at timestamptz not null default now()
+);
+create index if not exists site_visits_created on site_visits(created_at);
+create index if not exists site_visits_sid on site_visits(sid);
 create table if not exists newsletter_events (
   id bigserial primary key,
   newsletter_id int not null references newsletters(id) on delete cascade,
