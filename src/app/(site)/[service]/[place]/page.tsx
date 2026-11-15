@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCity, getRegion, getRegionByCode, cityLabel, prerenderCities, regions, City, Region } from "@/lib/geo";
+import { getCity, getRegion, getRegionByCode, cityLabel, City, Region } from "@/lib/geo";
 import { LOCAL_SLUGS, SERVICES, getService } from "@/lib/services";
 import { cityContent, regionContent, resolveTarget, hubServices, imagesFor, targetName, targetPro, targetSlug, LocalTarget } from "@/lib/content";
 import { PageHero, TrustBar, SectionTitle, Pricing, Faqs, ClientLogos, Gallery, Breadcrumbs, CtaBand, HowItWorks } from "@/components/blocks";
@@ -18,29 +18,18 @@ import { photoPicker, rotate, bannerSafe } from "@/lib/images";
 import { SITE } from "@/lib/site";
 import { IconCheck } from "@/components/Icons";
 import PhotoSpots from "@/components/PhotoSpots";
-import { EVENT_TYPES } from "@/data/eventTypes";
 import { EventCityPage, EventRegionPage } from "@/components/EventLocalPage";
-import { getEventType, eventPrerenderCities, eventCityContent, eventRegionContent } from "@/lib/eventLocal";
+import { getEventType, eventCityContent, eventRegionContent } from "@/lib/eventLocal";
 
-export const revalidate = 604800; // re-render weekly
+// Cost: pages are NOT pre-rendered at build (thousands of pages × every deploy was the bulk of build minutes,
+// deployment storage and ISR writes). Each page renders on its first visit and is cached until the next deploy.
+export const revalidate = false;
 export const dynamicParams = true;
 
 type Params = { service: string; place: string };
 
 export function generateStaticParams(): Params[] {
-  const out: Params[] = [];
-  const cities = prerenderCities();
-  for (const service of LOCAL_SLUGS) {
-    for (const r of regions) out.push({ service, place: r.slug });
-    for (const place of cities) out.push({ service, place });
-  }
-  // Event type × location: all states/provinces + the largest cities; the rest render on demand (ISR).
-  const eventCities = eventPrerenderCities().map((c) => c.slug);
-  for (const e of EVENT_TYPES) {
-    for (const r of regions) out.push({ service: e.slug, place: r.slug });
-    for (const place of eventCities) out.push({ service: e.slug, place });
-  }
-  return out;
+  return [];
 }
 
 function load(p: Params) {
