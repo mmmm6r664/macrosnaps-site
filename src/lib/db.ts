@@ -294,6 +294,7 @@ alter table payouts add column if not exists payee_name text;
 alter table payouts add column if not exists payee_email text;
 alter table payouts add column if not exists emailed_at timestamptz;
 alter table payouts add column if not exists external_id text;
+alter table users add column if not exists alt_emails text[] not null default '{}';
 create unique index if not exists payouts_ext on payouts (external_id) where external_id is not null;
 alter table crew_assignments add column if not exists drive_link_at timestamptz;
 alter table crew_assignments add column if not exists drive_asked_at timestamptz;

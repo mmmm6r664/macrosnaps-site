@@ -351,7 +351,7 @@ const TOOLS: Tool[] = [
       const tokenHash = createHash("sha256").update(`external:${str(a.external_id, 200)}`).digest("hex");
       if ((await q`select 1 from contracts where token_hash = ${tokenHash}`).length) return { ok: true, skipped: "already imported" };
       const role = /video/i.test(str(a.role, 40) + str(a.title, 200)) ? "Videographer" : "Photographer";
-      let [u] = await q<{ id: number; name: string }[]>`select id, name from users where lower(email) = ${email}`;
+      let [u] = await q<{ id: number; name: string }[]>`select id, name from users where lower(email) = ${email} or ${email} = any(alt_emails) order by id limit 1`;
       let created = false;
       if (!u) {
         [u] = await q<{ id: number; name: string }[]>`insert into users (email, name, password_hash, role) values (${email}, ${name}, ${await hashPassword(randomBytes(24).toString("hex"))}, 'staff') returning id, name`;
@@ -379,6 +379,47 @@ const TOOLS: Tool[] = [
         if (Number(busy.n) === 0) { await q`delete from users where id = ${u.id}`; removedUser = true; }
       }
       return { ok: true, contracts_deleted: del.length, removed_user: removedUser };
+    },
+  },
+  {
+    name: "merge_staff",
+    description: "Merge a duplicate team member into another (same person, two emails). Moves contracts, payouts, assignments and everything else, fills blank profile fields, keeps the second email as an alternate, then deletes the duplicate. Sends nothing.",
+    inputSchema: obj({ keep_id: N("User id to keep"), merge_id: N("Duplicate user id to merge in and delete") }, ["keep_id", "merge_id"]),
+    run: async (a) => {
+      const keep = Number(a.keep_id), merge = Number(a.merge_id);
+      if (!keep || !merge || keep === merge) return { error: "Bad ids" };
+      const sql = await db();
+      const users = await sql<{ id: number; email: string; role: string }[]>`select id, email, role from users where id in (${keep}, ${merge})`;
+      if (users.length !== 2 || users.some((u) => u.role !== "staff")) return { error: "Both must be staff users" };
+      const mergeEmail = users.find((u) => u.id === merge)!.email;
+      const fks = await sql<{ table_name: string; column_name: string }[]>`
+        select kcu.table_name, kcu.column_name from information_schema.table_constraints tc
+        join information_schema.key_column_usage kcu on kcu.constraint_name = tc.constraint_name and kcu.table_schema = tc.table_schema
+        join information_schema.constraint_column_usage ccu on ccu.constraint_name = tc.constraint_name and ccu.table_schema = tc.table_schema
+        where tc.constraint_type = 'FOREIGN KEY' and ccu.table_name = 'users' and ccu.column_name = 'id' and tc.table_schema = 'public'`;
+      const moved: Record<string, number> = {};
+      for (const f of fks) {
+        if (f.table_name === "staff_profiles") continue;
+        try {
+          const r = await sql`update ${sql(f.table_name)} set ${sql(f.column_name)} = ${keep} where ${sql(f.column_name)} = ${merge}`;
+          if (r.count) moved[`${f.table_name}.${f.column_name}`] = r.count;
+        } catch { /* unique per-user rows (sessions, tokens): left to cascade */ }
+      }
+      const cols = await sql<{ column_name: string; data_type: string }[]>`select column_name, data_type from information_schema.columns where table_name = 'staff_profiles' and table_schema = 'public'`;
+      const [hasKeep] = await sql`select 1 from staff_profiles where user_id = ${keep}`;
+      if (!hasKeep) await sql`update staff_profiles set user_id = ${keep} where user_id = ${merge}`;
+      else {
+        for (const c of cols) {
+          if (["user_id", "updated_at"].includes(c.column_name)) continue;
+          const col = sql(c.column_name);
+          if (c.data_type === "ARRAY") await sql`update staff_profiles k set ${col} = (select array(select distinct unnest(k.${col} || m.${col}))) from staff_profiles m where k.user_id = ${keep} and m.user_id = ${merge}`;
+          else if (c.data_type === "text") await sql`update staff_profiles k set ${col} = coalesce(nullif(k.${col}, ''), m.${col}) from staff_profiles m where k.user_id = ${keep} and m.user_id = ${merge}`;
+          else await sql`update staff_profiles k set ${col} = coalesce(k.${col}, m.${col}) from staff_profiles m where k.user_id = ${keep} and m.user_id = ${merge}`;
+        }
+      }
+      await sql`update users set alt_emails = array(select distinct unnest(alt_emails || ${[mergeEmail.toLowerCase()]}::text[])) where id = ${keep}`;
+      await sql`delete from users where id = ${merge}`;
+      return { ok: true, kept: keep, merged_email: mergeEmail, moved };
     },
   },
   {
