@@ -423,6 +423,32 @@ const TOOLS: Tool[] = [
     },
   },
   {
+    name: "update_staff_details",
+    description: "Fill team members' profile details from their application (gear/kit, shoot types, T-shirt size, car, bio, address, travel, headshot link). Matches by email (or alternate email). Only fills blank fields unless overwrite is true. Sends nothing.",
+    inputSchema: obj({
+      people: { type: "array", items: obj({ email: S(""), gear: S(""), shoot_types: { type: "array", items: { type: "string" } }, tshirt_size: S(""), has_car: { type: "boolean" }, bio: S(""), address: S(""), travel: S(""), headshot_url: S("") }, ["email"]) },
+      overwrite: { type: "boolean" },
+    }, ["people"]),
+    run: async (a) => {
+      const list = (Array.isArray(a.people) ? a.people : []).slice(0, 500) as Json[];
+      const ow = a.overwrite === true;
+      const out = { updated: 0, missing: [] as string[] };
+      for (const p of list) {
+        const email = str(p.email, 200).trim().toLowerCase();
+        const [u] = await q<{ id: number }[]>`select id from users where lower(email) = ${email} or ${email} = any(alt_emails) order by id limit 1`;
+        if (!u) { out.missing.push(email); continue; }
+        await q`insert into staff_profiles (user_id) values (${u.id}) on conflict (user_id) do nothing`;
+        const t = (k: string, n = 4000) => str(p[k], n).trim() || null;
+        const types = Array.isArray(p.shoot_types) ? (p.shoot_types as unknown[]).map((x) => str(x, 60).trim()).filter(Boolean) : [];
+        const car = typeof p.has_car === "boolean" ? p.has_car : null;
+        if (ow) await q`update staff_profiles set gear = coalesce(${t("gear")}, gear), shoot_types = case when ${types.length} > 0 then ${types} else shoot_types end, tshirt_size = coalesce(${t("tshirt_size", 10)}, tshirt_size), has_car = coalesce(${car}, has_car), bio = coalesce(${t("bio")}, bio), address = coalesce(${t("address", 300)}, address), travel = coalesce(${t("travel", 120)}, travel), headshot_url = coalesce(${t("headshot_url", 500)}, headshot_url), updated_at = now() where user_id = ${u.id}`;
+        else await q`update staff_profiles set gear = case when coalesce(gear, '') = '' then coalesce(${t("gear")}, '') else gear end, shoot_types = case when coalesce(cardinality(shoot_types), 0) = 0 then ${types} else (select array(select distinct unnest(shoot_types || ${types}::text[]))) end, tshirt_size = coalesce(tshirt_size, ${t("tshirt_size", 10)}), has_car = coalesce(has_car, ${car}), bio = case when coalesce(bio, '') = '' then coalesce(${t("bio")}, '') else bio end, address = coalesce(address, ${t("address", 300)}), travel = coalesce(travel, ${t("travel", 120)}), headshot_url = coalesce(headshot_url, ${t("headshot_url", 500)}), updated_at = now() where user_id = ${u.id}`;
+        out.updated++;
+      }
+      return out;
+    },
+  },
+  {
     name: "fix_team_city",
     description: "Re-resolve the city of team members whose city text matches (e.g. fix 'Washington, UT' to 'Washington, DC'). Sends nothing.",
     inputSchema: obj({ from: S("Current city text, e.g. Washington, UT"), to: S("Correct city, e.g. Washington, DC") }, ["from", "to"]),

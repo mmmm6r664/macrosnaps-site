@@ -4,7 +4,7 @@ import { messagePeople, createOffer, type S } from "@/app/admin/(panel)/photogra
 import { noReset } from "./noReset";
 import { inputCls, labelCls, btnPrimary, btnGold, Badge } from "./ui";
 
-type P = { key: string; kind: string; name: string; email: string; phone: string | null; city: string; radius: number; miles?: number; roles: string; shootTypes: string[]; experience?: string; portfolio?: string; camera?: string; gear?: string };
+type P = { key: string; kind: string; name: string; email: string; phone: string | null; city: string; radius: number; miles?: number; roles: string; shootTypes: string[]; experience?: string; portfolio?: string; camera?: string; gear?: string; tshirt?: string; uid?: number };
 const Msg = ({ s }: { s: S }) => (s ? <p role="status" className={`rounded px-3 py-2 text-sm ${s.error ? "bg-red-50 text-red-800" : "bg-emerald-50 text-emerald-800"}`}>{s.error ?? s.ok}</p> : null);
 
 export default function Directory({ people, offer }: { people: P[]; offer?: { title: string; city: string; date: string; details: string; bookingId?: number } }) {
@@ -29,7 +29,7 @@ export default function Directory({ people, offer }: { people: P[]; offer?: { ti
             {people.map((p) => (
               <tr key={p.key} className={sel.has(p.key) ? "bg-[#ccba56]/10" : ""}>
                 <td className="px-3 py-3 align-top"><input type="checkbox" aria-label={`Select ${p.name}`} checked={sel.has(p.key)} onChange={() => toggle(p.key)} /></td>
-                <td className="px-3 py-3 align-top"><span className="font-semibold">{p.name}</span><div className="mt-1"><Badge status={p.kind === "staff" ? "done" : "new"}>{p.kind === "staff" ? "Team" : "Applicant"}</Badge></div></td>
+                <td className="px-3 py-3 align-top">{p.uid ? <a className="font-semibold underline decoration-black/20 hover:decoration-black" href={`/admin/photographers/${p.uid}`}>{p.name}</a> : <span className="font-semibold">{p.name}</span>}{p.tshirt && <div className="text-xs text-black/50">T-shirt: {p.tshirt}</div>}<div className="mt-1"><Badge status={p.kind === "staff" ? "done" : "new"}>{p.kind === "staff" ? "Team" : "Applicant"}</Badge></div></td>
                 <td className="px-3 py-3 align-top"><a className="underline" href={`mailto:${p.email}`}>{p.email}</a>{p.phone && <div><a className="underline" href={`tel:${p.phone}`}>{p.phone}</a></div>}</td>
                 <td className="px-3 py-3 align-top">{p.city || "—"}<div className="text-xs text-black/50">{p.miles != null ? `${p.miles} mi away · ` : ""}travels {p.radius >= 500 ? "anywhere" : `${p.radius} mi`}</div></td>
                 <td className="px-3 py-3 align-top">{p.roles}{p.experience && <div className="text-xs text-black/50">{p.experience}</div>}</td>

@@ -51,7 +51,7 @@ export default async function Photographers({ searchParams }: { searchParams: Pr
         <button className={btnGhost}>Filter</button>
         <p className="self-center text-sm text-black/60 xl:col-span-3">{people.length} match{people.length === 1 ? "" : "es"}</p>
       </form>
-      <Directory people={people.map(({ lat: _lat, lng: _lng, userId: _u, inquiryId: _i, active: _a, ...p }) => p)} offer={offer} />
+      <Directory people={people.map(({ lat: _lat, lng: _lng, userId, inquiryId: _i, active: _a, ...p }) => ({ ...p, uid: userId ?? undefined }))} offer={offer} />
     </>
   );
 }
