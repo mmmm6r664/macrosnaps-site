@@ -25,7 +25,7 @@ function useFirstParty(path: string) {
     const send = () => { if (!id) return; const ms = Date.now() - start - hidden - (hiddenAt ? Date.now() - hiddenAt : 0); navigator.sendBeacon?.("/api/t", JSON.stringify({ k: "ping", id, sid, ms })); };
     const vis = () => { if (document.visibilityState === "hidden") { hiddenAt = Date.now(); send(); } else if (hiddenAt) { hidden += Date.now() - hiddenAt; hiddenAt = 0; } };
     document.addEventListener("visibilitychange", vis);
-    const iv = setInterval(send, 15000);
+    const iv = setInterval(send, 120000); // cost: rare pings; time on page is mainly sent when the tab is hidden or closed
     return () => { send(); clearInterval(iv); document.removeEventListener("visibilitychange", vis); };
   }, [path]);
 }
