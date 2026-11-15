@@ -74,6 +74,10 @@ export function renderBody(src: string) {
 
 /** Newsletter layout: masthead with issue date, quick links, the body, a booking band and the footer. */
 export function emailHtml(subject: string, preheader: string, body: string, unsubUrl: string, sentAt: Date = new Date()) {
+  // A photo as the very first block becomes a full-width header right under the masthead.
+  const top = body.replace(/^\s+/, "").match(/^!\[[^\]]*\]\((https?:\/\/[^)\s]+)\)\s*(?:\n|$)/);
+  const hero = top ? top[1] : "";
+  const rest = top ? body.replace(/^\s+/, "").slice(top[0].length) : body;
   const issue = sentAt.toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "America/New_York" });
   const nav = [["Book", `${ORIGIN}/book`], ["Portfolio", `${ORIGIN}/portfolio`], ["Weddings", `${ORIGIN}/wedding-photography`], ["Events", `${ORIGIN}/events`]]
     .map(([l, u]) => `<a href="${u}" style="color:#e9e2c4;text-decoration:none;font:600 11px ${SANS};letter-spacing:2px;text-transform:uppercase">${l}</a>`).join(`<span style="color:#555">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>`);
@@ -89,7 +93,8 @@ export function emailHtml(subject: string, preheader: string, body: string, unsu
     <p style="margin:16px 0 0;font:italic 15px ${SERIF};color:${GOLD}">The MacroSnaps Journal &nbsp;&middot;&nbsp; ${esc(issue)}</p></td></tr>
   <tr><td align="center" style="background:#000;padding:4px 20px 20px">${nav}</td></tr>
   <tr><td style="height:4px;line-height:4px;font-size:0;background:${GOLD}">&nbsp;</td></tr>
-  <tr><td class="nl-pad" style="padding:40px 44px 20px">${renderBody(body)}</td></tr>
+  ${hero ? `<tr><td style="padding:0;line-height:0;font-size:0"><img src="${safeUrl(hero)}" alt="" width="600" style="display:block;width:100%;height:auto;border:0"></td></tr>` : ""}
+  <tr><td class="nl-pad" style="padding:${hero ? "34px" : "40px"} 44px 20px">${renderBody(rest)}</td></tr>
   <tr><td align="center" style="background:#111;padding:34px 30px">
     <p style="margin:0 0 6px;font:700 11px ${SANS};letter-spacing:3px;text-transform:uppercase;color:${GOLD}">Planning something?</p>
     <p style="margin:0 0 18px;font:400 24px/1.3 ${SERIF};color:#fff">Published prices. Book online in two minutes.</p>
