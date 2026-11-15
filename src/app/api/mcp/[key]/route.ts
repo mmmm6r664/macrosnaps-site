@@ -613,11 +613,11 @@ const TOOLS: Tool[] = [
   {
     name: "host_image",
     description: "Copy an image from a public URL (e.g. a Canva export) into our own storage for newsletters. Returns the permanent URL: …/newsletter/<name>.<jpg|png|gif> (same name replaces the file).",
-    inputSchema: obj({ url: S("https://…"), name: S("file name, e.g. thanksgiving-2026-header") }, ["url", "name"]),
+    inputSchema: obj({ url: S("https://… or a data:image/jpeg;base64,… URL"), name: S("file name, e.g. thanksgiving-2026-header") }, ["url", "name"]),
     run: async (a) => {
       const { put } = await import("@vercel/blob");
       const url = str(a.url, 2000);
-      if (!/^https:\/\//.test(url)) return { error: "https URL required" };
+      if (!/^(https:\/\/|data:image\/(jpeg|png);base64,)/.test(url)) return { error: "https or data:image URL required" };
       const res = await fetch(url, { redirect: "follow" });
       const type = res.headers.get("content-type") ?? "";
       if (!res.ok || !type.startsWith("image/")) return { error: `fetch ${res.status} ${type}` };
