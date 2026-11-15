@@ -324,11 +324,23 @@ const TOOLS: Tool[] = [
         const signed = c.signed_on && !Number.isNaN(Date.parse(str(c.signed_on, 20))) ? new Date(str(c.signed_on, 20)) : null;
         const [u] = await q<{ id: number }[]>`insert into users (email, name, password_hash, role) values (${email}, ${str(c.name, 100).trim()}, ${await hashPassword(randomBytes(24).toString("hex"))}, 'staff') returning id`;
         await q`insert into staff_profiles (user_id, phone, city, lat, lng, roles, contract_version, contract_signature, contract_signed_at)
-          values (${u.id}, ${str(c.phone, 40) || null}, ${city ? `${city.name}, ${city.state}` : cityText || null}, ${city?.lat ?? null}, ${city?.lng ?? null}, ${roles.length ? roles : ["Photographer"]},
+          values (${u.id}, ${str(c.phone, 40) || null}, ${city ? (city.name.includes(",") ? city.name : `${city.name}, ${city.state}`) : cityText || null}, ${city?.lat ?? null}, ${city?.lng ?? null}, ${roles.length ? roles : ["Photographer"]},
             ${signed ? `external:${str(c.source, 40) || "signed elsewhere"}` : null}, ${signed ? str(c.name, 100) : null}, ${signed})`;
         out.added.push(email);
       }
       return out;
+    },
+  },
+  {
+    name: "fix_team_city",
+    description: "Re-resolve the city of team members whose city text matches (e.g. fix 'Washington, UT' to 'Washington, DC'). Sends nothing.",
+    inputSchema: obj({ from: S("Current city text, e.g. Washington, UT"), to: S("Correct city, e.g. Washington, DC") }, ["from", "to"]),
+    run: async (a) => {
+      const { resolveCity } = await import("@/lib/geo");
+      const c = resolveCity(str(a.to, 80));
+      const label = c ? `${c.name}${c.name.includes(",") ? "" : `, ${c.state}`}` : str(a.to, 80);
+      const rows = await q<{ user_id: number }[]>`update staff_profiles set city = ${label}, lat = ${c?.lat ?? null}, lng = ${c?.lng ?? null}, updated_at = now() where city = ${str(a.from, 80)} returning user_id`;
+      return { ok: true, updated: rows.length, city: label };
     },
   },
   {

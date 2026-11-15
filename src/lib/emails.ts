@@ -16,14 +16,14 @@ const PORTAL = `${ORIGIN}/account`;
 /* ---------- bookings ---------- */
 export function bookingConfirmed(b: BookingInfo): Email {
   return {
-    subject: `You're booked! ${b.service} on ${b.schedule.split(";")[0]}${b.schedule.includes(";") ? " +more" : ""} (ref ${b.ref})`,
+    subject: `Booking confirmed: ${b.service} on ${b.schedule.split(";")[0]}${b.schedule.includes(";") ? " +more" : ""} (ref ${b.ref})`,
     html: layout({
-      title: "You're booked!",
+      title: "Your booking is confirmed",
       preheader: `Your ${b.service.toLowerCase()} is confirmed. Here are your details and what happens next.`,
       hero: IMG.hero,
       body:
         p(`Hi ${first(b.firstName)},`) +
-        p(`Thank you for choosing MacroSnaps. Your payment went through and your date is reserved. Here's everything in one place.`) +
+        p(`Thank you for choosing MacroSnaps. Your payment has been received and your date is reserved. Your booking details are below.`) +
         eyebrow("Your booking") +
         details([["Service", b.service], ["When", b.schedule], ["Where", [b.venue, b.city].filter(Boolean).join(", ")], ["Booking ref", b.ref]]) +
         eyebrow("Receipt") +
@@ -31,8 +31,8 @@ export function bookingConfirmed(b: BookingInfo): Email {
         h2("What happens next") +
         steps([
           ["We assign your crew", "You'll get an email with your photographer's or videographer's name and contact details before the shoot."],
-          ["Shoot day", "Your crew arrives about 15 minutes early. Share a shot list or key people by replying to this email."],
-          ["Your gallery", "Edited and retouched photos arrive in your private online gallery in about a week; highlight videos in 2 to 4 weeks."],
+          ["Event day", "Your crew arrives about 15 minutes before the start time. To share a shot list or key people, simply reply to this email."],
+          ["Delivery", "Edited, retouched photographs are delivered to your private online gallery within about one week; highlight films within two to four weeks."],
         ]) +
         button("Track your order", PORTAL) +
         small(`Sign in to your client portal with this email address to check your order status and, later, view and download your gallery. Your signed Terms and Conditions are on file with this booking.`),
@@ -87,35 +87,35 @@ export function stageUpdate(name: string, stageLabel: string, stageText: string,
 
 export function galleryReady(name: string, service: string, url: string, email: string, previews: string[] = []): Email {
   return {
-    subject: "Your MacroSnaps gallery is ready! 📸",
+    subject: "Your MacroSnaps gallery is ready",
     html: layout({
       title: "Your gallery is ready",
       preheader: `Your photos from your ${service.toLowerCase()} are ready to view and download.`,
       hero: previews.length ? undefined : IMG.hero,
       body:
         p(`Hi ${first(name)},`) +
-        p(`The wait is over! Your edited and retouched photos from your <b>${esc(service.toLowerCase())}</b> are ready in your private gallery.`) +
+        p(`Your edited and retouched photographs from your <b>${esc(service.toLowerCase())}</b> are now available in your private gallery.`) +
         (previews.length ? photoRow(previews) : "") +
         button("View your gallery", url) +
         small(`Sign in with ${esc(email)}. You can view every photo full-screen and download them. Galleries are kept online for 30 days, so please download your favorites soon.`) +
         divider() +
-        p(`We'd love to hear how we did. You can rate your experience right in your portal; it only takes a few seconds.`),
+        p(`We would value your feedback. You can rate your experience directly in your client portal; it takes only a moment.`),
     }),
   };
 }
 
 export function reviewRequest(name: string, reviewUrl: string): Email {
   return {
-    subject: "Thank you! Would you share your experience on Google?",
+    subject: "Would you share your experience on Google?",
     html: layout({
-      title: "Thank you for the kind words",
+      title: "Thank you for your kind words",
       preheader: "A quick Google review helps other people find us.",
       body:
         p(`Hi ${first(name)},`) +
-        p("We're so glad you loved working with MacroSnaps. Reviews are how most of our clients find us, so a few words from you mean a lot.") +
+        p("Thank you for choosing MacroSnaps. Reviews help other clients find us, and a few words about your experience would be greatly appreciated.") +
         `<p style="margin:0 0 6px;text-align:center;font-size:30px;color:#ccba56;letter-spacing:6px">★★★★★</p>` +
         button("Leave a Google review", reviewUrl) +
-        small("It takes about a minute. Thank you for supporting a small business!"),
+        small("It takes about a minute. Thank you for your support."),
     }),
   };
 }
@@ -126,13 +126,13 @@ export function feedbackRequest(name: string, service: string, orderUrl: string)
     .map((n) => `<a href="${esc(`${orderUrl}?rate=${n}#feedback`)}" style="text-decoration:none;font-size:38px;line-height:1;color:#ccba56;padding:0 4px" title="${n} star${n > 1 ? "s" : ""}">★</a>`)
     .join("");
   return {
-    subject: "How did we do? (takes 10 seconds)",
+    subject: "How was your experience with MacroSnaps?",
     html: layout({
       title: "How did we do?",
       preheader: `Tell us about your ${service.toLowerCase()}. One click is all it takes.`,
       body:
         p(`Hi ${first(name)},`) +
-        p(`We hope you're enjoying your photos! Your opinion helps us get better, so how would you rate your experience with MacroSnaps?`) +
+        p(`We hope you are enjoying your photographs. Your feedback helps us maintain the highest standards. How would you rate your experience with MacroSnaps?`) +
         `<p style="margin:8px 0 6px;text-align:center">${stars}</p>` +
         small(`<span style="display:block;text-align:center">Tap a star to rate. Only our team sees your answer.</span>`) +
         button("Leave feedback", `${orderUrl}#feedback`),
@@ -159,15 +159,15 @@ export function abandoned1(a: Abandoned): Email {
   return {
     subject: `Your ${a.service.toLowerCase()} booking isn't finished yet`,
     html: layout({
-      title: "You're one step away",
+      title: "Your booking is almost complete",
       preheader: "Your date isn't reserved until payment is complete. It only takes a minute.",
       body:
         p(`Hi ${first(a.firstName)},`) +
-        p(`It looks like you started booking with us but didn't get to the payment step. We've saved everything for you, so you can finish in under a minute.`) +
+        p(`You recently started a booking with MacroSnaps but did not complete payment. We have saved your details so you can finish in under a minute.`) +
         details([["Service", a.service], ["When", a.schedule], ["Where", a.city]]) +
         priceTable(a.lines, "Total", a.total) +
         button("Finish my booking", a.resumeUrl) +
-        small("Pay securely by card, Apple Pay, Google Pay, Cash App Pay, Amazon Pay, or in installments with Klarna or Afterpay. Hit a snag? Just reply and we'll help."),
+        small("Pay securely by card, Apple Pay, Google Pay, Cash App Pay, Amazon Pay, or in installments with Klarna or Afterpay. If you need any assistance, simply reply to this email."),
       footerNote: reminderFooter(a.stopUrl),
     }),
   };
@@ -175,22 +175,22 @@ export function abandoned1(a: Abandoned): Email {
 
 export function abandoned2(a: Abandoned): Email {
   return {
-    subject: `Is your date still open? Let's lock in your ${a.service.toLowerCase()}`,
+    subject: `Reserve your date: ${a.service}`,
     html: layout({
-      title: "Popular dates go fast",
+      title: "Secure your date",
       preheader: "We can't hold your date until the booking is paid. Here's your saved booking.",
       hero: IMG.hero,
       body:
         p(`Hi ${first(a.firstName)},`) +
-        p(`Just a friendly reminder: your booking for <b>${esc(a.schedule)}</b> isn't reserved yet. Our crews book up quickly, especially on weekends and during conference season.`) +
+        p(`A brief reminder that your booking for <b>${esc(a.schedule)}</b> is not yet reserved. Our crews are in high demand, particularly on weekends and during conference season.`) +
         h2("Why clients choose MacroSnaps") +
         steps([
-          ["Published prices", `The same rates for everyone: photography from $${RATES.photo.first} for the first hour, no surprise fees.`],
-          ["Our own crews", "Experienced photographers and videographers, insured by State Farm ($1M / $2M)."],
-          ["Fast delivery", "Edited and retouched photos in about a week, in a private online gallery."],
+          ["Transparent pricing", `Published rates for every client: photography from $${RATES.photo.first} for the first hour, with no hidden fees.`],
+          ["Experienced professionals", "Seasoned photographers and videographers, fully insured ($1M / $2M)."],
+          ["Prompt delivery", "Edited, retouched photographs in about one week, delivered to a private online gallery."],
         ]) +
         button("Complete my booking", a.resumeUrl) +
-        small("Questions about the details? Reply to this email or call us and we'll sort it out."),
+        small("Questions about the details? Reply to this email or call us and we will be glad to help."),
       footerNote: reminderFooter(a.stopUrl),
     }),
   };
@@ -200,14 +200,14 @@ export function abandoned3(a: Abandoned): Email {
   return {
     subject: "Last reminder: your saved MacroSnaps booking",
     html: layout({
-      title: "Still need a photographer?",
+      title: "Your saved booking",
       preheader: "This is our last reminder about your saved booking.",
       body:
         p(`Hi ${first(a.firstName)},`) +
-        p(`We don't want you to miss out, so this is our last note about your saved booking for <b>${esc(a.service.toLowerCase())}</b> on ${esc(a.schedule)}.`) +
-        callout(`Plans changed? No problem. If you need a different date, time or service, reply to this email and we'll help you put together the right booking.`) +
+        p(`This is our final reminder about your saved booking for <b>${esc(a.service.toLowerCase())}</b> on ${esc(a.schedule)}.`) +
+        callout(`If your plans have changed, we are happy to help. Reply to this email and we will arrange the right date, time or service for you.`) +
         button("Finish my booking", a.resumeUrl) +
-        small(`Or call ${esc(SITE.phone)}. We're happy to answer any questions.`),
+        small(`You may also call us at ${esc(SITE.phone)}.`),
       footerNote: reminderFooter(a.stopUrl),
     }),
   };
@@ -216,24 +216,24 @@ export function abandoned3(a: Abandoned): Email {
 /* ---------- nurture series for new subscribers (3 emails) ---------- */
 export function nurture1(name: string, unsubUrl: string): Email {
   return {
-    subject: "Welcome to MacroSnaps 📸",
+    subject: "Welcome to MacroSnaps",
     html: layout({
       title: "Welcome to MacroSnaps",
-      preheader: "Thanks for joining us. Here's what to expect (and a little about us).",
+      preheader: "Thank you for joining us. Here is what to expect from MacroSnaps.",
       hero: IMG.hero,
       body:
         p(`Hi ${first(name)},`) +
-        p("Thanks for subscribing! We're MacroSnaps: photographers and videographers for conferences, corporate events, weddings and celebrations across all 50 states, Washington, DC, Ontario and Quebec.") +
-        p("A few times a year we'll send photo tips, event-planning ideas and the occasional offer. Never spam.") +
-        h2("What we do") +
+        p("Thank you for joining the MacroSnaps community. MacroSnaps is America&rsquo;s premier photography and videography company, serving clients in all 50 states, Washington, DC, Ontario and Quebec.") +
+        p("From time to time we will share planning insights, recent work and exclusive offers. We respect your inbox.") +
+        h2("Our services") +
         steps([
-          ["Events & conferences", "Keynotes, panels, galas, trade shows, recap videos and live streaming."],
-          ["Weddings & celebrations", "Indian, Pakistani, Muslim, Jewish and every other kind of wedding, plus Bar and Bat Mitzvahs, sweet 16s and more."],
-          ["Business content", "Headshots, product, food and real estate photos, 3D tours and video ads."],
+          ["Conferences & corporate events", "Keynotes, panels, galas, trade shows, recap films and live streaming."],
+          ["Weddings & celebrations", "Weddings, engagements and milestone celebrations, captured with artistry and care."],
+          ["Brand & business content", "Executive headshots, product, food and real estate photography, 3D tours and video."],
         ]) +
-        button("See our work", `${ORIGIN}/portfolio`),
+        button("View our portfolio", `${ORIGIN}/portfolio`),
       unsubUrl,
-      footerNote: "You're receiving this because you subscribed on macrosnaps.com.",
+      footerNote: "You are receiving this because you subscribed to MacroSnaps updates.",
     }),
   };
 }
@@ -241,48 +241,48 @@ export function nurture1(name: string, unsubUrl: string): Email {
 export function nurture2(name: string, unsubUrl: string): Email {
   const pics = [...byTags("wedding").slice(0, 1), ...byTags("conference").slice(0, 1), ...byTags("family").slice(0, 1)];
   return {
-    subject: "How to get photos you'll love (5 quick tips)",
+    subject: "Five ways to get exceptional event photography",
     html: layout({
-      title: "5 tips for better event photos",
+      title: "Five tips for exceptional event photography",
       preheader: "Small things that make a big difference on the day.",
       body:
         p(`Hi ${first(name)},`) +
-        p("After thousands of events, here's what we've learned makes the biggest difference:") +
+        p("Drawing on thousands of events, these are the details that make the greatest difference:") +
         photoRow(pics) +
         steps([
-          ["Share a shot list", "Name the must-have moments and VIPs. Your photographer will make sure nothing gets missed."],
-          ["Plan for light", "Golden hour (the hour before sunset) is magic for portraits. Ask us about timing."],
-          ["Build in buffer time", "Ten extra minutes for group photos keeps the day relaxed."],
-          ["Tell guests", "A quick heads-up helps people relax in front of the camera."],
-          ["Book early", "Weekends and conference season fill up fast. Book online in minutes at published prices."],
+          ["Share a shot list", "Identify key moments and VIPs so your photographer captures everything that matters."],
+          ["Plan for light", "The hour before sunset offers the most flattering light for portraits. We are happy to advise on timing."],
+          ["Allow buffer time", "Ten additional minutes for group photographs keeps the schedule relaxed."],
+          ["Inform your guests", "A brief note in advance helps guests feel at ease in front of the camera."],
+          ["Reserve early", "Weekends and conference season fill quickly. Book online in minutes at published rates."],
         ]) +
         button("Plan my shoot", `${ORIGIN}/book`),
       unsubUrl,
-      footerNote: "You're receiving this because you subscribed on macrosnaps.com.",
+      footerNote: "You are receiving this because you subscribed to MacroSnaps updates.",
     }),
   };
 }
 
 export function nurture3(name: string, unsubUrl: string): Email {
   return {
-    subject: "Simple, published pricing (and booking takes 2 minutes)",
+    subject: "Transparent pricing, effortless booking",
     html: layout({
       title: "Ready when you are",
       preheader: "Our rates are published, and you can book and pay online in minutes.",
       hero: IMG.conferenceHero,
       body:
         p(`Hi ${first(name)},`) +
-        p("Most photographers make you ask for a quote. We publish ours, so you know the price before you book:") +
+        p("We publish our rates, so you know the investment before you book:") +
         priceTable(
           [{ label: `Photography, 2 hours (${RATES.minHours}-hour minimum)`, amount: RATES.photo.first + RATES.photo.extra }, { label: "Each additional hour of photography", amount: RATES.photo.extra }, { label: "Videography, 2 hours", amount: RATES.video.first + RATES.video.extra }],
-          "Same price for everyone",
+          "Published rates",
           "No hidden fees",
         ) +
-        p("Pick your date and time, sign the terms online and pay securely, all in about two minutes. Then track everything in your client portal.") +
+        p("Select your date and time, review the terms and pay securely in about two minutes, then follow every step in your client portal.") +
         button("Book now", `${ORIGIN}/book`) +
-        small(`Planning something bigger, like a multi-day conference? Reply to this email or call ${esc(SITE.phone)}.`),
+        small(`Planning a multi-day conference or a larger production? Reply to this email or call ${esc(SITE.phone)} for a tailored proposal.`),
       unsubUrl,
-      footerNote: "You're receiving this because you subscribed on macrosnaps.com.",
+      footerNote: "You are receiving this because you subscribed to MacroSnaps updates.",
     }),
   };
 }
@@ -290,7 +290,7 @@ export function nurture3(name: string, unsubUrl: string): Email {
 /* ---------- photographer / videographer network ---------- */
 export function photographerAccepted(name: string, signUrl: string | null, setupUrl: string): Email {
   return {
-    subject: "Congratulations! You've been accepted to MacroSnaps 🎉",
+    subject: "Welcome to the MacroSnaps network",
     html: layout({
       title: "Welcome to the team!",
       preheader: "Your application was accepted. Two quick steps to start getting shoots.",
@@ -317,9 +317,9 @@ export function photographerAccepted(name: string, signUrl: string | null, setup
 /** Sent when a new photographer/videographer is fully onboarded (contract on file). */
 export function photographerWelcome(name: string, portalUrl: string, firstLogin: boolean): Email {
   return {
-    subject: "Welcome to MacroSnaps! 🎉",
+    subject: "Welcome to MacroSnaps",
     html: layout({
-      title: "Welcome to MacroSnaps!",
+      title: "Welcome to MacroSnaps",
       preheader: "Your contractor agreement is on file. Here's how working with us works.",
       hero: IMG.conferenceHero,
       body:
@@ -454,15 +454,15 @@ export function contactReceived(name: string, subject: string, message: string):
   return {
     subject: "We received your message | MacroSnaps",
     html: layout({
-      title: "Thanks for reaching out!",
+      title: "Thank you for contacting MacroSnaps",
       preheader: "We'll reply within one business day.",
       body:
         p(`Hi ${first(name)},`) +
-        p("Thank you for contacting MacroSnaps. We've received your message and a member of our team will get back to you <b>within one business day</b>, usually much sooner.") +
+        p("Thank you for contacting MacroSnaps. We have received your message, and a member of our team will respond <b>within one business day</b>.") +
         details([["Subject", subject || "General inquiry"]]) +
         `<div style="margin:0 0 22px;padding:14px 18px;border-left:3px solid #ccba56;background:#faf8f2;font:15px/1.6 Arial,sans-serif;color:#333">${esc(message).replace(/\n/g, "<br>")}</div>` +
-        p("Ready to lock in your date? You can see prices and book online in a few minutes.") +
-        button("See prices & book online", `${ORIGIN}/book`),
+        p("You can also review our rates and reserve your date online in just a few minutes.") +
+        button("View rates & book online", `${ORIGIN}/book`),
     }),
   };
 }
@@ -472,7 +472,7 @@ export function applicationReceived(name: string, role: string): Email {
   return {
     subject: "We received your application | MacroSnaps",
     html: layout({
-      title: "Thanks for applying!",
+      title: "Thank you for your application",
       preheader: "Our team reviews every application. Here's what happens next.",
       body:
         p(`Hi ${first(name)},`) +
@@ -675,11 +675,11 @@ export function invoiceReceipt(i: PaidInvoice): Email {
   return {
     subject: `Payment received: ${usdAmt(i.amount)} for invoice ${i.number}`,
     html: layout({
-      title: "Payment received. Thank you!",
+      title: "Payment received",
       preheader: `We received your payment of ${usdAmt(i.amount)} for invoice ${i.number}.`,
       body:
         p(`Hi ${first(i.name)},`) +
-        p(`Thank you! We've received your payment${i.memo ? ` for <b>${esc(i.memo)}</b>` : ""}.`) +
+        p(`Thank you. We have received your payment${i.memo ? ` for <b>${esc(i.memo)}</b>` : ""}.`) +
         details([["Invoice", i.number], ["Billed to", i.billTo ?? null], ["Amount paid", usdAmt(i.amount)], ["Paid on", paidDay(i.paidAt)], ["Payment method", i.method ?? null]]) +
         button("View paid invoice", i.viewUrl) +
         small(i.receiptUrl ? `<a href="${esc(i.receiptUrl)}">Download your receipt</a> for your records.` : "Keep this email for your records.") +

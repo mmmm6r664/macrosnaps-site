@@ -92,14 +92,14 @@ export function layout(o: LayoutOpts) {
   <tr><td class="card" style="padding:40px 44px 28px">
     <h1 class="h1" style="margin:0 0 20px;font:400 32px/1.25 ${SERIF};color:${INK}">${esc(o.title)}</h1>
     ${o.body}
-    ${o.signoff === false ? "" : `<p style="margin:26px 0 0;font:15px/1.6 ${SANS};color:#333">Warmly,<br><span style="font:italic 20px ${SERIF};color:${INK}">The MacroSnaps Team</span></p>`}
+    ${o.signoff === false ? "" : `<p style="margin:26px 0 0;font:15px/1.6 ${SANS};color:#333">Kind regards,<br><span style="font:italic 20px ${SERIF};color:${INK}">The MacroSnaps Team</span></p>`}
   </td></tr>
   <tr><td style="background:${CREAM};padding:22px 44px;font:14px/1.6 ${SANS};color:#444;text-align:center">
     Questions? Just reply to this email, or call <a href="${SITE.phoneHref}" style="color:${GOLD_DARK};text-decoration:none;font-weight:600">${esc(SITE.phone)}</a>
   </td></tr>
   <tr><td align="center" style="background:#000;padding:26px 30px 30px">
     <p style="margin:0 0 12px">${social}</p>
-    <p style="margin:0 0 6px;font:12px/1.6 ${SANS};color:#9a9a9a">America's premier event &amp; wedding photography and videography company</p>
+    <p style="margin:0 0 6px;font:12px/1.6 ${SANS};color:#9a9a9a">America&rsquo;s premier photography and videography company</p>
     <p style="margin:0;font:12px/1.6 ${SANS};color:#777">© ${year} MacroSnaps · part of MacroHype LLC · <a href="${ORIGIN}" style="color:${GOLD};text-decoration:none">macrosnaps.com</a></p>
     ${o.footerNote ? `<p style="margin:12px 0 0;font:11px/1.6 ${SANS};color:#777">${o.footerNote}</p>` : ""}
     ${o.unsubUrl ? `<p style="margin:8px 0 0;font:11px/1.6 ${SANS}"><a href="${esc(o.unsubUrl)}" style="color:#9a9a9a">Unsubscribe</a></p>` : ""}

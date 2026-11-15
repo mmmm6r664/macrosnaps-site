@@ -56,7 +56,7 @@ async function addSignerToTeam(o: { name: string; email: string; phone: string; 
   const sql = await db();
   return sql.begin(async (tx) => {
     const [nu] = await tx<{ id: number }[]>`insert into users (email, name, password_hash, role) values (${o.email.toLowerCase()}, ${o.name}, ${await hashPassword(randomBytes(24).toString("hex"))}, 'staff') returning id`;
-    await tx`insert into staff_profiles (user_id, phone, city, lat, lng, roles, application_id) values (${nu.id}, ${o.phone || null}, ${city ? `${city.name}, ${city.state}` : cityText}, ${city?.lat ?? null}, ${city?.lng ?? null}, ${roles}, ${app ? o.inquiryId : null})`;
+    await tx`insert into staff_profiles (user_id, phone, city, lat, lng, roles, application_id) values (${nu.id}, ${o.phone || null}, ${city ? (city.name.includes(",") ? city.name : `${city.name}, ${city.state}`) : cityText}, ${city?.lat ?? null}, ${city?.lng ?? null}, ${roles}, ${app ? o.inquiryId : null})`;
     if (app) await tx`update inquiries set status = 'done', notes = notes || ${`\nAdded to the team after signing the contractor agreement on ${new Date().toISOString().slice(0, 10)}`} where id = ${o.inquiryId}`;
     return nu.id;
   });

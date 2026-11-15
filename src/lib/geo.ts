@@ -93,6 +93,8 @@ export function pick<T>(arr: T[], seed: number, salt = 0): T {
 export function resolveCity(text: string): City | undefined {
   const t = text.toLowerCase().replace(/[^a-z\s,]/g, " ").replace(/\s+/g, " ").trim();
   if (!t) return undefined;
+  // "Washington, DC" is stored as one name; don't let it fall through to Washington, UT.
+  if (/^(washington\s*,?\s*d\s*c|d\s*c|district of columbia|washington\s*,?\s*district of columbia)$/.test(t)) return cities.find((c) => c.state === "DC");
   const [namePart, statePart = ""] = t.split(",").map((x) => x.trim());
   const st = statePart.replace(/\s/g, "");
   const byName = cities.filter((c) => c.name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "") === namePart);

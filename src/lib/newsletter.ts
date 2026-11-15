@@ -78,7 +78,7 @@ export function emailHtml(subject: string, preheader: string, body: string, unsu
   </td></tr>
   <tr><td align="center" style="background:#000;padding:26px 30px 30px">
     <p style="margin:0 0 12px">${social}</p>
-    <p style="margin:0 0 6px;font:12px/1.6 ${SANS};color:#9a9a9a">America's premier event &amp; wedding photography and videography company</p>
+    <p style="margin:0 0 6px;font:12px/1.6 ${SANS};color:#9a9a9a">America&rsquo;s premier photography and videography company</p>
     <p style="margin:0;font:12px/1.6 ${SANS};color:#777">${esc(SITE.phone)} &middot; ${esc(SITE.email)} &middot; <a href="${ORIGIN}" style="color:${GOLD};text-decoration:none">macrosnaps.com</a></p>
     <p style="margin:12px 0 0;font:11px/1.6 ${SANS};color:#777">You're receiving this because you subscribed or worked with MacroSnaps. <a href="${unsubUrl}" style="color:#9a9a9a">Unsubscribe</a></p>
   </td></tr>

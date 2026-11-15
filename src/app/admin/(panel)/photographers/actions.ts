@@ -30,7 +30,7 @@ export async function approveApplicant(_: S, f: FormData): Promise<S> {
   const userId = await sql.begin(async (tx) => {
     const [nu] = await tx<{ id: number }[]>`insert into users (email, name, password_hash, role) values (${email}, ${a.name}, ${await hashPassword(randomBytes(24).toString("hex"))}, 'staff') returning id`;
     await tx`insert into staff_profiles (user_id, phone, city, lat, lng, radius_miles, roles, shoot_types, gear, portfolio, application_id)
-      values (${nu.id}, ${a.phone}, ${city ? `${city.name}, ${city.state}` : a.data.city ?? ""}, ${city?.lat ?? null}, ${city?.lng ?? null}, ${parseRadius(a.data.radius)},
+      values (${nu.id}, ${a.phone}, ${city ? (city.name.includes(",") ? city.name : `${city.name}, ${city.state}`) : a.data.city ?? ""}, ${city?.lat ?? null}, ${city?.lng ?? null}, ${parseRadius(a.data.radius)},
       ${roles}, ${shoots}, ${[a.data.camera, a.data.secondary, a.data.lenses, a.data.lighting].filter(Boolean).join("\n")}, ${a.data.portfolio ?? null}, ${a.id})`;
     await tx`update inquiries set status = 'done', notes = notes || ${`\nApproved by ${u.name} on ${new Date().toISOString().slice(0, 10)}`} where id = ${a.id}`;
     return nu.id;
@@ -110,7 +110,7 @@ export async function addPhotographer(_: S, f: FormData): Promise<S> {
   const sql = await db();
   const userId = await sql.begin(async (tx) => {
     const [nu] = await tx<{ id: number }[]>`insert into users (email, name, password_hash, role) values (${email}, ${name}, ${await hashPassword(randomBytes(24).toString("hex"))}, 'staff') returning id`;
-    await tx`insert into staff_profiles (user_id, phone, city, lat, lng, roles) values (${nu.id}, ${phone}, ${city ? `${city.name}, ${city.state}` : cityIn}, ${city?.lat ?? null}, ${city?.lng ?? null}, ${roles})`;
+    await tx`insert into staff_profiles (user_id, phone, city, lat, lng, roles) values (${nu.id}, ${phone}, ${city ? (city.name.includes(",") ? city.name : `${city.name}, ${city.state}`) : cityIn}, ${city?.lat ?? null}, ${city?.lng ?? null}, ${roles})`;
     return nu.id;
   });
   const token = await createPasswordToken(userId, "set");
