@@ -366,6 +366,22 @@ const TOOLS: Tool[] = [
     },
   },
   {
+    name: "undo_contract_import",
+    description: "Delete contracts imported with import_signed_contract for a signer email (to fix a bad import), and remove that team member if they were created by the import and have nothing else. Sends nothing.",
+    inputSchema: obj({ email: S("Signer email used in the bad import") }, ["email"]),
+    run: async (a) => {
+      const email = str(a.email, 200).toLowerCase();
+      const del = await q<{ user_id: number | null }[]>`delete from contracts where lower(signer_email) = ${email} and doc_version = 'external:Adobe Sign' returning user_id`;
+      const [u] = await q<{ id: number }[]>`select id from users where lower(email) = ${email} and role = 'staff'`;
+      let removedUser = false;
+      if (u) {
+        const [busy] = await q<{ n: number }[]>`select (select count(*) from contracts where user_id = ${u.id}) + (select count(*) from payouts where user_id = ${u.id}) as n`;
+        if (Number(busy.n) === 0) { await q`delete from users where id = ${u.id}`; removedUser = true; }
+      }
+      return { ok: true, contracts_deleted: del.length, removed_user: removedUser };
+    },
+  },
+  {
     name: "fix_team_city",
     description: "Re-resolve the city of team members whose city text matches (e.g. fix 'Washington, UT' to 'Washington, DC'). Sends nothing.",
     inputSchema: obj({ from: S("Current city text, e.g. Washington, UT"), to: S("Correct city, e.g. Washington, DC") }, ["from", "to"]),
