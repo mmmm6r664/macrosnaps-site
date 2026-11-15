@@ -48,9 +48,9 @@ export default async function Home() {
   // The homepage uses only the original photos from the old site (newer Drive photos appear on the portfolio and service pages).
   const orig = (l: string[]) => l.filter((x) => !x.includes(".blob.vercel-storage.com/"));
   const tags = (...t: string[]) => orig(byTags(...t));
-  const hero = pick.use(IMG.hero);
+  pick.use(IMG.hero); // keep the old hero photo out of the other homepage sections
   const heroSlides = [
-    { src: hero, alt: "Wedding couple photographed by MacroSnaps", pos: "center 22%" },
+    { src: "https://u5lzcjgumozqfr1a.public.blob.vercel-storage.com/portfolio/1QIyoG7VYMbs-k7MqoMQ-KB99PbxoJV0a-2000.jpg", alt: "Bridal shoes, earrings and burgundy ribbon photographed by MacroSnaps", pos: "center 45%" },
     { src: pick.use(ORIGINAL_CONFERENCE_HERO), alt: "Conference audience photographed by MacroSnaps" },
     { src: pick.one(bannerSafe(tags("indian"))), alt: "Indian wedding couple photographed by MacroSnaps" },
     { src: pick.one(bannerSafe(tags("conference")).slice(1)), alt: "Panel discussion at a conference photographed by MacroSnaps" },
