@@ -72,8 +72,9 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
     q<{ path: string; views: number; visitors: number; avg: number }[]>`select path, count(*)::int as views, count(distinct vid)::int as visitors, avg(duration_ms)::int as avg from site_visits where created_at >= ${from} and created_at < ${to} group by 1 order by 2 desc limit 25`,
     q<{ place: string; visitors: number }[]>`select concat_ws(', ', nullif(city,''), nullif(region,''), country) as place, count(distinct vid)::int as visitors from site_visits where created_at >= ${from} and created_at < ${to} group by 1 order by 2 desc limit 15`,
     q<{ device: string; visitors: number }[]>`select device, count(distinct vid)::int as visitors from site_visits where created_at >= ${from} and created_at < ${to} group by 1 order by 2 desc`,
-    q<{ bucket: string; visitors: number }[]>`select to_char(date_trunc(${byDay ? "day" : "hour"}, created_at at time zone 'America/New_York'), ${byDay ? "Mon DD" : "HH12am"}) as bucket, count(distinct vid)::int as visitors
-      from site_visits where created_at >= ${from} and created_at < ${to} group by date_trunc(${byDay ? "day" : "hour"}, created_at at time zone 'America/New_York'), 1 order by date_trunc(${byDay ? "day" : "hour"}, created_at at time zone 'America/New_York')`,
+    byDay
+      ? q<{ bucket: string; visitors: number }[]>`select to_char(d, 'Mon DD') as bucket, n as visitors from (select date_trunc('day', created_at at time zone 'America/New_York') as d, count(distinct vid)::int as n from site_visits where created_at >= ${from} and created_at < ${to} group by 1) x order by d`
+      : q<{ bucket: string; visitors: number }[]>`select to_char(d, 'HH12am') as bucket, n as visitors from (select date_trunc('hour', created_at at time zone 'America/New_York') as d, count(distinct vid)::int as n from site_visits where created_at >= ${from} and created_at < ${to} group by 1) x order by d`,
     sales(from, to), sales(pFrom, pTo),
     q<{ d: Date | null }[]>`select min(created_at) as d from site_visits`,
   ]);
