@@ -4,7 +4,7 @@
 import { timingSafeEqual } from "crypto";
 import { NextResponse } from "next/server";
 import { actingAs, type User } from "@/lib/auth";
-import { q, audit } from "@/lib/db";
+import { q, audit, db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 import { replyInquiry, updateInquiry } from "@/app/admin/(panel)/inbox/actions";
 import { createInvoice, invoiceEmailAction, invoiceAction } from "@/app/admin/(panel)/invoices/actions";
@@ -241,6 +241,31 @@ const TOOLS: Tool[] = [
     run: async (a) => {
       const s = a.search ? `%${str(a.search, 100)}%` : null;
       return q`select id, to_addr, subject, status, error, created_at from email_log where (${s}::text is null or to_addr ilike ${s} or subject ilike ${s}) order by id desc limit ${Math.min(100, Number(a.limit) || 30)}`;
+    },
+  },
+  {
+    name: "add_lead",
+    description: "Add a lead from another source (Sulekha, Thumbtack, a phone call…) to the CRM inbox as a contact message, so it can be tracked, replied to and invoiced. Skips duplicates: same external_id, or same email + source within 3 days. Sends nothing to the lead.",
+    inputSchema: obj({
+      name: S("Lead's name"), email: S("Email (optional if phone given)"), phone: S("Phone (optional)"), source: S("e.g. Sulekha"),
+      service: S("What they're looking for, e.g. Wedding Videographers"), location: S("City / ZIP"), date: S("Event date if known"),
+      message: S("Any details (optional)"), received_at: S("When the lead came in, ISO time (optional)"), external_id: S("The source's lead or message id, for de-duplication (optional)"),
+    }, ["name", "source"]),
+    run: async (a) => {
+      const email = str(a.email, 200).trim().toLowerCase(), phone = str(a.phone, 40).trim(), source = str(a.source, 40).trim() || "Other";
+      if (!email && !phone) return { error: "Give an email or a phone number." };
+      const ext = str(a.external_id, 120).trim() || null;
+      const at = a.received_at && !Number.isNaN(Date.parse(str(a.received_at, 40))) ? new Date(str(a.received_at, 40)) : new Date();
+      const dupe = await q<{ id: number }[]>`select id from inquiries where kind = 'contact' and data->>'source' = ${source}
+        and ((${ext}::text is not null and data->>'external_id' = ${ext}) or (${email} <> '' and lower(email) = ${email} and abs(extract(epoch from created_at - ${at})) < 259200)) limit 1`;
+      if (dupe[0]) return { ok: true, duplicate: true, id: dupe[0].id };
+      const service = str(a.service, 120).trim(), location = str(a.location, 120).trim();
+      const subject = `${source}: ${[service || "Photography request", location && `in ${location}`].filter(Boolean).join(" ")}`;
+      const message = [`Lead from ${source}.`, service && `Looking for: ${service}`, location && `Location: ${location}`, a.date && `Date: ${str(a.date, 80)}`, a.message && str(a.message, 4000)].filter(Boolean).join("\n");
+      const [r] = await q<{ id: number }[]>`insert into inquiries (kind, name, email, phone, data, status, created_at)
+        values ('contact', ${str(a.name, 100).trim() || "Unknown"}, ${email}, ${phone || null},
+          ${(await db()).json({ source, subject, message, date: str(a.date, 80), location, service, external_id: ext, page: source })}, 'new', ${at}) returning id`;
+      return { ok: true, id: r.id, subject };
     },
   },
   {
