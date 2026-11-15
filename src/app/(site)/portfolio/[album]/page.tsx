@@ -14,7 +14,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ album: string }> }): Promise<Metadata> {
   const a = albumBySlug((await params).album);
   if (!a) return {};
-  const desc = a.folderId ? `${a.eventType} photographed by MacroSnaps: ${a.photoCount} photos delivered. See the highlights and browse the full gallery.` : `${a.eventType} photographed by MacroSnaps. See a selection of our favorite photos.`;
+  const desc = a.folderId ? `${a.eventType} photographed by MacroSnaps: ${a.photoCount ? `${a.photoCount} photos` : "a full gallery"} delivered. See the highlights and browse the full gallery.` : `${a.eventType} photographed by MacroSnaps. See a selection of our favorite photos.`;
   return { title: /photo/i.test(a.eventType) ? a.displayTitle : `${a.displayTitle}: ${a.eventType} Photography`, description: desc, alternates: { canonical: `/portfolio/${a.slug}` }, openGraph: { images: a.cover ? [a.cover] : undefined } };
 }
 
@@ -31,7 +31,7 @@ export default async function AlbumPage({ params }: { params: Promise<{ album: s
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <PageHero image={a.cover ?? a.photos[0].src} eyebrow={a.eventType} title={a.displayTitle} subtitle={a.folderId ? `${a.photoCount} photos delivered to our client. Here are a few favorites, and the full gallery below.` : "A few of our favorite photos from this shoot."} />
+      <PageHero image={a.cover ?? a.photos[0].src} eyebrow={a.eventType} title={a.displayTitle} subtitle={a.folderId ? `${a.photoCount ? `${a.photoCount} photos` : "A full gallery"} delivered to our client. Here are a few favorites, and the full gallery below.` : "A few of our favorite photos from this shoot."} />
       <section className="mx-auto max-w-7xl px-4 py-12 md:px-6">
         <nav className="mb-6 text-sm text-muted"><Link href="/portfolio" className="hover:text-ink">Portfolio</Link> / <Link href="/portfolio#galleries" className="hover:text-ink">{a.group}</Link></nav>
         <Gallery images={a.photos.map((p) => p.src)} alt={a.displayTitle} />
@@ -41,7 +41,7 @@ export default async function AlbumPage({ params }: { params: Promise<{ album: s
         <div className="mx-auto max-w-7xl space-y-12">
           <div>
             <h2 className="font-serif text-3xl">The full gallery</h2>
-            <p className="text-sm text-muted">Every photo from this {a.category === "conference" || a.category === "corporate" ? "event" : "celebration"}, as delivered ({a.photoCount} photos).</p>
+            <p className="text-sm text-muted">Every photo from this {a.category === "conference" || a.category === "corporate" ? "event" : "celebration"}, as delivered{a.photoCount ? ` (${a.photoCount} photos)` : ""}.</p>
           </div>
           {embedsFor(a.folderId).map((e) => (
             <div key={e.id}>

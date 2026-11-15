@@ -500,6 +500,40 @@ const TOOLS: Tool[] = [
     },
   },
   {
+    name: "import_survey_response",
+    description: "Store a past satisfaction-form response (from the old Google Form) and, if invite=true, email that client the Google review invitation (no survey, no tip link). Skips duplicates and blocked emails.",
+    inputSchema: obj({
+      name: S(""), email: S(""), phone: S(""), submitted_at: S("ISO time the form was answered"), event_date: S("YYYY-MM-DD"), location: S(""), heard: S(""), repeat: S(""), services: S(""),
+      crew: { type: "array", items: obj({ name: S(""), role: S(""), professionalism: N(""), punctuality: N("") }, ["name"]) },
+      booking: N("1-5"), quality: N("1-5"), recommend: N("1-5"), comments: S(""), invite: { type: "boolean" },
+    }, ["name", "email", "submitted_at"]),
+    run: async (a) => {
+      const { reviewThanksEmail, reviewUrl } = await import("@/lib/surveys");
+      const { sendMail } = await import("@/lib/mail");
+      const email = str(a.email, 200).trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: "Bad email" };
+      const at = new Date(str(a.submitted_at, 40));
+      if (isNaN(+at)) return { error: "Bad submitted_at" };
+      const n = (v: unknown) => Math.max(0, Math.min(5, Math.round(Number(v) || 0)));
+      const crew = ((Array.isArray(a.crew) ? a.crew : []) as Json[]).map((c) => ({ name: str(c.name, 80), role: str(c.role, 20) || "Photographer", professionalism: n(c.professionalism), punctuality: n(c.punctuality) }));
+      const answers = { name: str(a.name, 100), email, phone: str(a.phone, 40), heard: str(a.heard, 100), event_date: str(a.event_date, 10), location: str(a.location, 200), repeat: str(a.repeat, 10), services: str(a.services, 40), crew, booking: n(a.booking), quality: n(a.quality), recommend: n(a.recommend), comments: str(a.comments, 4000), tip: "" };
+      const scores = [...crew.flatMap((c) => [c.professionalism, c.punctuality]), answers.booking, answers.quality, answers.recommend].filter((x) => x > 0);
+      const avg = scores.length ? scores.reduce((x, y) => x + y, 0) / scores.length : null;
+      let [row] = await q<{ id: number; review_invited_at: Date | null }[]>`select id, review_invited_at from surveys where lower(email) = ${email} and submitted_at = ${at}`;
+      if (!row) [row] = await q<{ id: number; review_invited_at: Date | null }[]>`insert into surveys (name, email, phone, event, event_date, location, services, crew, sent_at, submitted_at, answers, avg_rating, recommend)
+        values (${answers.name}, ${email}, ${answers.phone || null}, ${"Imported from Google Form"}, ${/^\d{4}-\d{2}-\d{2}$/.test(answers.event_date) ? answers.event_date : null}, ${answers.location}, ${answers.services},
+        ${(await db()).json(crew.map((c) => ({ name: c.name, role: c.role })))}, ${at}, ${at}, ${(await db()).json(answers)}, ${avg}, ${answers.recommend || null}) returning id, review_invited_at`;
+      if (a.invite !== true) return { ok: true, survey_id: row.id, invited: false };
+      if (row.review_invited_at) return { ok: true, survey_id: row.id, invited: false, note: "Already invited" };
+      const url = await reviewUrl();
+      if (!url) return { error: "Set the Google review link first" };
+      const m = reviewThanksEmail(answers.name, url, null);
+      const r = await sendMail({ to: email, ...m });
+      if (r.ok) await q`update surveys set review_invited_at = now() where id = ${row.id}`;
+      return { ok: true, survey_id: row.id, invited: r.ok, result: r };
+    },
+  },
+  {
     name: "list_feedback", readOnly: true,
     description: "Client survey results: ratings per crew member, booking/quality/recommend scores, comments, review invitation and tips.",
     inputSchema: obj({ limit: N("Default 30") }),

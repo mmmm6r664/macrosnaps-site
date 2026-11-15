@@ -29,7 +29,7 @@ export default function AlbumGrid({ albums }: { albums: Card[] }) {
             <div className="p-5">
               <p className="text-xs font-semibold uppercase tracking-[.2em] text-gold-dark">{a.eventType}</p>
               <h3 className="mt-1 font-serif text-xl leading-snug">{a.title}</h3>
-              <p className="mt-1 text-sm text-muted">{a.count} photos · View gallery →</p>
+              <p className="mt-1 text-sm text-muted">{a.count ? `${a.count} photos · ` : ""}View gallery →</p>
             </div>
           </Link>
         ))}
