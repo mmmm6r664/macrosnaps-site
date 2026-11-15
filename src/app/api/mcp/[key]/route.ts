@@ -612,7 +612,7 @@ const TOOLS: Tool[] = [
   },
   {
     name: "host_image",
-    description: "Copy an image from a public URL (e.g. a Canva export) into our own storage for newsletters. Returns the permanent URL.",
+    description: "Copy an image from a public URL (e.g. a Canva export) into our own storage for newsletters. Returns the permanent URL: …/newsletter/<name>.<jpg|png|gif> (same name replaces the file).",
     inputSchema: obj({ url: S("https://…"), name: S("file name, e.g. thanksgiving-2026-header") }, ["url", "name"]),
     run: async (a) => {
       const { put } = await import("@vercel/blob");
@@ -623,7 +623,7 @@ const TOOLS: Tool[] = [
       if (!res.ok || !type.startsWith("image/")) return { error: `fetch ${res.status} ${type}` };
       const ext = type.includes("png") ? "png" : type.includes("gif") ? "gif" : "jpg";
       const name = str(a.name, 80).toLowerCase().replace(/[^a-z0-9-]+/g, "-");
-      const b = await put(`newsletter/${name}.${ext}`, Buffer.from(await res.arrayBuffer()), { access: "public", contentType: type, addRandomSuffix: true });
+      const b = await put(`newsletter/${name}.${ext}`, Buffer.from(await res.arrayBuffer()), { access: "public", contentType: type, addRandomSuffix: false, allowOverwrite: true });
       return { ok: true, url: b.url };
     },
   },
