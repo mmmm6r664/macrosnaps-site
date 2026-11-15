@@ -349,10 +349,10 @@ export function contractToSign(name: string, companySigner: string, docTitle: st
     subject: `Please sign: MacroSnaps ${docTitle}`,
     html: layout({
       title: "Your contract is ready to sign",
-      preheader: `${companySigner} sent you the MacroSnaps ${docTitle}.`,
+      preheader: `MacroSnaps sent you our ${docTitle}.`,
       body:
         p(`Hi ${first(name)},`) +
-        p(`${esc(companySigner)} has signed and sent you our <b>${esc(docTitle)}</b>. Please review it and sign online. It takes about two minutes and works on your phone.`) +
+        p(`MacroSnaps has signed and sent you our <b>${esc(docTitle)}</b>. Please review it and sign online. It takes about two minutes and works on your phone.`) +
         button("Review & sign", url) +
         callout("After you sign, you'll both receive the signed PDF by email.") +
         small("This link is private to you. Please don't forward it. If you have questions about the agreement, just reply to this email."),
@@ -361,8 +361,8 @@ export function contractToSign(name: string, companySigner: string, docTitle: st
   };
 }
 
-const contractInfo = (docTitle: string, version: string, docId: string, signer: string, email: string, company: string) =>
-  details([["Document", `${docTitle} (v${version})`], ["Document ID", docId], ["Signed by", `${signer} <${email}>`], ["Countersigned by", `${company}, MacroSnaps`]]);
+const contractInfo = (docTitle: string, version: string, docId: string, signer: string, email: string, _company: string) =>
+  details([["Document", `${docTitle} (v${version})`], ["Document ID", docId], ["Signed by", `${signer} <${email}>`]]);
 
 export function contractSignedSigner(name: string, docTitle: string, version: string, docId: string, email: string, company: string): Email {
   return {

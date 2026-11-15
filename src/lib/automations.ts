@@ -6,7 +6,7 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { q, hasDb } from "@/lib/db";
 import { sendMail } from "@/lib/mail";
 import { ORIGIN } from "@/lib/emailTemplate";
-import { abandoned1, abandoned2, abandoned3, nurture1, nurture2, nurture3, feedbackRequest } from "@/lib/emails";
+import { abandoned1, abandoned2, abandoned3, nurture1, nurture2, nurture3 } from "@/lib/emails";
 import { unsubUrl, listUnsubscribe } from "@/lib/newsletter";
 
 const SECRET = () => process.env.CRON_SECRET || process.env.ADMIN_SETUP_CODE || "dev-only-secret";
@@ -68,17 +68,21 @@ export async function runDailyAutomations() {
       nurture_step = 0 or (nurture_step = 1 and nurture_at < now() - interval '2 days') or (nurture_step = 2 and nurture_at < now() - interval '3 days'))`;
   for (const s of subs) if (await sendNurture(s, (s.nurture_step + 1) as 1 | 2 | 3)) out.nurture++;
 
-  // Review requests: 3 days after a gallery is published, if the client hasn't rated yet.
-  const galleries = await q<{ gid: number; ref: string; email: string; customer_name: string; service_name: string }[]>`
-    select g.id as gid, b.ref, b.email, b.customer_name, b.service_name from galleries g join bookings b on b.id = g.booking_id
-    where g.status = 'published' and g.published_at < now() - interval '3 days' and g.published_at > now() - interval '30 days'
+  // Satisfaction survey (rate the crew, review on Google, optional tip): 2 days after a gallery is published.
+  const galleries = await q<{ gid: number; bid: number; email: string; customer_name: string; phone: string | null; service_name: string; city: string | null; first_date: string | null }[]>`
+    select g.id as gid, b.id as bid, b.email, b.customer_name, b.phone, b.service_name, b.city, b.first_date::text from galleries g join bookings b on b.id = g.booking_id
+    where g.status = 'published' and g.published_at < now() - interval '2 days' and g.published_at > now() - interval '30 days'
       and g.feedback_asked_at is null and not exists (select 1 from feedback f where f.booking_id = b.id)`;
+  const { createSurvey, sendSurvey } = await import("@/lib/surveys");
   for (const g of galleries) {
     const claimed = await q<{ id: number }[]>`update galleries set feedback_asked_at = now() where id = ${g.gid} and feedback_asked_at is null returning id`;
     if (!claimed.length) continue;
-    const m = feedbackRequest(g.customer_name, g.service_name, `${ORIGIN}/account/orders/${g.ref}`);
-    if ((await sendMail({ to: g.email, subject: m.subject, html: m.html })).ok) out.feedback++;
+    const sid = await createSurvey({ bookingId: g.bid, name: g.customer_name, email: g.email, phone: g.phone, event: g.service_name, eventDate: g.first_date, location: g.city ?? "", services: /video/i.test(g.service_name) ? "Videography" : "Photography" });
+    if (await sendSurvey(sid)) out.feedback++;
   }
+  // One reminder 4 days later if the survey hasn't been answered.
+  const due = await q<{ id: number }[]>`select id from surveys where submitted_at is null and reminded_at is null and sent_at < now() - interval '4 days' and sent_at > now() - interval '30 days'`;
+  for (const s of due) if (await sendSurvey(s.id, true)) out.feedback++;
   // Keep the email log light: drop the stored copy of emails older than 180 days (the log line stays).
   await q`update email_log set html = null where html is not null and created_at < now() - interval '180 days'`.catch(() => null);
   return out;

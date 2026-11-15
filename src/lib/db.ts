@@ -466,6 +466,21 @@ create table if not exists feedback (
   review_invited_at timestamptz,
   created_at timestamptz not null default now()
 );
+create table if not exists surveys (
+  id serial primary key,
+  booking_id int references bookings(id) on delete set null,
+  order_id int references orders(id) on delete set null,
+  name text not null default '', email text not null, phone text,
+  event text not null default '', event_date date, location text not null default '', services text not null default '',
+  crew jsonb not null default '[]',          -- [{ user_id, name, role }]
+  sent_at timestamptz, reminded_at timestamptz,
+  submitted_at timestamptz, answers jsonb, avg_rating numeric(3,2), recommend int,
+  review_invited_at timestamptz,
+  tip_cents int, tip_session text, tip_paid_at timestamptz,
+  created_at timestamptz not null default now()
+);
+create index if not exists surveys_email on surveys(lower(email));
+create unique index if not exists surveys_booking on surveys(booking_id) where booking_id is not null;
 `;
 
 /** The SQL client, with tables created on first use. */

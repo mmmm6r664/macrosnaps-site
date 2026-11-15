@@ -27,7 +27,7 @@ export default async function Contracts({ searchParams }: { searchParams: Promis
                     <td className="py-3 font-mono text-xs">MS-C{c.id}<br /><span className="text-black/40">v{c.doc_version}</span></td>
                     <td className="py-3">{c.signer_name}<br /><span className="text-black/50">{c.signer_email}</span></td>
                     <td className="py-3"><span className={`rounded px-2 py-1 text-xs font-semibold ${BADGE[c.status] ?? ""}`}>{c.status}</span></td>
-                    <td className="py-3">{fmt(c.sent_at)}<br /><span className="text-xs text-black/40">by {c.company_signer}</span></td>
+                    <td className="py-3">{fmt(c.sent_at)}</td>
                     <td className="py-3">{fmt(c.viewed_at)}</td>
                     <td className="py-3">{fmt(c.signed_at)}{c.signed_ip && <><br /><span className="text-xs text-black/40">IP {c.signed_ip}</span></>}</td>
                     <td className="py-3 text-right">

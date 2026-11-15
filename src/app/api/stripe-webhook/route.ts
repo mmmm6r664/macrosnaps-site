@@ -26,6 +26,11 @@ export async function POST(req: Request) {
   if (isCheckout && (event.data.object as Stripe.Checkout.Session).payment_status === "paid") {
     const s = event.data.object as Stripe.Checkout.Session;
     const m = s.metadata || {};
+    if (m.kind === "tip") {
+      const { recordTip } = await import("@/lib/surveys");
+      await recordTip(Number(m.survey_id) || 0, s.id, s.amount_total || 0);
+      return NextResponse.json({ received: true, tip: true });
+    }
     const email = s.customer_details?.email || s.customer_email || "";
     const first = await markPaid(m.booking_ref, s.id, typeof s.payment_intent === "string" ? s.payment_intent : s.payment_intent?.id ?? null, s.amount_total || 0);
     if (first === false) return NextResponse.json({ received: true, duplicate: true }); // already confirmed; don't email twice

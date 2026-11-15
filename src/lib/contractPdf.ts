@@ -136,7 +136,7 @@ export async function buildContractPdf(c: ContractPdfInput): Promise<Uint8Array>
     page.drawLine({ start: { x: sx, y: yy - 4 }, end: { x: x + colW, y: yy - 4 }, thickness: 0.8, color: rgb(0.17, 0.42, 0.6) });
   };
   await block(M, "CONTRACTOR", c.signedName, c.signedAt, "image");
-  await block(M + colW + 40, "MACROHYPE LLC (D/B/A MACROSNAPS)", c.companySigner, c.companySignedAt, "type");
+  await block(M + colW + 40, "MACROHYPE LLC (D/B/A MACROSNAPS)", "MacroSnaps", c.companySignedAt, "type");
   y = top - 130;
 
   // Audit certificate
@@ -145,7 +145,7 @@ export async function buildContractPdf(c: ContractPdfInput): Promise<Uint8Array>
   text(`Document ID MS-C${c.id} · ${c.title} (version ${c.version})`, { size: 9, color: MUTED, gap: 14 });
   const rows: [string, string][] = [
     ["Document fingerprint (SHA-256 of the agreement text)", c.docSha256],
-    ["Sent and signed for MacroSnaps by", `${c.companySigner}, ${fmt(c.sentAt)}`],
+    ["Sent and signed by", `MacroSnaps, ${fmt(c.sentAt)}`],
     ["Sent to", `${c.signerName} <${c.signerEmail}>`],
     ["First viewed", c.viewedAt ? `${fmt(c.viewedAt)} from IP ${c.viewedIp ?? "unknown"}` : "Not recorded"],
     ["Consent", "Signer agreed to use electronic records and signatures (U.S. ESIGN Act / UETA)."],

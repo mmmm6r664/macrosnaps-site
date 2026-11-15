@@ -473,6 +473,53 @@ const TOOLS: Tool[] = [
     },
   },
   {
+    name: "send_feedback_request",
+    description: "Email a client the satisfaction survey (rate the photographer/videographer, booking and quality; happy clients are invited to leave a Google review; optional crew tip). Use for clients who booked outside the website. Set send=false to only create the link.",
+    inputSchema: obj({
+      name: S("Client name"), email: S("Client email"), phone: S(""), event: S("Event name, e.g. GSIA 2026 ENGAGE"), event_date: S("YYYY-MM-DD"), location: S(""),
+      services: S("Photography, Videography or Both"), crew: { type: "array", items: obj({ name: S(""), role: S("Photographer or Videographer"), email: S("Team member email (optional)") }, ["name"]) },
+      booking_ref: S("Website booking ref, if any"), send: { type: "boolean" },
+    }, ["name", "email"]),
+    run: async (a) => {
+      const { createSurvey, sendSurvey, surveyUrl } = await import("@/lib/surveys");
+      const email = str(a.email, 200).trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: "Bad email" };
+      const [blocked] = await q`select 1 from blocklist where kind = 'email' and value = ${email}`;
+      if (blocked) return { error: "That email is on the blocklist" };
+      let bookingId: number | null = null;
+      if (a.booking_ref) bookingId = (await q<{ id: number }[]>`select id from bookings where ref = ${str(a.booking_ref, 40)}`)[0]?.id ?? null;
+      const crew = [];
+      for (const c of (Array.isArray(a.crew) ? a.crew : []) as Json[]) {
+        const ce = str(c.email, 200).toLowerCase();
+        const uid = ce ? (await q<{ id: number }[]>`select id from users where lower(email) = ${ce} or ${ce} = any(alt_emails) limit 1`)[0]?.id ?? null : null;
+        crew.push({ user_id: uid, name: str(c.name, 80), role: /video/i.test(str(c.role, 20)) ? "Videographer" as const : "Photographer" as const });
+      }
+      const id = await createSurvey({ bookingId, name: str(a.name, 100), email, phone: str(a.phone, 40) || null, event: str(a.event, 150), eventDate: /^\d{4}-\d{2}-\d{2}$/.test(str(a.event_date, 10)) ? str(a.event_date, 10) : null, location: str(a.location, 200), services: str(a.services, 20), crew });
+      const sent = a.send === false ? false : await sendSurvey(id);
+      return { ok: true, survey_id: id, sent, link: surveyUrl(id) };
+    },
+  },
+  {
+    name: "list_feedback", readOnly: true,
+    description: "Client survey results: ratings per crew member, booking/quality/recommend scores, comments, review invitation and tips.",
+    inputSchema: obj({ limit: N("Default 30") }),
+    run: async (a) => q`select id, name, email, event, event_date::text, sent_at, reminded_at, submitted_at, avg_rating::text, recommend, answers, review_invited_at, tip_cents, tip_paid_at
+      from surveys order by coalesce(submitted_at, created_at) desc limit ${Math.min(100, Number(a.limit) || 30)}`,
+  },
+  {
+    name: "set_google_review_url",
+    description: "Save the public Google review link used in review invitations.",
+    inputSchema: obj({ url: S("https://g.page/r/.../review") }, ["url"]),
+    run: async (a) => {
+      const url = str(a.url, 500).trim();
+      if (!/^https:\/\/\S+$/.test(url)) return { error: "Must start with https://" };
+      const { revalidateTag } = await import("next/cache");
+      await q`insert into settings (key, value) values ('google_review_url', ${JSON.stringify(url)}::jsonb) on conflict (key) do update set value = excluded.value, updated_at = now()`;
+      revalidateTag("settings");
+      return { ok: true };
+    },
+  },
+  {
     name: "fix_team_city",
     description: "Re-resolve the city of team members whose city text matches (e.g. fix 'Washington, UT' to 'Washington, DC'). Sends nothing.",
     inputSchema: obj({ from: S("Current city text, e.g. Washington, UT"), to: S("Correct city, e.g. Washington, DC") }, ["from", "to"]),
