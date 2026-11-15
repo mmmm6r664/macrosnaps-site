@@ -293,6 +293,8 @@ alter table payouts alter column user_id drop not null;
 alter table payouts add column if not exists payee_name text;
 alter table payouts add column if not exists payee_email text;
 alter table payouts add column if not exists emailed_at timestamptz;
+alter table payouts add column if not exists external_id text;
+create unique index if not exists payouts_ext on payouts (external_id) where external_id is not null;
 alter table crew_assignments add column if not exists drive_link_at timestamptz;
 alter table crew_assignments add column if not exists drive_asked_at timestamptz;
 alter table crew_assignments add column if not exists drive_reminded_at timestamptz;

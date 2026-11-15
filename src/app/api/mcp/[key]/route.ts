@@ -408,6 +408,46 @@ const TOOLS: Tool[] = [
     },
   },
   {
+    name: "import_payouts",
+    description: "Record past payouts (e.g. from Cash App or Venmo history) against team members. Matches by email, then by name; unmatched rows are kept under the payee's name. Skips rows whose external_id was already imported. Sends NO email or notification.",
+    inputSchema: obj({
+      payouts: { type: "array", items: obj({
+        name: S("Payee name as shown in the app"), email: S(""), amount: N("Dollars"), paid_on: S("YYYY-MM-DD"), method: S("Cash App, Venmo…"), note: S(""), external_id: S("Unique id for dedupe"),
+      }, ["name", "amount", "paid_on"]) },
+      dry_run: { type: "boolean", description: "Only report matches" },
+    }, ["payouts"]),
+    run: async (a) => {
+      const u = await actor();
+      if (!u) return { error: "No admin user" };
+      const rows = Array.isArray(a.payouts) ? (a.payouts as Json[]).slice(0, 500) : [];
+      const staff = await q<{ id: number; name: string; email: string }[]>`select u.id, u.name, lower(u.email) as email from users u where u.role in ('staff','admin','owner')`;
+      const norm = (x: string) => x.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z\s]/g, " ").replace(/\b(jr|sr|ii|iii)\b/g, " ").replace(/\s+/g, " ").trim();
+      const find = (name: string, email: string) => {
+        if (email) { const e = staff.find((s) => s.email === email.toLowerCase()); if (e) return e; }
+        const n = norm(name); if (!n) return undefined;
+        const exact = staff.filter((s) => norm(s.name) === n); if (exact.length === 1) return exact[0];
+        const t = n.split(" ");
+        if (t.length >= 2) { const fl = staff.filter((s) => { const st = norm(s.name).split(" "); return st[0] === t[0] && st[st.length - 1] === t[t.length - 1]; }); if (fl.length === 1) return fl[0]; }
+        const sub = staff.filter((s) => { const sn = norm(s.name); return t.length >= 2 && (sn.startsWith(n + " ") || n.startsWith(sn + " ")); }); if (sub.length === 1) return sub[0];
+        return undefined;
+      };
+      const out = { added: 0, skipped: 0, matched: [] as string[], unmatched: [] as string[] };
+      for (const r of rows) {
+        const name = str(r.name, 120).trim(); const date = str(r.paid_on, 10); const cents = Math.round(Number(r.amount) * 100);
+        if (!name || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !(cents > 0)) { out.skipped++; continue; }
+        const m = find(name, str(r.email, 200));
+        (m ? out.matched : out.unmatched).push(m ? `${name} → ${m.name}` : name);
+        if (a.dry_run) continue;
+        const ext = str(r.external_id, 200) || null;
+        const res = await q<{ id: number }[]>`insert into payouts (user_id, payee_name, payee_email, amount_cents, paid_on, method, note, created_by, external_id)
+          values (${m?.id ?? null}, ${m ? m.name : name}, ${m?.email ?? null}, ${cents}, ${date}, ${str(r.method, 40) || null}, ${str(r.note, 300)}, ${u.id}, ${ext})
+          on conflict (external_id) where external_id is not null do nothing returning id`;
+        if (res.length) out.added++; else out.skipped++;
+      }
+      return { ...out, matched: [...new Set(out.matched)], unmatched: [...new Set(out.unmatched)] };
+    },
+  },
+  {
     name: "list_payouts", readOnly: true,
     description: "Payouts recorded to photographers.",
     inputSchema: obj({ limit: N("Max rows, default 30") }),
