@@ -616,14 +616,20 @@ const TOOLS: Tool[] = [
     inputSchema: obj({ url: S("https://… or a data:image/jpeg;base64,… URL"), name: S("file name, e.g. thanksgiving-2026-header") }, ["url", "name"]),
     run: async (a) => {
       const { put } = await import("@vercel/blob");
-      const url = str(a.url, 2000);
+      const url = str(a.url, 4_000_000);
       if (!/^(https:\/\/|data:image\/(jpeg|png);base64,)/.test(url)) return { error: "https or data:image URL required" };
-      const res = await fetch(url, { redirect: "follow" });
-      const type = res.headers.get("content-type") ?? "";
-      if (!res.ok || !type.startsWith("image/")) return { error: `fetch ${res.status} ${type}` };
+      let type = "", bytes: Buffer;
+      const m = url.match(/^data:(image\/(?:jpeg|png));base64,(.+)$/);
+      if (m) { type = m[1]; bytes = Buffer.from(m[2], "base64"); }
+      else {
+        const res = await fetch(url, { redirect: "follow" });
+        type = res.headers.get("content-type") ?? "";
+        if (!res.ok || !type.startsWith("image/")) return { error: `fetch ${res.status} ${type}` };
+        bytes = Buffer.from(await res.arrayBuffer());
+      }
       const ext = type.includes("png") ? "png" : type.includes("gif") ? "gif" : "jpg";
       const name = str(a.name, 80).toLowerCase().replace(/[^a-z0-9-]+/g, "-");
-      const b = await put(`newsletter/${name}.${ext}`, Buffer.from(await res.arrayBuffer()), { access: "public", contentType: type, addRandomSuffix: false });
+      const b = await put(`newsletter/${name}.${ext}`, bytes, { access: "public", contentType: type, addRandomSuffix: false });
       return { ok: true, url: b.url };
     },
   },
