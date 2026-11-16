@@ -458,7 +458,7 @@ create index if not exists newsletter_events_nl on newsletter_events(newsletter_
 create index if not exists orders_email on orders(lower(email));
 create index if not exists orders_created on orders(created_at desc);
 alter table subscribers add column if not exists nurture_at timestamptz;
-update subscribers set nurture_step = 3 where nurture_step < 3 and (source = 'import' or source like 'crm-%');
+update subscribers set nurture_step = 3 where nurture_step < 3 and (source = 'import' or source like 'crm-%' or created_at < '2026-11-16T05:00:00Z');
 create table if not exists feedback (
   id serial primary key,
   booking_id int unique not null references bookings(id) on delete cascade,
