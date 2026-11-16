@@ -6,7 +6,7 @@ import { put } from "@vercel/blob";
 export const maxDuration = 300;
 
 // Only these hand-picked photos can be imported, so the route is harmless if called by anyone else.
-const ALLOWED = ["11ejLpnvEm0A-cgHi5ofb4QI5z4dgrdW6", "1SooDs3NmuMO6t8iyflLEyAlTij89-Ipx", "14vhpDtQaJSaVqbC3w2aR3wcaHDhkLubf", "1k3hMrEurS2veiS2n6b9k75cxwPCsKFPQ", "1Ax_9fiHCMDOAQPcGAFrrrjUvDuqMlTkz", "1XARWC7cO0ITu4UGWoveDX6IWLIZwxA51", "1kPHovDASQKeSsWn359LOBxpcXYxhtx5N", "1VtD_8OMl-6k3sXviZJ7ABfFWWnrhq7-X", "1n0LuxkPW_3P2SBsg0M8UBXslzg1-rrKs", "1TrlRnM85KF9omG67Is2LLNhGsWDd65QW", "1Ok_ZGzP1kGYFU6nn5TzUvWHCf9Y1v05u", "19Bam00xC4KqHi_XSOrBg83xdvnPYSVSN", "11j7ntSH0x0XoE7F-5XEBjiYAnrwE7Bv2", "1HxcxfxFlBLG6aMPc0nFSVtdKwSqUZOSd", "1aK3rE4zf9IvWtk155ESxjm22ZZAg1cZh", "10M2g9Qm6OuKi-4b4xVwbMqOCeVAbeJ7L"];
+const ALLOWED = ["1u1loA8qHbUDxparrUfFt0kG7N_AvpSpe", "1-5KYpwoWuCDh3vdFO43F8eKnTzNtLL8H", "1o8m7_2FETgW4Mm4qdeovgnXxU_MD_chu", "1-Qt3d7JZJDy5pL8Pi_wBR42cfMeZtY8X", "1syTdevblvaC4xkeE3WPhScSw3boIQmPN", "1SfxBEcAtLmqb6X2qy3Ncq50p9S9XuTsJ", "1aCx3Ky-2DQ10925ooQJZaDMZWzsQCFb4", "1pQhsafsR3Cf8a_s7o5-q61RwwLSaLAM7", "1eV0UdJyRO3pnvQo58WEwotP2I5YCYiaJ", "1QiyvlsaRWlo-zIvvXImC-0SiTiMKxBjn", "1T78Z4FKMz0wt_0Md2oPlsZrEhQjWfpjR", "1h0aWf1DgpSLi46BKUk6JHoqQxiovEkBq", "1gczXn8dDdM49Ay_7bhQP-CCwHEU3Pr2K", "1kcI30_LgEEk2AHLHbh3zfwZBFcC5sV6r", "1nO-ns4bqsqGzRABx_3sA4_ge3LV4prYy", "18Kw9EgE6CrMk5sKBxIm85E5WzrzFPbIR"];
 
 export async function GET(req: Request) {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return NextResponse.json({ error: "Blob not connected" }, { status: 503 });
