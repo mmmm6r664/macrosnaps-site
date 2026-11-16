@@ -16,7 +16,7 @@ export async function importSubscribers(_: S, f: FormData): Promise<S> {
   const sql = await db();
   let added = 0;
   for (const email of found) {
-    const r = await sql`insert into subscribers (email, token, source) values (${email}, ${randomBytes(18).toString("base64url")}, 'import') on conflict (email) do nothing returning id`;
+    const r = await sql`insert into subscribers (email, token, source, nurture_step) values (${email}, ${randomBytes(18).toString("base64url")}, 'import', 3) on conflict (email) do nothing returning id`;
     added += r.length;
   }
   await audit(u.id, "subscribers_import", `${added}/${found.length}`);

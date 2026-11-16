@@ -573,8 +573,8 @@ const TOOLS: Tool[] = [
     run: async (a) => {
       const src = str(a.source, 40) || null;
       const ex = (Array.isArray(a.exclude_emails) ? a.exclude_emails : []).map((e) => str(e, 200).trim().toLowerCase()).filter(Boolean);
-      const rows = await q<{ id: number }[]>`insert into subscribers (email, name, token, source)
-        select c.email, trim(c.first_name || ' ' || c.last_name), md5(random()::text || clock_timestamp()::text || c.id::text), 'crm-' || lower(coalesce(c.source, 'portal'))
+      const rows = await q<{ id: number }[]>`insert into subscribers (email, name, token, source, nurture_step)
+        select c.email, trim(c.first_name || ' ' || c.last_name), md5(random()::text || clock_timestamp()::text || c.id::text), 'crm-' || lower(coalesce(c.source, 'portal')), 3
         from clients c where c.email is not null and c.email like '%@%.%' and (${src}::text is null or c.source = ${src})
           and not (c.email = any(${ex}::text[])) and not exists (select 1 from users u where lower(u.email) = c.email)
         on conflict (email) do nothing returning id`;

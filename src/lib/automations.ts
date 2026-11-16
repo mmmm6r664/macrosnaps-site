@@ -64,7 +64,9 @@ export async function runDailyAutomations() {
 
   // Welcome series: #1 is sent on signup (or here if that failed), #2 after 2 days, #3 three days after that.
   const subs = await q<{ id: number; email: string; name: string; token: string; nurture_step: number }[]>`
-    select id, email, name, token, nurture_step from subscribers where status = 'subscribed' and nurture_step < 3 and (
+    select id, email, name, token, nurture_step from subscribers where status = 'subscribed' and nurture_step < 3
+      -- Only people who signed up themselves on the website. Imported lists and CRM contacts never get the welcome series.
+      and coalesce(source, '') <> 'import' and coalesce(source, '') not like 'crm-%' and created_at > now() - interval '14 days' and (
       nurture_step = 0 or (nurture_step = 1 and nurture_at < now() - interval '2 days') or (nurture_step = 2 and nurture_at < now() - interval '3 days'))`;
   for (const s of subs) if (await sendNurture(s, (s.nurture_step + 1) as 1 | 2 | 3)) out.nurture++;
 
