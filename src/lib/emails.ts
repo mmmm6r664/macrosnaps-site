@@ -574,12 +574,22 @@ export const DEFAULT_SCOPE: Record<string, string[]> = {
     "Focus on storytelling through photography, capturing the energy, professionalism, and atmosphere of the event.",
     "Ensure consistent photography coverage across all days.",
   ],
+  video: [
+    "Record all sessions/speeches using one camera on a tripod for continuous coverage.",
+    "Use a second camera on a gimbal or crane for dynamic angles and movement (very important for stable footage).",
+    "Capture clear, professional audio using lav mics (plugged into the venue's audio system where available).",
+    "Record audience engagement, speaker moments and guest interactions that represent the event atmosphere, including breaks and shots outside and inside the venue.",
+  ],
 };
+
+/** True when an assignment type is videography (gets the video guidelines). */
+export const isVideoAssignment = (type: string) => /video|film|cinemat/i.test(type);
 
 /** Sent to a photographer/videographer when a shoot is assigned to them. */
 export function crewAssignment(a: CrewAssignment): Email {
   const firstName = first(a.name);
   const plain = (s: string) => esc(s);
+  const video = isVideoAssignment(a.type);
   return {
     subject: `[CONFIRMED] ${a.type} – ${a.dates}${a.city ? ` – ${a.city}` : ""}`,
     html: layout({
@@ -594,9 +604,13 @@ export function crewAssignment(a: CrewAssignment): Email {
         p(`<b>Location:</b><br>${plain(a.location).replace(/\n/g, "<br>")}`) +
         p(`<b>Compensation:</b> ${plain(a.pay)}`) +
         head("Scope of Work") +
-        bullets(a.scope.map(plain)) +
+        bullets((a.scope.length ? a.scope : video ? DEFAULT_SCOPE.video : DEFAULT_SCOPE.conference).map(plain)) +
         head("Technical Shooting Guidelines") +
-        bullets([
+        bullets(video ? [
+          "Shoot at <b>1080p resolution, 30 frames per second (FPS)</b> in <b>MP4 format</b>.",
+          "Ensure steady <b>tripod coverage</b> for the main camera and smooth, motion-stabilized shots with the <b>gimbal/crane</b>.",
+          "Confirm <b>lav mics</b> are recording properly and synced through the main audio system.",
+        ] : [
           "Shoot in <b>RAW format</b>.",
           "Never drop shutter speed below <b>1/60</b>.",
           "Keep ISO no higher than <b>2500 indoors</b> and <b>500 outdoors</b>.",
@@ -604,7 +618,11 @@ export function crewAssignment(a: CrewAssignment): Email {
           "Do <b>not use direct flash</b> — only use flash with a <b>white reflector</b> or bounce it off the ceiling for softer lighting.",
         ]) +
         head("Deliverables") +
-        bullets([
+        bullets(video ? [
+          "Upload all <b>unedited raw video files (MP4)</b> to the <b>Google Drive</b> link we'll provide after the event.",
+          "The client receives the raw recordings and a highlight video edited by our internal team.",
+          "Retain all footage for at least <b>30 days</b> in case additional edits or revisions are needed.",
+        ] : [
           "Shoot in <b>RAW format</b>.",
           "Only <b>unedited RAW files</b> are required.",
           "Send unedited RAW files via <b>Google Drive or Dropbox within 24 hours</b> after each shoot.",
@@ -614,12 +632,12 @@ export function crewAssignment(a: CrewAssignment): Email {
         bullets([
           `Always introduce yourself as <b>${firstName} from MacroSnaps</b>.`,
           "Represent <b>MacroSnaps exclusively</b> — do not engage the client directly for future work or represent other companies.",
-          "All photographs are the <b>intellectual property of MacroSnaps</b>. Delete all files after 30 days unless instructed otherwise.",
-          "Do not share any photos directly with the client — all communication and delivery must go through <b>MacroSnaps</b>.",
+          `All ${video ? "footage is" : "photographs are"} the <b>intellectual property of MacroSnaps</b>. Delete all files after 30 days unless instructed otherwise.`,
+          `Do not share any ${video ? "videos" : "photos"} directly with the client — all communication and delivery must go through <b>MacroSnaps</b>.`,
           "Please provide your <b>CashApp, PayPal, or Venmo ID</b> for payment after the assignment.",
         ]) +
         p("<b>Important:</b><br>Please do not ask the client directly for tips. A feedback and tipping link will be sent after delivery. Any tip received will be forwarded to you in full without deductions.") +
-        p(`<b>Performance Note:</b><br>Let us know if you have any questions. We look forward to your excellent coverage of this ${plain(a.type.replace(/\s*photography\s*$/i, "").toLowerCase() || "shoot")}. Our top-performing contractors typically receive <b>5–10 shoots per week</b>, so please always give your best. After each session, we send the client a <b>satisfaction survey</b>, and their feedback determines how many future assignments you receive.`),
+        p(`<b>Performance Note:</b><br>Let us know if you have any questions. We look forward to your excellent coverage of this ${plain(a.type.replace(/\s*(photography|videography)\s*$/i, "").toLowerCase() || "shoot")}. Our top-performing contractors typically receive <b>5–10 shoots per week</b>, so please always give your best. After each session, we send the client a <b>satisfaction survey</b>, and their feedback determines how many future assignments you receive.`),
     }),
   };
 }
