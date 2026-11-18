@@ -40,14 +40,6 @@
 "banner": false
 },
 {
-"id": "1syTdevblvaC4xkeE3WPhScSw3boIQmPN",
-"tags": [
-"conference"
-],
-"alt": "Presenter leading a workshop session with a microphone",
-"banner": false
-},
-{
 "id": "1SfxBEcAtLmqb6X2qy3Ncq50p9S9XuTsJ",
 "tags": [
 "conference"
@@ -135,7 +127,8 @@
 "alt": "Participant sharing ideas at a roundtable",
 "banner": false
 }
-]
+],
+"hideGallery": true
 },
 {
 "folderId": "1_O6XCRrYfl5reHjLIujYPK29k9Sgn_lf",

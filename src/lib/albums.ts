@@ -8,7 +8,7 @@ import subfolders from "@/data/albumSubfolders.json";
 type Hosted = Record<string, { large: string; small: string }>;
 const H = hosted as Hosted;
 type Pick = { id: string; tags: string[]; alt: string; banner?: boolean };
-type Raw = { source?: string; folderId: string; displayTitle: string; category: string; eventType: string; photoCount: number; date?: string; picks: Pick[] };
+type Raw = { source?: string; folderId: string; displayTitle: string; category: string; eventType: string; photoCount: number; date?: string; picks: Pick[]; /** Show only the selected photos, not the delivered Drive folder */ hideGallery?: boolean };
 
 export const CATEGORIES: Record<string, { label: string; service: string; serviceName: string }> = {
   wedding: { label: "Weddings", service: "/wedding-photography", serviceName: "wedding photography" },
