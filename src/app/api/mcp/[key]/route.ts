@@ -779,6 +779,18 @@ const TOOLS: Tool[] = [
     },
   },
   {
+    name: "update_payout",
+    description: "Correct a recorded payout's method (e.g. Venmo, Cash App) and/or note. Sends nothing.",
+    inputSchema: obj({ id: N("Payout id from list_payouts"), method: S("New method (optional)"), note: S("New note (optional)") }, ["id"]),
+    run: async (a) => {
+      const method = a.method == null ? null : str(a.method, 40);
+      const note = a.note == null ? null : str(a.note, 500);
+      const rows = await q<{ id: number; method: string | null; note: string }[]>`update payouts set method = coalesce(${method}, method), note = coalesce(${note}, note)
+        where id = ${Number(a.id)} returning id, method, note`;
+      return rows.length ? { ok: true, payout: rows[0] } : { error: "No payout with that id" };
+    },
+  },
+  {
     name: "list_payouts", readOnly: true,
     description: "Payouts recorded to photographers.",
     inputSchema: obj({ limit: N("Max rows, default 30") }),
