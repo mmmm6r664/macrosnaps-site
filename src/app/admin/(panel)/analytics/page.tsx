@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { q } from "@/lib/db";
-import { stripe } from "@/lib/stripe";
 import { PageHead, Card, Table, money, Notice } from "@/components/admin/ui";
 
 export const metadata = { title: "Analytics" };
@@ -36,20 +35,18 @@ function bounds(r: R) {
 const fmtDur = (ms: number) => { const s = Math.round(ms / 1000); return s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${s % 60}s`; };
 const delta = (a: number, b: number) => (b ? Math.round(((a - b) / b) * 100) : a ? 100 : 0);
 
+// Every paid invoice from admin → Invoices becomes a booking (lib/invoiceBooking), so paid bookings already include
+// invoices, website checkouts and payments recorded by hand (PayPal, Zelle…). Adding Stripe invoices again would count
+// website bookings twice (their checkout also creates a Stripe invoice).
 async function sales(from: Date, to: Date) {
-  const [b] = await q<{ n: number; v: number; paid: number; pv: number }[]>`select count(*)::int as n, coalesce(sum(total_cents),0)::bigint::int as v,
+  const [b] = await q<{ n: number; v: number; paid: number; pv: number; ip: number; iv: number }[]>`select count(*)::int as n, coalesce(sum(total_cents),0)::bigint::int as v,
       count(*) filter (where status in ('paid','confirmed','completed','partially_refunded'))::int as paid,
-      coalesce(sum(total_cents) filter (where status in ('paid','confirmed','completed','partially_refunded')),0)::bigint::int as pv
-    from bookings where created_at >= ${from} and created_at < ${to}`;
+      coalesce(sum(total_cents - amount_refunded_cents) filter (where status in ('paid','confirmed','completed','partially_refunded')),0)::bigint::int as pv,
+      count(*) filter (where stripe_invoice_id is not null and status in ('paid','confirmed','completed','partially_refunded'))::int as ip,
+      coalesce(sum(total_cents) filter (where stripe_invoice_id is not null and status in ('paid','confirmed','completed','partially_refunded')),0)::bigint::int as iv
+    from bookings where created_at >= ${from} and created_at < ${to} and lower(email) not in ('info@macrosnaps.com', 'rehmansiddiq@gmail.com')`;
   const [o] = await q<{ n: number; v: number }[]>`select count(*)::int as n, coalesce(sum(paid_cents),0)::bigint::int as v from orders where created_at >= ${from} and created_at < ${to}`;
-  let inv = { n: 0, v: 0 };
-  if (stripe) {
-    try {
-      const list = await stripe.invoices.list({ status: "paid", created: { gte: Math.floor(from.getTime() / 1000), lt: Math.floor(to.getTime() / 1000) }, limit: 100 });
-      inv = { n: list.data.length, v: list.data.reduce((a, i) => a + i.amount_paid, 0) };
-    } catch (e) { console.error(e); }
-  }
-  return { bookings: b, orders: o, invoices: inv, revenue: b.pv + o.v + inv.v, count: b.paid + o.n + inv.n };
+  return { bookings: b, orders: o, invoices: { n: b.ip, v: b.iv }, revenue: b.pv + o.v, count: b.paid + o.n };
 }
 
 export default async function AnalyticsPage({ searchParams }: { searchParams: Promise<{ r?: string }> }) {
@@ -99,7 +96,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
         <Stat k="Average order" v={s1.count ? money(Math.round(s1.revenue / s1.count)) : "—"} />
         <Stat k="Booking requests" v={s1.bookings.n} d={delta(s1.bookings.n, s0.bookings.n)} />
       </div>
-      <p className="-mt-6 mb-8 text-xs text-black/50">Revenue = paid online bookings ({money(s1.bookings.pv)}) + paid Stripe invoices ({money(s1.invoices.v)}, {s1.invoices.n}) + past Wix orders ({money(s1.orders.v)}, {s1.orders.n}).</p>
+      <p className="-mt-6 mb-8 text-xs text-black/50">Revenue = paid bookings ({money(s1.bookings.pv)}, {s1.bookings.paid}; {s1.invoices.n} of them from invoices, {money(s1.invoices.v)}) + past Wix orders ({money(s1.orders.v)}, {s1.orders.n}). Refunds are subtracted.</p>
 
       <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-black/55">Website</h2>
       {firstVisit[0]?.d && new Date(firstVisit[0].d) > from ? <Notice>Visitor tracking started {new Date(firstVisit[0].d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}; earlier visits aren&apos;t counted here (Google Analytics has the older history).</Notice> : null}

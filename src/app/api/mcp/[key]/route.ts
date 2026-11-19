@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 import { actingAs, type User } from "@/lib/auth";
 import { q, audit, db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
+import { bookingFromInvoice } from "@/lib/invoiceBooking";
 import { replyInquiry, updateInquiry } from "@/app/admin/(panel)/inbox/actions";
 import { createInvoice, invoiceEmailAction, invoiceAction } from "@/app/admin/(panel)/invoices/actions";
 import { addPhotographer, requestFiles, sendAssignment } from "@/app/admin/(panel)/photographers/actions";
@@ -776,6 +777,21 @@ const TOOLS: Tool[] = [
       const rows = await q<{ id: number }[]>`update payouts set user_id = ${m.id}, payee_name = ${m.name}, payee_email = ${m.email}
         where user_id is null and lower(payee_name) = ${str(a.payee_name, 120).toLowerCase()} returning id`;
       return { ok: true, moved: rows.length, to: m.name };
+    },
+  },
+  {
+    name: "sync_paid_invoices",
+    description: "Turn paid Stripe invoices from admin → Invoices in the last N days (default 120) into bookings (admin → Bookings). Skips invoices that already have one; marks a matching unpaid website booking paid instead of duplicating it. Sends nothing.",
+    inputSchema: obj({ days: N("Look back this many days, default 30") }),
+    run: async (a) => {
+      if (!stripe) return { error: "Stripe not configured" };
+      const since = Math.floor(Date.now() / 1000) - Math.min(365, Number(a.days) || 120) * 86400;
+      const out: { invoice: string; ref?: string; created?: boolean; error?: string }[] = [];
+      for await (const inv of stripe.invoices.list({ status: "paid", created: { gte: since }, limit: 100 })) {
+        try { const r = await bookingFromInvoice(inv); if (r) out.push({ invoice: inv.number ?? inv.id!, ...r }); }
+        catch (e) { out.push({ invoice: inv.number ?? inv.id!, error: String(e) }); }
+      }
+      return { ok: true, results: out };
     },
   },
   {

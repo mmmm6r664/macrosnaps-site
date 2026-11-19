@@ -1,3 +1,4 @@
+import { bookingFromInvoice } from "@/lib/invoiceBooking";
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
@@ -64,6 +65,7 @@ export async function POST(req: Request) {
     if ((inv.amount_paid ?? 0) > 0) {
       const opts = inv.metadata?.source === "admin" ? { team: true, client: true } : { team: true, client: false };
       await notifyInvoicePaid(inv.id!, opts).catch((e) => console.error("[webhook] invoice paid", e));
+      await bookingFromInvoice(inv).catch((e) => console.error("[webhook] invoice booking", e));
     }
   }
   // Customer left the payment page without paying → first abandoned-booking reminder.

@@ -303,6 +303,8 @@ alter table staff_profiles add column if not exists headshot_url text;
 create table if not exists blocklist (value text primary key, kind text not null, reason text not null default '', created_at timestamptz not null default now());
 alter table users add column if not exists blocked boolean not null default false;
 alter table bookings add column if not exists sms_consent boolean not null default false;
+alter table bookings add column if not exists stripe_invoice_id text;
+create unique index if not exists bookings_stripe_invoice on bookings(stripe_invoice_id) where stripe_invoice_id is not null;
 alter table staff_profiles add column if not exists sms_consent_at timestamptz;
 create unique index if not exists payouts_ext on payouts (external_id) where external_id is not null;
 alter table crew_assignments add column if not exists drive_link_at timestamptz;
