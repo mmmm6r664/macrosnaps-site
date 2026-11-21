@@ -81,13 +81,16 @@ export async function backfillPhones(): Promise<{ bookings: number; customers: n
     if (p) { await sql`update bookings set phone = ${p} where id = ${b.id}`; bookings++; }
   }
   if (stripe) {
-    const seen = new Set<string>();
+    // A finalized invoice keeps the phone it had when it was sent, so store the number on the invoice too.
+    const done = new Set<string>();
     for await (const inv of stripe.invoices.list({ created: { gte: Math.floor(Date.now() / 1000) - 120 * 86400 }, limit: 100 })) {
-      const cid = typeof inv.customer === "string" ? inv.customer : inv.customer?.id;
-      if (!cid || seen.has(cid) || inv.metadata?.source !== "admin" || inv.customer_phone) continue;
-      seen.add(cid);
+      if (inv.metadata?.source !== "admin" || inv.customer_phone || inv.metadata?.phone || inv.status === "void") continue;
       const p = await phoneForEmail(inv.customer_email);
-      if (p) { await stripe.customers.update(cid, { phone: p }); customers++; }
+      if (!p) continue;
+      await stripe.invoices.update(inv.id!, { metadata: { ...inv.metadata, phone: p } });
+      const cid = typeof inv.customer === "string" ? inv.customer : inv.customer?.id;
+      if (cid && !done.has(cid)) { await stripe.customers.update(cid, { phone: p }); done.add(cid); }
+      customers++;
     }
   }
   return { bookings, customers };
