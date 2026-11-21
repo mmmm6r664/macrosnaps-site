@@ -16,12 +16,15 @@ export async function listBookings(o: { status?: string; q?: string; page?: numb
   const sql = await db();
   const page = Math.max(1, o.page ?? 1);
   const q = o.q ? `%${o.q.replace(/[%_]/g, "")}%` : null;
+  // Search by phone too: compare digits only, ignoring a leading US "1".
+  const digits = (o.q ?? "").replace(/\D/g, "").replace(/^1(?=\d{10}$)/, "");
+  const qPhone = digits.length >= 4 ? `%${digits}%` : null;
   const rows = await sql<Booking[]>`
     select b.* from bookings b
     ${o.userId ? sql`join crew_assignments c on c.booking_id = b.id and c.user_id = ${o.userId}` : sql``}
     where true
     ${o.status ? sql`and b.status = ${o.status}` : sql``}
-    ${q ? sql`and (b.ref ilike ${q} or b.customer_name ilike ${q} or b.email ilike ${q} or b.city ilike ${q} or b.service_name ilike ${q} or coalesce(b.company,'') ilike ${q})` : sql``}
+    ${q ? sql`and (b.ref ilike ${q} or b.customer_name ilike ${q} or b.email ilike ${q} or b.city ilike ${q} or b.service_name ilike ${q} or coalesce(b.company,'') ilike ${q}${qPhone ? sql` or regexp_replace(coalesce(b.phone,''), '[^0-9]', '', 'g') like ${qPhone}` : sql``})` : sql``}
     order by b.created_at desc limit ${PAGE_SIZE + 1} offset ${(page - 1) * PAGE_SIZE}`;
   return { rows: rows.slice(0, PAGE_SIZE), more: rows.length > PAGE_SIZE, page };
 }

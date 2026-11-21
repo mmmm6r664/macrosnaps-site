@@ -3,6 +3,8 @@ import "server-only";
 import type Stripe from "stripe";
 import { hasDb, db } from "@/lib/db";
 import { newRef } from "@/lib/records";
+import { phoneForEmail } from "@/lib/phoneLookup";
+import { stripe } from "@/lib/stripe";
 
 const MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
 
@@ -63,8 +65,30 @@ export async function bookingFromInvoice(inv: Stripe.Invoice): Promise<{ ref: st
   const ref = newRef();
   await sql`insert into bookings (ref, status, service, service_name, package, city, venue_address, customer_name, email, phone, company, notes,
       schedule, lines, total_cents, stripe_payment_intent, stripe_invoice_id, first_date, reminders_stopped, internal_notes, created_at)
-    values (${ref}, 'paid', ${service}, ${serviceName}, 'Invoice', ${city}, ${venue}, ${contact}, ${email}, ${inv.customer_phone ?? null}, ${company},
+    values (${ref}, 'paid', ${service}, ${serviceName}, 'Invoice', ${city}, ${venue}, ${contact}, ${email}, ${inv.customer_phone || inv.metadata?.phone || (await phoneForEmail(email))}, ${company},
       ${inv.description ?? null}, ${sql.json(schedule)}, ${sql.json(items)}, ${total}, ${pi}, ${inv.id!}, ${when?.date ?? null}, true,
       ${`Created from paid invoice ${inv.number ?? inv.id}.${when ? "" : " No date found in the invoice: add the schedule."}`}, ${paidAt})`;
   return { ref, created: true };
+}
+
+/** Fills missing phone numbers: bookings from our other records, and Stripe customers of recent admin invoices. */
+export async function backfillPhones(): Promise<{ bookings: number; customers: number }> {
+  if (!hasDb) return { bookings: 0, customers: 0 };
+  const sql = await db();
+  let bookings = 0, customers = 0;
+  for (const b of await sql<{ id: number; email: string }[]>`select id, email from bookings where coalesce(phone, '') = '' and coalesce(email, '') <> ''`) {
+    const p = await phoneForEmail(b.email);
+    if (p) { await sql`update bookings set phone = ${p} where id = ${b.id}`; bookings++; }
+  }
+  if (stripe) {
+    const seen = new Set<string>();
+    for await (const inv of stripe.invoices.list({ created: { gte: Math.floor(Date.now() / 1000) - 120 * 86400 }, limit: 100 })) {
+      const cid = typeof inv.customer === "string" ? inv.customer : inv.customer?.id;
+      if (!cid || seen.has(cid) || inv.metadata?.source !== "admin" || inv.customer_phone) continue;
+      seen.add(cid);
+      const p = await phoneForEmail(inv.customer_email);
+      if (p) { await stripe.customers.update(cid, { phone: p }); customers++; }
+    }
+  }
+  return { bookings, customers };
 }

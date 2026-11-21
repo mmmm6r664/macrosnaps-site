@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 import { actingAs, type User } from "@/lib/auth";
 import { q, audit, db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
-import { bookingFromInvoice } from "@/lib/invoiceBooking";
+import { bookingFromInvoice, backfillPhones } from "@/lib/invoiceBooking";
 import { replyInquiry, updateInquiry } from "@/app/admin/(panel)/inbox/actions";
 import { createInvoice, invoiceEmailAction, invoiceAction } from "@/app/admin/(panel)/invoices/actions";
 import { addPhotographer, requestFiles, sendAssignment } from "@/app/admin/(panel)/photographers/actions";
@@ -98,7 +98,7 @@ const TOOLS: Tool[] = [
     run: async (a) => {
       const st = str(a.status, 30) || null, s = a.search ? `%${str(a.search, 100)}%` : null;
       return q`select id, ref, status, stage, service_name, customer_name, email, phone, company, city, venue_address, first_date, schedule, total_cents, created_at from bookings
-        where (${st}::text is null or status = ${st}) and (${s}::text is null or customer_name ilike ${s} or email ilike ${s} or ref ilike ${s} or city ilike ${s})
+        where (${st}::text is null or status = ${st}) and (${s}::text is null or customer_name ilike ${s} or email ilike ${s} or ref ilike ${s} or city ilike ${s} or regexp_replace(coalesce(phone,''), '[^0-9]', '', 'g') like ${'%' + String(a.search ?? '').replace(/\D/g, '').replace(/^1(?=\d{10}$)/, '') + '%'} and length(regexp_replace(${String(a.search ?? '')}, '[^0-9]', '', 'g')) >= 4)
         order by id desc limit ${Math.min(100, Number(a.limit) || 30)}`;
     },
   },
@@ -124,7 +124,7 @@ const TOOLS: Tool[] = [
       if (a.email) { customer = (await stripe.customers.list({ email: str(a.email, 200), limit: 1 })).data[0]?.id; if (!customer) return []; }
       const st = str(a.status, 20) as "draft" | "open" | "paid" | "void" | "uncollectible" | "";
       const r = await stripe.invoices.list({ limit: Math.min(100, Number(a.limit) || 20), ...(st ? { status: st } : {}), ...(customer ? { customer } : {}) });
-      return r.data.map((i) => ({ id: i.id, number: i.number, status: i.status, to: i.customer_email, name: i.customer_name, total: i.total / 100, amount_due: i.amount_due / 100, due: i.due_date ? new Date(i.due_date * 1000).toISOString().slice(0, 10) : null, memo: i.description, created: new Date(i.created * 1000).toISOString() }));
+      return r.data.map((i) => ({ id: i.id, number: i.number, status: i.status, to: i.customer_email, name: i.customer_name, phone: i.customer_phone ?? i.metadata?.phone ?? null, total: i.total / 100, amount_due: i.amount_due / 100, due: i.due_date ? new Date(i.due_date * 1000).toISOString().slice(0, 10) : null, memo: i.description, created: new Date(i.created * 1000).toISOString() }));
     },
   },
   {
@@ -795,7 +795,7 @@ const TOOLS: Tool[] = [
   },
   {
     name: "sync_paid_invoices",
-    description: "Turn paid Stripe invoices from admin → Invoices in the last N days (default 120) into bookings (admin → Bookings). Skips invoices that already have one; marks a matching unpaid website booking paid instead of duplicating it. Sends nothing.",
+    description: "Turn paid Stripe invoices from admin → Invoices in the last N days (default 120) into bookings (admin → Bookings), and fill in missing client phone numbers on invoices and bookings from our records. Skips invoices that already have a booking; marks a matching unpaid website booking paid instead of duplicating it. Sends nothing.",
     inputSchema: obj({ days: N("Look back this many days, default 30") }),
     run: async (a) => {
       if (!stripe) return { error: "Stripe not configured" };
@@ -805,7 +805,8 @@ const TOOLS: Tool[] = [
         try { const r = await bookingFromInvoice(inv); if (r) out.push({ invoice: inv.number ?? inv.id!, ...r }); }
         catch (e) { out.push({ invoice: inv.number ?? inv.id!, error: String(e) }); }
       }
-      return { ok: true, results: out };
+      const phones = await backfillPhones();
+      return { ok: true, results: out, phones };
     },
   },
   {

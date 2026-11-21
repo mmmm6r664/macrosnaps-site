@@ -1,4 +1,5 @@
 "use server";
+import { phoneForEmail } from "@/lib/phoneLookup";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { stripe } from "@/lib/stripe";
@@ -70,9 +71,11 @@ export async function createInvoice(_: S, f: FormData): Promise<S> {
   const descs = f.getAll("desc").map((v) => clip(v, 250));
   const qtys = f.getAll("qty").map((v) => Number(v));
   const prices = f.getAll("price").map((v) => Number(String(v).replace(/[$,]/g, "")));
-  const items = descs.map((d, i) => ({ d, q: Math.round(qtys[i] || 0), c: Math.round((prices[i] || 0) * 100) })).filter((x) => x.d && x.q > 0 && x.c > 0);
-  if (!items.length) return { error: "Add at least one line with a description, quantity and price." };
-  if (items.some((x) => x.q > 1000 || x.c > 10_000_000)) return { error: "Check the quantities and prices." };
+  // A negative price is a discount line (e.g. "Corporate discount (10%)  -250").
+  const items = descs.map((d, i) => ({ d, q: Math.round(qtys[i] || 0), c: Math.round((prices[i] || 0) * 100) })).filter((x) => x.d && x.q > 0 && x.c !== 0);
+  if (!items.some((x) => x.c > 0)) return { error: "Add at least one line with a description, quantity and price." };
+  if (items.some((x) => x.q > 1000 || Math.abs(x.c) > 10_000_000)) return { error: "Check the quantities and prices." };
+  if (items.reduce((t, x) => t + x.q * x.c, 0) <= 0) return { error: "Discounts can't be more than the invoice total." };
   const send = f.get("send") === "1";
   let invoiceId: string;
   try {
@@ -80,16 +83,18 @@ export async function createInvoice(_: S, f: FormData): Promise<S> {
     const line1 = clip(f.get("line1"), 200);
     const address = line1 ? { line1, line2: clip(f.get("line2"), 200) || undefined, city: clip(f.get("city"), 100) || undefined, state: clip(f.get("state"), 60) || undefined, postal_code: clip(f.get("zip"), 20) || undefined, country: "US" } : undefined;
     const billName = company || name;
+    // Keep the client's phone on the invoice so they're easy to reach; fall back to what we have on file.
+    const phone = clip(f.get("phone"), 40) || (await phoneForEmail(email)) || "";
     // The invoice copies the customer's name and address when it's finalized, so keep them current.
     const existing = await stripe.customers.list({ email, limit: 1 });
     const customer = existing.data[0]
-      ? await stripe.customers.update(existing.data[0].id, { name: billName, ...(address ? { address } : {}), ...(clip(f.get("phone"), 40) ? { phone: clip(f.get("phone"), 40) } : {}) })
-      : await stripe.customers.create({ email, name: billName, address, phone: clip(f.get("phone"), 40) || undefined });
+      ? await stripe.customers.update(existing.data[0].id, { name: billName, ...(address ? { address } : {}), ...(phone ? { phone } : {}) })
+      : await stripe.customers.create({ email, name: billName, address, phone: phone || undefined });
     const inv = await stripe.invoices.create({
       customer: customer.id, collection_method: "send_invoice", days_until_due: days, auto_advance: false,
       description: clip(f.get("memo"), 500) || undefined, footer: `${SITE.name} · ${SITE.phone} · ${SITE.email}`,
       custom_fields: company ? [{ name: "Attn", value: name.slice(0, 140) }] : undefined,
-      metadata: { created_by: u.email, source: "admin", contact_name: name },
+      metadata: { created_by: u.email, source: "admin", contact_name: name, ...(phone ? { phone } : {}) },
     });
     for (const x of items) {
       await stripe.invoiceItems.create({ customer: customer.id, invoice: inv.id, currency: "usd", amount: x.q * x.c, description: x.q > 1 ? `${x.d} (${x.q} × $${(x.c / 100).toFixed(2)})` : x.d });

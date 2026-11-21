@@ -23,7 +23,7 @@ export default async function InvoicePage({ params, searchParams }: { params: Pr
   const emailed = inv.metadata?.emailed_by_macrosnaps;
   return (
     <>
-      <PageHead title={`Invoice ${inv.number ?? "(draft)"}`} sub={`${inv.customer_name ?? ""} · ${inv.customer_email ?? ""}`} actions={<Link href="/admin/invoices" className={btnGhost}>← All invoices</Link>} />
+      <PageHead title={`Invoice ${inv.number ?? "(draft)"}`} sub={[inv.customer_name, inv.customer_email, inv.customer_phone || inv.metadata?.phone].filter(Boolean).join(" · ")} actions={<Link href="/admin/invoices" className={btnGhost}>← All invoices</Link>} />
       {sp["draft-preview"] && inv.status === "draft" && <Notice>You clicked the pay button in a draft preview. The real pay page exists once the invoice is finalized; in the client&apos;s email this button opens it.</Notice>}
       {created === "draft" && <Notice tone="green">Draft saved. Nothing has been sent.</Notice>}
       {created === "sent" && <Notice tone="green">Invoice finalized and emailed from MacroSnaps.</Notice>}

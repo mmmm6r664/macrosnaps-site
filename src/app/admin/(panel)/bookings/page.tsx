@@ -16,7 +16,7 @@ export default async function Bookings({ searchParams }: { searchParams: Promise
     <>
       <PageHead title="Bookings" sub="Every booking made on the website, newest first." actions={<Link href="/admin/invoices/new" className={btnGold}>New invoice</Link>} />
       <form className="mb-4 flex flex-wrap gap-2">
-        <input name="q" defaultValue={q} placeholder="Search name, email, ref, city…" className={`${inputCls} max-w-xs`} />
+        <input name="q" defaultValue={q} placeholder="Search name, email, phone, ref, city…" className={`${inputCls} max-w-xs`} />
         <select name="status" defaultValue={status ?? ""} className={`${inputCls} max-w-[200px]`}>
           <option value="">All statuses</option>
           {BOOKING_STATUSES.map((s) => <option key={s} value={s}>{s.replace(/_/g, " ")}</option>)}
@@ -28,7 +28,7 @@ export default async function Bookings({ searchParams }: { searchParams: Promise
           {rows.map((b) => (
             <tr key={b.id} className="hover:bg-black/[.02]">
               <td className="px-4 py-3"><Link href={`/admin/bookings/${b.id}`} className="font-semibold underline-offset-2 hover:underline">{b.ref}</Link></td>
-              <td className="px-4 py-3">{b.customer_name}<div className="text-xs text-black/50">{b.email}</div></td>
+              <td className="px-4 py-3">{b.customer_name}<div className="text-xs text-black/50">{b.email}</div>{b.phone && <a href={`tel:${b.phone}`} className="text-xs text-black/60 hover:underline">{b.phone}</a>}</td>
               <td className="px-4 py-3">{b.service_name}{b.addon && <div className="text-xs text-black/50">+ {b.addon}</div>}</td>
               <td className="whitespace-nowrap px-4 py-3">{fmtDate(b.first_date)}{b.schedule.length > 1 && <div className="text-xs text-black/50">{b.schedule.length} days</div>}</td>
               <td className="px-4 py-3">{b.city}</td>

@@ -28,7 +28,7 @@ export default async function Invoices({ searchParams }: { searchParams: Promise
           {list.data.map((i) => (
             <tr key={i.id} className="align-top">
               <td className="px-4 py-3"><Link href={`/admin/invoices/${i.id}`} className="underline">{i.number ?? "Draft"}</Link><div className="text-xs text-black/50">{fmtDate(new Date(i.created * 1000))}</div></td>
-              <td className="px-4 py-3">{i.customer_name || "—"}<div className="text-xs text-black/50">{i.customer_email}</div></td>
+              <td className="px-4 py-3">{i.customer_name || "—"}<div className="text-xs text-black/50">{i.customer_email}</div>{(i.customer_phone || i.metadata?.phone) && <a href={`tel:${i.customer_phone || i.metadata?.phone}`} className="text-xs text-black/60 hover:underline">{i.customer_phone || i.metadata?.phone}</a>}</td>
               <td className="whitespace-nowrap px-4 py-3 font-semibold">{money(i.total)}{i.amount_paid > 0 && i.status !== "paid" && <div className="text-xs text-black/50">Paid {money(i.amount_paid)}</div>}</td>
               <td className="whitespace-nowrap px-4 py-3">{i.due_date ? fmtDate(new Date(i.due_date * 1000)) : "—"}</td>
               <td className="px-4 py-3"><Badge status={i.status ?? "draft"} /></td>
