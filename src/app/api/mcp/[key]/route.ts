@@ -246,6 +246,17 @@ const TOOLS: Tool[] = [
     },
   },
   {
+    name: "get_sent_email", readOnly: true,
+    description: "Read one sent email (from list_sent_emails) as plain text.",
+    inputSchema: obj({ id: N("email_log id") }),
+    run: async (a) => {
+      const [r] = await q`select id, to_addr, subject, html, created_at from email_log where id = ${Number(a.id)}`;
+      if (!r) return { error: "not found" };
+      const text = String(r.html ?? "").replace(/<style[\s\S]*?<\/style>/gi, "").replace(/<br\s*\/?>/gi, "\n").replace(/<\/(p|div|tr|h\d|li)>/gi, "\n").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/[ \t]+/g, " ").replace(/\n\s*\n+/g, "\n").trim();
+      return { id: r.id, to: r.to_addr, subject: r.subject, sent: r.created_at, text: text.slice(0, 12000) };
+    },
+  },
+  {
     name: "add_lead",
     description: "Add a lead from another source (Sulekha, Thumbtack, a phone call…) to the CRM inbox as a contact message, so it can be tracked, replied to and invoiced. Skips duplicates: same external_id, or same email + source within 3 days. Sends nothing to the lead.",
     inputSchema: obj({
