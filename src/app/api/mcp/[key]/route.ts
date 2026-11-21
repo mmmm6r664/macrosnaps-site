@@ -242,7 +242,10 @@ const TOOLS: Tool[] = [
     inputSchema: obj({ search: S("Recipient or subject text (optional)"), limit: N("Max rows, default 30") }),
     run: async (a) => {
       const s = a.search ? `%${str(a.search, 100)}%` : null;
-      return q`select id, to_addr, subject, status, error, created_at from email_log where (${s}::text is null or to_addr ilike ${s} or subject ilike ${s}) order by id desc limit ${Math.min(100, Number(a.limit) || 30)}`;
+      const rows = await q<{ id: number; to_addr: string; subject: string; status: string; error: string | null; created_at: string; html: string | null }[]>`select id, to_addr, subject, status, error, created_at, html from email_log where (${s}::text is null or to_addr ilike ${s} or subject ilike ${s}) order by id desc limit ${Math.min(100, Number(a.limit) || 30)}`;
+      // With a search narrowed to a few emails, include each one's text so it can be read.
+      const withText = !!s && rows.length <= 5;
+      return rows.map(({ html, ...r }) => withText ? { ...r, text: String(html ?? "").replace(/<style[\s\S]*?<\/style>/gi, "").replace(/<br\s*\/?>/gi, "\n").replace(/<\/(p|div|tr|h\d|li)>/gi, "\n").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/[ \t]+/g, " ").replace(/\n\s*\n+/g, "\n").trim().slice(0, 8000) } : r);
     },
   },
   {
