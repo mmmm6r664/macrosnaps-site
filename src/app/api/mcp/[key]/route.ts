@@ -8,6 +8,7 @@ import { q, audit, db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 import { bookingFromInvoice, backfillPhones } from "@/lib/invoiceBooking";
 import { replyInquiry, updateInquiry } from "@/app/admin/(panel)/inbox/actions";
+import { refundBooking } from "@/app/admin/(panel)/bookings/actions";
 import { createInvoice, invoiceEmailAction, invoiceAction } from "@/app/admin/(panel)/invoices/actions";
 import { addPhotographer, requestFiles, sendAssignment } from "@/app/admin/(panel)/photographers/actions";
 import { sendNew, voidContract } from "@/app/admin/(panel)/contracts/actions";
@@ -246,6 +247,18 @@ const TOOLS: Tool[] = [
       // With a search narrowed to a few emails, include each one's text so it can be read.
       const withText = !!s && rows.length <= 5;
       return rows.map(({ html, ...r }) => withText ? { ...r, text: String(html ?? "").replace(/<style[\s\S]*?<\/style>/gi, "").replace(/<br\s*\/?>/gi, "\n").replace(/<\/(p|div|tr|h\d|li)>/gi, "\n").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/[ \t]+/g, " ").replace(/\n\s*\n+/g, "\n").trim().slice(0, 8000) } : r);
+    },
+  },
+  {
+    name: "refund_booking",
+    description: "Refund a paid website booking to the client's card through Stripe. Requires the exact dollar amount the owner approved (no 'full'). Irreversible. Sends no email.",
+    inputSchema: obj({ ref: S("Booking ref, e.g. MS-XXXX"), amount: N("Exact refund in USD, as approved by the owner") }, ["ref", "amount"]),
+    run: async (a) => {
+      const [b] = await q<{ id: number }[]>`select id from bookings where ref = ${str(a.ref, 40)}`;
+      if (!b) return { error: "Booking not found" };
+      const amt = Number(a.amount);
+      if (!(amt > 0)) return { error: "Give the exact amount to refund." };
+      return refundBooking(undefined, form({ id: String(b.id), amount: amt.toFixed(2), confirm: "on" }));
     },
   },
   {
