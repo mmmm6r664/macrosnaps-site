@@ -46,7 +46,7 @@ export async function onCheckoutExpired(sessionId: string) {
 
 /** Daily: abandoned-booking reminders, welcome series and review requests. Returns counts for the cron log. */
 export async function runDailyAutomations() {
-  const out = { reminders: 0, nurture: 0, feedback: 0 };
+  const out = { reminders: 0, nurture: 0, feedback: 0, invoiceReminders: { sent: 0, failed: 0 } };
   if (!hasDb) return out;
   // Abandoned bookings from the last 14 days whose date is still at least 2 days away.
   const pending = await q<(Pending & { due: number })[]>`
@@ -85,6 +85,9 @@ export async function runDailyAutomations() {
   // One reminder 4 days later if the survey hasn't been answered.
   const due = await q<{ id: number }[]>`select id from surveys where submitted_at is null and reminded_at is null and sent_at < now() - interval '4 days' and sent_at > now() - interval '30 days'`;
   for (const s of due) if (await sendSurvey(s.id, true)) out.feedback++;
+  // Invoice payment reminders, 3 and 7 days after the invoice was emailed.
+  const { runInvoiceReminders } = await import("@/lib/invoiceReminders");
+  out.invoiceReminders = await runInvoiceReminders().catch(() => ({ sent: 0, failed: -1 }));
   // Keep the email log light: drop the stored copy of emails older than 180 days (the log line stays).
   await q`update email_log set html = null where html is not null and created_at < now() - interval '180 days'`.catch(() => null);
   return out;
