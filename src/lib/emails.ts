@@ -697,7 +697,8 @@ function invoiceReminderEmail(i: InvoiceMail): Email {
       preheader: `${total} still open${due ? `, ${overdue ? "was due" : "due"} ${due}` : ""}. Pay securely online to confirm your booking.`,
       body:
         p(`Hi ${first(i.name)},`) +
-        p(`Just a friendly reminder that your MacroSnaps invoice${i.memo ? ` for <b>${esc(i.memo)}</b>` : ""} is still open. Your date is confirmed once the invoice is paid, so we recommend paying soon to make sure it stays available.`) +
+        p(`Just a friendly reminder that your MacroSnaps invoice <b>${esc(i.number)}</b> is still open. Your date is confirmed once the invoice is paid, so we recommend paying soon to make sure it stays available.`) +
+        (i.memo ? small(esc(i.memo)) : "") +
         details([["Invoice", i.number], ["Billed to", i.billTo ?? null], ["Amount due", total], ["Due date", due]]) +
         priceTable(i.lines, "Total due", total) +
         button("View & pay invoice", i.payUrl) +
