@@ -160,7 +160,7 @@ const TOOLS: Tool[] = [
   },
   {
     name: "send_invoice",
-    description: "Email an invoice from MacroSnaps (finalizes a draft first; a finalized invoice can't be edited).",
+    description: "Email an invoice from MacroSnaps (finalizes a draft first; a finalized invoice can't be edited). If MacroSnaps already emailed this open invoice, this sends a friendly payment REMINDER instead (copy to info@).",
     inputSchema: obj({ id: S("Stripe invoice id (in_…)") }, ["id"]),
     run: (a) => invoiceEmailAction(undefined, form({ id: a.id, mode: "send" })),
   },

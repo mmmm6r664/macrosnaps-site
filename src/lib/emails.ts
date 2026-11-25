@@ -663,8 +663,9 @@ export function payoutSent(o: { name: string; amount: string; method: string | n
 }
 
 /* ---------- client: invoice (sent by MacroSnaps; Stripe only hosts the payment page) ---------- */
-export type InvoiceMail = { name: string; billTo?: string | null; number: string; total: number; due: Date | null; memo?: string | null; lines: { label: string; amount: number }[]; payUrl: string; pdfUrl?: string | null; paid?: boolean };
+export type InvoiceMail = { name: string; billTo?: string | null; number: string; total: number; due: Date | null; memo?: string | null; lines: { label: string; amount: number }[]; payUrl: string; pdfUrl?: string | null; paid?: boolean; reminder?: boolean };
 export function invoiceEmail(i: InvoiceMail): Email {
+  if (i.reminder) return invoiceReminderEmail(i);
   const due = i.due ? i.due.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "America/New_York" }) : null;
   const total = `$${i.total.toLocaleString("en-US", { minimumFractionDigits: i.total % 1 ? 2 : 0 })}`;
   return {
@@ -679,6 +680,28 @@ export function invoiceEmail(i: InvoiceMail): Email {
         priceTable(i.lines, "Total due", total) +
         button("View & pay invoice", i.payUrl) +
         small(`Pay securely online by card or bank transfer (ACH).${i.pdfUrl ? ` <a href="${esc(i.pdfUrl)}">Download the PDF invoice</a>.` : ""} Need a W-9 or a different payment method? Just reply to this email.`) +
+        p("We look forward to working with you."),
+    }),
+  };
+}
+
+/** Friendly payment reminder for an invoice that was already sent and is still open. */
+function invoiceReminderEmail(i: InvoiceMail): Email {
+  const due = i.due ? i.due.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "America/New_York" }) : null;
+  const overdue = !!i.due && i.due.getTime() < Date.now() - 86_400_000;
+  const total = `$${i.total.toLocaleString("en-US", { minimumFractionDigits: i.total % 1 ? 2 : 0 })}`;
+  return {
+    subject: `Reminder: Invoice ${i.number} from MacroSnaps: ${total}${due ? `, ${overdue ? "was due" : "due"} ${due}` : ""}`,
+    html: layout({
+      title: `Reminder: invoice ${i.number}`,
+      preheader: `${total} still open${due ? `, ${overdue ? "was due" : "due"} ${due}` : ""}. Pay securely online to confirm your booking.`,
+      body:
+        p(`Hi ${first(i.name)},`) +
+        p(`Just a friendly reminder that your MacroSnaps invoice${i.memo ? ` for <b>${esc(i.memo)}</b>` : ""} is still open. Your date is confirmed once the invoice is paid, so we recommend paying soon to make sure it stays available.`) +
+        details([["Invoice", i.number], ["Billed to", i.billTo ?? null], ["Amount due", total], ["Due date", due]]) +
+        priceTable(i.lines, "Total due", total) +
+        button("View & pay invoice", i.payUrl) +
+        small(`Pay securely online by card or bank transfer (ACH).${i.pdfUrl ? ` <a href="${esc(i.pdfUrl)}">Download the PDF invoice</a>.` : ""} If you've already paid, or your plans have changed, just reply to this email and let us know.`) +
         p("We look forward to working with you."),
     }),
   };

@@ -36,7 +36,7 @@ export function InvoiceEmail({ id, draft }: { id: string; draft: boolean }) {
       <input type="hidden" name="id" value={id} />
       <div className="flex flex-wrap gap-2">
         <button name="mode" value="preview" disabled={pending} className={btnGhost}>{pending ? "Working…" : "Preview email"}</button>
-        <button name="mode" value="send" disabled={pending || !s?.html} title={s?.html ? "" : "Preview first"} className={btnGold}>{draft ? "Finalize & email from MacroSnaps" : "Email from MacroSnaps"}</button>
+        <button name="mode" value="send" disabled={pending || !s?.html} title={s?.html ? "" : "Preview first"} className={btnGold}>{draft ? "Finalize & email from MacroSnaps" : s?.reminder ? "Send payment reminder" : "Email from MacroSnaps"}</button>
       </div>
       {(s?.error || s?.ok) && <p role="status" className={`mt-3 rounded px-3 py-2 text-sm ${s.error ? "bg-red-50 text-red-800" : "bg-emerald-50 text-emerald-800"}`}>{s.error ?? s.ok}</p>}
       {s?.html && (

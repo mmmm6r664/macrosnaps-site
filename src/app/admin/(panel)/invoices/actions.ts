@@ -12,13 +12,16 @@ import { sendMail } from "@/lib/mail";
 import { invoiceLink } from "@/lib/invoiceLink";
 
 /** Build our own invoice email from a finalized Stripe invoice. */
-async function mailFor(inv: Stripe.Invoice) {
+/** An open invoice MacroSnaps already emailed gets the reminder version of the email. */
+const isReminder = (inv: Stripe.Invoice) => inv.status === "open" && !!inv.metadata?.emailed_by_macrosnaps;
+
+async function mailFor(inv: Stripe.Invoice, reminder = false) {
   const lines = (await stripe!.invoices.listLineItems(inv.id!, { limit: 50 })).data.slice().reverse().map((l) => ({ label: l.description ?? "Item", amount: l.amount / 100 }));
   return invoiceEmail({
     name: inv.metadata?.contact_name || inv.customer_name || inv.customer_email || "there",
     billTo: inv.customer_address?.line1 ? [inv.customer_name, inv.customer_address.line1, inv.customer_address.line2, [inv.customer_address.city, [inv.customer_address.state, inv.customer_address.postal_code].filter(Boolean).join(" ")].filter(Boolean).join(", ")].filter(Boolean).join("\n") : null, number: inv.number ?? "Draft", total: inv.amount_due / 100,
     due: inv.due_date ? new Date(inv.due_date * 1000) : null, memo: inv.description, lines,
-    payUrl: inv.hosted_invoice_url ? invoiceLink(inv.id!) : SITE.url, pdfUrl: inv.invoice_pdf,
+    payUrl: inv.hosted_invoice_url ? invoiceLink(inv.id!) : SITE.url, pdfUrl: inv.invoice_pdf, reminder,
   });
 }
 
@@ -26,16 +29,20 @@ async function mailFor(inv: Stripe.Invoice) {
 export async function sendInvoiceEmail(id: string, by: { id: number; email: string }) {
   const inv = await stripe!.invoices.retrieve(id);
   if (!inv.customer_email || !inv.hosted_invoice_url) return { ok: false as const, error: "The invoice needs a customer email and must be finalized first." };
-  const m = await mailFor(inv);
-  const r = await sendMail({ to: inv.customer_email, subject: m.subject, html: m.html });
+  const reminder = isReminder(inv);
+  const m = await mailFor(inv, reminder);
+  // A copy goes to info@ so every client email also shows up in Gmail.
+  const r = await sendMail({ to: inv.customer_email, subject: m.subject, html: m.html, bcc: SITE.email });
   if (r.ok) {
-    await stripe!.invoices.update(id, { metadata: { ...(inv.metadata ?? {}), emailed_by_macrosnaps: new Date().toISOString() } });
-    await audit(by.id, "invoice_emailed", `${id} ${inv.customer_email}`);
+    const now = new Date().toISOString();
+    const md = inv.metadata ?? {};
+    await stripe!.invoices.update(id, { metadata: reminder ? { ...md, reminded_at: now, reminders_sent: String(Number(md.reminders_sent || 0) + 1) } : { ...md, emailed_by_macrosnaps: now } });
+    await audit(by.id, reminder ? "invoice_reminder" : "invoice_emailed", `${id} ${inv.customer_email}`);
   }
-  return r.ok ? { ok: true as const } : { ok: false as const, error: "The email couldn't be sent. Check Sent emails for details." };
+  return r.ok ? { ok: true as const, reminder } : { ok: false as const, error: "The email couldn't be sent. Check Sent emails for details." };
 }
 
-export type PreviewS = { error?: string; ok?: string; html?: string; subject?: string; to?: string } | undefined;
+export type PreviewS = { error?: string; ok?: string; html?: string; subject?: string; to?: string; reminder?: boolean } | undefined;
 /** Preview or send the MacroSnaps invoice email for an invoice (finalizes a draft only on send). */
 export async function invoiceEmailAction(_: PreviewS, f: FormData): Promise<PreviewS> {
   const u = await requireUser();
@@ -45,13 +52,13 @@ export async function invoiceEmailAction(_: PreviewS, f: FormData): Promise<Prev
   try {
     let inv = await stripe.invoices.retrieve(id);
     if (f.get("mode") !== "send") {
-      const m = await mailFor(inv.status === "draft" ? { ...inv, number: inv.number ?? "(number assigned when sent)", hosted_invoice_url: inv.hosted_invoice_url ?? `${SITE.url}/admin/invoices/${id}?draft-preview=1` } as Stripe.Invoice : inv);
-      return { html: m.html, subject: m.subject, to: inv.customer_email ?? "" };
+      const m = await mailFor(inv.status === "draft" ? { ...inv, number: inv.number ?? "(number assigned when sent)", hosted_invoice_url: inv.hosted_invoice_url ?? `${SITE.url}/admin/invoices/${id}?draft-preview=1` } as Stripe.Invoice : inv, isReminder(inv));
+      return { html: m.html, subject: m.subject, to: inv.customer_email ?? "", reminder: isReminder(inv) };
     }
     if (inv.status === "draft") inv = await stripe.invoices.finalizeInvoice(id);
     const r = await sendInvoiceEmail(inv.id!, u);
     revalidatePath("/admin/invoices"); revalidatePath(`/admin/invoices/${id}`);
-    return r.ok ? { ok: `Emailed from MacroSnaps to ${inv.customer_email}.` } : { error: r.error };
+    return r.ok ? { ok: `${r.reminder ? "Payment reminder emailed" : "Emailed"} from MacroSnaps to ${inv.customer_email}.` } : { error: r.error };
   } catch (e) { return { error: e instanceof Error ? e.message : "Stripe error." }; }
 }
 
