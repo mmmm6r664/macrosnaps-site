@@ -78,7 +78,7 @@ const TOOLS: Tool[] = [
   },
   {
     name: "reply_to_message",
-    description: "Email a branded MacroSnaps reply to an inbox message (from info@e.macrosnaps.com; their reply comes to info@macrosnaps.com; the sign-off is added automatically). Marks it in progress and logs the reply.",
+    description: "Email a branded MacroSnaps reply to an inbox message (from info@e.macrosnaps.com, with a copy to the info@macrosnaps.com Gmail; their reply comes back to the portal conversation; the sign-off is added automatically). Marks it in progress and logs the reply.",
     inputSchema: obj({ id: N("Inbox message id"), subject: S("Email subject"), message: S("Plain-text body, without sign-off"), book_button: B("Add a 'Book your date online' button") }, ["id", "subject", "message"]),
     run: (a) => act(() => replyInquiry(undefined, form({ id: a.id, subject: a.subject, message: a.message, book: a.book_button === true }))),
   },
@@ -270,6 +270,19 @@ const TOOLS: Tool[] = [
       if (!r) return { error: "not found" };
       const text = String(r.html ?? "").replace(/<style[\s\S]*?<\/style>/gi, "").replace(/<br\s*\/?>/gi, "\n").replace(/<\/(p|div|tr|h\d|li)>/gi, "\n").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/[ \t]+/g, " ").replace(/\n\s*\n+/g, "\n").trim();
       return { id: r.id, to: r.to_addr, subject: r.subject, sent: r.created_at, text: text.slice(0, 12000) };
+    },
+  },
+  {
+    name: "import_email",
+    description: "Bring a client email (e.g. from the info@macrosnaps.com Gmail inbox) into the portal inbox so it can be answered from the portal. A new sender becomes a new inquiry; a sender with an inquiry in the last 120 days gets the email added to that conversation (and it's marked new). Skips internal/automated senders and duplicates (same message id). Sends nothing.",
+    inputSchema: obj({
+      from: S("Sender, 'Name <email>' or email"), subject: S("Subject"), body: S("Plain-text body"),
+      received_at: S("ISO time (optional)"), message_id: S("Gmail message id, for de-duplication"), source: S("Email (default), WeddingWire, The Knot…"),
+    }, ["from", "subject", "body", "message_id"]),
+    run: async (a) => {
+      const { ingestInbound } = await import("@/lib/inboundEmail");
+      const at = a.received_at && !Number.isNaN(Date.parse(str(a.received_at, 40))) ? new Date(str(a.received_at, 40)) : undefined;
+      return ingestInbound({ from: str(a.from, 300), subject: str(a.subject, 300), text: str(a.body, 20000), messageId: `gmail:${str(a.message_id, 120)}`, receivedAt: at, source: str(a.source, 40) || "Email" });
     },
   },
   {

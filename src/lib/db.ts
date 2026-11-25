@@ -356,6 +356,16 @@ create table if not exists email_log (
   created_at timestamptz not null default now()
 );
 create index if not exists email_log_created on email_log(created_at desc);
+create table if not exists inquiry_messages (
+  id serial primary key,
+  inquiry_id int not null references inquiries(id) on delete cascade,
+  direction text not null,                         -- in | out
+  from_addr text not null default '', to_addr text not null default '',
+  subject text not null default '', body text not null default '',
+  message_id text, created_at timestamptz not null default now()
+);
+create index if not exists inquiry_messages_inq on inquiry_messages(inquiry_id, created_at);
+create unique index if not exists inquiry_messages_mid on inquiry_messages(message_id) where message_id is not null;
 create table if not exists file_requests (
   id serial primary key,
   name text not null, email text not null, shoot text not null default '', shoot_date text not null default '',

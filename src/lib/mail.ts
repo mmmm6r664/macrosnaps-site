@@ -5,6 +5,8 @@ import { details } from "./emailTemplate";
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 const FROM = process.env.MAIL_FROM || "MacroSnaps <info@e.macrosnaps.com>";
 export const TEAM_INBOX = process.env.TEAM_INBOX || SITE.email;
+/** Where client replies to portal emails go. Set INBOUND_ADDRESS (a Resend receiving address) to bring replies back into the portal inbox. */
+export const REPLY_ADDRESS = process.env.INBOUND_ADDRESS || SITE.email;
 
 /** Addresses on the blocklist (blacklisted contractors etc.) never receive email. */
 export async function blockedEmails(list: string[]): Promise<Set<string>> {
@@ -16,7 +18,7 @@ export async function blockedEmails(list: string[]): Promise<Set<string>> {
   } catch { return new Set(); }
 }
 
-export async function sendMail(opts: { to: string | string[]; subject: string; html: string; replyTo?: string; attachments?: { filename: string; content: Buffer }[]; headers?: Record<string, string> }) {
+export async function sendMail(opts: { to: string | string[]; subject: string; html: string; replyTo?: string; bcc?: string | string[]; attachments?: { filename: string; content: Buffer }[]; headers?: Record<string, string> }) {
   const all = Array.isArray(opts.to) ? opts.to : [opts.to];
   const blocked = await blockedEmails(all);
   if (blocked.size) {
@@ -29,7 +31,7 @@ export async function sendMail(opts: { to: string | string[]; subject: string; h
     await logEmail(opts, "not sent", "Email service not connected (RESEND_API_KEY)");
     return { ok: false as const, skipped: true };
   }
-  const { data, error } = await resend.emails.send({ from: FROM, to: opts.to, subject: opts.subject, html: opts.html, replyTo: opts.replyTo || SITE.email, attachments: opts.attachments, headers: opts.headers });
+  const { data, error } = await resend.emails.send({ from: FROM, to: opts.to, subject: opts.subject, html: opts.html, replyTo: opts.replyTo || SITE.email, ...(opts.bcc ? { bcc: opts.bcc } : {}), attachments: opts.attachments, headers: opts.headers });
   if (error) {
     console.error("[mail] send failed", error);
     await logEmail(opts, "failed", error.message || String(error));

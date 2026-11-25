@@ -36,10 +36,13 @@ export default async function InquiryPage({ params }: { params: Promise<{ id: st
   const [r] = await q<{ id: number; kind: string; name: string; email: string; phone: string | null; data: Record<string, string>; status: string; notes: string; created_at: Date }[]>`
     select * from inquiries where id = ${Number((await params).id) || 0}`;
   if (!r) notFound();
+  const thread = await q<{ id: number; direction: string; from_addr: string; subject: string; body: string; created_at: Date }[]>`
+    select id, direction, from_addr, subject, body, created_at from inquiry_messages where inquiry_id = ${r.id} order by created_at`.catch(() => []);
   return (
     <>
       <PageHead title={r.name || r.email} sub={`${r.kind === "application" ? "Careers application" : "Contact message"} · ${fmtDate(r.created_at, true)}`} actions={<Badge status={r.status} />} />
       <div className="grid gap-5 xl:grid-cols-[1fr_360px]">
+        <div className="space-y-5">
         <Card>
           <dl className="space-y-3 text-sm">
             <div><dt className="text-black/50">Email</dt><dd><a className="underline" href={`mailto:${r.email}`}>{r.email}</a></dd></div>
@@ -49,6 +52,19 @@ export default async function InquiryPage({ params }: { params: Promise<{ id: st
             ))}
           </dl>
         </Card>
+        {thread.length > 0 && (
+          <Card title="Conversation">
+            <ol className="space-y-3">
+              {thread.map((t) => (
+                <li key={t.id} className={`rounded-lg p-3 text-sm ${t.direction === "out" ? "ml-8 bg-amber-50" : "mr-8 bg-black/[.03]"}`}>
+                  <div className="mb-1 text-xs text-black/50">{t.direction === "out" ? `MacroSnaps (${t.from_addr})` : t.from_addr} · {fmtDate(t.created_at, true)}{t.subject && ` · ${t.subject}`}</div>
+                  <div className="whitespace-pre-wrap">{t.body}</div>
+                </li>
+              ))}
+            </ol>
+          </Card>
+        )}
+        </div>
         <div className="space-y-5">
         {r.kind === "application" && (
           <Card title="Hire">

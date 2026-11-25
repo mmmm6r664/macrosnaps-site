@@ -28,11 +28,15 @@ export async function replyInquiry(_: ReplyState, f: FormData): Promise<ReplySta
   const { inquiryReply } = await import("@/lib/emails");
   const { sendMail } = await import("@/lib/mail");
   const m = inquiryReply(subject, message, f.get("book") === "on");
-  const sent = await sendMail({ to: r.email, subject: m.subject, html: m.html });
+  const { REPLY_ADDRESS } = await import("@/lib/mail");
+  const { SITE } = await import("@/lib/site");
+  // A copy goes to the team Gmail so every conversation is visible there too; the client's reply comes back into this inbox.
+  const sent = await sendMail({ to: r.email, subject: m.subject, html: m.html, replyTo: REPLY_ADDRESS, bcc: SITE.email });
   if (!sent.ok) return { error: "The email couldn't be sent. Please try again in a minute." };
   const stamp = new Date().toLocaleString("en-US", { timeZone: "America/New_York", dateStyle: "medium", timeStyle: "short" });
   const log = `[${stamp}] Replied by email (${u.name || u.email}): ${subject}`;
   await q`update inquiries set status = ${r.status === "new" ? "in_progress" : r.status}, notes = ${r.notes ? `${r.notes}\n${log}` : log} where id = ${id}`;
+  await q`insert into inquiry_messages (inquiry_id, direction, from_addr, to_addr, subject, body) values (${id}, 'out', ${u.name || u.email}, ${r.email}, ${subject}, ${message})`.catch(() => null);
   await audit(u.id, "inquiry_reply", `#${id} to ${r.email}`);
   revalidatePath(`/admin/inbox/${id}`);
   revalidatePath("/admin/inbox");
