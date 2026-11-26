@@ -769,7 +769,7 @@ const TOOLS: Tool[] = [
   },
   {
     name: "import_payouts",
-    description: "Record past payouts (e.g. from Cash App or Venmo history) against team members. Matches by email, then by name; unmatched rows are kept under the payee's name. Skips rows whose external_id was already imported. Sends NO email or notification.",
+    description: "Record past payouts (e.g. from Cash App or Venmo history) against team members. Matches by email, then by name; unmatched rows are kept under the payee's name. Skips rows whose external_id was already imported. A payment dated within the last 3 days to a team member also emails them a \"Payment sent\" notice from the portal (once per payout; re-importing the same external_id sends it if it wasn't sent yet). Older (history) rows send nothing.",
     inputSchema: obj({
       payouts: { type: "array", items: obj({
         name: S("Payee name as shown in the app"), email: S(""), amount: N("Dollars"), paid_on: S("YYYY-MM-DD"), method: S("Cash App, Venmo…"), note: S(""), external_id: S("Unique id for dedupe"),
@@ -791,7 +791,7 @@ const TOOLS: Tool[] = [
         const sub = staff.filter((s) => { const sn = norm(s.name); return t.length >= 2 && (sn.startsWith(n + " ") || n.startsWith(sn + " ")); }); if (sub.length === 1) return sub[0];
         return undefined;
       };
-      const out = { added: 0, skipped: 0, matched: [] as string[], unmatched: [] as string[] };
+      const out = { added: 0, skipped: 0, matched: [] as string[], unmatched: [] as string[], emailed: [] as string[] };
       for (const r of rows) {
         const name = str(r.name, 120).trim(); const date = str(r.paid_on, 10); const cents = Math.round(Number(r.amount) * 100);
         if (!name || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !(cents > 0)) { out.skipped++; continue; }
@@ -803,6 +803,19 @@ const TOOLS: Tool[] = [
           values (${m?.id ?? null}, ${m ? m.name : name}, ${m?.email ?? null}, ${cents}, ${date}, ${str(r.method, 40) || null}, ${str(r.note, 300)}, ${u.id}, ${ext})
           on conflict (external_id) where external_id is not null do nothing returning id`;
         if (res.length) out.added++; else out.skipped++;
+        // Fresh payments (not history) get a "Payment sent" email from the portal, once.
+        const recent = Date.parse(`${date}T12:00:00Z`) >= Date.now() - 3 * 86_400_000;
+        if (m?.email && recent) {
+          const [row] = res.length ? res : ext ? await q<{ id: number }[]>`select id from payouts where external_id = ${ext}` : [];
+          const claimed = row ? await q<{ id: number }[]>`update payouts set emailed_at = now() where id = ${row.id} and emailed_at is null returning id` : [];
+          if (claimed.length) {
+            const { payoutSent } = await import("@/lib/emails");
+            const { sendMail } = await import("@/lib/mail");
+            const mail = payoutSent({ name: m.name, amount: `$${(cents / 100).toFixed(2)}`, method: str(r.method, 40) || null, date, note: str(r.note, 300), portal: true });
+            const ok = (await sendMail({ to: m.email, subject: mail.subject, html: mail.html })).ok;
+            if (ok) out.emailed.push(m.email); else await q`update payouts set emailed_at = null where id = ${row.id}`;
+          }
+        }
       }
       return { ...out, matched: [...new Set(out.matched)], unmatched: [...new Set(out.unmatched)] };
     },
