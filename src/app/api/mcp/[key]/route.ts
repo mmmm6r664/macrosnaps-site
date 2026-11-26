@@ -10,7 +10,7 @@ import { bookingFromInvoice, backfillPhones } from "@/lib/invoiceBooking";
 import { replyInquiry, updateInquiry } from "@/app/admin/(panel)/inbox/actions";
 import { refundBooking } from "@/app/admin/(panel)/bookings/actions";
 import { createInvoice, invoiceEmailAction, invoiceAction } from "@/app/admin/(panel)/invoices/actions";
-import { addPhotographer, requestFiles, sendAssignment } from "@/app/admin/(panel)/photographers/actions";
+import { addPhotographer, requestFiles, sendAssignment, sendProfileReminder } from "@/app/admin/(panel)/photographers/actions";
 import { sendNew, voidContract } from "@/app/admin/(panel)/contracts/actions";
 import { importContacts, importOrders, type ContactIn, type OrderIn } from "@/lib/crmImport";
 
@@ -169,6 +169,12 @@ const TOOLS: Tool[] = [
     description: "Void an open invoice (it can no longer be paid). Use when replacing an invoice.",
     inputSchema: obj({ id: S("Stripe invoice id (in_…)") }, ["id"]),
     run: async (a) => { await act(() => invoiceAction(form({ id: a.id, op: "void" }))); return { ok: true }; },
+  },
+  {
+    name: "send_profile_reminder",
+    description: "Email a crew member from the portal asking them to complete their profile, W-9 and payment method (lists only what's still missing, with a link to their crew portal). Copy goes to info@.",
+    inputSchema: obj({ email: S("Team member's email") }, ["email"]),
+    run: (a) => sendProfileReminder(str(a.email, 200)),
   },
   {
     name: "list_photographers", readOnly: true,

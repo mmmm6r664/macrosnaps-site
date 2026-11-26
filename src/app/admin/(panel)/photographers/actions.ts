@@ -174,6 +174,23 @@ export async function sendWelcome(_: S, f: FormData): Promise<S> {
   return sent ? { ok: `Welcome email sent to ${m.email}.${f.get("offline") === "on" ? " Contract recorded as signed outside the portal." : ""}` } : { error: "The email couldn't be sent. Please try again." };
 }
 
+/** Emails a crew member from the portal asking them to complete their profile, W-9 and payout method (only what's missing). */
+export async function sendProfileReminder(email: string): Promise<{ ok?: string; error?: string }> {
+  const [m] = await q<{ id: number; email: string; name: string; phone: string | null; city: string | null; payout_method: string | null; w9: boolean }[]>`
+    select u.id, u.email, u.name, p.phone, p.city, p.payout_method, (p.w9_signed_at is not null) as w9
+    from users u left join staff_profiles p on p.user_id = u.id where lower(u.email) = ${email.trim().toLowerCase()} and u.active and u.role = 'staff'`;
+  if (!m) return { error: "No active team member with that email." };
+  const missing = { payout: !m.payout_method, w9: !m.w9, contact: !m.phone || !m.city };
+  if (!missing.payout && !missing.w9 && !missing.contact) return { ok: `${m.name}'s profile, W-9 and payment method are already complete. Nothing sent.` };
+  const loggedIn = (await q`select 1 from sessions where user_id = ${m.id} limit 1`).length > 0 || (await q`select 1 from audit_log where user_id = ${m.id} and action = 'login' limit 1`.catch(() => [])).length > 0;
+  const url = loggedIn ? `${ORIGIN}/staff/profile` : `${ORIGIN}/staff/set-password?t=${await createPasswordToken(m.id, "set")}`;
+  const { crewProfileReminder } = await import("@/lib/emails");
+  const msg = crewProfileReminder(m.name, url, missing, !loggedIn);
+  const sent = (await sendMail({ to: m.email, subject: msg.subject, html: msg.html, bcc: "info@macrosnaps.com" })).ok;
+  await audit(null, "staff_profile_reminder", m.email);
+  return sent ? { ok: `Emailed ${m.email} from the portal. Still missing: ${[missing.contact && "phone/city", missing.payout && "payment method", missing.w9 && "W-9"].filter(Boolean).join(", ")}.` } : { error: "The email couldn't be sent." };
+}
+
 export type AssignS = { error?: string; ok?: string; preview?: { to: string; subject: string; html: string } } | undefined;
 
 /** Preview or send the "[CONFIRMED] …" assignment email to a photographer/videographer. */

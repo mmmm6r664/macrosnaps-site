@@ -314,6 +314,30 @@ export function photographerAccepted(name: string, signUrl: string | null, setup
   };
 }
 
+/** Asks a crew member to finish their portal profile: lists exactly what is still missing. */
+export function crewProfileReminder(name: string, portalUrl: string, missing: { payout: boolean; w9: boolean; contact: boolean }, firstLogin: boolean): Email {
+  const items: [string, string][] = [];
+  if (missing.contact) items.push(["Complete your profile", "Add your phone number and city so we can match you with shoots and reach you quickly."]);
+  if (missing.payout) items.push(["Add your payment method", "Tell us how you'd like to be paid (Venmo, PayPal or Cash App) and your handle. This is how we send your payments."]);
+  if (missing.w9) items.push(["Complete your W-9", "Add your W-9 tax details under Tax in your portal. We need it on file to pay you."]);
+  return {
+    subject: "Please complete your MacroSnaps profile, W-9 and payment method",
+    html: layout({
+      title: "Please complete your crew profile",
+      preheader: "A few quick details so we can pay you and match you with shoots.",
+      body:
+        p(`Hi ${first(name)},`) +
+        p("Thank you for your work with MacroSnaps. To make sure we can pay you on time and send you the right shoots, please finish setting up your crew portal. It only takes a few minutes:") +
+        steps(items) +
+        button(firstLogin ? "Set up my crew portal" : "Open my crew portal", portalUrl) +
+        (firstLogin ? small("The setup link works for 7 days. After that, use \u201cForgot password\u201d on the sign-in page.") : "") +
+        divider() +
+        p("Questions? Just reply to this email. We're happy to help."),
+      footerNote: "You're receiving this because you're part of the MacroSnaps team.",
+    }),
+  };
+}
+
 /** Sent when a new photographer/videographer is fully onboarded (contract on file). */
 export function photographerWelcome(name: string, portalUrl: string, firstLogin: boolean): Email {
   return {
