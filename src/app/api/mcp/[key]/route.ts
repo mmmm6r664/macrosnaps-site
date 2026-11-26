@@ -188,9 +188,14 @@ const TOOLS: Tool[] = [
   },
   {
     name: "add_photographer",
-    description: "Add a hired photographer/videographer to the team and email their welcome with an account setup link. If they already signed a contract it's linked; send_contract=true also sends the agreement.",
+    description: "If the email is already an active team member: emails them from the portal to complete their profile, W-9 and payment method (only what is missing). Otherwise add a hired photographer/videographer to the team and email their welcome with an account setup link. If they already signed a contract it's linked; send_contract=true also sends the agreement.",
     inputSchema: obj({ full_name: S("First and last name"), email: S("Email"), phone: S("Optional"), city: S("Optional"), role: S("Photographer | Videographer | Both"), send_contract: B("Also send the contractor agreement for e-signature") }, ["full_name", "email"]),
-    run: (a) => addPhotographer(undefined, form({ name: a.full_name, email: a.email, phone: a.phone, city: a.city, role: str(a.role, 20) || "Photographer", contract: a.send_contract === true })),
+    run: async (a) => {
+      // Already on the team → send the "complete your profile, W-9 and payment method" email from the portal instead of adding a duplicate.
+      const [ex] = await q<{ id: number }[]>`select id from users where lower(email) = ${str(a.email, 200).trim().toLowerCase()} and role = 'staff' and active`;
+      if (ex) return sendProfileReminder(str(a.email, 200));
+      return addPhotographer(undefined, form({ name: a.full_name, email: a.email, phone: a.phone, city: a.city, role: str(a.role, 20) || "Photographer", contract: a.send_contract === true }));
+    },
   },
   {
     name: "send_shoot_assignment",
