@@ -29,7 +29,7 @@ export function renderBody(src: string) {
       .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, (_, a, u) => `<a href="${safeUrl(u.replace(/&amp;/g, "&"))}" style="color:${GOLD_DARK};font-weight:600">${a}</a>`);
   const P = `margin:0 0 18px;font:16px/1.7 ${SANS};color:#333`;
   const card = (title: string, text: string, img: string, url: string) =>
-    `<td valign="top" width="50%" style="padding:0 8px 16px"><a href="${safeUrl(url)}" style="text-decoration:none;color:${INK}">${img ? `<img src="${safeUrl(sized(img, "w_520,h_360,q_80"))}" alt="" width="252" style="display:block;width:100%;height:auto;border:0">` : ""}<p style="margin:12px 0 4px;font:400 19px/1.3 ${SERIF};color:${INK}">${esc(title)}</p><p style="margin:0;font:14px/1.55 ${SANS};color:#555">${esc(text)}</p><p style="margin:8px 0 0;font:700 11px ${SANS};letter-spacing:2px;text-transform:uppercase;color:${GOLD_DARK}">Read more &rarr;</p></a></td>`;
+    `<td valign="top" width="50%" style="padding:0 8px 16px"><a href="${safeUrl(url)}" style="text-decoration:none;color:${INK}">${img ? `<img src="${safeUrl(sized(img, "w_520,h_360,q_80"))}" alt="" width="252" style="display:block;width:100%;height:180px;object-fit:cover;border:0">` : ""}<p style="margin:12px 0 4px;font:400 19px/1.3 ${SERIF};color:${INK}">${esc(title)}</p><p style="margin:0;font:14px/1.55 ${SANS};color:#555">${esc(text)}</p><p style="margin:8px 0 0;font:700 11px ${SANS};letter-spacing:2px;text-transform:uppercase;color:${GOLD_DARK}">Read more &rarr;</p></a></td>`;
   const blocks = src.replace(/\r/g, "").split(/\n{2,}/).map((b) => b.trim()).filter(Boolean);
   const out: string[] = [];
   for (let i = 0; i < blocks.length; i++) {
@@ -56,7 +56,7 @@ export function renderBody(src: string) {
     } else if (b.split("\n").every((l) => /^@@/.test(l))) {
       const tiles = b.split("\n").map((l) => l.replace(/^@@\s*/, "").split("|").map((x) => x.trim()));
       const rows: string[] = [];
-      for (let k = 0; k < tiles.length; k += 3) rows.push(`<tr>${[0, 1, 2].map((j) => { const t = tiles[k + j]; return t ? `<td valign="top" width="33%" style="padding:3px"><a href="${safeUrl(t[2] || ORIGIN)}" style="text-decoration:none"><img src="${safeUrl(sized(t[1] ?? "", "w_400,h_400,q_80"))}" alt="${esc(t[0] ?? "")}" width="180" height="180" style="display:block;width:100%;height:auto;border:0;object-fit:cover"><p style="margin:6px 0 8px;font:700 10px ${SANS};letter-spacing:2px;text-transform:uppercase;color:${GOLD_DARK};text-align:center">${esc(t[0] ?? "")}</p></a></td>` : `<td width="33%"></td>`; }).join("")}</tr>`);
+      for (let k = 0; k < tiles.length; k += 3) rows.push(`<tr>${[0, 1, 2].map((j) => { const t = tiles[k + j]; return t ? `<td valign="top" width="33%" style="padding:3px"><a href="${safeUrl(t[2] || ORIGIN)}" style="text-decoration:none"><img src="${safeUrl(sized(t[1] ?? "", "w_400,h_400,q_80"))}" alt="${esc(t[0] ?? "")}" width="165" style="display:block;width:100%;height:165px;border:0;object-fit:cover"><p style="margin:6px 0 8px;font:700 10px ${SANS};letter-spacing:2px;text-transform:uppercase;color:${GOLD_DARK};text-align:center">${esc(t[0] ?? "")}</p></a></td>` : `<td width="33%"></td>`; }).join("")}</tr>`);
       out.push(`<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px -3px 18px;width:calc(100% + 6px)">${rows.join("")}</table>`);
     }
     else if (/^\{\{.+\}\}$/.test(b)) {
