@@ -116,8 +116,8 @@ export async function sendNewsletter(id: number): Promise<{ ok: boolean; sent: n
   const key = process.env.RESEND_API_KEY;
   if (!key) return { ok: false, sent: 0, error: "Email isn't connected (RESEND_API_KEY)." };
   const sql = await db();
-  const claimed = await sql<{ id: number; subject: string; preheader: string; body: string }[]>`
-    update newsletters set status = 'sending', updated_at = now() where id = ${id} and status in ('draft', 'scheduled', 'failed') returning id, subject, preheader, body`;
+  const claimed = await sql<{ id: number; subject: string; preheader: string; body: string; sent_count: number | null }[]>`
+    update newsletters set status = 'sending', updated_at = now() where id = ${id} and status in ('draft', 'scheduled', 'failed') returning id, subject, preheader, body, sent_count`;
   if (!claimed.length) return { ok: false, sent: 0, error: "This newsletter is already sending or sent." };
   const n = claimed[0];
   const subs = await sql<{ email: string; token: string }[]>`select email, token from subscribers s where status = 'subscribed'
@@ -129,18 +129,22 @@ export async function sendNewsletter(id: number): Promise<{ ok: boolean; sent: n
     and lower(s.email) !~ '(@(macrohype|macrosnaps)\\.com$|^(rehmansiddiq|macrohype)@|@member\\.theknot\\.com$|@reply\\.weddingwire\\.com$|sulekha)'
     order by id`;
   const resend = new Resend(key);
-  let sent = 0;
+  // A failed send resumes where it stopped: the list is ordered by id and each batch of 100 is all-or-nothing,
+  // so the first sent_count recipients already have it and must not be emailed twice.
+  const resumeFrom = n.sent_count ?? 0;
+  const todo = subs.slice(resumeFrom).filter((s) => /^[^\s@<>,;]+@[^\s@<>,;]+\.[^\s@<>,;]+$/.test(s.email.trim()));
+  let sent = resumeFrom;
   try {
-    for (let i = 0; i < subs.length; i += 100) {
-      const chunk = subs.slice(i, i + 100);
+    for (let i = 0; i < todo.length; i += 100) {
+      const chunk = todo.slice(i, i + 100);
       const { error } = await resend.batch.send(chunk.map((s) => ({
-        from: FROM, to: s.email, replyTo: SITE.email, subject: n.subject,
+        from: FROM, to: s.email.trim(), replyTo: SITE.email, subject: n.subject,
         html: addTracking(emailHtml(n.subject, n.preheader, n.body, unsubUrl(s.token)), id, s.token),
         headers: listUnsubscribe(s.token),
       })));
       if (error) throw new Error(error.message);
       sent += chunk.length;
-      if (i + 100 < subs.length) await new Promise((r) => setTimeout(r, 600)); // stay under Resend's rate limit
+      if (i + 100 < todo.length) await new Promise((r) => setTimeout(r, 600)); // stay under Resend's rate limit
     }
     await sql`update newsletters set status = 'sent', sent_at = now(), sent_count = ${sent}, error = null, updated_at = now() where id = ${id}`;
     return { ok: true, sent };
