@@ -78,9 +78,6 @@ export function emailHtml(subject: string, preheader: string, body: string, unsu
   const top = body.replace(/^\s+/, "").match(/^!\[[^\]]*\]\((https?:\/\/[^)\s]+)\)\s*(?:\n|$)/);
   const hero = top ? top[1] : "";
   const rest = top ? body.replace(/^\s+/, "").slice(top[0].length) : body;
-  const issue = sentAt.toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "America/New_York" });
-  const nav = [["Book", `${ORIGIN}/book`], ["Portfolio", `${ORIGIN}/portfolio`], ["Weddings", `${ORIGIN}/wedding-photography`], ["Events", `${ORIGIN}/events`]]
-    .map(([l, u]) => `<a href="${u}" style="color:#e9e2c4;text-decoration:none;font:600 11px ${SANS};letter-spacing:2px;text-transform:uppercase">${l}</a>`).join(`<span style="color:#555">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>`);
   const social = [["Instagram", SITE.social.instagram], ["Facebook", SITE.social.facebook], ["YouTube", SITE.social.youtube], ["Pinterest", SITE.social.pinterest]]
     .map(([n, u]) => `<a href="${esc(u)}" style="color:${GOLD};text-decoration:none;font:600 12px ${SANS}">${n}</a>`).join(`<span style="color:#555">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>`);
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="x-apple-disable-message-reformatting"><meta name="color-scheme" content="light"><title>${esc(subject)}</title>
@@ -89,9 +86,7 @@ export function emailHtml(subject: string, preheader: string, body: string, unsu
 <div style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(preheader)}&#8199;&#65279;&#847;&#8199;&#65279;&#847;</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ede9df"><tr><td align="center" style="padding:24px 10px">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#fff">
-  <tr><td align="center" style="background:#000;padding:30px 20px 16px"><a href="${ORIGIN}"><img src="${LOGO}" alt="MacroSnaps" width="140" style="display:block;width:140px;height:auto;border:0"></a>
-    <p style="margin:16px 0 0;font:italic 15px ${SERIF};color:${GOLD}">The MacroSnaps Journal &nbsp;&middot;&nbsp; ${esc(issue)}</p></td></tr>
-  <tr><td align="center" style="background:#000;padding:4px 20px 20px">${nav}</td></tr>
+  <tr><td align="center" style="background:#000;padding:30px 20px 26px"><a href="${ORIGIN}"><img src="${LOGO}" alt="MacroSnaps" width="140" style="display:block;width:140px;height:auto;border:0"></a></td></tr>
   <tr><td style="height:4px;line-height:4px;font-size:0;background:${GOLD}">&nbsp;</td></tr>
   ${hero ? `<tr><td style="padding:0;line-height:0;font-size:0"><img src="${safeUrl(hero)}" alt="" width="600" style="display:block;width:100%;height:auto;border:0"></td></tr>` : ""}
   <tr><td class="nl-pad" style="padding:${hero ? "34px" : "40px"} 44px 20px">${renderBody(rest)}</td></tr>
