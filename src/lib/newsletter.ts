@@ -132,7 +132,7 @@ export async function sendNewsletter(id: number): Promise<{ ok: boolean; sent: n
   // A failed send resumes where it stopped: the list is ordered by id and each batch of 100 is all-or-nothing,
   // so the first sent_count recipients already have it and must not be emailed twice.
   const resumeFrom = n.sent_count ?? 0;
-  const todo = subs.slice(resumeFrom).filter((s) => /^[^\s@<>,;]+@[^\s@<>,;]+\.[^\s@<>,;]+$/.test(s.email.trim()));
+  const todo = subs.slice(resumeFrom).filter((s) => /^[A-Za-z0-9._%+'-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/.test(s.email.trim()) && !/\.\.|^\.|\.@/.test(s.email.trim()));
   let sent = resumeFrom;
   try {
     for (let i = 0; i < todo.length; i += 100) {
