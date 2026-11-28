@@ -55,6 +55,7 @@ export async function saveW9(_: S, f: FormData): Promise<S> {
 export async function signContract(_: S, f: FormData): Promise<S> {
   const u = await requireStaff();
   const sig = t(f, "signature", 120);
+  if (f.get("eligibility") !== "on" || f.get("representation") !== "on") return { error: "Tick the eligibility and MacroSnaps representation confirmations to sign." };
   if (f.get("agree") !== "on" || sig.length < 3) return { error: "Tick the box and type your full name to sign." };
   await ensureProfile(u.id);
   await q`update staff_profiles set contract_version = ${CONTRACT_VERSION}, contract_signature = ${sig}, contract_signed_at = now(), contract_ip = ${await clientIp()} where user_id = ${u.id}`;

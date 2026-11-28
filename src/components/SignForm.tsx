@@ -1,6 +1,7 @@
 "use client";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { sign, type SignState } from "@/app/sign/actions";
+import { CONTRACT_CONFIRMATIONS } from "@/data/contractorAgreement";
 
 /** Signature pad (mouse, finger or stylus) + typed legal name + ESIGN consent. */
 export default function SignForm({ token, name, pdfUrl }: { token: string; name: string; pdfUrl: string }) {
@@ -43,13 +44,15 @@ export default function SignForm({ token, name, pdfUrl }: { token: string; name:
         <div><label htmlFor="phone" className="mb-1 block text-sm font-semibold">Phone</label><input id="phone" name="phone" type="tel" required maxLength={30} autoComplete="tel" className="w-full border border-black/20 px-4 py-3 text-base" /></div>
         <div><label htmlFor="address" className="mb-1 block text-sm font-semibold">Mailing address</label><input id="address" name="address" required maxLength={200} autoComplete="street-address" placeholder="Street, city, state, ZIP" className="w-full border border-black/20 px-4 py-3 text-base" /></div>
       </div>
+      <label className="flex items-start gap-3 text-sm"><input type="checkbox" name="eligibility" className="mt-1 h-4 w-4 accent-[#a8963b]" />{CONTRACT_CONFIRMATIONS.eligibility}</label>
+      <label className="flex items-start gap-3 text-sm"><input type="checkbox" name="representation" className="mt-1 h-4 w-4 accent-[#a8963b]" />{CONTRACT_CONFIRMATIONS.representation}</label>
+      <label className="flex items-start gap-3 text-sm"><input type="checkbox" name="agree" className="mt-1 h-4 w-4 accent-[#a8963b]" />I agree to the terms above and confirm that I have read this Agreement in full.</label>
+      <label className="flex items-start gap-3 text-sm"><input type="checkbox" name="consent" className="mt-1 h-4 w-4 accent-[#a8963b]" />I agree to sign electronically. My electronic signature is the legal equivalent of my handwritten signature, and I consent to receive this agreement and related records electronically.</label>
       <div>
         <div className="mb-1 flex items-end justify-between"><span className="text-sm font-semibold">Draw your signature</span><button type="button" onClick={clear} className="text-xs underline">Clear</button></div>
         <canvas ref={canvas} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerLeave={up} className="h-40 w-full touch-none border-2 border-dashed border-black/25 bg-[#fcfbf7]" aria-label="Signature pad: draw your signature with your mouse or finger" />
         {!drawn && <p className="mt-1 text-xs text-black/50">Use your mouse, finger or stylus.</p>}
       </div>
-      <label className="flex items-start gap-3 text-sm"><input type="checkbox" name="agree" className="mt-1 h-4 w-4 accent-[#a8963b]" />I have read and agree to the preceding terms and conditions.</label>
-      <label className="flex items-start gap-3 text-sm"><input type="checkbox" name="consent" className="mt-1 h-4 w-4 accent-[#a8963b]" />I agree to sign electronically. My electronic signature is the legal equivalent of my handwritten signature, and I consent to receive this agreement and related records electronically.</label>
       {state?.error && <p className="bg-red-50 px-3 py-2 text-sm text-red-800">{state.error}</p>}
       <button disabled={busy || !drawn} className="w-full bg-[#ccba56] px-6 py-4 text-sm font-bold uppercase tracking-widest text-black disabled:opacity-50">{busy ? "Signing…" : "Sign agreement"}</button>
     </form>

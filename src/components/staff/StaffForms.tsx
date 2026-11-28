@@ -3,6 +3,7 @@ import { useActionState, useState } from "react";
 import { saveProfile, saveW9, signContract, openTicket, type S } from "@/app/staff/(portal)/actions";
 import { noReset } from "@/components/admin/noReset";
 import { inputCls, labelCls, btnPrimary } from "@/components/admin/ui";
+import { CONTRACT_CONFIRMATIONS } from "@/data/contractorAgreement";
 
 const Msg = ({ s }: { s: S }) => (s ? <p role="status" className={`rounded px-3 py-2 text-sm ${s.error ? "bg-red-50 text-red-800" : "bg-emerald-50 text-emerald-800"}`}>{s.error ?? s.ok}</p> : null);
 
@@ -71,6 +72,8 @@ export function ContractForm() {
   const [s, act, pending] = useActionState<S, FormData>(signContract, undefined);
   return (
     <form onSubmit={noReset(act)} className="space-y-3 rounded-lg border border-black/10 bg-[#faf8f3] p-5">
+      <label className="flex items-start gap-2 text-sm"><input type="checkbox" name="eligibility" className="mt-1" />{CONTRACT_CONFIRMATIONS.eligibility}</label>
+      <label className="flex items-start gap-2 text-sm"><input type="checkbox" name="representation" className="mt-1" />{CONTRACT_CONFIRMATIONS.representation}</label>
       <label className="flex items-start gap-2 text-sm"><input type="checkbox" name="agree" className="mt-1" />I have read and agree to the MacroSnaps Independent Contractor Agreement.</label>
       <div><label className={labelCls} htmlFor="sig">Type your full name to sign</label><input id="sig" name="signature" required className={`${inputCls} font-script text-2xl`} /></div>
       <Msg s={s} />

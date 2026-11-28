@@ -13,6 +13,8 @@ export async function sign(_: SignState, fd: FormData): Promise<SignState> {
   const address = String(fd.get("address") ?? "").replace(/[<>]/g, "").trim().slice(0, 200);
   const sig = String(fd.get("signature") ?? "");
   if (fd.get("consent") !== "on") return { error: "Please agree to sign electronically." };
+  if (fd.get("eligibility") !== "on") return { error: "Please confirm the eligibility statement (criminal record, age, driver's license and work authorization)." };
+  if (fd.get("representation") !== "on") return { error: "Please confirm the MacroSnaps representation and client-contact agreement." };
   if (fd.get("agree") !== "on") return { error: "Please confirm you have read and agree to the agreement." };
   if (name.length < 3 || !/\s/.test(name)) return { error: "Please type your full legal name (first and last)." };
   if (phone.replace(/\D/g, "").length < 10) return { error: "Please enter your phone number." };
