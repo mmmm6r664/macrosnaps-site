@@ -2,10 +2,12 @@ import { NextResponse } from "next/server";
 import { CAMERAS, EXPERIENCE, NOT_ELIGIBLE, checkEligibility } from "@/lib/careers";
 import { sendMail, table, TEAM_INBOX } from "@/lib/mail";
 import { saveInquiry } from "@/lib/records";
+import { limited } from "@/lib/rateLimit";
 
 const s = (v: unknown, max = 300) => String(v ?? "").trim().slice(0, max);
 
 export async function POST(req: Request) {
+  if (limited(`apply:${(req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim()}`, 5, 10 * 60_000)) return NextResponse.json({ error: "Too many applications from this connection. Please try again later." }, { status: 429 });
   const b = await req.json().catch(() => null);
   if (!b) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   if (b.website) return NextResponse.json({ ok: true }); // honeypot

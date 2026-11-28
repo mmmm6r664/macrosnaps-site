@@ -1,6 +1,7 @@
 // First-party, cookie-free page analytics: one row per page view, plus time-on-page pings.
 import { createHash } from "crypto";
 import { q } from "@/lib/db";
+import { limited } from "@/lib/rateLimit";
 
 export const dynamic = "force-dynamic";
 const BOT = /bot|crawl|spider|slurp|preview|headless|lighthouse|pingdom|uptime|monitor|facebookexternalhit|curl|wget|python|axios|node-fetch/i;
@@ -26,6 +27,7 @@ function classify(ref: string, utm: { s?: string; m?: string }, host: string) {
 export async function POST(req: Request) {
   const ua = req.headers.get("user-agent") ?? "";
   if (BOT.test(ua)) return new Response(null, { status: 204 });
+  if (limited(`t:${(req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim()}`, 120, 60_000)) return new Response(null, { status: 429 });
   let b: { k?: string; id?: number; ms?: number; sid?: string; p?: string; r?: string; us?: string; um?: string; uc?: string } = {};
   try { b = JSON.parse(await req.text()); } catch { return new Response(null, { status: 204 }); }
   try {
