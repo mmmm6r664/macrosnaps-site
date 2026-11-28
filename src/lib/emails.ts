@@ -354,8 +354,8 @@ export function photographerWelcome(name: string, portalUrl: string, firstLogin:
           [firstLogin ? "Set up your crew portal" : "Complete your crew portal", "Add your payout method (Venmo, PayPal or Cash App), W-9 details, the shoot types you do and how far you'll travel. This is how we match you with shoots."],
           ["Accept shoot offers", "We'll send shoot offers in your area by email and in your portal. Accept the ones that fit your schedule. All the details you need are in the portal."],
           ["Shoot as MacroSnaps", "On a MacroSnaps shoot you represent MacroSnaps only. Please share only MacroSnaps materials and contact details with clients."],
-          ["Deliver within 24 hours", "After each shoot, upload all original RAW files and the edited .JPG files to Google Drive. We'll email you a link to send it to us. Everything is due within 24 hours of the event."],
-          ["Get paid", "Payment is released once all edited and RAW files are delivered. You can track it under Payments in your portal."],
+          ["Deliver within 24 hours", "After each shoot, upload all unedited RAW files and any video files to Google Drive. We'll email you a link to send it to us. Everything is due within 24 hours of the event."],
+          ["Get paid", "Payment is released once all unedited RAW files are delivered. You can track it under Payments in your portal."],
         ]) +
         button(firstLogin ? "Set up my crew portal" : "Open my crew portal", portalUrl) +
         (firstLogin ? small("The setup link works for 7 days. After that, use \u201cForgot password\u201d on the sign-in page.") : "") +
@@ -443,7 +443,7 @@ export function crewDriveRequest(c: CrewShoot, reminder = false): Email {
         p(`Hi ${first(c.name)},`) +
         p(reminder
           ? `We haven't received the Google Drive link for this shoot yet. As a reminder, all files are due <b>within 24 hours of the event</b>, by <b>${esc(c.deadline)}</b>.`
-          : `Thank you for covering this shoot for MacroSnaps. Please upload <b>all original RAW files and the edited .JPG files</b> (and video files, if you filmed) to a Google Drive folder and send us the link <b>within 24 hours</b>, by <b>${esc(c.deadline)}</b>.`) +
+          : `Thank you for covering this shoot for MacroSnaps. Please upload <b>all unedited RAW files</b> (and video files, if you filmed) to a Google Drive folder and send us the link <b>within 24 hours</b>, by <b>${esc(c.deadline)}</b>.`) +
         details([["Order", c.order], ["Shoot", c.service], ["Client", c.client], ["When", c.when], ["Venue", c.venue]]) +
         button("Send the Google Drive link", c.url) +
         steps([
@@ -451,7 +451,7 @@ export function crewDriveRequest(c: CrewShoot, reminder = false): Email {
           ["Share it with us only", "Share the folder with <b>info@macrosnaps.com</b> only. Please do not set it to “Anyone with the link”, and never share files or links with the client: MacroSnaps delivers everything to the client."],
           ["Paste the link", "Use the button above. It only takes a moment and no login is needed."],
         ]) +
-        small("Payment for the shoot is released once all edited and RAW files are delivered. Questions? Just reply to this email."),
+        small("Payment for the shoot is released once all unedited RAW files are delivered. Questions? Just reply to this email."),
     }),
   };
 }

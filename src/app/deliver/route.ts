@@ -19,7 +19,7 @@ function form(hidden: string, t: string, info: { ref: string; service_name: stri
     `<form method="post" style="text-align:left">${hidden}<input type="hidden" name="t" value="${esc(t)}">
 <label for="link" style="display:block;font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#ccba56;margin-bottom:6px">Google Drive folder link</label>
 <input id="link" name="link" type="url" required placeholder="https://drive.google.com/drive/folders/..." value="${esc(info.drive_link ?? "")}" style="width:100%;box-sizing:border-box;padding:14px;font-size:16px;border:1px solid #555;background:#111;color:#fff;border-radius:6px">
-<p style="color:#999;font-size:13px;line-height:1.5">Include all original RAW files and the edited .JPG files (and video files, if you filmed). Set sharing to “Anyone with the link can view”.</p>
+<p style="color:#999;font-size:13px;line-height:1.5">Include all unedited RAW files (and video files, if you filmed). Set sharing to “Anyone with the link can view”.</p>
 <button style="width:100%;background:#ccba56;color:#000;border:0;padding:15px;font-size:15px;font-weight:bold;letter-spacing:.12em;cursor:pointer;border-radius:4px">SEND LINK</button></form>`;
 }
 

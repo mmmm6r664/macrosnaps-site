@@ -44,8 +44,7 @@ export default async function SignPage({ params }: { params: Promise<{ token: st
         <li className="list-none pt-2 font-bold underline">Terms and Conditions</li>
         {c.doc_sections.filter((s) => s.title).map((s, i) => <li key={i} className="list-none"><p className="text-black/75"><b className="text-black">{i + 1}. {s.title}:</b> {s.body}</p></li>)}
       </ol>
-      <div className="my-6 grid gap-4 sm:grid-cols-2">
-        <div className="border border-black/10 bg-white p-4"><p className="text-xs font-bold uppercase tracking-widest text-black/50">MacroHype LLC (d/b/a MacroSnaps)</p><p className="mt-2 font-serif text-2xl italic">MacroSnaps</p><p className="text-xs text-black/50">Signed {fmt(c.company_signed_at)}</p></div>
+      <div className="my-6 grid gap-4">
         <div className="border border-black/10 bg-white p-4"><p className="text-xs font-bold uppercase tracking-widest text-black/50">Contractor</p>{c.status === "signed" ? <><p className="mt-2 font-serif text-2xl italic">{c.signed_name}</p><p className="text-xs text-black/50">Signed {fmt(c.signed_at!)}</p></> : <p className="mt-2 text-sm text-black/60">Awaiting your signature</p>}</div>
       </div>
       {c.status === "signed" ? (
