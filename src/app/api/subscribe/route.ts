@@ -2,8 +2,10 @@ import { startNurture } from "@/lib/automations";
 import { NextResponse } from "next/server";
 import { subscribe } from "@/lib/records";
 import { hasDb } from "@/lib/db";
+import { limited } from "@/lib/rateLimit";
 
 export async function POST(req: Request) {
+  if (limited(`subscribe:${(req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim()}`, 10, 10 * 60_000)) return NextResponse.json({ error: "Too many sign-ups from this connection. Please try again later." }, { status: 429 });
   const b = await req.json().catch(() => null);
   if (!b || typeof b !== "object") return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   if (b.website) return NextResponse.json({ ok: true }); // honeypot

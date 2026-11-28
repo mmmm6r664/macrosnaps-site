@@ -9,12 +9,14 @@ import { TERMS_VERSION } from "@/lib/terms";
 import { newRef, saveBooking, attachCheckout } from "@/lib/records";
 import { priceAddons } from "@/lib/addons";
 import { findActiveCode } from "@/lib/coupons";
+import { limited } from "@/lib/rateLimit";
 
-const s = (v: unknown, max = 300) => String(v ?? "").trim().slice(0, max);
+const s =(v: unknown, max = 300) => String(v ?? "").trim().slice(0, max);
 const isDate = (d: string) => /^\d{4}-\d{2}-\d{2}$/.test(d) && new Date(`${d}T23:59:59`) >= new Date();
 const isTime = (t: string) => /^([01]\d|2[0-3]):(00|30)$/.test(t); // 30-minute slots only
 
 export async function POST(req: Request) {
+  if (limited(`checkout:${(req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim()}`, 10, 10 * 60_000)) return NextResponse.json({ error: "Too many attempts. Please try again in a few minutes or call 877-622-4973." }, { status: 429 });
   const b = await req.json().catch(() => null);
   if (!b) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
 

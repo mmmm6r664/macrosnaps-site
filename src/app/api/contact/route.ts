@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { sendMail, table, TEAM_INBOX } from "@/lib/mail";
 import { saveInquiry } from "@/lib/records";
+import { limited } from "@/lib/rateLimit";
 
 export async function POST(req: Request) {
+  if (limited(`contact:${(req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim()}`, 5, 10 * 60_000)) return NextResponse.json({ error: "Too many messages from this connection. Please try again later." }, { status: 429 });
   const b = await req.json().catch(() => null);
   if (!b || typeof b !== "object") return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   if (b.website) return NextResponse.json({ ok: true }); // honeypot
