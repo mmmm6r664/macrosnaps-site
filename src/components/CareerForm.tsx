@@ -2,11 +2,14 @@
 import SmsConsent from "./SmsConsent";
 import { useState } from "react";
 import { BRANDS, CAMERAS, EXPERIENCE, RADIUS, ROLES, WORK_STATUS, AVAILABILITY, SHOOT_TYPES, DISQUALIFIERS, DISABILITY, NOT_ELIGIBLE, checkEligibility } from "@/lib/careers";
+import locations from "@/data/careerLocations.json";
 
 export default function CareerForm() {
   const [camera, setCamera] = useState("");
+  const [region, setRegion] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "sent" | "rejected" | "error">("idle");
   const [error, setError] = useState("");
+  const cityOptions: string[] = (locations.cities as Record<string, string[]>)[region] ?? [];
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -14,6 +17,7 @@ export default function CareerForm() {
     const data: Record<string, unknown> = Object.fromEntries(fd.entries());
     data.shootTypes = fd.getAll("shootTypes");
     data.flags = fd.getAll("flags");
+    data.city = `${String(data.city ?? "").trim()}, ${String(data.region ?? "")}`;
     if (!(data.shootTypes as string[]).length) { setError("Please choose at least one type of shoot."); setState("error"); return; }
     if (!checkEligibility({ experience: String(data.experience), camera: String(data.camera), otherYear: String(data.otherYear ?? ""), otherValue: String(data.otherValue ?? ""), flags: data.flags as string[] })) {
       setState("rejected");
@@ -52,7 +56,8 @@ export default function CareerForm() {
         <div><label className={label} htmlFor="email">Email *</label><input id="email" name="email" type="email" required className={field} autoComplete="email" /></div>
         <div><label className={label} htmlFor="phone">Phone *</label><input id="phone" name="phone" type="tel" required className={field} autoComplete="tel" /></div>
         <SmsConsent audience="crew" />
-        <div><label className={label} htmlFor="city">City & state / province *</label><input id="city" name="city" required className={field} placeholder="e.g. Arlington, VA" autoComplete="address-level2" /></div>
+        <div><label className={label} htmlFor="region">State / province *</label><select id="region" name="region" required value={region} onChange={(e) => setRegion(e.target.value)} className={field}><option value="" disabled>Select your state or province</option>{locations.regions.map((r) => <option key={r.code} value={r.code}>{r.name}</option>)}</select></div>
+        <div><label className={label} htmlFor="city">City *</label><input id="city" name="city" required maxLength={80} className={field} placeholder={region ? "Start typing your city" : "Choose a state or province first"} autoComplete="off" list="city-options" disabled={!region} /><datalist id="city-options">{cityOptions.map((c) => <option key={c} value={c} />)}</datalist></div>
         <div><label className={label} htmlFor="radius">Work radius *</label><select id="radius" name="radius" required defaultValue="" className={field}><option value="" disabled>Select how far you&apos;ll travel</option>{RADIUS.map((r) => <option key={r}>{r}</option>)}</select></div>
         <div><label className={label} htmlFor="role">I am a *</label><select id="role" name="role" required defaultValue="" className={field}><option value="" disabled>Select</option>{ROLES.map((r) => <option key={r}>{r}</option>)}</select></div>
         <div><label className={label} htmlFor="experience">Professional experience *</label><select id="experience" name="experience" required defaultValue="" className={field}><option value="" disabled>Select years of experience</option>{EXPERIENCE.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}</select></div>
