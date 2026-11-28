@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getContract, markViewed } from "@/lib/esign";
+import { q } from "@/lib/db";
 import { clientIp } from "@/lib/auth";
 import SignForm from "@/components/SignForm";
 import { LOGO } from "@/lib/emailTemplate";
@@ -25,6 +26,14 @@ export default async function SignPage({ params }: { params: Promise<{ token: st
   if (!c || c.status === "voided")
     return shell(<div className="bg-white p-8 text-center"><h1 className="font-serif text-3xl">This link isn&apos;t active</h1><p className="mt-3 text-black/70">It may have been replaced by a newer contract. Please check your email for the latest link, or contact MacroSnaps at info@macrosnaps.com.</p></div>);
   if (c.status === "sent") await markViewed(c.id, await clientIp());
+  // Prefill the phone number from what we already have on file: the staff profile, or the application.
+  const phoneOnFile = c && c.status !== "signed"
+    ? (await q<{ phone: string | null }[]>`select coalesce(
+          (select phone from staff_profiles where user_id = ${c.user_id}),
+          (select phone from inquiries where id = ${c.inquiry_id}),
+          (select phone from inquiries where lower(email) = ${c.signer_email} and coalesce(phone, '') <> '' order by created_at desc limit 1)
+        ) as phone`)[0]?.phone ?? ""
+    : "";
   return shell(
     <>
       <p className="text-xs font-bold uppercase tracking-[.25em] text-[#8a7a2b]">Document MS-C{c.id} · Version {c.doc_version}</p>
@@ -42,7 +51,7 @@ export default async function SignPage({ params }: { params: Promise<{ token: st
       {c.status === "signed" ? (
         <div className="bg-white p-6 text-center"><p className="font-serif text-2xl">This agreement is signed.</p><a href={`/sign/${token}/pdf`} className="mt-4 inline-block bg-[#ccba56] px-6 py-3 text-sm font-bold uppercase tracking-widest text-black">Download signed PDF</a></div>
       ) : (
-        <SignForm token={token} name={c.signer_name} pdfUrl={`/sign/${token}/pdf`} />
+        <SignForm token={token} name={c.signer_name} email={c.signer_email} phone={phoneOnFile} pdfUrl={`/sign/${token}/pdf`} />
       )}
     </>,
   );

@@ -4,7 +4,7 @@ import { sign, type SignState } from "@/app/sign/actions";
 import { CONTRACT_CONFIRMATIONS } from "@/data/contractorAgreement";
 
 /** Signature pad (mouse, finger or stylus) + typed legal name + ESIGN consent. */
-export default function SignForm({ token, name, pdfUrl }: { token: string; name: string; pdfUrl: string }) {
+export default function SignForm({ token, name, email, phone, pdfUrl }: { token: string; name: string; email: string; phone: string; pdfUrl: string }) {
   const [state, act, busy] = useActionState<SignState, FormData>(sign, undefined);
   const canvas = useRef<HTMLCanvasElement>(null);
   const [drawn, setDrawn] = useState(false);
@@ -40,8 +40,12 @@ export default function SignForm({ token, name, pdfUrl }: { token: string; name:
         <label htmlFor="name" className="mb-1 block text-sm font-semibold">Your full legal name</label>
         <input id="name" name="name" required defaultValue={name} maxLength={100} autoComplete="name" className="w-full border border-black/20 px-4 py-3 text-base" />
       </div>
+      <div>
+        <label htmlFor="email" className="mb-1 block text-sm font-semibold">Email</label>
+        <input id="email" value={email} readOnly className="w-full border border-black/20 bg-black/5 px-4 py-3 text-base text-black/70" />
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <div><label htmlFor="phone" className="mb-1 block text-sm font-semibold">Phone</label><input id="phone" name="phone" type="tel" required maxLength={30} autoComplete="tel" className="w-full border border-black/20 px-4 py-3 text-base" /></div>
+        <div><label htmlFor="phone" className="mb-1 block text-sm font-semibold">Phone</label><input id="phone" name="phone" type="tel" required maxLength={30} defaultValue={phone} autoComplete="tel" className="w-full border border-black/20 px-4 py-3 text-base" /></div>
         <div><label htmlFor="address" className="mb-1 block text-sm font-semibold">Mailing address</label><input id="address" name="address" required maxLength={200} autoComplete="street-address" placeholder="Street, city, state, ZIP" className="w-full border border-black/20 px-4 py-3 text-base" /></div>
       </div>
       <label className="flex items-start gap-3 text-sm"><input type="checkbox" name="eligibility" className="mt-1 h-4 w-4 accent-[#a8963b]" />{CONTRACT_CONFIRMATIONS.eligibility}</label>
